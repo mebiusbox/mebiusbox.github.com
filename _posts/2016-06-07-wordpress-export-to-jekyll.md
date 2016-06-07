@@ -2,7 +2,6 @@
 layout: post
 title: WorldPress から Jekyll へのエクスポート
 category: note
-tagline: ""
 tags: [WordPress, Jekyll]
 ---
 {% include JB/setup %}
