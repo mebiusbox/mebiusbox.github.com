@@ -133,8 +133,20 @@ $deleted-color:  #ff0000;
   color: $deleted-color;
 }
 
-
+#post p {
+	line-height:28px;
+}
 #post pre,
-#post code {
-	background-color: #404040;
+#post code,
+.post_code {
+	font-size: 10.5pt;
+	background-color: #f6d5d6;
+  padding: 4px;
+	text-shadow: 0 0 0 #000;
+	border-radius:3px;
+	border: 0px;
+}
+#post pre.highlight,
+#post pre.highlight code {
+	background-color: rgb(38,41,44);
 }
