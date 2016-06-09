@@ -150,3 +150,7 @@ $deleted-color:  #ff0000;
 #post pre.highlight code {
 	background-color: rgb(38,41,44);
 }
+
+h1.title {
+	margin: 40px 0px;
+}

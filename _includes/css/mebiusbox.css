@@ -175,6 +175,12 @@ a.film:hover {
  border-bottom: 1px solid #999;
 }
 
+h1.mebiusbox {
+	color: #003399;
+	font-size: 18px;
+	font-weight: normal;
+}
+/*
 h1 {
 background-color: transparent;
 color: #003399;
@@ -184,6 +190,7 @@ margin: 0;
 padding: 0 0 6px 0;
 border-bottom:1px solid #888;
 }
+*/
 
 #header table {
 margin: 0;
