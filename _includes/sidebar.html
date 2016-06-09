@@ -1,0 +1,16 @@
+<nav>
+  <a href="/">
+    {% if site.data.theme.social.gravatar %}
+    <img src="http://www.gravatar.com/avatar/{{ site.data.theme.social.gravatar }}?s=200" id="gravatar" alt="My photo"/>
+    {% else %}
+    <!-- <img src="/logo.png" id="logo" alt="Blog logo"/> -->
+    {% endif %}
+  </a>
+  <h1>Mebiusbox Software</h1>
+  <div id="bio">
+    <p>sugiyama: Hi. I am programmer. This site has published a software that I have developed.</p>
+  </div>
+  <div id="social">
+    {% include social.html %}
+  </div>
+</nav>
