@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ site.data.theme.name }} - {{ page.title }}</title>
+  <meta name="author" content="{{ site.data.theme.name }}" />
+  <meta name="description" content="The blog of {{ site.data.theme.name }}" />
+  <link rel="canonical" href="{{ site.url }}{{ page.url | replace:'index.html','' }}" />
+
+  <link rel="shortcut icon" href="/favicon.png">
+  <link rel="alternate" type="application/atom+xml" title="{{ site.data.theme.name }}" href="{{site.url}}/atom.xml" />
+
+  <link rel="stylesheet" href="/assets/css/all.css">
+	<link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/notosansjp.css">
+	<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:600,800" type="text/css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha256-k2/8zcNbxVIh5mnQ52A0r3a6jAgMGxFJFE2707UxGCk= sha512-ZV9KawG2Legkwp3nAlxLIVFudTauWuBpC10uEafMHYL0Sarrz5A7G79kXh5+5+woxQ5HM559XX2UZjMJ36Wplg==" crossorigin="anonymous">
+	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+  <div class="container">
+
+    <div class="sixteen columns content">
+
+			<div id="breadcrumb">
+&nbsp;<a href="/">Top</a>
+&nbsp;|&nbsp;<a href="{{ site.url }}#announce">お知らせ</a>
+&nbsp;|&nbsp;<a href="{{ site.url }}#download">ダウンロード</a>
+&nbsp;|&nbsp;<a href="{{ site.url }}#support">サポート</a>
+&nbsp;|&nbsp;<a href="{{ site.url }}#donation">寄付</a>
+&nbsp;
+</div><div class="clear"></div>
+
+			<script type="text/javascript"><!--
+			google_ad_client = "ca-pub-4921759935398373";
+			/* ad_top */
+			google_ad_slot = "7667956147";
+			google_ad_width = 728;
+			google_ad_height = 90;
+			//-->
+			</script>
+			<script type="text/javascript"
+			src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+			</script>
+			<br /><br />
+
+      {{ content }}
+
+			<br class="clear" /><br />
+			<script type="text/javascript"><!--
+			google_ad_client = "ca-pub-4921759935398373";
+			/* ad_page_bottom */
+			google_ad_slot = "4223868627";
+			google_ad_width = 728;
+			google_ad_height = 90;
+			//-->
+			</script>
+			<script type="text/javascript"
+			src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+			</script>
+
+      <div class="footer">
+        {% include footer.html %}
+      </div>
+    </div>
+  </div>
+
+{% include analytics.html %}
+</body>
+</html>
