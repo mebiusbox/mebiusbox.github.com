@@ -145,7 +145,7 @@ h1.title {
 .post_code {
 	font-size: 10.5pt;
 	background-color: #f6d5d6;
-  padding: 4px;
+  padding: 2px 6px;
 	text-shadow: 0 0 0 #000;
 	border-radius:3px;
 	border: 0px;
