@@ -133,6 +133,10 @@ $deleted-color:  #ff0000;
   color: $deleted-color;
 }
 
+#post *,
+h1.title {
+	font-family:"Noto Sans JP",Hiragino Sans,"ヒラギノ角ゴシック",Hiragino Kaku Gothic ProN,"ヒラギノ角ゴ ProN W3",Meiryo,sans-serif;
+}
 #post p {
 	line-height:28px;
 }
