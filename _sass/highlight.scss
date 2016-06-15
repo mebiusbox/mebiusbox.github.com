@@ -1,0 +1,134 @@
+$fg-color: #ffffff;
+$bg-color: #002c2d;
+$comment-color: #fa8072;
+$keyword-color: #da70d6;
+$constant-color: #ffff00;
+$type-color: #ffa500;
+$attr-color: #00ffff;
+$inserted-color: #00ff00;
+$deleted-color:  #ff0000;
+
+.highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight code {
+  color: $fg-color;
+}
+/* .highlight &, */
+.highlight .w {
+  color: $fg-color;
+  background-color: $bg-color;
+}
+.highlight .err {
+  color: #151515;
+  background-color: #ac4142;
+}
+.highlight .k,
+.highlight .kc,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr {
+  /* keyword */
+  color: $keyword-color;
+}
+.highlight .kt {
+  /* type */
+  color: $type-color;
+}
+.highlight .na {
+  /* attribute */
+  color: $attr-color;
+}
+.highlight .nb, .highlight .bp {
+  /* builtin name */
+  color: $keyword-color;
+}
+.highlight .nc {
+  /* class name */
+  color: $type-color;
+}
+.highlight .no {
+  /* constant */
+  color: $constant-color;
+}
+.highlight .ne {
+  /* exception */
+  color: $keyword-color;
+}
+.highlight .nf {
+  /* function name */
+  color: $attr-color;
+}
+.highlight .nl {
+  /* label */
+  color: $attr-color;
+}
+.highlight .nt {
+  /* tag name */
+  color: $keyword-color;
+}
+.highlight .vc, .highlight .vg, .highlight .vi {
+  /* class, global, instance variable */
+  color: $attr-color;
+}
+.highlight .s,
+.highlight .sb,
+.highlight .sc,
+.highlight .sd,
+.highlight .s2,
+.highlight .sh,
+.highlight .sx,
+.highlight .sr,
+.highlight .s1,
+.highlight .ss {
+  /* string */
+  color: $constant-color;
+}
+.highlight .se {
+  /* escape sequence */
+  color: $keyword-color;
+}
+.highlight .si {
+  /* interpolation */
+  color: $keyword-color;
+}
+.highlight .m,
+.highlight .mf,
+.highlight .mh,
+.highlight .mi,
+.highlight .il,
+.highlight .mo,
+.highlight .mb,
+.highlight .mx {
+  /* number */
+  color: $constant-color;
+}
+.highlight .ow {
+  /* word operator */
+  color: $keyword-color;
+}
+.highlight .p, .highlight .pi {
+  /* punctuation */
+  color: $fg-color;
+}
+.highlight .c, .highlight .cd, .highlight .cm, .highlight .c1, .highlight .cs {
+  /* comment */
+  color: $comment-color;
+}
+.highlight .cp {
+  /* preprocessor */
+  color: $keyword-color;
+}
+.highlight .gh {
+  /* headline */
+  color: $keyword-color;
+  font-weight: bold;
+}
+.highlight .gi {
+  /* inserted text */
+  color: $inserted-color;
+}
+.highlight .gd {
+  /* deleted text */
+  color: $deleted-color;
+}
