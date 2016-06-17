@@ -15,10 +15,12 @@ h1.title {
 	border-radius:3px;
 	border: 0px;
 }
+#post pre.highlight {
+	padding:16px;
+}
 #post pre.highlight,
 #post pre.highlight code {
 	font-family: Monaco,Consolas,Courier New,Courier,monospace,sans-serif;
-	padding: 16px;
 	background-color: rgb(38,41,44);
 }
 
