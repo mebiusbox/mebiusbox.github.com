@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="../mebiusbox.css" rel="stylesheet" type="text/css" />
+		<link href="../mebiusbox_guide.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="../mebiusbox.js"></script>
+		<!--[if lt IE 7]>
+        <script type="text/javascript" src="../lib/js/unitpngfix.js"></script>
+		<![endif]-->
+        <title>Mebiusbox software</title>
+    </head>
+    <body>
+
+<div id="container">
+<div id="header">
+	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+		<tr>
+			<th><a href="./index.html">mebiusbox software</a></th>
+			<td id="searchbox"><form method="get" action="http://www.google.com/search"><input class="input" type="hidden" name="as_sitesearch" id="as_sitesearch" value="mebiusbox.crap.jp/" />検索&nbsp; <input type="text" class="input" style="width:200px;" name="q" id="q" size="31" maxlength="255" value="" />&nbsp;<input type="submit" class="submit" name="sa" value="Go" /></form></td>
+		</tr>
+	</table>
+</div><!-- header -->
+<div id="content">
+<div id="breadcrumb">
+&nbsp;<a href="./index.html">Top</a>
+&nbsp;&gt;&nbsp;FAQ
+&nbsp;
+</div><!-- breadcrumb -->
+
+<br class="clear" />
+<br />
+
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-4921759935398373";
+/* ad_top */
+google_ad_slot = "7667956147";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+
+<br />
+
+<h1>Mebiusbox 2.x ユーザーガイド</h1>
+<h2>FAQ</h2>
+<div class="wrap">
+<p>
+<ul>
+<li><a href="#k0000002">「アプリケーションの構成が正しくありません…」と表示され、起動しない。</a></li>
+<li><a href="#k0000001">最新バージョンへの更新方法</a></li>
+<li><a href="#k0000003">ファイル検索 (Everything) とは何ですか？</a></li>
+<li><a href="#k0000004">動画のコーデック情報を表示したい</a></li>
+<li><a href="#k0000005">ID3タグ情報を表示したい</a></li>
+<li><a href="#k0000006">２画面モードにしたい</a></li>
+<li><a href="#k0000007">アップデータを使ってアップデートしようとしましたが、「アップデートしています」と表示され続けます。</a></li>
+<li><a href="#k0000008">タブを多段表示することは出来ませんか</a></li>
+</ul>
+</p>
+</div>
+
+<h2>「アプリケーションの構成が正しくありません…」と表示され、起動しない。</h2><a name="#k0000002">&nbsp;</a>
+<div class="wrap">
+<p>
+「Microsoft Visual C++ 2008 ランタイムライブラリ」がインストールされていない可能性があります。<br />
+以下の場所からダウンロードして、インストールしてみてください。<br />
+<br />
+<a href="http://www.microsoft.com/Downloads/details.aspx?displaylang=ja&amp;FamilyID=a5c84275-3b97-4ab7-a40d-3802b2af5fc2">http://www.microsoft.com/Downloads/details.aspx?displaylang=ja&amp;FamilyID=a5c84275-3b97-4ab7-a40d-3802b2af5fc2</a>
+</p>
+</div>
+
+<h2>最新バージョンへの更新方法</h2><a name="k0000001">&nbsp;</a>
+<div class="wrap">
+<p>
+メインメニューから「ヘルプ > ソフトウェアの更新を確認...」を選択してください。<br />
+</p>
+</div>
+
+<h2>ファイル検索 (Everything) とは何ですか？</h2><a name="k0000001">&nbsp;</a>
+<div class="wrap">
+<p>
+Everything とはハードディスク内のファイルやフォルダをデータベース化して、高速にファイル検索するフリーソフトウェアです。<br />
+Mebiusbox2 は Everything と通信し、Everything の機能を利用してファイル検索を行えます。<br />
+総当りでファイル検索する場合に便利です。<br />
+この機能を利用するには、Everything をインストールし設定を行う必要があります。
+詳しくは<a href="">こちら</a>。
+</p>
+</div>
+
+<h2>動画のコーデック情報を表示したい</h2><a name="k0000004">&nbsp;</a>
+<div class="wrap">
+<p>
+黒羽製作所で公開されている Sinku.dll, format.ini, codecs.ini を使って、動画のコーデック情報を取得し表示することができます。
+上記ファイルは<a href="http://www.kurohane.net/">黒羽製作所</a>から入手できます。<br />
+Mebiusbox2.exe と同じ場所においてください。
+</p>
+</div>
+
+<h2>ID3タグ情報を表示したい</h2><a name="k0000005">&nbsp;</a>
+<div class="wrap"><p>
+ＭＰ３ファイルに含まれているＩＤ３タグ情報を解析して、トラック名やアーティスト名、アルバム名などを取得し表示することができます。<br />
+そのためには、TagLibUtil.dll, tag.dll, tag_c.dll が必要です。<br />
+TagLibUtil.dll は<a href="http://mebiusbox.crap.jp/software_disk_catalog_manager.html">こちら</a>から。<br />
+tag.dll, tag_c.dll は <a href="http://developer.kde.org/~wheeler/taglib.html">TagLib</a> から入手できます。 
+TagLib は Windows binaries をダウンロードしてください。
+各DLLは Mebiusbox2.exe と同じ場所においてください。
+</p>
+</div>
+
+<h2>２画面モードにしたい</h2><a name="k0000006">&nbsp;</a>
+<div class="wrap"><p>
+<a class="film" href="./screencast_mebiusbox2_doublemode.wmv">２画面モードのやり方（動画）</a>
+<p class="clearfloat">&nbsp;</p>
+</p>
+</div>
+
+<h2>アップデータを使ってアップデートしようとしましたが、「アップデートしています」と表示され続けます。</h2><a name="k0000007">&nbsp;</a>
+<div class="wrap">
+<p>
+Mebiusbox2 本体が正常に終了していない可能性があります。
+その場合は、タスクマネージャを起動して、「プロセス」から「Mebiusbox2.exe」を探してみてください。
+もし、存在していれば右クリックで強制終了してください。
+</p>
+</div>
+
+<h2>タブを多段表示することは出来ませんか</h2><a name="k0000008">&nbsp;</a>
+<div class="wrap">
+<p>
+すみません、出来ませんし、対応する予定もありません。誰かがコード書いてくれたら実装するかも。ちなみに、タブは CMFCTabCtrl 使っています。
+</p>
+</div>
+
+<br class="clear" />
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-4921759935398373";
+/* ad_page_bottom */
+google_ad_slot = "4223868627";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+			
+    </div><!-- content -->
+	
+	<br class="clear" />
+	<div id="footer">
+		&copy;&nbsp;2006-2011 mebiusbox software.<br />
+		Copyright (C) 2009 Yusuke Kamiyamane. All rights reserved.<br />
+		contact:webmaster[at]mebiusbox[dot]crap[dot]jp<br />
+	</div>
+
+</div><!-- container -->
+
+<script type="text/javascript" src="http://mebiusbox.crap.jp/report.js"></script>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-5766141-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+
+</body>
+</html>
