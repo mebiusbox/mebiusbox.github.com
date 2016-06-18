@@ -55,3 +55,6 @@ PDFビューアを使用する場合は Adobe Acrobat Reader をインストー�
 * .Net Framework 2.0 以上
 
 ## 更新履歴
+
+### 0.1.0
+* first release.

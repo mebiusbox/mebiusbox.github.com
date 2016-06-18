@@ -79,3 +79,5 @@ Mebiusbox はファイル管理ソフト（ファイラ）です。
 Windows10, Window7
 
 ## 更新履歴
+
+[こちら](/software_mebiusbox_changelogs.html)

@@ -63,3 +63,5 @@ Windows XP(32bit), 7(32bit,64bit)
 ヘルプの「インポート」を参照してください。
 
 ## 更新履歴
+
+[こちら](/software_disk_catalog_manager_changelogs.html)

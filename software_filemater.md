@@ -36,3 +36,13 @@ Filemater はファイル自動処理ツールです。
 * Net Framework 3.5 以上
 
 ## 更新履歴
+
+### 0.2.0
+* New: 「Arguments」「Program」ノードを追加しました。
+* New: コマンドラインオプションを追加しました。
+* New: 自動実行ができるようになりました。
+* Misc: 外観を変更しました。
+* Misc: 「FileMAX」から「Filemater」に改名しました。
+
+### 0.1.0
+* first release.

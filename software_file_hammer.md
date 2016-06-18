@@ -53,3 +53,5 @@ FileHammerはファイル削除ツールです。
 Windows XP, Vista, 7
 
 ## 更新履歴
+
+[こちら](/software_file_hammer_changelogs.html)
