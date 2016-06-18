@@ -51,7 +51,6 @@ a.film {
   background-position:4px 5px;
 }
 
-
 a.film:hover {
   background-color: #ddd;
   border:1px solid black;
@@ -228,26 +227,23 @@ text-align:left;
 }
 
 .mbx h1 {
-color: #d21a4e;
-background-color: #fff;
-font-weight: normal;
-font-size: 22px;
-margin: 20px 0 15px 0;
-padding: 3px 2px 3px 10px;
-border-bottom:1px solid #888;
+	color: #d21a4e;
+	background-color: #fff;
+	font-weight: normal;
+	font-size: 24px;
+	margin: 20px 0 15px 0;
+	padding: 3px 2px 3px 10px;
+	border-bottom:1px solid #888;
 }
 
 .mbx h2 {
- background-color: transparent;
- color:#d21a4e;
- border-bottom:1px solid #ddd;
- font-size: 12px;
- font-weight: bold;
- margin: 24px 0 2px 0;
- padding: 5px 0 6px 12px;
- background: transparent url(/assets/img/point3.gif) no-repeat left top;
- background-position: 4px 14px;
- text-indent: 8px;
+	color: #d21a4e;
+	background-color: #fff;
+	font-weight: normal;
+	font-size: 22px;
+	margin: 20px 0 15px 0;
+	padding: 3px 2px 3px 10px;
+	border-bottom:1px solid #ddd;
 }
 
 .mbx h2.version {
@@ -255,25 +251,40 @@ border-bottom:1px solid #888;
 }
 
 .mbx h3 {
- background-color: transparent;
- color: #e40;
- font-size: 12px;
- font-weight: bold;
- margin: 22px 0 12px 0;
- padding: 0 0 0 0;
+	background-color: transparent;
+	color:#d21a4e;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 24px 0 2px 0;
+	padding: 5px 0 6px 12px;
+	background: transparent url(/assets/img/point3.gif) no-repeat left top;
+	background-position: 4px 14px;
+	text-indent: 8px;
+
 }
 
 .mbx h4 {
- background-color: transparent;
- color: #444;
- font-size: 14px;
- font-weight: bold;
- margin: 22px 0 0 0;
- padding: 0 0 0 0;
+	background-color: transparent;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 0;
+  padding: 5px 0 0 12px;
+	background: transparent url(/assets/img/ul_point_2.gif) no-repeat left top;
+	background-position: 4px 14px;
+	text-indent: 8px;
+}
+
+.mbx h5 {
+	background-color: transparent;
+	color: #444;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 22px 0 0 0;
+	padding: 0 0 0 0;
 }
 
 .mbx img {
- margin: auto;
+ margin: 8px;
  padding: 0;
 }
 
@@ -282,7 +293,24 @@ border-bottom:1px solid #888;
 }
 
 .mbx code,
-.mbx pre,
+.mbx pre {
+	background-color: #f6d5d6;
+	border: 0 none;
+	border-radius: 3px;
+	font-size: 10.5pt;
+	padding: 2px 6px;
+	text-shadow: 0 0 0 #000;
+}
+
+.mbx pre.highlight {
+	padding:16px;
+}
+.mbx pre.highlight,
+.mbx pre.highlight code {
+	font-family: Monaco,Consolas,Courier New,Courier,monospace,sans-serif;
+	background-color: rgb(38,41,44);
+}
+
 .mbx div.box {
  font-family: Monaco, Verdana, Sans-serif;
  font-size: 12px;
@@ -330,7 +358,7 @@ border-bottom:1px solid #888;
 
 .mbx ul, .mbx ol {
  list-style-image: url(/assets/img/arrow.gif);
- padding: 0 0 0 18px;
+ padding: 0 0 0 48px;
  margin: 8px 0 12px 0;
 }
 
@@ -343,36 +371,20 @@ border-bottom:1px solid #888;
 }
 
 .mbx table {
-	margin: 10px 0px;
-}
-.mbx .tableborder {
+ margin: 10px 0px;
  border-width: 1px;
  border-color: #d0d0d0;
  border-style: solid;
 }
+
 .mbx th {
  font-weight: bold;
  text-align: left;
  font-size: 14px;
  background-color: #f9f9f9;
+ border-right:1px solid #d0d0d0;
  color:#d21a4e;
  padding: 4px;
-}
-
-.mbx .th {
-  font-weight:normal;
-}
-
-.mbx .td strong {
- background-color: #e5e9ed;
-}
-
-.mbx .td {
- border-top:1px solid #d0d0d0;
- font-weight: normal;
- font-size: 12px;
- padding: 6px;
- background-color: #f9f9f9;
 }
 
 .mbx th a,
@@ -383,10 +395,34 @@ border-bottom:1px solid #888;
  color:#d21a4e;
 }
 
-.mbx .td a,
-.mbx .td a:visited,
-.mbx .td a:hover {
+.mbx td {
+ border-top:1px solid #d0d0d0;
+ border-right:1px solid #d0d0d0;
+ font-weight: normal;
  font-size: 12px;
+ padding: 6px;
+ background-color: #f9f9f9;
+}
+
+.mbx td a,
+.mbx td a:visited,
+.mbx td a:hover {
+ font-size: 12px;
+}
+
+.mbx table.dl {
+ margin: 10px 0px;
+ border-width: 0px;
+}
+
+.mbx table.dl th {
+	background-color: transparent;
+	border-width: 0px;
+}
+
+.mbx table.dl td {
+	background-color: transparent;
+	border-width: 0px;
 }
 
 .mbx .tdpackage {
