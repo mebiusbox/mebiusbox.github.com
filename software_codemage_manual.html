@@ -1,0 +1,415 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="stylesheet" href="/assets/css/mebiusbox.css">
+        <title>Mebiusbox software</title>
+    </head>
+    <body>
+
+<div id="container">
+<div id="header">
+	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+		<tr>
+			<th>mebiusbox software</th>
+			<td id="searchbox"><form method="get" action="http://www.google.com/search"><input class="input" type="hidden" name="as_sitesearch" id="as_sitesearch" value="mebiusbox.crap.jp/" />検索&nbsp; <input type="text" class="input" style="width:200px;" name="q" id="q" size="31" maxlength="255" value="" />&nbsp;<input type="submit" class="submit" name="sa" value="Go" /></form></td>
+		</tr>
+	</table>
+</div><!-- header -->
+<div id="content">
+
+<h1>CodeMage</h1>
+<div class="wrap">
+<p>Mac 用テキストエディタ TextMate を参考に作成したテキストエディタです。<br />
+ですが、私自身、TextMate は持っていないどころか、使ったこともありません。
+公開されているスクリーンキャストやマニュアルを参考にしています。
+TextMate とは全然挙動が違っている機能もあるでしょうが、勘弁してください。
+</p>
+</div>
+
+<h2>TextMate</h2>
+<div class="wrap">
+<p>
+Macromates社が開発している Mac 用テキストエディタです。Ruby 関係で人気のようです。<br />
+<br />
+<a href="http://macromates.com/">http://macromates.com/</a><br />
+<br />
+マニュアルは以下の場所にあります。<br />
+</p>
+<ul>
+<li><a href="http://manual.macromates.com/en/">英語版</a></li>
+<li><a href="http://manual.macromates.com/ja/">日本語</a></li>
+</ul>
+<p>
+<br />
+その他参考になるサイトです。<br />
+</p>
+<ul>
+<li><a href="http://www.fraction.jp/log/archives/2007/05/1132">TextMateを理解する - BONNOH FRACTION 13</a></li>
+</ul>
+</div>
+
+<h2>索引</h2>
+<div class="wrap">
+<ul>
+<li><a href="#bundle">バンドル</a></li>
+<li><a href="#bundle_install">バンドルのインストール</a></li>
+<li><a href="#regexp">正規表現</a></li>
+<li><a href="#regexp_replace">正規表現置換</a></li>
+<li><a href="#shortcut">ショートカット</a></li>
+<li><a href="#spell">スペル辞書</a></li>
+<li><a href="#cygwin">Cygwin</a></li>
+<li><a href="#update">最新バージョンへの更新方法</a></li>
+<li><a href="./comment/">コメント</a></li>
+</ul>
+</div>
+
+
+<h2><a name="bundle"></a>バンドル</h2>
+<div class="wrap">
+<p>CodeMage 自体には各プログラミング言語に特化した機能や便利な編集機能は含まれていません。これらはバンドルを導入することで大幅に改善されます。<br />
+基本的にバンドルはプログラミング言語ごとにまとまっています。たとえば、C, Java, Ruby, Html などです。
+CodeMage は TextMate 用のバンドルを使用することが可能（ただし、100%互換ではありません）で、現在 100 種類以上の TextMate 用バンドルが存在しています。<br />
+もちろん、CodeMage で独自のバンドルを作成することも可能です。（CodeMageで作成したバンドルが TextMate で使えるかは未検証です）<br />
+</p>
+</div>
+
+
+<h2><a name="bundle_install"></a>バンドルのインストール</h2>
+<div class="wrap">
+<p>
+バンドルのインストールは、メインメニューの「バンドル」から「Manage Bundle...」を選択します。<br />
+ダイアログ上部にあるコンボボックスからリポジトリ（現在は１つしかない）を選択します。<br />
+利用可能なバンドルの一覧が表示されますので、必要なものをダウンロード、インストールしてください。<br />
+<br />
+<strong>Source</strong>, <strong>Text</strong> バンドルは、基本的な機能が入っているので、インストールしておいてください。<br />
+</p>
+</div>
+
+
+<h2><a name="regexp"></a>正規表現</h2>
+<div class="wrap">
+<p>
+CodeMage の正規表現エンジンには<a href="http://www.geocities.jp/kosako3/oniguruma/index_ja.html">鬼車</a>を使用しています。正規表現の詳しい情報は鬼車のドキュメントを参照してください。<br />
+</p>
+</div>
+
+
+<h2><a name="regexp_replace"></a>正規表現置換</h2>
+<div class="wrap">
+<h3>キャプチャ</h3>
+<div class="wrap">
+<p>キャプチャの参照は $n です。</p>
+</div>
+
+<h3>コードフォールディング</h3>
+<div class="wrap">
+<p>キャプチャした文字列を参照する際に、変形させることができます。<br />
+<code>
+検索対象：CodeMage.h<br />
+正規表現：(.+)\.(.*)<br />
+</code>
+</p>
+<table cellpadding="0" cellspacing="0" border="0" style="width:100%" class="tableborder">
+<tr>
+	<th>特殊文字</th>
+	<th>機能</th>
+	<th>例</th>
+	<th>結果</th>
+</tr>
+<tr>
+	<td class="td"><strong>\l</strong></td>
+	<td class="td">先頭を子文字にする</td>
+	<td class="td">\l$1.$2</td>
+	<td class="td">codeMage.h</td>
+</tr>
+<tr>
+	<td class="td"><strong>\L</strong></td>
+	<td class="td">子文字化</td>
+	<td class="td">\L$1\E.$2</td>
+	<td class="td">codemage.h</td>
+</tr>
+<tr>
+	<td class="td"><strong>\u</strong></td>
+	<td class="td">先頭を大文字にする</td>
+	<td class="td">$1.\u$2</td>
+	<td class="td">CodeMage.H</td>
+</tr>
+<tr>
+	<td class="td"><strong>\U</strong></td>
+	<td class="td">大文字化</td>
+	<td class="td">\U$1\E.$2</td>
+	<td class="td">CODEMAGE.h</td>
+</tr>
+<tr>
+	<td class="td"><strong>\E</strong></td>
+	<td class="td">\L, \U を解除</td>
+	<td class="td">\U$1\E.$2</td>
+	<td class="td">CODEMAGE.h</td>
+</tr>
+</table>
+</div>
+
+
+<h3>条件付きの挿入</h3>
+<div class="wrap">
+<p>
+あるキャプチャがマッチしたかどうかによって、挿入する値を変更することができます。<br />
+<code>
+(?«n»:«insertion»)<br />
+<br />
+(?«n»:«insertion»:«otherwise»)
+</code>
+例：<br />
+<code>
+検索対象：CodeMage<br />
+<br />
+正規表現：([a-zA-Z]{5})(.*)<br />
+<br />
+置換：$1(?2:...)<br />
+<br />
+結果：CodeM...<br />
+</code>
+</p>
+</div>
+</div>
+
+
+<h2><a name="shortcut"></a>ショートカット</h2>
+<div class="wrap">
+<table cellpadding="0" cellspacing="0" border="0" style="width:100%" class="tableborder">
+<tr>
+	<th>機能</th>
+	<th>キー</th>
+</tr>
+<tr>
+	<td class="td"><strong>開く</strong></td>
+	<td class="td">Ctrl+O</td>
+</tr>
+<tr>
+	<td class="td"><strong>保存</strong></td>
+	<td class="td">Ctrl+S</td>
+</tr>
+<tr>
+	<td class="td"><strong>すべて保存する</strong></td>
+	<td class="td">Shift+Ctrl+S</td>
+</tr>
+<tr>
+	<td class="td"><strong>タブを閉じる</strong></td>
+	<td class="td">Ctrl+W</td>
+</tr>
+<tr>
+	<td class="td"><strong>すべてのタブを閉じる</strong></td>
+	<td class="td">Shift+Ctrl+W</td>
+</tr>
+<tr>
+	<td class="td"><strong>次のタブへ</strong></td>
+	<td class="td">Ctrl+Tab</td>
+</tr>
+<tr>
+	<td class="td"><strong>前のタブへ</strong></td>
+	<td class="td">Shift+Ctrl+Tab</td>
+</tr>
+<tr>
+	<td class="td"><strong>タブを選択</strong></td>
+	<td class="td">Ctrl+0</td>
+</tr>
+<tr>
+	<td class="td"><strong>ファイルを選択</strong></td>
+	<td class="td">Shift+Ctrl+T</td>
+</tr>
+<tr>
+	<td class="td"><strong>次の単語の先頭に進める</strong></td>
+	<td class="td">Ctrl+Right</td>
+</tr>
+<tr>
+	<td class="td"><strong>単語の先頭の移動する</strong></td>
+	<td class="td">Ctrl+Left</td>
+</tr>
+<tr>
+	<td class="td"><strong>カーソル行を中央に表示する</strong></td>
+	<td class="td">Ctrl+L</td>
+</tr>
+<tr>
+	<td class="td"><strong>行の先頭へ</strong></td>
+	<td class="td">Home</td>
+</tr>
+<tr>
+	<td class="td"><strong>行の末尾へ</strong></td>
+	<td class="td">End</td>
+</tr>
+<tr>
+	<td class="td"><strong>テキストの先頭へ</strong></td>
+	<td class="td">Ctrl+Home</td>
+</tr>
+<tr>
+	<td class="td"><strong>テキストの末尾へ</strong></td>
+	<td class="td">Ctrl+End</td>
+</tr>
+<tr>
+	<td class="td"><strong>コピー</strong></td>
+	<td class="td">Ctrl+C</td>
+</tr>
+<tr>
+	<td class="td"><strong>切り取り</strong></td>
+	<td class="td">Ctrl+X</td>
+</tr>
+<tr>
+	<td class="td"><strong>貼り付け</strong></td>
+	<td class="td">Ctrl+V</td>
+</tr>
+<tr>
+	<td class="td"><strong>元に戻す</strong></td>
+	<td class="td">Ctrl+Z</td>
+</tr>
+<tr>
+	<td class="td"><strong>やり直す</strong></td>
+	<td class="td">Ctrl+Y</td>
+</tr>
+<tr>
+	<td class="td"><strong>インデントを解除</strong></td>
+	<td class="td">Shift+Tab</td>
+</tr>
+<tr>
+	<td class="td"><strong>検索</strong></td>
+	<td class="td">Shift+Ctrl+F</td>
+</tr>
+<tr>
+	<td class="td"><strong>次を検索</strong></td>
+	<td class="td">F3</td>
+</tr>
+<tr>
+	<td class="td"><strong>前を検索</strong></td>
+	<td class="td">Shift+F3</td>
+</tr>
+<tr>
+	<td class="td"><strong>クイック検索</strong></td>
+	<td class="td">Ctrl+F</td>
+</tr>
+<tr>
+	<td class="td"><strong>検索と置換</strong></td>
+	<td class="td">Ctrl+R</td>
+</tr>
+<tr>
+	<td class="td"><strong>インクリメンタルサーチ</strong></td>
+	<td class="td">Ctrl+I</td>
+</tr>
+<tr>
+	<td class="td"><strong>ブックマークを設定／解除</strong></td>
+	<td class="td">Ctrl+F2</td>
+</tr>
+<tr>
+	<td class="td"><strong>次のブックマークへ</strong></td>
+	<td class="td">F2</td>
+</tr>
+<tr>
+	<td class="td"><strong>前のブックマークへ</strong></td>
+	<td class="td">Shift+F2</td>
+</tr>
+<tr>
+	<td class="td"><strong>すべてのブックマークを削除</strong></td>
+	<td class="td">Shift+Ctrl+F2</td>
+</tr>
+<tr>
+	<td class="td"><strong>ヘッダファイルとソースファイルを切り替える</strong></td>
+	<td class="td">Alt+Ctrl+Up</td>
+</tr>
+<tr>
+	<td class="td"><strong>対応する括弧に移動</strong></td>
+	<td class="td">Ctrl+B</td>
+</tr>
+<tr>
+	<td class="td"><strong>シンボル移動</strong></td>
+	<td class="td">Ctrl+M</td>
+</tr>
+<tr>
+	<td class="td"><strong>行移動</strong></td>
+	<td class="td">Ctrl+G</td>
+</tr>
+<tr>
+	<td class="td"><strong>折り畳みを切り替える</strong></td>
+	<td class="td">F1</td>
+</tr>
+<tr>
+	<td class="td"><strong>すべて折りたたむ</strong></td>
+	<td class="td">Ctrl+F1</td>
+</tr>
+<tr>
+	<td class="td"><strong>カレント以外を折りたたむ</strong></td>
+	<td class="td">Alt+F1</td>
+</tr>
+<tr>
+	<td class="td"><strong>すべて展開</strong></td>
+	<td class="td">Alt+Ctrl+F1</td>
+</tr>
+<tr>
+	<td class="td"><strong>タブトリガ</strong></td>
+	<td class="td">Tab</td>
+</tr>
+<tr>
+	<td class="td"><strong>現在の行を実行し、結果を挿入する</strong></td>
+	<td class="td">Alt+Ctrl+R</td>
+</tr>
+<tr>
+	<td class="td"><strong>コマンドに渡す</strong></td>
+	<td class="td">Ctrl+H</td>
+</tr>
+<tr>
+	<td class="td"><strong>補完</strong></td>
+	<td class="td">Esc</td>
+</tr>
+<tr>
+	<td class="td"><strong>英単語補完</strong></td>
+	<td class="td">Ctrl+Space</td>
+</tr>
+<tr>
+	<td class="td"><strong>バンドルアイテムを選択</strong></td>
+	<td class="td">Alt+Ctrl+T</td>
+</tr>
+</table>
+</div>
+
+
+<h2><a name="spell"></a>スペル辞書</h2>
+<div class="wrap">
+<p>
+英単語補完、Pascal形式変換、Camel形式変換機能を利用するためには、スペルチェック用のデータが必要です。
+以下の場所からダウンロードしてください。<br />
+<br />
+<a href="http://wordlist.sourceforge.net/">http://wordlist.sourceforge.net/</a><br />
+<br />
+Spell Checking Dictionaries にある en_US (http://downloads.sourceforge.net/wordlist/hunspell-en_US-20081205.zip) をダウンロード。
+解凍して、en_US.dic ファイルを CodeMage/Support/Spell に入れてください。
+フォルダが存在しない場合は、作成してください。
+</p>
+</div>
+
+
+<h2><a name="cygwin"></a>Cygwin</h2>
+<div class="wrap">
+<p>
+CodeMage でコマンドを実行するには、<strong>cygwin</strong> が必要です。
+「ツール > オプション > Cygwin」で bash.exe の場所を指定してください。
+</p>
+</div>
+
+
+<h2><a name="update"></a>最新バージョンへの更新方法</h2>
+<div class="wrap">
+<p>
+メインメニューから「ヘルプ > ソフトウェアの更新を確認...」を選択してください。<br />
+</p>
+</div>
+
+    </div><!-- content -->
+
+	<br class="clear" />
+	<div id="footer">
+		&copy;&nbsp;2006-2011 mebiusbox software.<br />
+		contact:webmaster[at]mebiusbox[dot]crap[dot]jp<br />
+	</div>
+
+</div><!-- container -->
+</body>
+</html>
