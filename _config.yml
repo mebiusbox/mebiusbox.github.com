@@ -3,3 +3,13 @@ highlighter: rouge
 url: http://mebiusbox.github.io
 lsi: false
 exclude: [LICENSE, CNAME, README.md, .gitignore, Gemfile, Gemfile.lock]
+paginate: 10
+gems: [jekyll-archives, jekyll-paginate]
+jekyll-archives:
+  enabled: [year]
+  layout: 'archive'
+  permalinks:
+    year: '/archives/year/:year/'
+    month: '/archives/month/:year:month/'
+    tag: '/archives/tag/:name/'
+    category: '/archives/category/:name/'
