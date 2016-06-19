@@ -23,7 +23,17 @@ h1.title {
 	font-family: Monaco,Consolas,Courier New,Courier,monospace,sans-serif;
 	background-color: rgb(38,41,44);
 }
+h2 {
+	border-bottom: 1px dotted #ddd;
+	padding-bottom: 8px;
+	margin: 20px 0;
+}
 
 h1.title {
 	margin: 40px 0px;
+}
+
+div.sep {
+	border-top: 1px dotted #ddd;
+	margin: 15px 0px;
 }
