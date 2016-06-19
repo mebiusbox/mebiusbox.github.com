@@ -130,5 +130,12 @@
 		"version": "1.1.0",
 		"url": "/software_jsonbridge.html",
 		"description":"独自の文法で記述したテキストを JSON, XML に変換するツールです."
+	},
+
+	{
+		"name": "TagLibUtil",
+		"version": "1.0.0",
+		"url": "http://bit.ly/28NZ59i",
+		"description":"tag.dll を扱うためのライブラリ."
 	}
 ]
