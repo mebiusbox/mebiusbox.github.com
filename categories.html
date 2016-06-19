@@ -10,7 +10,7 @@ title: Categories
 	{% for post in site.categories[name] %}
 		<li>
 			<a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-			<span class="post-date">{{ post.date | date: "%b %-d, %Y" }}</span>
+			<span class="post-date">{{ post.date | date_to_string }}</span>
 		</li>
 	{% endfor %}
 	</ul>

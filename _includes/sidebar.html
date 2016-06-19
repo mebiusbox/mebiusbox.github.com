@@ -23,14 +23,14 @@
 					{% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
 					{% capture nyear %}{{ post.next.date | date: '%Y' }}{% endcapture %}
 					{% if year != nyear %}
-						<li><a href="{{ site.url }}/archives/year/{{ nyear }}">{{ nyear }}</a> ({{ count }})
+						<li><a href="{{ site.url }}/archives.html#{{ nyear }}">{{ nyear }}</a> ({{ count }})
 						{% assign count = 0 %}
 					{% endif %}
 					{% capture count %}{{ count | plus:1 }}{% endcapture %}
 				{% endunless %}
 			{% endfor %}
 			{% if count != 0 %}
-				<li><a href="{{ site.url }}/archives/year/{{ nyear }}">{{ nyear }}</a> ({{ count }})
+				<li><a href="{{ site.url }}/archives.html#{{ nyear }}">{{ nyear }}</a> ({{ count }})
 			{% endif %}
 			<li><a href="{{ site.url }}/categories.html">カテゴリ</a>
 			<li><a href="{{ site.url }}/tags.html">タグ</a>
