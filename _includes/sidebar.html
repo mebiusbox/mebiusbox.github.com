@@ -13,7 +13,30 @@
   <div id="social">
     {% include social.html %}
   </div>
-	<div>
+	<div class="sep">
+		{% assign count = 1 %}
+		<ul>
+			{% for post in site.posts %}
+				{% unless post.next %}
+					{% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
+				{% else %}
+					{% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
+					{% capture nyear %}{{ post.next.date | date: '%Y' }}{% endcapture %}
+					{% if year != nyear %}
+						<li><a href="{{ site.url }}/archives/year/{{ nyear }}">{{ nyear }}</a> ({{ count }})
+						{% assign count = 0 %}
+					{% endif %}
+					{% capture count %}{{ count | plus:1 }}{% endcapture %}
+				{% endunless %}
+			{% endfor %}
+			{% if count != 0 %}
+				<li><a href="{{ site.url }}/archives/year/{{ nyear }}">{{ nyear }}</a> ({{ count }})
+			{% endif %}
+			<li><a href="{{ site.url }}/categories.html">カテゴリ</a>
+			<li><a href="{{ site.url }}/tags.html">タグ</a>
+		</ul>
+	</div>
+	<div class="sep">
 		<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/mebiusbox2" data-widget-id="518101088566652928">@mebiusbox2 からのツイート</a>
 		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 	</div>
