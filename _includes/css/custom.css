@@ -17,11 +17,11 @@ h1.title {
 }
 #post pre.highlight {
 	padding:16px;
+	background-color: #222;
 }
-#post pre.highlight,
-#post pre.highlight code {
-	font-family: Monaco,Consolas,Courier New,Courier,monospace,sans-serif;
-	background-color: rgb(38,41,44);
+#post pre.highlight * {
+	font-family: Consolas,Courier New,Courier,monospace,sans-serif;
+	background-color: #222;
 }
 h2 {
 	border-bottom: 1px dotted #ddd;
