@@ -23,6 +23,33 @@ h1.title {
 	font-family: Consolas,Courier New,Courier,monospace,sans-serif;
 	background-color: #222;
 }
+#post table {
+ margin: 10px 0px;
+ border-width: 1px;
+ border-color: #d0d0d0;
+ border-style: solid;
+}
+#post th {
+ font-weight: bold;
+ font-size: 14px;
+ background-color: #f9f9f9;
+ border-right:1px solid #d0d0d0;
+ color:#d21a4e;
+ padding: 4px;
+}
+#post td {
+ border-top:1px solid #d0d0d0;
+ border-right:1px solid #d0d0d0;
+ font-weight: normal;
+ font-size: 12px;
+ padding: 6px;
+ background-color: #f9f9f9;
+}
+#post td a,
+#post td a:visited,
+#post td a:hover {
+ font-size: 12px;
+}
 h2 {
 	border-bottom: 1px dotted #ddd;
 	padding-bottom: 8px;
