@@ -11,9 +11,12 @@ h1.title {
 	font-size: 10.5pt;
 	background-color: #f6d5d6;
   padding: 2px 6px;
-	text-shadow: 0 0 0 #000;
+/*	text-shadow: 0 0 0 #000;*/
 	border-radius:3px;
 	border: 0px;
+}
+#post code {
+	font-family: Consolas, sans-serif, monospace;
 }
 #post pre.highlight {
 	padding:16px;
