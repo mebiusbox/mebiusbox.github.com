@@ -18,7 +18,7 @@ Eclipse の C++ 開発環境に静的コード解析をいくつか追加しま�
 
 ツールバーから選択してもいいです。
 
-![003]({{ site.url }}/assets/img/post/2016-06-26-eclipse-cpp-code-analyze-002.png)
+![002]({{ site.url }}/assets/img/post/2016-06-26-eclipse-cpp-code-analyze-002.png)
 
 
 ## cpplint
@@ -26,6 +26,7 @@ Eclipse の C++ 開発環境に静的コード解析をいくつか追加しま�
 まずは cpplint を登録します。
 cpplint は以下の場所からダウンロードできます。
 
+<i class="fa fa-external-link"></i>
 [cpplint](https://github.com/google/styleguide/tree/gh-pages/cpplint)
 
 cpplint を実行するには python が必要です。
@@ -55,6 +56,7 @@ Arguments：`E:\cpplint.py ${resource_loc}`
 同じような手順で、cppcheck を登録します。
 cppcheck は以下の場所からダウンロードできます。
 
+<i class="fa fa-external-link"></i>
 [cppcheck](http://cppcheck.sourceforge.net/)
 
 ここでは 1.74 (64bit) をデフォルト設定のままインストールしました。
@@ -70,6 +72,7 @@ cppcheck はインクルードしたファイルが検索できないとエラ�
 
 SourceMonitor はメトリクス解析をやってくれます。以下の場所からダウンロードできます。
 
+<i class="fa fa-external-link"></i>
 [SourceMonitor](http://www.campwoodsw.com/sourcemonitor.html)
 
 ここではデフォルト設定のままインストールしました。こちらは次のように設定します。
@@ -101,10 +104,28 @@ linelength で行数を、filter でフィルターの細かい設定を行え�
 対象のソースファイルが UTF-8 の場合、SourceMonitor が起動しないことがあります。
 一度 SourceMonitor を直接起動し、`File > Options > Allow parsing of UTF-8 files` にチェックをつけて再度試してみてください。
 
-![005]({{ site.url }}/assets/img/post/2016-06-26-eclipse-cpp-code-analyze-006.png)
+![006]({{ site.url }}/assets/img/post/2016-06-26-eclipse-cpp-code-analyze-006.png)
 
 ## メトリクス計測について
 
 詳しくは検索してもらえれば沢山見つかると思います。
 複雑度の数値については 10 以下が理想とありますが、個人的には 50 以下、出来れば 30 以下をキープすればいいかと思っています。
 ただし、場合によっては複雑な条件だらけになることもあるので例外はあると思っています。
+
+## metriculator
+
+Eclipse のプラグインに metriculator というメトリクス計測があります。
+Eclipse Marketplace からインストールするこｔが出来ます。
+
+![007]({{ site.url }}/assets/img/post/2016-06-26-eclipse-cpp-code-analyze-007.png)
+
+使い方は Project Explorer 上でフォルダまたはファイルを右クリックして `Run C/C++ Code Analysis` を選択します。
+しばらくすると結果が表示されます。
+
+項目 | 名前 | 説明 |
+---|---|---
+McCabe | cyclomatic complex | サイクロマチック数（複雑度）
+NbMembers | Number of Members per type | クラスのメンバー数
+LSLOC | Logical source lines of code | 行数
+EfferentCoupling | Number of Efferent Couplings per type | クラスが参照している数
+NbParams | Number of parameters per function | メソッドのパラメータ数
