@@ -1,6 +1,18 @@
-#post *,
+#post p,
+#post div,
+#post th,
+#post td,
+#post h1,
+#post h2,
+#post h3,
+#post h4,
 h1.title {
 	font-family:"Noto Sans JP",Hiragino Sans,"ヒラギノ角ゴシック",Hiragino Kaku Gothic ProN,"ヒラギノ角ゴ ProN W3",Meiryo,sans-serif;
+}
+.fa-external-link {
+	position:relative;
+	top:5px;
+	font-size:1.4em;
 }
 #post p {
 	line-height:28px;
