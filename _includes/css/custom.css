@@ -79,3 +79,7 @@ div.sep {
 	border-top: 1px dotted #ddd;
 	margin: 15px 0px;
 }
+.imgblk {
+	float:left;
+	margin-right: 16px;
+}
