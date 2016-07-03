@@ -18,7 +18,7 @@ Blender で複数のビルをパーティクルを使って格子状に配置す
 ![building1]({{ site.url }}/assets/img/post/2016-07-02-blender-building-building1.png){: .imgblk }
 ![building3]({{ site.url }}/assets/img/post/2016-07-02-blender-building-building3.png)
 
-作成したビルはグループ化し、名前は `Building` にします。
+作成したビルはグループ化し、名前は `Buildings` にします。
 
 ![002]({{ site.url }}/assets/img/post/2016-07-02-blender-building-002.png)
 
