@@ -102,7 +102,6 @@ book.json に書かれたプラグインをインストールする場合は以�
 
 	gitbook install
 
-特に問題なければインストールは完了です。
 `info: >> plugin "mathjax" installed with success` と表示されればインストール成功です。
 もし次のようなエラーが出た場合：
 
@@ -130,6 +129,7 @@ book.json に書かれたプラグインをインストールする場合は以�
 	gitbook serve
 
 ## PDF, epub, mobi 形式の作成
+
 ### svgexport
 PDF などで数式を文書に含めるには `SVGexport` が必要です。
 以下のコマンドを実行してインストールします。
