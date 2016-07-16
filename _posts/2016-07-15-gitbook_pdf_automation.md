@@ -259,11 +259,7 @@ gitbook install ./$2
 gitbook pdf ./$2 ./$2/$3.pdf
 gitbook build ./$2
 
-if [ -e /var/www/html/$2 ]; then
-	cp -rf ./$2/_book -T /var/www/html/$2
-else
-	cp -rf ./$2/_book /var/www/html/$2
-fi
+cp -rf ./$2/_book -T /var/www/html/$2
 ```
 
 忘れずに実行権限を与えておきます。
@@ -286,7 +282,7 @@ ssh-keygen -t rsa
 実際に clone 出来るか確認しておきます。
 GitLab で適当なプロジェクトを作成します。
 ここでは 「root」 ユーザーで 「Test」 というプロジェクトを作成しました。
-URL は「git@192.168.56.101:root/Test.git」になります。
+URL は「 git@192.168.56.101:root/Test.git 」になります。
 
 ```
 git clone git@192.168.56.101:root/Test.git
@@ -356,7 +352,7 @@ systemctl start httpd
 systemctl enable httpd
 ```
 
-例えば先ほどの「Test」プロジェクトは `/var/www/html/Test` となりますので、URL は「http://192.168.56.101:8000/Test/」になります。また、PDF 文書は「http://192.168.56.101:8000/Test/{output_pdf}.pdf」でアクセスします。
+例えば先ほどの「Test」プロジェクトは `/var/www/html/Test` となりますので、URL は「 http://192.168.56.101:8000/Test/ 」になります。また、PDF 文書は「 http://192.168.56.101:8000/Test/{output_pdf}.pdf 」でアクセスします。
 
 ## GitLab で WebHook を設定
 
@@ -420,6 +416,7 @@ npm install forever -g
 forever start -c coffee node_modules/.bin/hubot
 ```
 
+起動方法はこれまで変わらないので `./run_hubot.sh` を実行します。
 動作しているか確認する場合は `forever list` です。
 
 ## 日本語の対応
