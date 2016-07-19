@@ -62,7 +62,7 @@ GitLab の Issues は一覧画面、詳細画面ともにタイトルが少し�
 ```css
 .issue-title-text {
     font-family: "メイリオ";
-    font-size: 18pt;
+    font-size: 12pt;
     a {
         color: #b92a2c !important;
         &:hover {
@@ -90,7 +90,7 @@ GitLab の Issues は一覧画面、詳細画面ともにタイトルが少し�
 .detail-page-description {
     .title {
         margin: 0;
-        font-size: 23px;
+        font-size: 16px;
 //      color: $gl-gray-dark;
         color: #b92a2c;
         padding-bottom: 8px;
