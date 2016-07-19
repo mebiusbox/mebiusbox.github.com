@@ -1,6 +1,6 @@
 ---
 layout: post
-title: GitLab Issues の css をカスタマイズ
+title: GitLab Issues のスタイルシートをカスタマイズ
 category: note
 tags: [gitlab]
 ---
