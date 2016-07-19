@@ -122,7 +122,7 @@ gitbook pdf
 > Install it from Calibre: https://calibre-ebook.com
 ```
 
-"ebook-convert" がインストールされていないので、[Calbre](https://calibre-ebook.com/) をインストールする必要があります。
+"ebook-convert" がインストールされていないので、[Calibre](https://calibre-ebook.com/) をインストールする必要があります。
 
 公式サイトのダウンロードから Unix 用のインストール方法が記載されていますので、それを実行します。
 
