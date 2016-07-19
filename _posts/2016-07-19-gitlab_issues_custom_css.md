@@ -42,7 +42,7 @@ GitLab の Issues は一覧画面、詳細画面ともにタイトルが少し�
 
 ## Issues 画面のスタイルシート
 
-一覧ページと詳細ページのスタイルシートはそれぞれ `/opt/gitlab/embedded/service/gitlab-rails/public/assets` に入っています。
+一覧ページと詳細ページのスタイルシートは `/opt/gitlab/embedded/service/gitlab-rails/public/assets` に入っています。
 ここにある css は SCSS からコンパイルされたもので、ソースファイルは以下の場所にあります。
 
 ### 一覧用スタイルシート
