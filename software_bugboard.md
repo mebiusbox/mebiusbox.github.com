@@ -11,7 +11,7 @@ Bugboard はバグトラッキングシステム（ＢＴＳ）です。
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="http://bit.ly/1QcQUNz" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/Bugboard','Title':'Bugboard});">
+			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/bugboard-1.2.2.zip" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/Bugboard','Title':'Bugboard});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>

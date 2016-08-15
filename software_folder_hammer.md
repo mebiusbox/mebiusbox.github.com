@@ -11,12 +11,12 @@ FolderHammer は空フォルダ削除ツールです。
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="http://bit.ly/1V46neP" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FolderHammerSetup','Title':'FolderHammerSetup'});">
+			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/FolderHammerSetup-1.2.1.exe" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FolderHammerSetup','Title':'FolderHammerSetup'});">
 				<img src="/assets/img/download_exe.jpg" />
 			</a>
 		</td>
 		<td>
-			<a href="http://bit.ly/1WT5ZGe" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FolderHammer','Title':'FolderHammer'});">
+			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/FolderHammer-1.2.1.zip" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FolderHammer','Title':'FolderHammer'});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>

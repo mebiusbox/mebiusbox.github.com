@@ -15,7 +15,7 @@ PortalFolder は フォルダへの移動、コピーを支援し、素早いア
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="http://bit.ly/1V4chwi" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PortalFolder','Title':'PortalFolder'});">
+			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/PortalFolder-0.1.0.zip" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PortalFolder','Title':'PortalFolder'});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>

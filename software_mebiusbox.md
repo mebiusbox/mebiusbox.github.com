@@ -13,12 +13,12 @@ Mebiusbox はファイル管理ソフト（ファイラ）です。
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="http://bit.ly/1OvsMoT" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/MebiusboxSetup','Title':'MebiusboxSetup'});">
+			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/MebiusboxSetup-1.9.1.exe" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/MebiusboxSetup','Title':'MebiusboxSetup'});">
 				<img src="/assets/img/download_exe.jpg" />
 			</a>
 		</td>
 		<td>
-			<a href="http://bit.ly/1Uowekl" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/Mebiusbox','Title':'Mebiusbox'});">
+			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/Mebiusbox-1.9.1.zip" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/Mebiusbox','Title':'Mebiusbox'});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>

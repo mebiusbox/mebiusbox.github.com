@@ -12,12 +12,12 @@ ExtendQuickBarはクイック起動ツールバーを拡張したようなラン
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="http://bit.ly/1SaG1Gh" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/ExtendQuickBarSetup','Title':'ExtendQuickBarSetup'});">
+			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/ExtendQuickBarSetup-1.5.5.exe" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/ExtendQuickBarSetup','Title':'ExtendQuickBarSetup'});">
 				<img src="/assets/img/download_exe.jpg" />
 			</a>
 		</td>
 		<td>
-			<a href="http://bit.ly/1Ovs3nv" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/ExtendQuickBar','Title':'ExtendQuickBar'});">
+			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/ExtendQuickBar-1.5.5.zip" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/ExtendQuickBar','Title':'ExtendQuickBar'});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>

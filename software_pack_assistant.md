@@ -9,12 +9,12 @@ PackAssistant は複数のファイルを指定の容量をもつパックに、
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="http://bit.ly/1YyzD2N" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PackAssitantSetup','Title':'PackAssistantSetup'});">
+			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/PackAssistantSetup-1.5.2.exe" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PackAssitantSetup','Title':'PackAssistantSetup'});">
 				<img src="/assets/img/download_exe.jpg" />
 			</a>
 		</td>
 		<td>
-			<a href="http://bit.ly/1SaF5l5" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PackAssistant','Title':'PackAssistant'});">
+			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/PackAssistant-1.5.2.zip" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PackAssistant','Title':'PackAssistant'});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>

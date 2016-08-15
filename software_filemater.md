@@ -11,12 +11,12 @@ Filemater はファイル自動処理ツールです。
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="http://bit.ly/28Mp8xr" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileMaterSetup','Title':'FileMaterSetup'});">
+			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/FilematerSetup-0.2.0.exe" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileMaterSetup','Title':'FileMaterSetup'});">
 				<img src="/assets/img/download_exe.jpg" />
 			</a>
 		</td>
 		<td>
-			<a href="http://bit.ly/1QcXwf1" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileMater','Title':'FileMater'});">
+			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/Filemater-0.2.0.zip" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileMater','Title':'FileMater'});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>

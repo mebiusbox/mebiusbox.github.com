@@ -11,12 +11,12 @@ FileHammerはファイル削除ツールです。
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="http://bit.ly/1UFQew7" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileHammerSetup','Title':'FileHammerSetup'});">
+			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/FileHammerSetup-1.19.0.exe" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileHammerSetup','Title':'FileHammerSetup'});">
 				<img src="/assets/img/download_exe.jpg" />
 			</a>
 		</td>
 		<td>
-			<a href="http://bit.ly/1XvsFw0" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileHammer','Title':'FileHammer'});">
+			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/FileHammer-1.19.0.zip" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileHammer','Title':'FileHammer'});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>

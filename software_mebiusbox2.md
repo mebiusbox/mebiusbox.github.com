@@ -16,7 +16,7 @@ Web, PDF, 画像、Windows Media Player があります。
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="http://bit.ly/1UTXJSX" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/Mebiusbox2Setup','Title':'Mebiusbox2Setup'});">
+			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/Mebiusbox2Setup-2.1.1a.exe" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/Mebiusbox2Setup','Title':'Mebiusbox2Setup'});">
 				<img src="/assets/img/download_exe.jpg" />
 			</a>
 		</td>

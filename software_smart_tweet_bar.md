@@ -11,12 +11,12 @@ title: SmartTweetBar
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="http://bit.ly/1runTkH" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/SmartTweetBarSetup','Title':'SmartTweetBarSetup'});">
+			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/SmartTweetBarSetup-1.2.4.exe" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/SmartTweetBarSetup','Title':'SmartTweetBarSetup'});">
 				<img src="/assets/img/download_exe.jpg" />
 			</a>
 		</td>
 		<td>
-			<a href="http://bit.ly/1V4nxZO" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/SmartTweetBar','Title':'SmartTweetBar'});">
+			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/SmartTweetBar-1.2.4.zip" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/SmartTweetBar','Title':'SmartTweetBar'});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>
