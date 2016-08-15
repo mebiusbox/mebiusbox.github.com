@@ -16,7 +16,7 @@ ComicPicker は画像をまとめた書庫ファイル、画像、PDF 文書を�
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="http://bit.ly/1Y0ysdS" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/ComicPickerSetup','Title':'ComicPickerSetup'});">
+			<a href="http://bit.ly/2b9T6m8" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/ComicPickerSetup','Title':'ComicPickerSetup'});">
 				<img src="/assets/img/download_exe.jpg" />
 			</a>
 		</td>
