@@ -42,7 +42,7 @@
     <div id="info">
       EffectTextureMaker - Powered by <a href="http://threejs.org" target="_blank">three.js</a><br />
       <br />
-      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer
+      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe
     </div>
     <div id="inspector" style="position:absolute; left: 10px; top: 100px; width: 200px; height: 100px; font-family: consolas;">
 		</div>
@@ -170,6 +170,7 @@
         // stdShader.enable("TEST");
         var type = effectController.type;
         stdShader.enable(type.toUpperCase());
+        // stdShader.enable("TOON");
         layer.uniforms = stdShader.generateUniforms();
         layer.material = stdShader.createMaterial(layer.uniforms, { defines: defines });
         
@@ -330,6 +331,14 @@
           cellSize: 1.0,
           lightningFreq: 1.0,
           lightningWidth: 7.0,
+          coronaRadius: 0.3,
+          coronaSize: 1.0,
+          
+          fireStrength: 1.0,
+          firePower: 1.0,
+          fireRange: 2.0,
+          fireWidth: 0.1,
+          fireColor: 0.0001,
           
           explosionCameraTilt: 0.0,
           explosionCameraPan: 0.0,
@@ -383,12 +392,14 @@
         });
         
         h.add(effectController, "type", [
-          "Wood", "Circle", "Solar", "Spark", "Ring", "Gradation", "GradationLine", "Flash", "Cone", "Flower", "Flower+Fun", "WaveRing", "Smoke", "Flame", "Cell", "Lightning", "Flare", "Flare2", "Flare3", "MagicCircle",
-          "Explosion", "Cross", "Noise", "SeemlessNoise"
+          "Wood", "Circle", "Solar", "Corona", "Spark", "Ring", "Gradation", "GradationLine", "Flash", "Cone", "Flower", "Flower+Fun", "WaveRing", "Smoke", "Flame", "Fire", "Cell", "Lightning", "Flare", "Flare2", "Flare3", "MagicCircle",
+          "Explosion", "Cross",
+          "Noise", "SeemlessNoise"
         ]).onChange(function(value) {
           
           var stdShader = new PixSpriteStudioShader();
           stdShader.enable(value.toUpperCase());
+          // stdShader.enable("TOON");
           layers[0].uniforms = stdShader.generateUniforms();
           layers[0].material = stdShader.createMaterial(layers[0].uniforms, { defines: stdShader.generateDefines()});
         });
@@ -418,6 +429,15 @@
         h.add(effectController, "cellSize", 0.1, 5.0);
         h.add(effectController, "lightningFreq", 0.0, 2.0);
         h.add(effectController, "lightningWidth", 1.0, 10.0);
+        h.add(effectController, "coronaRadius", 0.0, 1.0);
+        h.add(effectController, "coronaSize", 0.0, 2.0);
+        
+        h = gui.addFolder("Fire Parameters");
+        h.add(effectController, "fireStrength", 0.0, 5.0);
+        h.add(effectController, "firePower", 0.0, 1.0);
+        h.add(effectController, "fireRange", 0.0, 5.0);
+        h.add(effectController, "fireWidth", 0.1, 1.0);
+        h.add(effectController, "fireColor", 0.0, 1.0);
         
         h = gui.addFolder("Explosion Parameters");
         h.add(effectController, "explosionCameraTilt", 0.0, 1.0).name("CameraTilt");
@@ -467,6 +487,7 @@
       function animate() {
         if (effectController.animate) {
           effectController.time += clock.getDelta();
+          // console.log(effectController.time);
         }
         requestAnimationFrame(animate, renderer.domElement);
         render();

@@ -254,6 +254,23 @@ PixSpriteStudioShaderChunks = {
   ].join("\n"),
   
   
+  //// TOON CHUNK
+  
+  toonUniforms: {
+  },
+  
+  toonFragPars: [
+  ].join("\n"),
+  
+  toonFrag: [
+    "  float c = pout.color.x;",
+    "  if (c > 0.5) c = 1.0;",
+    "  else if (c > 0.3) c = 0.5;",
+    "  else if (c > 0.1) c = 0.2;",
+    "  else c = 0.0;",
+    "  pout.color = vec3(c);",
+  ].join("\n"),
+  
   //// MANDELBLOT CHUNK
   
   mandelblotFrag: [
@@ -2381,6 +2398,153 @@ PixSpriteStudioShaderChunks = {
     // "fragColor.rgb *= pow(16.0*q.x*q.y*(1.0-q.x)*(1.0-q.y),0.1);",
   ].join("\n"),
   
+  
+  //// CORONA
+  // https://www.shadertoy.com/view/XdV3DW by vamoss
+  
+  coronaUniforms: {
+    intensity: { value: 1.0 },
+    coronaRadius: { value: 0.3 },
+    coronaSize: { value: 1.0 },
+  },
+  
+  coronaFragPars: [
+    "uniform float intensity;",
+    "uniform float coronaRadius;",
+    "uniform float coronaSize;",
+    
+    "float burnNoise(vec3 uv, float res) {",
+    "	const vec3 s = vec3(1e0, 1e2, 1e3);",
+    "	uv *= res;",
+    "	vec3 uv0 = floor(mod(uv, res))*s;",
+    "	vec3 uv1 = floor(mod(uv+1., res))*s;",
+    "	vec3 f = fract(uv); ",
+    "	f = f*f*(3.0-2.0*f);",
+    "	vec4 v = vec4(uv0.x+uv0.y+uv0.z, uv1.x+uv0.y+uv0.z,",
+    "	              uv0.x+uv1.y+uv0.z, uv1.x+uv1.y+uv0.z);",
+    "	vec4 r = fract(sin(v*1e-1)*1e3);",
+    "	float r0 = mix(mix(r.x, r.y, f.x), mix(r.z, r.w, f.x), f.y);",
+    "	r = fract(sin((v + uv1.z - uv0.z)*1e-1)*1e3);",
+    "	float r1 = mix(mix(r.x, r.y, f.x), mix(r.z, r.w, f.x), f.y);",
+    "	return mix(r0, r1, f.z)*2.-1.;",
+    "}",
+    
+    "vec3 burn(vec2 p, float size) {",
+    "  float c1 = size * 4.0 - 3.0 * length(2.5 * p);",
+    "  vec3 coord = vec3(atan(p.x, p.y) / PI2 + 0.5, length(p) * 0.4, 0.5);",
+    "  for (int i=0; i<=3; i++) {",
+    "    float power = exp2(float(i));",
+    "    c1 += 0.2 * (1.5 / power) * burnNoise(coord + vec3(0.0, -time*0.05, -time*0.01), power*16.0);",
+    "  }",
+    "  c1 *= intensity;",
+    "  return vec3(c1);",
+    "}",
+    
+    
+  ].join("\n"),
+  
+  coronaFrag: [
+    
+    "if (length(pin.position) < coronaRadius) {",
+    "  pout.color = vec3(0.0);",
+    "} else {",
+    "  pout.color = burn(pin.position, coronaSize);",
+    "}",
+
+  ].join("\n"),
+  
+  
+  //// FIRE CHUNK
+  // https://www.shadertoy.com/view/XsXSWS by xbe
+  
+  fireUniforms: {
+    intensity: { value: 1.0 },
+    fireStrength: { value: 1.0 },
+    firePower: { value: 1.0 },
+    fireRange: { value: 1.0 },
+    fireWidth: { value: 1.0 },
+    fireColor: { value: 1.0 },
+  },
+  
+  fireFragPars: [
+    "uniform float intensity;",
+    "uniform float fireStrength;",
+    "uniform float firePower;",
+    "uniform float fireRange;",
+    "uniform float fireWidth;",
+    "uniform float fireColor;",
+    
+    // procedural noise from IQ
+    "vec2 hash( vec2 p ) {",
+    "	p = vec2( dot(p,vec2(127.1,311.7)),",
+    "			 dot(p,vec2(269.5,183.3)) );",
+    "	return -1.0 + 2.0*fract(sin(p)*43758.5453123);",
+    "}",
+
+    "float flameNoise( in vec2 p ) {",
+    "	const float K1 = 0.366025404; // (sqrt(3)-1)/2;",
+    "	const float K2 = 0.211324865; // (3-sqrt(3))/6;",
+    "	vec2 i = floor( p + (p.x+p.y)*K1 );",
+    "	vec2 a = p - i + (i.x+i.y)*K2;",
+    "	vec2 o = (a.x>a.y) ? vec2(1.0,0.0) : vec2(0.0,1.0);",
+    "	vec2 b = a - o + K2;",
+    "	vec2 c = a - 1.0 + 2.0*K2;",
+    "	vec3 h = max( 0.5-vec3(dot(a,a), dot(b,b), dot(c,c) ), 0.0 );",
+    "	vec3 n = h*h*h*h*vec3( dot(a,hash(i+0.0)), dot(b,hash(i+o)), dot(c,hash(i+1.0)));",
+    "	return dot( n, vec3(70.0) );",
+    "}",
+
+    "float fbm(vec2 uv) {",
+    "	float f;",
+    "	mat2 m = mat2( 1.6,  1.2, -1.2,  1.6 );",
+    "	f  = 0.5000*flameNoise( uv ); uv = m*uv;",
+    "	f += 0.2500*flameNoise( uv ); uv = m*uv;",
+    "	f += 0.1250*flameNoise( uv ); uv = m*uv;",
+    "	f += 0.0625*flameNoise( uv ); uv = m*uv;",
+    "	f = 0.5 + 0.5*f;",
+    "	return f;",
+    "}",
+    
+  ].join("\n"),
+  
+  fireFrag: [
+
+    "vec2 q = pin.uv;",
+    "q.y *= 2.0 - 1.0 * firePower;",
+    "float T3 = max(3.0, 1.25 * fireStrength) * time;",
+    "q.x = mod(q.x, 1.0) - 0.5;",
+    "q.y -= 0.25;",
+    "float n = fbm(fireStrength * q - vec2(0, T3));",
+    "float c = 2.0 * intensity - 16.0 * pow(max(0.0, length(q * vec2(3.0 - fireWidth*3.0 + q.y*1.5, 0.75)) - n * max(0.0, q.y + 0.25)), 1.2);",
+    "float c1 = n * c * (1.5 - pow((2.50 / fireRange)*pin.uv.y, 4.0));",
+    "c1 = clamp(c1, 0.0, 1.0);",
+    "vec3 col = vec3(1.5*c1, 1.5*c1*c1*c1, c1*c1*c1*c1*c1);",
+    
+    "float a = c * (1.0 - pow(pin.uv.y, 3.0));",
+    "vec3 color = mix(vec3(0.0), col, a);",
+    "float gray = rgb2gray(color);",
+    "pout.color = mix(vec3(gray), color, fireColor);",
+
+  ].join("\n"),
+  
+  
+  //// SILEXARS
+  
+  silexarsFrag: [
+    "vec3 c;",
+    "float l, z = sin(time) * 1.0 + 17.0;",
+    "for (int i=0; i<3; i++) {",
+    "  vec2 uv = pin.uv;",
+    "  vec2 p = uv - 0.5;",
+    "  z += 0.07;",
+    "  l = length(p);",
+    "  uv += p / l * (sin(z) + 1.0) * abs(sin(l*9.0-z*2.0));",
+    "  c[i] = 0.01 / length(abs(mod(uv, 1.0)-0.5));",
+    "}",
+    "pout.color = c/l;",
+  ].join("\n"),
+  
+  
   //// TEST CHUNK
   
   testFragPars: [
@@ -2584,6 +2748,7 @@ PixSpriteStudioShader = function() {
     this.addUniform(uniforms, ["SMOKE"], "smokeUniforms");
     this.addUniform(uniforms, ["CELL"], "cellUniforms");
     this.addUniform(uniforms, ["FLAME"], "flameUniforms");
+    this.addUniform(uniforms, ["FIRE"], "fireUniforms");
     this.addUniform(uniforms, ["LIGHTNING"], "lightningUniforms");
     this.addUniform(uniforms, ["FLARE"], "flareUniforms");
     this.addUniform(uniforms, ["FLARE2"], "flare2Uniforms");
@@ -2591,6 +2756,7 @@ PixSpriteStudioShader = function() {
     this.addUniform(uniforms, ["MAGICCIRCLE"], "magicCircleUniforms");
     this.addUniform(uniforms, ["CROSS"], "crossUniforms");
     this.addUniform(uniforms, ["EXPLOSION"], "explosionUniforms");
+    this.addUniform(uniforms, ["CORONA"], "coronaUniforms");
     
     return THREE.UniformsUtils.clone(THREE.UniformsUtils.merge(uniforms));
   }
@@ -2640,6 +2806,7 @@ PixSpriteStudioShader = function() {
     this.addCode(codes, ["POLARCONVERSION"], "polarConversionFragPars");
     this.addCode(codes, ["SMOKE"], "smokeFragPars");
     this.addCode(codes, ["FLAME"], "flameFragPars");
+    this.addCode(codes, ["FIRE"], "fireFragPars");
     this.addCode(codes, ["CELL"], "cellFragPars");
     this.addCode(codes, ["LIGHTNING"], "lightningFragPars");
     this.addCode(codes, ["FLARE"], "flareFragPars");
@@ -2648,6 +2815,7 @@ PixSpriteStudioShader = function() {
     this.addCode(codes, ["MAGICCIRCLE"], "magicCircleFragPars");
     this.addCode(codes, ["CROSS"], "crossFragPars");
     this.addCode(codes, ["EXPLOSION"], "explosionFragPars");
+    this.addCode(codes, ["CORONA"], "coronaFragPars");
     this.addCode(codes, ["TEST"], "testFragPars");
     
     codes.push("");
@@ -2680,6 +2848,7 @@ PixSpriteStudioShader = function() {
       this.addCode(codes, ["COLORBALANCE"], "colorBalanceFrag");
       this.addCode(codes, ["SMOKE"], "smokeFrag");
       this.addCode(codes, ["FLAME"], "flameFrag");
+      this.addCode(codes, ["FIRE"], "fireFrag");
       this.addCode(codes, ["CELL"], "cellFrag");
       this.addCode(codes, ["LIGHTNING"], "lightningFrag");
       this.addCode(codes, ["FLARE"], "flareFrag");
@@ -2688,8 +2857,11 @@ PixSpriteStudioShader = function() {
       this.addCode(codes, ["MAGICCIRCLE"], "magicCircleFrag");
       this.addCode(codes, ["CROSS"], "crossFrag");
       this.addCode(codes, ["EXPLOSION"], "explosionFrag");
+      this.addCode(codes, ["CORONA"], "coronaFrag");
       this.addCode(codes, ["COPY"], "copyFrag");
       this.addCode(codes, ["TEST"], "testFrag");
+      
+      this.addCode(codes, ["TOON"], "toonFrag");
       
       this.addCode(codes, [], "fragEnd");
       
