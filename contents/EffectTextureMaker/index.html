@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>three.js</title>
+    <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+      body {
+        color: #fff;
+        font-family: Monospace;
+        font-size: 13px;
+        text-align: center;
+        font-weight: bold;
+        
+        background-color: #000;
+        margin: 0px;
+        overflow: hidden;
+      }
+      
+      canvas {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+      }
+      
+      #info {
+        position: absolute;
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+        color: #fff;
+      }
+      
+      a { color: orange; }
+    </style>
+  </head>
+  <body>
+    <div id="info">
+      EffectTextureMaker - Powered by <a href="http://threejs.org" target="_blank">three.js</a><br />
+      <br />
+      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer
+    </div>
+    <div id="inspector" style="position:absolute; left: 10px; top: 100px; width: 200px; height: 100px; font-family: consolas;">
+		</div>
+    <script src="js/three.js"></script>
+    <script src="js/controls/OrbitControls.js"></script>
+    <script src="js/Detector.js"></script>
+    <script src="js/libs/dat.gui.min.js"></script>
+    <script src="js/libs/stats.min.js"></script>
+    <script src="pixy/shaders/EffectTextureMaker.js"></script>
+    <script>
+      if (!Detector.webgl) Detector.addGetWebGLMessage();
+      
+      var mouse = new THREE.Vector2(0.5, 0.5);
+      var canvas;
+      var camera, dummyCamera, controls, scene, renderer;
+      var gui, guiCB, stats, clock = new THREE.Clock();
+      var effectController;
+      var layers = [];
+      
+      var noise;
+      var defines;
+      
+      init();
+      // render();
+      animate();
+      
+      function init() {
+        
+        initGraphics();
+        initScene();
+        setupGui();
+        initLayers();
+        
+        // EVENTS
+        
+        window.addEventListener('resize', onWindowResize, false);
+      }
+      
+      function initGraphics() {
+        // RENDERER
+        
+        renderer = new THREE.WebGLRenderer();
+        // renderer = new THREE.WebGLRenderer({antialias: true});
+        // renderer.setClearColor(0xAAAAAA);
+        // renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(512, 512);
+        // renderer.gammaInput = true;
+        // renderer.gammaOutput = true;
+        // renderer.autoClear = false;
+        // container.appendChild(renderer.domElement);
+        // renderer.context.getExtension('OES_standard_derivatives');
+        canvas = renderer.domElement;
+        canvas.addEventListener('mousemove', onMouseMove);
+        document.body.appendChild(canvas);
+        
+        // STATS
+        
+        stats = new Stats();
+				document.body.appendChild(stats.dom);
+      }
+      
+      function initScene() {
+        
+        // scene itself
+        scene = new THREE.Scene();
+        
+        // CAMERA
+        
+        camera = new THREE.Camera();
+        camera.lookAt(new THREE.Vector3(0.0, -0.3, 1.0));
+        dummyCamera = new THREE.Camera();
+        
+        // CONTROLS
+        
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.target.set(0,0,0);
+        controls.addEventListener('change', render);
+        
+        // TEXTUERS
+        
+        // MATERIALS
+        
+        // MODELS
+        
+        var geo = new THREE.PlaneBufferGeometry(2, 2);
+        var mesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial());
+        scene.add(mesh);
+
+        // LAYERS
+        
+        noise = {};
+        noise.octave = 8;
+        noise.persistence = 0.5;
+        
+        var stdShader = new PixSpriteStudioShader();
+        defines = stdShader.generateDefines();
+        
+        // initLayers();
+      }
+      
+      function initLayers() {
+        
+        layers = [];
+        
+        var layer = {};
+        
+        layer.name = "Base";
+        layer.renderTarget = new THREE.WebGLRenderTarget(canvas.width, canvas.height, {
+          minFilter: THREE.LinearFilter,
+          magFilter: THREE.LinearFilter,
+          format: THREE.RGBFormat,
+          stencilBuffer: false });
+        
+        var stdShader = new PixSpriteStudioShader();
+        // stdShader.enable("SINE");
+        // stdShader.enable("GRADATION");
+        // stdShader.enable("FLASH");
+        // stdShader.enable("CONE");
+        // stdShader.enable("FLOWER");
+        // stdShader.enable("FLOWER+FUN");
+        // stdShader.enable("WAVERING");
+        // stdShader.enable("MANDELBLOT");
+        // stdShader.enable("JULIA");
+        // stdShader.enable("SEEMLESSNOISE");
+        // stdShader.enable("TEST");
+        var type = effectController.type;
+        stdShader.enable(type.toUpperCase());
+        layer.uniforms = stdShader.generateUniforms();
+        layer.material = stdShader.createMaterial(layer.uniforms, { defines: defines });
+        
+        layers.push(layer);
+        
+        //// POLAR CONVERSION
+        
+        layer = {};
+        layer.name = "PolarConversion";
+        layer.tDiffuse = layers[layers.length-1].renderTarget.texture;
+        layer.renderTarget = new THREE.WebGLRenderTarget(canvas.width, canvas.height, {
+          minFilter: THREE.LinearFilter,
+          magFilter: THREE.LinearFilter,
+          format: THREE.RGBFormat,
+          stencilBuffer: false });
+        
+        stdShader.clear();
+        stdShader.enable("POLARCONVERSION");
+        layer.uniforms = stdShader.generateUniforms();
+        layer.material = stdShader.createMaterial(layer.uniforms, { defines: defines });
+        layers.push(layer);
+        
+        //// COLOR BALANCE
+        
+        layer = {};
+        layer.name = "ColorBalance";
+        layer.tDiffuse = layers[layers.length-1].renderTarget.texture;
+        layer.renderTarget = new THREE.WebGLRenderTarget(canvas.width, canvas.height, {
+          minFilter: THREE.LinearFilter,
+          magFilter: THREE.LinearFilter,
+          format: THREE.RGBFormat,
+          stencilBuffer: false });
+        
+        stdShader.clear();
+        stdShader.enable("COLORBALANCE");
+        layer.uniforms = stdShader.generateUniforms();
+        layer.material = stdShader.createMaterial(layer.uniforms, { defines: defines });
+        // console.log(stdShader.generateVertexShader());
+        // console.log(stdShader.generateFragmentShader());
+        layers.push(layer);
+        
+        //// NORMAL MAP
+        
+        layer = {};
+        layer.name = "NormalMap";
+        layer.tDiffuse = layers[layers.length-1].renderTarget.texture;
+        layer.renderTarget = new THREE.WebGLRenderTarget(canvas.width, canvas.height, {
+          minFilter: THREE.LinearFilter,
+          magFilter: THREE.LinearFilter,
+          format: THREE.RGBFormat,
+          stencilBuffer: false });
+          
+        stdShader.clear();
+        // stdShader.enable("HEIGHT2NORMAL");
+        stdShader.enable("HEIGHT2NORMALSOBEL");
+        layer.uniforms = stdShader.generateUniforms();
+        layer.material = stdShader.createMaterial(layer.uniforms, { defines: defines });
+        layers.push(layer);
+        
+        //// COPY
+        
+        layer = {};
+        layer.name = "Copy";
+        layer.tDiffuse = layers[layers.length-1].renderTarget.texture;
+        layer.renderTarget = null;
+        
+        stdShader.clear();
+        stdShader.enable("COPY");
+        layer.uniforms = stdShader.generateUniforms();
+        layer.material = stdShader.createMaterial(layer.uniforms, { defines: defines });
+        layers.push(layer);
+      }
+      
+      // EVENT HANDLERS
+      
+      function onWindowResize() {
+        
+        renderer.setSize(canvas.width, canvas.height);
+        
+        if (layers) {
+          for (var i=0; i<layers.length; i++) {
+            if (layers[i].renderTarget) {
+              layers[i].renderTarget = new THREE.WebGLRenderTarget(canvas.width, canvas.height,
+                {
+                  minFilter: THREE.LinearFilter, 
+                  magFilter: THREE.LinearFilter,
+                  format: THREE.RGBFormat,
+                  stencilBuffer: false
+                });
+            }
+            if (layers[i].tDiffuse) {
+              layers[i].tDiffuse = layers[i-1].renderTarget.texture;
+            }
+          }
+        }
+        
+        // camera.aspect = window.innerWidth / window.innerHeight;
+        // camera.updateProjectionMatrix();
+        
+        render();
+      }
+      
+      function onMouseMove(e) {
+        mouse.x = e.offsetX / canvas.width;
+        mouse.y = e.offsetY / canvas.height;
+      }
+      
+      function setupGui() {
+        effectController = {
+          saveImage: function() {
+            render();
+            window.open(canvas.toDataURL());
+          },
+          
+          resetColorBalance: function() {
+            effectController.colorBalanceShadowsR = 0.0;
+            effectController.colorBalanceShadowsG = 0.0;
+            effectController.colorBalanceShadowsB = 0.0;
+            effectController.colorBalanceMidtonesR = 0.0;
+            effectController.colorBalanceMidtonesG = 0.0;
+            effectController.colorBalanceMidtonesB = 0.0;
+            effectController.colorBalanceHighlightsR = 0.0;
+            effectController.colorBalanceHighlightsG = 0.0;
+            effectController.colorBalanceHighlightsB = 0.0;
+            for (var i in guiCB.__controllers) {
+              guiCB.__controllers[i].updateDisplay();
+            }
+          },
+          
+          animate: false,
+          time: 0.0,
+          
+          // freeCamera: false,
+          resolution: '512',
+          polarConversion: false,
+          
+          heightScale: 2.0,
+          normalMap: false,
+          
+          frequency: 30.0,
+          amplitude: 0.01,
+          circleRadius: 1.1,
+          intensity: 0.5,
+          ringRadius: 0.5,
+          ringWidth: 0.1,
+          directionX: 0.0001,
+          directionY: 1.0,
+          powerExponent: 1.0,
+          flowerPetals: 6.0,
+          flowerRadius: 0.5,
+          flowerOffset: 0.2,
+          gradationOffset: 0.0001,
+          smokeVolume: 3.0,
+          smokeBeta: 4.0,
+          smokeDelta: 0.05,
+          flameWidth: 1.0,
+          flameScale: 1.0,
+          cellSize: 1.0,
+          lightningFreq: 1.0,
+          lightningWidth: 7.0,
+          
+          explosionCameraTilt: 0.0,
+          explosionCameraPan: 0.0,
+          explosionRadius: 1.75,
+          explosionDownScale: 1.25,
+          explosionGrain: 2.0,
+          explosionSpeed: 0.3,
+          explosionBallness: 2.0,
+          explosionGrowth: 2.2,
+          explosionFade: 1.6,
+          explosionDensity: 1.35,
+          explosionContrast: 1.0,
+          explosionRollingInitDamp: 0.3,
+          explosionRollingSpeed: 2.0,
+          explosionDelayRange: 0.25,
+          explosionBallSpread: 1.0,
+          
+          noiseOctave: 8,
+          noisePersistence: 0.5,
+          noiseScale: 1.0,
+          
+          colorBalanceShadowsR: 0.0001,
+          colorBalanceShadowsG: 0.0001,
+          colorBalanceShadowsB: 0.0001,
+          colorBalanceMidtonesR: 0.0001,
+          colorBalanceMidtonesG: 0.0001,
+          colorBalanceMidtonesB: 0.0001,
+          colorBalanceHighlightsR: 0.0001,
+          colorBalanceHighlightsG: 0.0001,
+          colorBalanceHighlightsB: 0.0001,
+          colorBlanacePreserveLuminosity: false,
+          
+          type: "Wood",
+          // type: "TEST",
+        };
+        
+        var h;
+        gui = new dat.GUI();
+        
+        // material (attributes)
+        
+        h = gui;
+        
+        // Parameters
+        
+        // h.add(effectController, 'freeCamera');
+        h.add(effectController, 'resolution', ['128', '256', '512', '1024']).onChange(function(value) {
+          canvas.width = value;
+          canvas.height = value;
+          onWindowResize();
+        });
+        
+        h.add(effectController, "type", [
+          "Wood", "Circle", "Solar", "Spark", "Ring", "Gradation", "GradationLine", "Flash", "Cone", "Flower", "Flower+Fun", "WaveRing", "Smoke", "Flame", "Cell", "Lightning", "Flare", "Flare2", "Flare3", "MagicCircle",
+          "Explosion", "Cross", "Noise", "SeemlessNoise"
+        ]).onChange(function(value) {
+          
+          var stdShader = new PixSpriteStudioShader();
+          stdShader.enable(value.toUpperCase());
+          layers[0].uniforms = stdShader.generateUniforms();
+          layers[0].material = stdShader.createMaterial(layers[0].uniforms, { defines: stdShader.generateDefines()});
+        });
+        
+        gui.add(effectController, "time", 0, 1000.0);
+        gui.add(effectController, "animate");
+        
+        h = gui.addFolder("Parameters");
+        h.add(effectController, "frequency", 0.0, 50.0);
+        h.add(effectController, "amplitude", 0.0, 0.2);
+        h.add(effectController, "intensity", 0.0, 1.0);
+        h.add(effectController, "directionX", -1.0, 1.0);
+        h.add(effectController, "directionY", -1.0, 1.0);
+        h.add(effectController, "powerExponent", 1.0, 50.0);
+        h.add(effectController, "circleRadius", 0.0, 2.5);
+        h.add(effectController, "ringRadius", 0.0, 1.0);
+        h.add(effectController, "ringWidth", 0.0, 1.0);
+        h.add(effectController, "gradationOffset", 0.0, 1.0);
+        h.add(effectController, "flowerPetals", 1.0, 20.0);
+        h.add(effectController, "flowerRadius", 0.0, 1.0);
+        h.add(effectController, "flowerOffset", 0.0, 1.0);
+        h.add(effectController, "smokeVolume", 1, 10);
+        h.add(effectController, "smokeBeta", 1, 10);
+        h.add(effectController, "smokeDelta", 0.01, 0.2);
+        h.add(effectController, "flameWidth", 0.1, 2.0);
+        h.add(effectController, "flameScale", 0.1, 1.0);
+        h.add(effectController, "cellSize", 0.1, 5.0);
+        h.add(effectController, "lightningFreq", 0.0, 2.0);
+        h.add(effectController, "lightningWidth", 1.0, 10.0);
+        
+        h = gui.addFolder("Explosion Parameters");
+        h.add(effectController, "explosionCameraTilt", 0.0, 1.0).name("CameraTilt");
+        h.add(effectController, "explosionCameraPan", 0.0, 1.0).name("CameraPan");
+        h.add(effectController, "explosionRadius", 1.0, 2.0).name("Radius");
+        h.add(effectController, "explosionDownScale", 1.0, 2.0).name("DownScale");
+        h.add(effectController, "explosionGrain", 1.0, 5.0).name("Grain");
+        h.add(effectController, "explosionSpeed", 0.1, 2.0).name("Speed");
+        h.add(effectController, "explosionBallness", 2.0, 50.0).name("Ballness");
+        h.add(effectController, "explosionGrowth", 0.1, 3.0).name("Growth");
+        h.add(effectController, "explosionFade", 1.0, 5.0).name("Fade");
+        h.add(effectController, "explosionDensity", 0.1, 4.0).name("Density");
+        h.add(effectController, "explosionContrast", 0.1, 2.0).name("Contrast");
+        h.add(effectController, "explosionRollingInitDamp", 0.1, 2.0).name("RollingInitDamp");
+        h.add(effectController, "explosionRollingSpeed", 0.0, 4.0).name("RollingSpeed");
+        h.add(effectController, "explosionDelayRange", 0.1, 2.0).name("DelayRange");
+        h.add(effectController, "explosionBallSpread", 0.1, 5.0).name("BallSpread");
+        
+        h = gui.addFolder("Noise");
+        h.add(effectController, "noiseOctave", 1, 16);
+        h.add(effectController, "noisePersistence", 0.0, 1.0);
+        h.add(effectController, "noiseScale", 0.0, 1.0);
+        
+        gui.add(effectController, "polarConversion");
+        
+        h = gui.addFolder("NormalMap");
+        h.add(effectController, "normalMap").name("Generate");
+        h.add(effectController, "heightScale", 0.0, 10.0);
+        
+        h = gui.addFolder("ColorBalance");
+        h.add(effectController, "colorBalanceShadowsR", -1.0, 1.0, 0.025).name("Shadows-R");
+        h.add(effectController, "colorBalanceShadowsG", -1.0, 1.0, 0.025).name("Shadows-G");
+        h.add(effectController, "colorBalanceShadowsB", -1.0, 1.0, 0.025).name("Shadows-B");
+        h.add(effectController, "colorBalanceMidtonesR", -1.0, 1.0, 0.025).name("Midtones-R");
+        h.add(effectController, "colorBalanceMidtonesG", -1.0, 1.0, 0.025).name("Midtones-G");
+        h.add(effectController, "colorBalanceMidtonesB", -1.0, 1.0, 0.025).name("Midtones-B");
+        h.add(effectController, "colorBalanceHighlightsR", -1.0, 1.0, 0.025).name("Highlights-R");
+        h.add(effectController, "colorBalanceHighlightsG", -1.0, 1.0, 0.025).name("Highlights-G");
+        h.add(effectController, "colorBalanceHighlightsB", -1.0, 1.0, 0.025).name("Highlights-B");
+        h.add(effectController, 'resetColorBalance');
+        // h.add(effectController, "colorBlanacePreserveLuminosity");
+        guiCB = h;
+        
+        gui.add(effectController, 'saveImage');
+      }
+      
+      function animate() {
+        if (effectController.animate) {
+          effectController.time += clock.getDelta();
+        }
+        requestAnimationFrame(animate, renderer.domElement);
+        render();
+      }
+      
+      function render() {
+        
+        stats.update();
+        
+        var delta = clock.getDelta();
+        
+        if (effectController.noiseOctave !== noise.octave ||
+            effectController.noisePersistence !== noise.persistence) {
+          
+          defines.NOISE_OCTAVE = parseInt(effectController.noiseOctave);
+          defines.NOISE_PERSISTENCE = effectController.noisePersistence;
+          
+          noise.octave = effectController.noiseOctave;
+          noise.persistence = effectController.noisePersistence;
+          
+          initLayers();
+        }
+        
+        // if (effectController.freeCamera) {
+        //   // controls.update(delta);
+        // }
+        // else {
+        //   camera.position.set(mouse.x - 0.5, mouse.y * 4, time * 0.001);
+        //   camera.lookAt(new THREE.Vector3(0.0, -0.3, 1.0).add(camera.position));
+        // }
+        // 
+        // if (camera.position.y < 0) camera.position.y = 0;
+        
+        for (var i=0; i<layers.length; i++) {
+          
+          var layer = layers[i];
+          var target = layer.renderTarget;
+          var texture = layer.tDiffuse;
+          
+          if (layer.name === "NormalMap" && effectController.normalMap === false) {
+            layer = layers[layers.length-1];
+          }
+          if (layer.name === "PolarConversion" && effectController.polarConversion === false) {
+            layer = layers[layers.length-1];
+          }
+          
+          layer.uniforms.resolution.value = new THREE.Vector2(canvas.width, canvas.height);
+          layer.uniforms.cameraPos.value = camera.getWorldPosition();
+          layer.uniforms.cameraDir.value = camera.getWorldDirection();
+          layer.uniforms.mouse.value.copy(mouse);
+          // layer.uniforms.time.value = effectController.time;
+          layer.uniforms.tDiffuse.value = texture;
+          
+          for (key in effectController) {
+            if (key === "resolution") continue;
+            PixSetShaderParameter(layer.uniforms, key, effectController[key]);
+          }
+          
+          // PixSetShaderParameter(layer.uniforms, "heightScale", effectController.heightScale);
+          PixSetShaderParameter(layer.uniforms, "colorBalanceShadows", 
+            new THREE.Vector3(
+              effectController.colorBalanceShadowsR,
+              effectController.colorBalanceShadowsG,
+              effectController.colorBalanceShadowsB));
+          PixSetShaderParameter(layer.uniforms, "colorBalanceMidtones", 
+            new THREE.Vector3(
+              effectController.colorBalanceMidtonesR,
+              effectController.colorBalanceMidtonesG,
+              effectController.colorBalanceMidtonesB));
+          PixSetShaderParameter(layer.uniforms, "colorBalanceHighlights", 
+            new THREE.Vector3(
+              effectController.colorBalanceHighlightsR,
+              effectController.colorBalanceHighlightsG,
+              effectController.colorBalanceHighlightsB));
+          PixSetShaderParameter(layer.uniforms, "direction",
+            new THREE.Vector2(
+              effectController.directionX,
+              effectController.directionY));
+        
+          scene.overrideMaterial = layer.material;
+          renderer.render(scene, dummyCamera, target);
+          scene.overrideMaterial = null;
+        }
+      }
+
+    </script>
+  </body>
+</html>
