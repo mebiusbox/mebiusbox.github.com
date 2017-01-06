@@ -255,20 +255,28 @@ PixSpriteStudioShaderChunks = {
   
   
   //// TOON CHUNK
+  // https://www.shadertoy.com/view/MtVGWV
   
   toonUniforms: {
+    toonEnable: { value: false },
+    toonDarkBorder: { value: 0.8 },
+    toonLightBorder: { value: 0.95 },
   },
   
   toonFragPars: [
+    "uniform bool toonEnable;",
+    "uniform float toonDarkBorder;",
+    "uniform float toonLightBorder;",
   ].join("\n"),
   
   toonFrag: [
-    "  float c = pout.color.x;",
-    "  if (c > 0.5) c = 1.0;",
-    "  else if (c > 0.3) c = 0.5;",
-    "  else if (c > 0.1) c = 0.2;",
-    "  else c = 0.0;",
-    "  pout.color = vec3(c);",
+    "  if (toonEnable) {",
+    "    vec3 dark = mix( vec3(0.0), vec3(0.5),  step(toonDarkBorder, pout.color) ) ;",
+    "    vec3 light = mix( dark, vec3(1.0),  step(toonLightBorder, pout.color) ) ;",
+    // "  vec3 dark = mix( vec3(0.0), vec3( 1.0, 0.4, 0.0),  step(0.8, pout.color) ) ;",
+    // "  vec3 light = mix( dark, vec3( 1.0, 0.8, 0.0),  step(0.95, pout.color) ) ;",
+    "    pout.color = light;",
+    "  }",
   ].join("\n"),
   
   //// MANDELBLOT CHUNK
@@ -2757,6 +2765,7 @@ PixSpriteStudioShader = function() {
     this.addUniform(uniforms, ["CROSS"], "crossUniforms");
     this.addUniform(uniforms, ["EXPLOSION"], "explosionUniforms");
     this.addUniform(uniforms, ["CORONA"], "coronaUniforms");
+    this.addUniform(uniforms, ["TOON"], "toonUniforms");
     
     return THREE.UniformsUtils.clone(THREE.UniformsUtils.merge(uniforms));
   }
@@ -2816,6 +2825,7 @@ PixSpriteStudioShader = function() {
     this.addCode(codes, ["CROSS"], "crossFragPars");
     this.addCode(codes, ["EXPLOSION"], "explosionFragPars");
     this.addCode(codes, ["CORONA"], "coronaFragPars");
+    this.addCode(codes, ["TOON"], "toonFragPars");
     this.addCode(codes, ["TEST"], "testFragPars");
     
     codes.push("");

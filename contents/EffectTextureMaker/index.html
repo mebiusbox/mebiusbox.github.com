@@ -54,7 +54,12 @@
     <script src="js/libs/dat.gui.min.js"></script>
     <script src="js/libs/stats.min.js"></script>
     <script src="js/shaders/CopyShader.js"></script>
+    <!-- <script src="pixy/shaders/LuminosityShader.js"></script> -->
+    <!-- <script src="pixy/shaders/EdgeShader.js"></script> -->
     <script src="pixy/shaders/EffectTextureMaker.js"></script>
+    <!-- <script src="pixy/post/Composer.js"></script> -->
+    <!-- <script src="pixy/post/UnrealBloomPass.js"></script> -->
+    <!-- <script src="pixy/post/EdgePass.js"></script> -->
     <script>
       if (!Detector.webgl) Detector.addGetWebGLMessage();
       
@@ -65,6 +70,7 @@
       var effectController;
       var layers = [];
       var spriteSheet = {};
+      var post = {};
       
       var noise;
       var defines;
@@ -77,6 +83,7 @@
         
         initGraphics();
         initScene();
+        // initPost();
         setupGui();
         initLayers();
         
@@ -167,6 +174,32 @@
         spriteSheet.scene.add(spriteSheet.quad);
       }
       
+      // function initPost() {
+      //     
+      //     var parameters = {
+      //       minFilter: THREE.LinearFilter,
+      //       magFilter: THREE.LinearFilter,
+      //       format: THREE.RGBFormat,
+      //       stencilBuffer: false
+      //     };
+      //     
+      //     post.rtScene = new THREE.WebGLRenderTarget(canvas.width, canvas.height, parameters);
+      //     
+      //     post.copyPass = new PixShaderPass(THREE.CopyShader);
+      //     post.composer = new PixComposer(renderer);
+      //     post.composer.addPass(new PixEdgePass(
+      //       new THREE.Vector2(canvas.width, canvas.height),
+      //       0.2, 
+      //       new THREE.Color(0x808080),
+      //       false,
+      //       512), null, null);
+      // 
+      //     // post.bloomPass = new PixUnrealBloomPass(new THREE.Vector2(canvas.width, canvas.height), 1.5, 0.4, 0.85);
+      //     // post.bloomPass = new PixUnrealBloomPass(new THREE.Vector2(canvas.width, canvas.height), 1.0, 9.0, 0.5, 512);
+      //     // post.composer.addPass(post.bloomPass, null, null);
+      //     post.composer.addPass(post.copyPass, null, null);
+      // }
+      
       function initLayers() {
         
         layers = [];
@@ -194,7 +227,7 @@
         // stdShader.enable("TEST");
         var type = effectController.type;
         stdShader.enable(type.toUpperCase());
-        // stdShader.enable("TOON");
+        stdShader.enable("TOON");
         layer.uniforms = stdShader.generateUniforms();
         layer.material = stdShader.createMaterial(layer.uniforms, { defines: defines });
         
@@ -414,6 +447,10 @@
           coronaRadius: 0.3,
           coronaSize: 1.0,
           
+          toonEnable: false,
+          toonDarkBorder: 0.8,
+          toonLightBorder: 0.95,
+          
           fireStrength: 1.0,
           firePower: 1.0,
           fireRange: 2.0,
@@ -479,7 +516,7 @@
           
           var stdShader = new PixSpriteStudioShader();
           stdShader.enable(value.toUpperCase());
-          // stdShader.enable("TOON");
+          stdShader.enable("TOON");
           layers[0].uniforms = stdShader.generateUniforms();
           layers[0].material = stdShader.createMaterial(layers[0].uniforms, { defines: stdShader.generateDefines()});
         });
@@ -540,6 +577,11 @@
         h.add(effectController, "noiseOctave", 1, 16);
         h.add(effectController, "noisePersistence", 0.0, 1.0);
         h.add(effectController, "noiseScale", 0.0, 1.0);
+        
+        h = gui.addFolder("Toon");
+        h.add(effectController, "toonEnable").name("enable");
+        h.add(effectController, "toonDarkBorder", 0.0, 1.0).name("dark");
+        h.add(effectController, "toonLightBorder", 0.0, 1.0).name("light");
         
         gui.add(effectController, "polarConversion");
         
@@ -663,6 +705,20 @@
           scene.overrideMaterial = layer.material;
           renderer.render(scene, dummyCamera, target);
           scene.overrideMaterial = null;
+          
+          // if (layer.name === "Base") {
+          //   
+            // post.composer.passes[0].pass.source = target.texture;
+            // post.composer.passes[0].readBuffer = target;
+            // post.composer.passes[0].writeBuffer = post.rtScene;
+            // post.composer.passes[1].readBuffer = post.rtScene;
+            // post.composer.passes[1].writeBuffer = target;
+            // post.composer.render();
+            
+            // post.composer.passes[0].readBuffer = target;
+            // post.composer.passes[0].writeBuffer = target;
+            // post.composer.render();
+          // }
         }
       }
 
