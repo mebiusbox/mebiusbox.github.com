@@ -447,6 +447,13 @@
           coronaRadius: 0.3,
           coronaSize: 1.0,
           
+          lensFlareRadius: 1.0,
+          lensFlareLength: 1.0,
+          lensFlareColor: 0.0,
+          
+          sunRadius: 1.0,
+          sunColor: 0.0,
+          
           toonEnable: false,
           toonDarkBorder: 0.8,
           toonLightBorder: 0.95,
@@ -509,7 +516,7 @@
         });
         
         h.add(effectController, "type", [
-          "Wood", "Circle", "Solar", "Corona", "Spark", "Ring", "Gradation", "GradationLine", "Flash", "Cone", "Flower", "Flower+Fun", "WaveRing", "Smoke", "Flame", "Fire", "Cell", "Lightning", "Flare", "Flare2", "Flare3", "MagicCircle",
+          "Wood", "Circle", "Solar", "Corona", "Spark", "Ring", "Gradation", "GradationLine", "Flash", "Cone", "Flower", "Flower+Fun", "WaveRing", "Smoke", "Flame", "Fire", "Cell", "Lightning", "Flare", "Flare2", "Flare3", "LensFlare", "Sun", "MagicCircle",
           "Explosion", "Cross",
           "Noise", "SeemlessNoise"
         ]).onChange(function(value) {
@@ -519,6 +526,8 @@
           stdShader.enable("TOON");
           layers[0].uniforms = stdShader.generateUniforms();
           layers[0].material = stdShader.createMaterial(layers[0].uniforms, { defines: stdShader.generateDefines()});
+          console.log(stdShader.generateVertexShader());
+          console.log(stdShader.generateFragmentShader());
         });
         
         gui.add(effectController, "time", 0, 100.0);
@@ -548,6 +557,15 @@
         h.add(effectController, "lightningWidth", 1.0, 10.0);
         h.add(effectController, "coronaRadius", 0.0, 1.0);
         h.add(effectController, "coronaSize", 0.0, 2.0);
+        
+        h = gui.addFolder("LensFlare Parameters");
+        h.add(effectController, "lensFlareRadius", 0.0, 1.0);
+        h.add(effectController, "lensFlareLength", 0.0, 1.0);
+        h.add(effectController, "lensFlareColor", 0.0, 1.0);
+        
+        h = gui.addFolder("Sun Parameters");
+        h.add(effectController, "sunRadius", 0.1, 1.0);
+        h.add(effectController, "sunColor", 0.0, 1.0);
         
         h = gui.addFolder("Fire Parameters");
         h.add(effectController, "fireStrength", 0.0, 5.0);
