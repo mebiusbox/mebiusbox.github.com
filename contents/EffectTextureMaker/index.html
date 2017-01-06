@@ -43,6 +43,8 @@
       EffectTextureMaker - Powered by <a href="http://threejs.org" target="_blank">three.js</a><br />
       <br />
       Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe
+      <div id="time" style="font-family: consolas; margin-top: 8px;">
+  		</div>
     </div>
     <div id="inspector" style="position:absolute; left: 10px; top: 100px; width: 200px; height: 100px; font-family: consolas;">
 		</div>
@@ -51,6 +53,7 @@
     <script src="js/Detector.js"></script>
     <script src="js/libs/dat.gui.min.js"></script>
     <script src="js/libs/stats.min.js"></script>
+    <script src="js/shaders/CopyShader.js"></script>
     <script src="pixy/shaders/EffectTextureMaker.js"></script>
     <script>
       if (!Detector.webgl) Detector.addGetWebGLMessage();
@@ -61,6 +64,7 @@
       var gui, guiCB, stats, clock = new THREE.Clock();
       var effectController;
       var layers = [];
+      var spriteSheet = {};
       
       var noise;
       var defines;
@@ -89,6 +93,7 @@
         // renderer.setClearColor(0xAAAAAA);
         // renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(512, 512);
+        // renderer.setSize(window.innerWidth, window.innerHeight);
         // renderer.gammaInput = true;
         // renderer.gammaOutput = true;
         // renderer.autoClear = false;
@@ -141,6 +146,25 @@
         defines = stdShader.generateDefines();
         
         // initLayers();
+        
+        spriteSheet.uniforms = THREE.UniformsUtils.clone(THREE.CopyShader.uniforms);
+        spriteSheet.material = new THREE.ShaderMaterial({
+          uniforms: spriteSheet.uniforms,
+          vertexShader: THREE.CopyShader.vertexShader,
+          fragmentShader: THREE.CopyShader.fragmentShader,
+          depthTest: false,
+          depthWrite: false});
+        // spriteSheet.uniforms.tDiffuse.value = spriteSheet.renderTarget.texture;
+        spriteSheet.uniforms.opacity.value = 1.0;
+        
+        spriteSheet.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        spriteSheet.scene = new THREE.Scene();
+        spriteSheet.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2,2), spriteSheet.material);
+        spriteSheet.dimension = 8;
+        spriteSheet.time = 0.0;
+        spriteSheet.timeLength = 3.0;
+        spriteSheet.timeStep = 0.1;
+        spriteSheet.scene.add(spriteSheet.quad);
       }
       
       function initLayers() {
@@ -242,6 +266,22 @@
         layer.uniforms = stdShader.generateUniforms();
         layer.material = stdShader.createMaterial(layer.uniforms, { defines: defines });
         layers.push(layer);
+        
+        spriteSheet.renderTarget = new THREE.WebGLRenderTarget(canvas.width, canvas.height, {
+          minFilter: THREE.LinearFilter,
+          magFilter: THREE.LinearFilter,
+          format: THREE.RGBFormat,
+          stencilBuffer: false });
+        // 
+        // spriteSheet.uniforms = THREE.UniformsUtils.clone(THREE.CopyShader.uniforms);
+        // spriteSheet.material = new THREE.ShaderMaterial({
+        //   uniforms: spriteSheet.uniforms,
+        //   vertexShader: THREE.CopyShader.vertexShader,
+        //   fragmentShader: THREE.CopyShader.fragmentShader,
+        //   depthTest: false,
+        //   depthWrite: false});
+        // spriteSheet.uniforms.tDiffuse.value = spriteSheet.renderTarget.texture;
+        // spriteSheet.uniforms.opacity.value = 1.0;
       }
       
       // EVENT HANDLERS
@@ -282,6 +322,46 @@
         effectController = {
           saveImage: function() {
             render();
+            window.open(canvas.toDataURL());
+          },
+          
+          saveSpriteSheet: function() {
+            
+            var width = Math.floor(canvas.width / spriteSheet.dimension);
+            var size = width / canvas.width;
+            var time = spriteSheet.time;
+            // var time = 0.0;
+            
+            renderer.clearTarget(spriteSheet.renderTarget);
+            
+            for (var i=0; i<spriteSheet.dimension; i++) {
+              for (var j=0; j<spriteSheet.dimension; j++) {
+                
+                var len = spriteSheet.timeStep * spriteSheet.dimension * i + spriteSheet.timeStep * j;
+                if (len >= spriteSheet.timeLength) {
+                  break;
+                }
+                
+                effectController.time = time + len;
+                render();
+                
+                spriteSheet.uniforms.tDiffuse.value = layers[layers.length-2].renderTarget.texture;
+
+                spriteSheet.quad.scale.set(size, size, 1.0);
+                spriteSheet.quad.position.set(-1 + 2.0 * size * j + size, 1 - 2.0 * size * i - size, 0.0);
+                
+                renderer.autoClear = false;
+                renderer.render(spriteSheet.scene, spriteSheet.camera, spriteSheet.renderTarget);
+                renderer.autoClear = true;
+              }
+            }
+            
+            spriteSheet.quad.scale.set(1.0, 1.0, 1.0);
+            spriteSheet.quad.position.set(0.0, 0.0, 0.0);
+            spriteSheet.uniforms.tDiffuse.value = spriteSheet.renderTarget.texture;
+            renderer.render(spriteSheet.scene, spriteSheet.camera);
+            
+            effectController.time = time;
             window.open(canvas.toDataURL());
           },
           
@@ -404,7 +484,7 @@
           layers[0].material = stdShader.createMaterial(layers[0].uniforms, { defines: stdShader.generateDefines()});
         });
         
-        gui.add(effectController, "time", 0, 1000.0);
+        gui.add(effectController, "time", 0, 100.0);
         gui.add(effectController, "animate");
         
         h = gui.addFolder("Parameters");
@@ -482,6 +562,13 @@
         guiCB = h;
         
         gui.add(effectController, 'saveImage');
+        
+        h = gui.addFolder("SpriteSheet");
+        h.add(spriteSheet, "dimension", 2, 32).step(1);
+        h.add(spriteSheet, "time", 0.0, 1000.0);
+        h.add(spriteSheet, "timeLength", 0.1, 1000.0);
+        h.add(spriteSheet, "timeStep", 0.0001, 100.0);
+        h.add(effectController, 'saveSpriteSheet');
       }
       
       function animate() {
@@ -489,6 +576,12 @@
           effectController.time += clock.getDelta();
           // console.log(effectController.time);
         }
+        
+        var time = effectController.time;
+        var str = time.toString() + "0000000";
+        if (time === 0) str = "0.00000000";
+        document.getElementById("time").innerHTML = str.substr(0, 8);
+        
         requestAnimationFrame(animate, renderer.domElement);
         render();
       }
@@ -497,7 +590,7 @@
         
         stats.update();
         
-        var delta = clock.getDelta();
+        // var delta = clock.getDelta();
         
         if (effectController.noiseOctave !== noise.octave ||
             effectController.noisePersistence !== noise.persistence) {
