@@ -42,7 +42,7 @@
     <div id="info">
       EffectTextureMaker - Powered by <a href="http://threejs.org" target="_blank">three.js</a><br />
       <br />
-      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau
+      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke
       <div id="time" style="font-family: consolas; margin-top: 8px;">
   		</div>
     </div>
@@ -483,6 +483,9 @@
           explosionRollingSpeed: 2.0,
           explosionDelayRange: 0.25,
           explosionBallSpread: 1.0,
+          explosionBloom: 0.0,
+          explosionEmission: 0.2,
+          explosionColor: 1.0,
           
           noiseOctave: 8,
           noisePersistence: 0.5,
@@ -521,7 +524,7 @@
         
         h.add(effectController, "type", [
           "Wood", "Circle", "Solar", "Corona", "Spark", "Ring", "Gradation", "GradationLine", "Flash", "Cone", "Flower", "Flower+Fun", "WaveRing", "Smoke", "Flame", "Fire", "Cell", "Lightning", "Flare", "Flare2", "Flare3", "LensFlare", "Sun", "MagicCircle",
-          "Explosion", "Cross", "Laser", "Laser2",
+          "Explosion", "Explosion2", "Cross", "Laser", "Laser2",
           "Noise", "SeemlessNoise"
         ]).onChange(function(value) {
           
@@ -599,6 +602,26 @@
         h.add(effectController, "explosionRollingSpeed", 0.0, 4.0).name("RollingSpeed");
         h.add(effectController, "explosionDelayRange", 0.1, 2.0).name("DelayRange");
         h.add(effectController, "explosionBallSpread", 0.1, 5.0).name("BallSpread");
+        
+        h = gui.addFolder("Explosion2 Parameters");
+        // h.add(effectController, "explosionCameraTilt", 0.0, 1.0).name("CameraTilt");
+        h.add(effectController, "explosionCameraPan", 0.0, 1.0).name("CameraPan");
+        // h.add(effectController, "explosionRadius", 1.0, 2.0).name("Radius");
+        // h.add(effectController, "explosionDownScale", 1.0, 2.0).name("DownScale");
+        // h.add(effectController, "explosionGrain", 1.0, 5.0).name("Grain");
+        h.add(effectController, "explosionSpeed", 0.1, 2.0).name("Speed");
+        // h.add(effectController, "explosionBallness", 2.0, 50.0).name("Ballness");
+        // h.add(effectController, "explosionGrowth", 0.1, 3.0).name("Growth");
+        // h.add(effectController, "explosionFade", 1.0, 5.0).name("Fade");
+        h.add(effectController, "explosionDensity", 0.1, 4.0).name("Density");
+        // h.add(effectController, "explosionContrast", 0.1, 2.0).name("Contrast");
+        // h.add(effectController, "explosionRollingInitDamp", 0.1, 2.0).name("RollingInitDamp");
+        // h.add(effectController, "explosionRollingSpeed", 0.0, 4.0).name("RollingSpeed");
+        // h.add(effectController, "explosionDelayRange", 0.1, 2.0).name("DelayRange");
+        // h.add(effectController, "explosionBallSpread", 0.1, 5.0).name("BallSpread");
+        h.add(effectController, "explosionEmission", 0.0, 1.0).name("Emission");
+        h.add(effectController, "explosionBloom", 0.0, 1.0).name("Bloom");
+        h.add(effectController, "explosionColor", 0.0, 1.0).name("Color");
         
         h = gui.addFolder("Noise");
         h.add(effectController, "noiseOctave", 1, 16);
