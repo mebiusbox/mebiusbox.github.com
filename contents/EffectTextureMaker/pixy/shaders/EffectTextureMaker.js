@@ -2936,6 +2936,75 @@ PixSpriteStudioShaderChunks = {
     
   ].join("\n"),
   
+  
+  // LASER CHUNK
+  // http://glslsandbox.com/e#26951.0
+  laserUniforms: {
+    "laserWidth": { value: 1.0 },
+    "laserColor": { value: 1.0 },
+    "intensity": { value: 1.0 },
+  },
+  
+  laserFragPars: [
+    "uniform float laserWidth;",
+    "uniform float laserColor;",
+    "uniform float intensity;",
+  ].join("\n"),
+  
+  laserFrag: [
+    
+    "float t = abs(laserWidth / (sin(pin.position.x + sin(pin.position.y*0.0) * pin.position.y) * 5.0));",
+    "t -= (1.0 - abs(laserWidth / (sin(pin.position.x) * 0.5))) * 4.0;",
+    "vec3 c = vec3(t*0.1, t*0.4, t*0.8);",
+    "vec3 g = vec3(rgb2gray(c));",
+    "pout.color = mix(g, c, laserColor);",
+
+  ].join("\n"),
+  
+  
+  // LASER2 CHUNK
+  // http://glslsandbox.com/e#37112.0
+  
+  laser2Uniforms: {
+    laserWidth: { value: 0.5 },
+    laserInnerWidth: { value: 0.4 }
+  },
+  
+  laser2FragPars: [
+    "uniform float laserWidth;",
+    "uniform float laserInnerWidth;",
+    // 
+    // "float Capsule(vec2 p, vec2 a, float r) {",
+    // "  vec2 pa = p - a, ba = -a*2.0;",
+    // "  float h = clamp(dot(pa,ba)/dot(ba,ba), 0.0, 1.0);",
+    // "  return length(pa - ba*h) - r;",
+    // "}",
+    
+  ].join("\n"),
+  
+  laser2Frag: [
+    
+    // "float dist = -Capsule(pin.position, vec2(1.0, 0), .25);",
+    // "dist = 1.0 - pow(dist, 2.0) * 4.0;",
+    // "if (abs(pin.position.y) < laserInnerWidth) {",
+    // "  float t = dist * abs(pin.position.y) / laserInnerWidth + 0.5;",
+    // "  dist = clamp(t, 0.0, dist);",
+    // "}",
+    
+    "float dist = laserWidth / abs(pin.position.x);",
+    "dist = clamp(pow(dist, 10.0), 0.0, 1.0);",
+    
+    "float d2 = (0.1 * laserInnerWidth) / abs(pin.position.x);",
+    "dist -= clamp(pow(d2, 2.0), 0.0, 1.0) * 0.5;",
+    
+    // "vec3 c = vec3(dist*0.1, dist*0.4, dist*0.8);",
+    // "pout.color = mix(vec3(dist), c, laserColor);",
+    "pout.color = vec3(dist);",
+  ].join("\n"),
+  
+  
+
+  
   //// TEST CHUNK
   
   testFragPars: [
@@ -3150,6 +3219,8 @@ PixSpriteStudioShader = function() {
     this.addUniform(uniforms, ["CORONA"], "coronaUniforms");
     this.addUniform(uniforms, ["LENSFLARE"], "lensFlareUniforms");
     this.addUniform(uniforms, ["SUN"], "sunUniforms");
+    this.addUniform(uniforms, ["LASER"], "laserUniforms");
+    this.addUniform(uniforms, ["LASER2"], "laser2Uniforms");
     this.addUniform(uniforms, ["TOON"], "toonUniforms");
     
     return THREE.UniformsUtils.clone(THREE.UniformsUtils.merge(uniforms));
@@ -3212,6 +3283,8 @@ PixSpriteStudioShader = function() {
     this.addCode(codes, ["CORONA"], "coronaFragPars");
     this.addCode(codes, ["LENSFLARE"], "lensFlareFragPars");
     this.addCode(codes, ["SUN"], "sunFragPars");
+    this.addCode(codes, ["LASER"], "laserFragPars");
+    this.addCode(codes, ["LASER2"], "laser2FragPars");
     this.addCode(codes, ["TOON"], "toonFragPars");
     this.addCode(codes, ["TEST"], "testFragPars");
     
@@ -3257,6 +3330,8 @@ PixSpriteStudioShader = function() {
       this.addCode(codes, ["CORONA"], "coronaFrag");
       this.addCode(codes, ["LENSFLARE"], "lensFlareFrag");
       this.addCode(codes, ["SUN"], "sunFrag");
+      this.addCode(codes, ["LASER"], "laserFrag");
+      this.addCode(codes, ["LASER2"], "laser2Frag");
       this.addCode(codes, ["COPY"], "copyFrag");
       this.addCode(codes, ["TEST"], "testFrag");
       

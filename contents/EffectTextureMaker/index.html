@@ -454,6 +454,10 @@
           sunRadius: 1.0,
           sunColor: 0.0,
           
+          laserWidth: 0.5,
+          laserInnerWidth: 0.4,
+          laserColor: 1.0,
+          
           toonEnable: false,
           toonDarkBorder: 0.8,
           toonLightBorder: 0.95,
@@ -517,7 +521,7 @@
         
         h.add(effectController, "type", [
           "Wood", "Circle", "Solar", "Corona", "Spark", "Ring", "Gradation", "GradationLine", "Flash", "Cone", "Flower", "Flower+Fun", "WaveRing", "Smoke", "Flame", "Fire", "Cell", "Lightning", "Flare", "Flare2", "Flare3", "LensFlare", "Sun", "MagicCircle",
-          "Explosion", "Cross",
+          "Explosion", "Cross", "Laser", "Laser2",
           "Noise", "SeemlessNoise"
         ]).onChange(function(value) {
           
@@ -566,6 +570,11 @@
         h = gui.addFolder("Sun Parameters");
         h.add(effectController, "sunRadius", 0.1, 1.0);
         h.add(effectController, "sunColor", 0.0, 1.0);
+        
+        h = gui.addFolder("Laser Parameters");
+        h.add(effectController, "laserWidth", 0.01, 1.0);
+        h.add(effectController, "laserInnerWidth", 0.1, 1.0);
+        h.add(effectController, "laserColor", 0.0, 1.0);
         
         h = gui.addFolder("Fire Parameters");
         h.add(effectController, "fireStrength", 0.0, 5.0);
