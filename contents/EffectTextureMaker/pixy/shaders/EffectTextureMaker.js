@@ -3,7 +3,7 @@ PixSpriteStudioShaderChunks = {
   //// COMMON CHUNK
   
   common: [
-    "#extension GL_OES_standard_derivatives : enable",
+    // "#extension GL_OES_standard_derivatives : enable",
     "precision highp float;",
     "#define PI 3.14159265359",
     "#define PI2 6.28318530718",
@@ -12,16 +12,19 @@ PixSpriteStudioShaderChunks = {
     "#define LOG2 1.442695",
     "#define EPSILON 1e-6",
     "",
+    
     // handy value clamping to 0 - 1 range
     // "#define saturate(a) clamp(a, 0.0, 1.0)",
     "#define whiteCompliment(a) (1.0 - saturate(a))",
     "",
+    
     "float pow2(const in float x) { return x*x; }",
     "float pow3(const in float x) { return x*x*x; }",
     "float pow4(const in float x) { float x2 = x*x; return x2*x2; }",
     "float pow5(const in float x) { float x2 = x*x; return x2*x2*x; }",
     "float averate(const in vec3 color) { return dot(color, vec3(0.3333)); }",
     "",
+    
     "struct PSInput {",
     "  vec2 position;",
     "  vec2 mouse;",
@@ -29,27 +32,28 @@ PixSpriteStudioShaderChunks = {
     "  vec2 uv;",
     "};",
     "",
+    
     "struct PSOutput {",
     "  vec3 color;",
     "  float opacity;",
     "};",
-    // expects values in the range of [0,1]x[0,1], returns values in the [0,1] range.
-    // do not collapse into a single function per: http://byteblacksmith.com/improvements-to-the-canonical-one-liner-glsl-rand-for-opengl-es-2-0/
-    "highp float rand(const in vec2 uv) {",
-    "  const highp float a = 12.9898, b = 78.233, c = 43758.5453;",
-    "  highp float dt = dot(uv.xy, vec2(a,b)), sn = mod(dt, PI);",
-    "  return fract(sin(sn) * c);",
-    "}",
+  ].join("\n"),
+  
+  //// COLOR CHUNK
+  
+  color: [
     "float rgb2gray(vec3 c) {",
     "  return dot(c, vec3(0.3, 0.59, 0.11));",
     "}",
     "",
+    
     "float rgb2l(vec3 c) {",
     "  float fmin = min(min(c.r, c.g), c.b);",
     "  float fmax = max(max(c.r, c.g), c.b);",
     "  return (fmax + fmin) * 0.5;", // Luminance
     "}",
     "",
+    
     // https://github.com/liovch/GPUImage/blob/master/framework/Source/GPUImageColorBalanceFilter.m
     "vec3 rgb2hsl(vec3 c) {",
     "  vec3 hsl;",
@@ -90,6 +94,7 @@ PixSpriteStudioShaderChunks = {
     "  return hsl;",
     "}",
     "",
+    
     "float hue2rgb(float f1, float f2, float hue) {",
     "  if (hue < 0.0) {",
     "    hue += 1.0;",
@@ -109,6 +114,7 @@ PixSpriteStudioShaderChunks = {
     "  return res;",
     "}",
     "",
+    
     "vec3 hsl2rgb(vec3 hsl) {",
     "  vec3 rgb;",
     "  if (hsl.y == 0.0) {",
@@ -128,46 +134,110 @@ PixSpriteStudioShaderChunks = {
     "  return rgb;",
     "}",
     "",
+    
     "vec3 hsv2rgb(vec3 c) {",
     "  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);",
     "  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);",
     "  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);",
     "}",
     "",
-    "float interpolate(float a, float b, float x) {",
+  ].join("\n"),
+  
+  //// NOISE COMMON CHUNK
+  
+  noiseUniforms: {
+    noiseOctave: { value: 6 },
+    noiseFrequency: { value: 2.0 },
+    noiseAmplitude: { value: 0.65 },
+    noisePersistence: { value: 0.5 },
+    noiseGraphEnable: { value: false},
+  },
+  
+  noise: [
+    "uniform int noiseOctave;",
+    "uniform float noiseFrequency;",
+    "uniform float noiseAmplitude;",
+    "uniform float noisePersistence;",
+    "uniform bool noiseGraphEnable;",
+    
+    // expects values in the range of [0,1]x[0,1], returns values in the [0,1] range.
+    // do not collapse into a single function per: http://byteblacksmith.com/improvements-to-the-canonical-one-liner-glsl-rand-for-opengl-es-2-0/
+    "highp float rand(const in vec2 uv) {",
+    "  const highp float a = 12.9898, b = 78.233, c = 43758.5453;",
+    "  highp float dt = dot(uv.xy, vec2(a,b)), sn = mod(dt, PI);",
+    "  return fract(sin(sn) * c);",
+    "}",
+
+    "float pinterpolate(float a, float b, float x) {",
     "  float f = (1.0 - cos(x * PI)) * 0.5;",
     "  return a * (1.0 - f) + b * f;",
     "}",
     "",
-    "float rnd(vec2 p) {",
+    
+    "float prand(vec2 p) {",
     "  return fract(sin(dot(p, vec2(12.9898,78.233))) * 43758.5453);",
     "}",
     "",
-    "float irnd(vec2 p) {",
+    
+    "float pirand(vec2 p) {",
     "  vec2 i = floor(p);",
     "  vec2 f = fract(p);",
-    "  vec4 v = vec4(rnd(vec2(i.x,       i.y)),",
-    "                rnd(vec2(i.x + 1.0, i.y)),",
-    "                rnd(vec2(i.x,       i.y + 1.0)),",
-    "                rnd(vec2(i.x + 1.0, i.y + 1.0)));",
-    "  return interpolate(interpolate(v.x, v.y, f.x), interpolate(v.z, v.w, f.x), f.y);",
+    "  vec4 v = vec4(prand(vec2(i.x,       i.y)),",
+    "                prand(vec2(i.x + 1.0, i.y)),",
+    "                prand(vec2(i.x,       i.y + 1.0)),",
+    "                prand(vec2(i.x + 1.0, i.y + 1.0)));",
+    "  return pinterpolate(pinterpolate(v.x, v.y, f.x), pinterpolate(v.z, v.w, f.x), f.y);",
     "}",
     "",
-    "float noise(vec2 p) {",
+    
+    "float pnoise(vec2 p, int octave, float frequency, float persistence) {",
     "  float t = 0.0;",
-    "  for (int i=0; i<NOISE_OCTAVE; i++) {",
+    "  float maxAmplitude = EPSILON;",
+    "  float amplitude = 1.0;",
+    "  for (int i=0; i<10; i++) {",
+    "    if (i >= octave) break;",
+    "    t += pirand(p * frequency) * amplitude;",
+    "    frequency *= 2.0;",
+    "    maxAmplitude += amplitude;",
+    "    amplitude *= persistence;",
+    "  }",
+    "  return t / maxAmplitude;",
+    "}",
+    "",
+    
+    "float pnoise(vec2 p) {",
+    // "  return pnoise(p, noiseOctave, noiseFrequency, noisePersistence);",
+    "  float t = 0.0;",
+    "  for (int i=0; i<10; i++) {",
+    "    if (i >= noiseOctave) break;",
     "    float freq = pow(2.0, float(i));",
-    "    float amp  = pow(NOISE_PERSISTENCE, float(NOISE_OCTAVE - i));",
-    "    t += irnd(vec2(p.x / freq, p.y / freq)) * amp;",
+    "    float amp = pow(noisePersistence, float(noiseOctave - i));",
+    "    t += pirand(vec2(p.x / freq, p.y / freq)) * amp;",
     "  }",
     "  return t;",
     "}",
     "",
-    "float snoise(vec2 p, vec2 q, vec2 r) {",
-    "  return noise(vec2(p.x,       p.y      )) *        q.x  *        q.y +",
-    "         noise(vec2(p.x,       p.y + r.y)) *        q.x  * (1.0 - q.y) +",
-    "         noise(vec2(p.x + r.x, p.y      )) * (1.0 - q.x) *        q.y +",
-    "         noise(vec2(p.x + r.x, p.y + r.y)) * (1.0 - q.x) * (1.0 - q.y);",
+    
+    "float pnoise_ridged(vec2 p, int octave, float frequency, float persistence) {",
+    "  float t = 0.0;",
+    "  float maxAmplitude = EPSILON;",
+    "  float amplitude = 1.0;",
+    "  for (int i=0; i<8; i++) {",
+    "    if (i >= octave) break;",
+    "    t += ((1.0 - abs(pirand(p * frequency))) * 2.0 - 1.0) * amplitude;",
+    "    frequency *= 2.0;",
+    "    maxAmplitude += amplitude;",
+    "    amplitude *= persistence;",
+    "  }",
+    "  return t / maxAmplitude;",
+    "}",
+    "",
+    
+    "float psnoise(vec2 p, vec2 q, vec2 r) {",
+    "  return pnoise(vec2(p.x,       p.y      )) *        q.x  *        q.y +",
+    "         pnoise(vec2(p.x,       p.y + r.y)) *        q.x  * (1.0 - q.y) +",
+    "         pnoise(vec2(p.x + r.x, p.y      )) * (1.0 - q.x) *        q.y +",
+    "         pnoise(vec2(p.x + r.x, p.y + r.y)) * (1.0 - q.x) * (1.0 - q.y);",
     "}",
     // https://www.shadertoy.com/view/Xd23Dh
     // Created by inigo quilez - iq/2014
@@ -192,39 +262,218 @@ PixSpriteStudioShaderChunks = {
     // But well, if only for the math fun it was worth trying. And they say a bit of 
     // mathturbation can be healthy anyway!
     // Use the mouse to blend between different patterns:
-    // ell noise    u=0,v=0
+    // cell noise   u=0,v=0
     // voronoi      u=1,v=0
     // perlin noise u=0,v1=
     // voronoise    u=1,v=1
     // More info here: http://iquilezles.org/www/articles/voronoise/voronoise.htm
-    "vec3 iqhash3( vec2 p )",
-    "{",
-    "    vec3 q = vec3( dot(p,vec2(127.1,311.7)), ",
-    "				   dot(p,vec2(269.5,183.3)), ",
-    "				   dot(p,vec2(419.2,371.9)) );",
-    "	return fract(sin(q)*43758.5453);",
+    // psudo-random number generator
+    "float iqhash2(vec2 p) {",
+    "  vec2 q = vec2(dot(p, vec2(127.1,311.7)), dot(p, vec2(269.5,183.3)));",
+    "  return abs(fract(sin(q.x*q.y)*43758.5453123)-0.5)*2.0;",
+    "}",
+    "",
+    
+    "vec3 iqhash3( vec2 p ) {",
+    "  vec3 q = vec3(dot(p,vec2(127.1,311.7)), ",
+    "                dot(p,vec2(269.5,183.3)), ",
+    "                dot(p,vec2(419.2,371.9)) );",
+    "  return fract(sin(q)*43758.5453);",
     "}",
 
-    "float iqnoise( in vec2 x, float u, float v )",
-    "{",
-    "    vec2 p = floor(x);",
-    "    vec2 f = fract(x);",
-    
+    "float iqnoise( in vec2 x, float u, float v ) {",
+    "  vec2 p = floor(x);",
+    "  vec2 f = fract(x);",
     "  float k = 1.0+63.0*pow(1.0-v,4.0);",
-    "	float va = 0.0;",
-    "	float wt = 0.0;",
-    "    for( int j=-2; j<=2; j++ )",
-    "    for( int i=-2; i<=2; i++ )",
-    "    {",
-    "        vec2 g = vec2( float(i),float(j) );",
-    "		vec3 o = iqhash3( p + g )*vec3(u,u,1.0);",
-    "		vec2 r = g - f + o.xy;",
-    "		float d = dot(r,r);",
-    "		float ww = pow( 1.0-smoothstep(0.0,1.414,sqrt(d)), k );",
-    "		va += o.z*ww;",
-    "		wt += ww;",
+    "  float va = 0.0;",
+    "  float wt = 0.0;",
+    "  for( int j=-2; j<=2; j++ ) {",
+    "    for( int i=-2; i<=2; i++ ) {",
+    "      vec2 g = vec2( float(i),float(j) );",
+    "      vec3 o = iqhash3( p + g )*vec3(u,u,1.0);",
+    "      vec2 r = g - f + o.xy;",
+    "      float d = dot(r,r);",
+    "      float ww = pow( 1.0-smoothstep(0.0,1.414,sqrt(d)), k );",
+    "      va += o.z*ww;",
+    "      wt += ww;",
     "    }",
-    "    return va/wt;",
+    "  }",
+    "  return va/wt;",
+    "}",
+    
+    
+    // simplex noise
+    
+    "vec2 mod289(vec2 x) {",
+    "  return x - floor(x * (1.0 / 289.0)) * 289.0;",
+    "}",
+    
+    "vec3 mod289(vec3 x) {",
+    "  return x - floor(x * (1.0 / 289.0)) * 289.0;",
+    "}",
+    
+    "vec4 mod289(vec4 x) {",
+    "  return x - floor(x * (1.0 / 289.0)) * 289.0;",
+    "}",
+    
+    "vec3 permute(in vec3 x) {",
+    "  return mod289(((x*34.0)+1.0)*x);",
+    "}",
+    
+    "vec4 permute(vec4 x) {",
+    "  return mod289(((x*34.0)+1.0)*x);",
+    "}",
+    
+    "vec4 taylorInvSqrt(vec4 r) {",
+    "  return 1.79284291400159 - 0.85373472095314 * r;",
+    "}",
+    
+    "float snoise(in vec2 v) {",
+    "  const vec4 C = vec4(0.211324865405187,", // (3.0-sqrt(3.0))/6.0
+    "                      0.366025403784439,", // 0.5*(sqrt(3.0)-1.0)
+    "                     -0.577350269189626,", // -1.0 + 2.0 * C.x
+    "                      0.024390243902439);", // 1.0 / 41.0
+    // First corner
+      "vec2 i = floor(v + dot(v, C.yy) );",
+      "vec2 x0 = v - i + dot(i, C.xx);",
+
+    // Other corners
+      "vec2 i1;",
+      //i1.x = step( x0.y, x0.x ); // x0.x > x0.y ? 1.0 : 0.0
+      //i1.y = 1.0 - i1.x;
+      "i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);",
+      // x0 = x0 - 0.0 + 0.0 * C.xx ;
+      // x1 = x0 - i1 + 1.0 * C.xx ;
+      // x2 = x0 - 1.0 + 2.0 * C.xx ;
+      "vec4 x12 = x0.xyxy + C.xxzz;",
+      "x12.xy -= i1;",
+
+    // Permutations
+      "i = mod289(i);", // Avoid truncation effects in permutation
+      "vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))",
+    "+ i.x + vec3(0.0, i1.x, 1.0 ));",
+
+      "vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);",
+      "m = m*m ;",
+      "m = m*m ;",
+
+    // Gradients: 41 points uniformly over a line, mapped onto a diamond.
+    // The ring size 17*17 = 289 is close to a multiple of 41 (41*7 = 287)
+
+      "vec3 x = 2.0 * fract(p * C.www) - 1.0;",
+      "vec3 h = abs(x) - 0.5;",
+      "vec3 ox = floor(x + 0.5);",
+      "vec3 a0 = x - ox;",
+
+    // Normalise gradients implicitly by scaling m
+    // Approximation of: m *= inversesqrt( a0*a0 + h*h );
+      "m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );",
+
+    // Compute final noise value at P
+      "vec3 g;",
+      "g.x = a0.x * x0.x + h.x * x0.y;",
+      "g.yz = a0.yz * x12.xz + h.yz * x12.yw;",
+      "return 130.0 * dot(m, g);",
+    "}",
+    "",
+
+    "float snoise(vec3 v) {",
+  	"const vec2  C = vec2(1.0/6.0, 1.0/3.0);",
+  	"const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);",
+
+  	// First corner
+  	"vec3 i  = floor(v + dot(v, C.yyy) );",
+  	"vec3 x0 =   v - i + dot(i, C.xxx) ;",
+
+  	// Other corners
+  	"vec3 g = step(x0.yzx, x0.xyz);",
+  	"vec3 l = 1.0 - g;",
+  	"vec3 i1 = min( g.xyz, l.zxy );",
+  	"vec3 i2 = max( g.xyz, l.zxy );",
+
+  	// x0 = x0 - 0.0 + 0.0 * C.xxx;
+    // "vec3 x1 = x0 - i1 + 1.0 * C.xxx;",
+    // "vec3 x2 = x0 - i2 + 2.0 * C.xxx;",
+    // "vec3 x3 = x0 - 1.0 + 3.0 * C.xxx;",
+  	"vec3 x1 = x0 - i1 + C.xxx;",
+  	"vec3 x2 = x0 - i2 + C.yyy;", // 2.0*C.x = 1/3 = C.y
+  	"vec3 x3 = x0 - D.yyy;",      // -1.0+3.0*C.x = -0.5 = -D.y
+
+  	// Permutations
+    	"i = mod289(i); ",
+    	"vec4 p = permute( permute( permute( ",
+      "         i.z + vec4(0.0, i1.z, i2.z, 1.0 ))",
+      "       + i.y + vec4(0.0, i1.y, i2.y, 1.0 )) ",
+      "       + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));",
+
+  	// Gradients: 7x7 points over a square, mapped onto an octahedron.
+  	// The ring size 17*17 = 289 is close to a multiple of 49 (49*6 = 294)
+  	"float n_ = 0.142857142857;", // 1.0/7.0
+  	"vec3  ns = n_ * D.wyz - D.xzx;",
+
+  	"vec4 j = p - 49.0 * floor(p * ns.z * ns.z);",  //  mod(p,7*7)
+
+  	"vec4 x_ = floor(j * ns.z);",
+  	"vec4 y_ = floor(j - 7.0 * x_ );",    // mod(j,N)
+
+  	"vec4 x = x_ *ns.x + ns.yyyy;",
+  	"vec4 y = y_ *ns.x + ns.yyyy;",
+  	"vec4 h = 1.0 - abs(x) - abs(y);",
+  	
+  	"vec4 b0 = vec4( x.xy, y.xy );",
+  	"vec4 b1 = vec4( x.zw, y.zw );",
+
+  	//vec4 s0 = vec4(lessThan(b0,0.0))*2.0 - 1.0;
+  	//vec4 s1 = vec4(lessThan(b1,0.0))*2.0 - 1.0;
+  	"vec4 s0 = floor(b0)*2.0 + 1.0;",
+  	"vec4 s1 = floor(b1)*2.0 + 1.0;",
+  	"vec4 sh = -step(h, vec4(0.0));",
+
+  	"vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;",
+  	"vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;",
+
+  	"vec3 p0 = vec3(a0.xy,h.x);",
+  	"vec3 p1 = vec3(a0.zw,h.y);",
+  	"vec3 p2 = vec3(a1.xy,h.z);",
+  	"vec3 p3 = vec3(a1.zw,h.w);",
+  	
+  	//Normalise gradients
+  	"vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));",
+  	"p0 *= norm.x;",
+  	"p1 *= norm.y;",
+  	"p2 *= norm.z;",
+  	"p3 *= norm.w;",
+
+  	// Mix final noise value
+  	"vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);",
+  	"m = m * m;",
+  	"return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3) ) );",
+    "}",
+  ].join("\n"),
+  
+  vert: [
+    "attribute vec3 position;",
+    "void main() {",
+    "  gl_Position = vec4(position, 1.0);",
+    "}",
+  ].join("\n"),
+  
+  displacementUniforms: {
+    tDisplacement: { value: null },
+  },
+  
+  displacementVert: [
+    // "attribute vec3 position;",
+    // "attribute vec3 normal;",
+    // "attribute vec3 uv;",
+    "varying float displacement;",
+    "uniform sampler2D tDisplacement;",
+    "void main() {",
+    "  displacement = texture2D(tDisplacement, uv).x;",
+    "  vec3 transformed = position + normal * displacement * 0.1;",
+    // "  vec3 transformed = position;",
+    "  vec4 hpos = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);",
+    "  gl_Position = hpos;",
     "}",
   ].join("\n"),
   
@@ -253,6 +502,14 @@ PixSpriteStudioShaderChunks = {
     "  gl_FragColor = vec4(pout.color, pout.opacity);",
   ].join("\n"),
   
+  displacementFragPars: [
+    "varying float displacement;",
+  ].join("\n"),
+  
+  displacementFrag: [
+    // "pout.color = vec3(1.0);",
+    "pout.color = vec3(displacement);",
+  ].join("\n"),
   
   //// TOON CHUNK
   // https://www.shadertoy.com/view/MtVGWV
@@ -398,7 +655,7 @@ PixSpriteStudioShaderChunks = {
   sparkFrag: [
     "vec2 n = normalize(pin.position);",
     "float t = intensity / length(pin.position);",
-    "float r = noise(n*resolution+time) * 2.0;",
+    "float r = pnoise(n*resolution+time) * 2.0;",
     "r = max(t-r, 0.0);",
     "r = pow(r, powerExponent);",
     "pout.color = vec3(r);",
@@ -609,12 +866,14 @@ PixSpriteStudioShaderChunks = {
   ].join("\n"),
   
   
-  //// NOISE CHUNK
+  //// PERLINNOISE CHUNK
   
-  noiseFrag: [
+  perlinNoiseFrag: [
     "vec2 t = pin.coord + vec2(time * 10.0);",
-    "float n = noise(t);",
+    "float n = pnoise(t);",
     "pout.color = vec3(n);",
+    
+    "float graph = pnoise(t.xx);",
   ].join("\n"),
   
   
@@ -631,8 +890,232 @@ PixSpriteStudioShaderChunks = {
   seemlessNoiseFrag: [
     "float map = min(resolution.x, resolution.y) * noiseScale;",
     "vec2 t = mod(pin.coord.xy + vec2(time * 10.0), map);",
-    "float n = snoise(t, t / map, vec2(map));",
+    "float n = psnoise(t, t / map, vec2(map));",
     "pout.color = vec3(n);",
+    
+    "float graph = psnoise(t.xx, t.xx/map, vec2(map));",
+  ].join("\n"),
+  
+  
+  // http://glslsandbox.com/e#14408.0
+  // https://github.com/ashima/webgl-noise
+  // https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
+  // https://www.reddit.com/r/gamedev/comments/32ews1/procedural_gas_giant_rendering_with_gpu_noise/
+  // http://www.sidefx.com/docs/houdini/nodes/vop/turbnoise
+  // http://paulbourke.net/texture_colour/perlin/
+  // http://alteredqualia.com/three/examples/webgl_shader_sparks.html
+
+  booleanNoiseFragPars: [
+  ].join("\n"),
+  
+  booleanNoiseFrag: [
+    "vec2 p = pin.uv - time*0.1;",
+    "float s = resolution.x * noiseFrequency;",
+    "float lum = float(iqhash2(floor(p*s)/s) > 0.5);",
+    "pout.color = vec3(lum);",
+    
+    "float graph = float(iqhash2(floor(p.xx*s)/s) > 0.5);",
+  ].join("\n"),
+  
+  
+  cellNoiseFragPars: [
+  ].join("\n"),
+  
+  cellNoiseFrag: [
+    "vec2 p = pin.uv - time*0.1;",
+    "float s = resolution.x * noiseFrequency;",
+    "float lum = iqnoise(p * s + 0.5, 0.0, 0.0);",
+    "pout.color = vec3(lum);",
+    
+    "float graph = iqnoise(p.xx * s + 0.5, 0.0, 0.0);",
+  ].join("\n"),
+  
+  randomNoiseFragPars: [
+  ].join("\n"),
+  
+  randomNoiseFrag: [
+    "vec2 p = pin.uv - time*0.1;",
+    "float lum = iqhash2(p);",
+    "pout.color = vec3(lum);",
+    
+    "float graph = iqhash2(p.xx);",
+  ].join("\n"),
+  
+
+  fbmNoiseFragPars: [
+    // fractal brownian motion (noise harmonic)
+    // "float fbm4(vec2 uv) {",
+    // "  float n = 0.5;",
+    // "  float f = 1.0;",
+    // "  float l = 0.2;",
+    // "  for (int i=0; i<4; i++) {",
+    // "    n += snoise(vec3(uv*f, 1.0))*l;",
+    // "    f *= 2.0;",
+    // "    l *= 0.65;",
+    // "  }",
+    // "  return n;",
+    // "}",
+    
+    // fractal brownian motion (noise harmonic - fewer octaves = smoother)
+    // "float fbm8(vec2 uv) {",
+    // "  float n = 0.5;",
+    // "  float f = 4.0;",
+    // "  float l = 0.2;",
+    // "  for (int i=0; i<8; i++) {",
+    // "    n += snoise(vec3(uv*f, 1.0))*l;",
+    // "    f *= 2.0;",
+    // "    l *= 0.65;",
+    // "  }",
+    // "  return n;",
+    // "}",
+    "float fbm(vec2 uv) {",
+    "  float n = 0.5;",
+    "  float f = 1.0;",
+    "  float l = 0.2;",
+    "  for (int i=0; i<8; i++) {",
+    "    if (i >= noiseOctave) break;",
+    "    n += snoise(vec3(uv*f, time))*l;",
+    // "    f *= 2.0;",
+    // "    l *= 0.65;",
+    "    f *= noiseFrequency * 8.0;",
+    "    l *= noiseAmplitude;",
+    "  }",
+    "  return n;",
+    "}",
+  ].join("\n"),
+  
+  fbmNoiseFrag: [
+    "vec2 p = pin.uv - time*0.1;",
+    "float lum = fbm(pin.uv);",
+    "pout.color = vec3(lum);",
+    
+    "float graph = fbm(pin.uv.xx);",
+  ].join("\n"),
+  
+  turbulentNoiseFragPars: [
+    "float fbm_ridged(vec2 v, int octaves, float frequency, float amplitude) {",
+    "  const mat2 m = mat2( 0.00, 0.80, -0.80,  0.36 );",
+    "  vec2 q = v;",
+    "  float f = 0.0;",
+    "  f  = 0.5000 * pnoise_ridged(q, octaves, frequency, amplitude); q = m*q*2.01;",
+    "  f += 0.2500 * pnoise_ridged(q, octaves, frequency, amplitude); q = m*q*2.02;",
+    "  f += 0.1250 * pnoise_ridged(q, octaves, frequency, amplitude); q = m*q*2.03;",
+    "  f += 0.0625 * pnoise_ridged(q, octaves, frequency, amplitude); q = m*q*2.01;",
+    
+    "  f = f*1.2 + 0.5;",
+    // "  f = sqrt(f);",
+    "  return f;",
+    "}",
+  ].join("\n"),
+  
+  turbulentNoiseFrag: [
+    "vec2 p = pin.uv - time*0.1;",
+    "float lum = fbm_ridged(p, 6, noiseFrequency * 128.0, noiseAmplitude);",
+    "pout.color = vec3(lum);",
+    
+    "float graph = fbm_ridged(p.xx, 6, noiseFrequency * 128.0, noiseAmplitude);",
+  ].join("\n"),
+  
+  
+  sparkNoiseFragPars: [
+    "float fbm_spark(vec3 v) {",
+    "  float n = 0.0;",
+    "  n += 1.0000 * abs(snoise(v));",
+    "  n += 0.5000 * abs(snoise(v*2.0));",
+    "  n += 0.2500 * abs(snoise(v*4.0));",
+    "  n += 0.1250 * abs(snoise(v*8.0));",
+    "  float rn = 1.0 - n;",
+    "  return rn*rn;",
+    "}",
+  ].join("\n"),
+  
+  sparkNoiseFrag: [
+    "float lum = fbm_spark(vec3(pin.uv * 16.0 * noiseFrequency, time));",
+    "pout.color = vec3(lum);",
+    
+    "float graph = fbm_spark(vec3(pin.uv.xx * 16.0 * noiseFrequency, time));",
+  ].join("\n"),
+  
+  
+  voronoiNoiseFragPars: [
+  ].join("\n"),
+  
+  voronoiNoiseFrag: [
+    "vec2 p = pin.uv - time*0.1;",
+    "float lum = iqnoise(p * 128.0 * noiseFrequency, 1.0, 0.0);",
+    "pout.color = vec3(lum);",
+    
+    "float graph = iqnoise(p.xx * 128.0 * noiseFrequency, 1.0, 0.0);",
+  ].join("\n"),
+  
+    // "float fbm_abs(vec2 v, int octaves) {",
+    // "  float res = 0.0;",
+    // "  float scale = 0.5;",
+    // "  for (int i=0; i<8; i++) {",
+    // "    if (i >= octaves) break;",
+    // "    res += abs(snoise(v)) * scale;",
+    // // "    res += snoise(v) * scale;",
+    // "    v *= vec2(2.0, 2.0);",
+    // "    scale *= 0.5;",
+    // "  }",
+    // "  return res;",
+    // "}",
+    // 
+    // "float fbm(vec2 p) {",
+    // "  float z = 2.0;",
+    // "  float rz = 0.0;",
+    // "  for (int i=0; i<5; i++) {",
+    // "    rz += abs((iqhash2(p)-0.5)*2.0)/z;",
+    // "    z *= 2.0;",
+    // "    p = p*2.0;",
+    // "  }",
+    // "  return rz;",
+    // "}",
+    // 
+  
+    // "vec2 p = pin.uv-time;",
+    // "vec2 p = pin.uv.xx-time;",
+    // "float lum = float(iqhash2(floor(p*64.0)/64.0) > 0.5);",
+    // "float lum = float(iqhash2(floor(p*512.0)/512.0) > 0.5);",
+    // "float lum = fbm4(p);",
+    // "float lum = fbm8(p);",
+    // "float lum = iqhash2(p);",
+    // "float lum = pnoise(p*512.0);",
+    // "float lum = fbm_abs(p * 16.0, 6);",
+    // "float lum = pnoise(p * 16.0, 6, 2.0, 0.5);",
+    // "float lum = pnoise(p * 16.0, 6, 2.0, 0.0);",
+    // "float lum = fbm_ridged(p * 16.0, 6, 2.0, 0.0);",
+    // "float lum = fbm_spark(vec3(pin.uv, -time));",
+    // "float lum = pnoise_ridged(p * 16.0, 6, 2.0, 0.5);",
+    // "float lum = iqnoise(p * 16.0, 0.0, 0.0);",
+    // "float lum = iqnoise(p * 16.0, 0.0, 1.0);",
+    // "float lum = iqnoise(p * 16.0, 1.0, 0.0);",
+    // "float lum = iqnoise(p * 16.0, 1.0, 1.0);",
+    // "float map = min(resolution.x, resolution.y) * 1.0;",
+    // "vec2 t = mod(pin.coord.xy + vec2(time * 10.0), map);",
+    // "float lum = psnoise(t, t / map, vec2(map));",
+    // "lum = step(lum - fract(pin.uv.y), 0.0);",
+    // "pout.color = vec3(lum);",
+    // "const float size = 50.0;",
+    // "float color = pow(size/length(pin.coord - resolution*0.5), 1.8);",
+    // "vec3 c = vec3(color, pow(max(color*0.9,0.0), 2.0)*0.4, pow(max(color*0.8, 0.0), 3.0)*0.15);",
+    // "vec3 g = vec3(rgb2gray(c));",
+    // "pout.color = vec3(color);",
+    // "pout.color = c;",
+    
+    // "if (pin.position.x < 0.0) color.x = 1.0;",
+    // "if (pin.position.y < 0.0) color.y = 1.0;",
+    // "pout.color = color;",
+    
+    // "vec2 t = pin.coord + vec2(time * 10.0);",
+    // "float n = noise(t);",
+    // "pout.color = vec3(n);",
+  
+  noiseGraphFrag: [
+    "if (noiseGraphEnable) {",
+    "  graph = step(graph - fract(pin.uv.y), 0.0);",
+    "  pout.color = mix(vec3(0.0, 0.5, 0.0), vec3(1.0), graph);",
+    "}",
   ].join("\n"),
   
   
@@ -3232,7 +3715,29 @@ PixSpriteStudioShaderChunks = {
   ].join("\n"),
   
   
-
+  //// LIGHT CHUNK
+  // http://glslsandbox.com/e#30670.0
+  
+  lightUniforms: {
+    radius: { value: 1.0 },
+    powerExponent: { value: 1.0 },
+    color: { value: 1.0 }
+  },
+  
+  lightFragPars: [
+    "uniform float radius;",
+    "uniform float powerExponent;",
+    "uniform float color;"
+  ].join("\n"),
+  
+  lightFrag: [
+    
+    "float size = 200.0 * radius;",
+    "float lum = pow(size/length(pin.coord - resolution*0.5), powerExponent);",
+    "vec3 c = vec3(lum, pow(max(lum*0.9,0.0), 2.0)*0.4, pow(max(lum*0.8, 0.0), 3.0)*0.15);",
+    "vec3 g = vec3(rgb2gray(c));",
+    "pout.color = mix(g, c, color);",
+  ].join("\n"),
   
   //// TEST CHUNK
 
@@ -3241,14 +3746,7 @@ PixSpriteStudioShaderChunks = {
   ].join("\n"),
   
   testFrag: [
-    
-    // "if (pin.position.x < 0.0) color.x = 1.0;",
-    // "if (pin.position.y < 0.0) color.y = 1.0;",
-    // "pout.color = color;",
-    
-    // "vec2 t = pin.coord + vec2(time * 10.0);",
-    // "float n = noise(t);",
-    // "pout.color = vec3(n);",
+
   ].join("\n")
 };
 
@@ -3419,6 +3917,9 @@ PixSpriteStudioShader = function() {
     
     //// UNIFORMS
     
+    this.addUniform(uniforms, [], "noiseUniforms");
+    this.addUniform(uniforms, ["DISPLACEMENT"], "displacementUniforms");
+    
     this.addUniform(uniforms, ["WOOD"], "woodUniforms");
     this.addUniform(uniforms, ["CIRCLE"], "circleUniforms");
     this.addUniform(uniforms, ["SOLAR"], "solarUniforms");
@@ -3451,6 +3952,7 @@ PixSpriteStudioShader = function() {
     this.addUniform(uniforms, ["SUN"], "sunUniforms");
     this.addUniform(uniforms, ["LASER"], "laserUniforms");
     this.addUniform(uniforms, ["LASER2"], "laser2Uniforms");
+    this.addUniform(uniforms, ["LIGHT"], "lightUniforms");
     this.addUniform(uniforms, ["TOON"], "toonUniforms");
     
     return THREE.UniformsUtils.clone(THREE.UniformsUtils.merge(uniforms));
@@ -3469,12 +3971,9 @@ PixSpriteStudioShader = function() {
     
     var codes = [];
     
-    this.addCode(codes, [], "common");
-    codes.push("attribute vec3 position;");
-    codes.push("void main() {");
-    codes.push("  gl_Position = vec4(position, 1.0);");
-    codes.push("}");
-
+    // this.addCode(codes, [], "common");
+    this.addCode(codes, ["DISPLACEMENT"], "displacementVert");
+    this.addCode(codes, ["-DISPLACEMENT"], "vert");
     return codes.join("\n");
   }
   
@@ -3482,7 +3981,10 @@ PixSpriteStudioShader = function() {
     
     var codes = [];
     this.addCode(codes, [], "common");
+    this.addCode(codes, [], "color");
+    this.addCode(codes, [], "noise");
     this.addCode(codes, [], "fragPars");
+    this.addCode(codes, ["DISPLACEMENT"], "displacementFragPars");
     this.addCode(codes, ["WOOD"], "woodFragPars");
     this.addCode(codes, ["CIRCLE"], "circleFragPars");
     this.addCode(codes, ["SOLAR"], "solarFragPars");
@@ -3495,6 +3997,13 @@ PixSpriteStudioShader = function() {
     this.addCode(codes, ["FLOWER"], "flowerFragPars");
     this.addCode(codes, ["FLOWER+FUN"], "flowerFunFragPars");
     this.addCode(codes, ["WAVERING"], "waveRingFragPars");
+    this.addCode(codes, ["BOOLEANNOISE"], "booleanNoiseFragPars");
+    this.addCode(codes, ["CELLNOISE"], "cellNoiseFragPars");
+    this.addCode(codes, ["FBMNOISE"], "fbmNoiseFragPars");
+    this.addCode(codes, ["VORONOINOISE"], "voronoiNoiseFragPars");
+    this.addCode(codes, ["TURBULENTNOISE"], "turbulentNoiseFragPars");
+    this.addCode(codes, ["SPARKNOISE"], "sparkNoiseFragPars");
+    this.addCode(codes, ["RANDOMNOISE"], "randomNoiseFragPars");
     this.addCode(codes, ["SEEMLESSNOISE"], "seemlessNoiseFragPars");
     this.addCode(codes, ["+HEIGHT2NORMAL","+HEIGHT2NORMALSOBEL"], "height2NormalFragPars");
     this.addCode(codes, ["COLORBALANCE"], "colorBalanceFragPars");
@@ -3516,6 +4025,7 @@ PixSpriteStudioShader = function() {
     this.addCode(codes, ["SUN"], "sunFragPars");
     this.addCode(codes, ["LASER"], "laserFragPars");
     this.addCode(codes, ["LASER2"], "laser2FragPars");
+    this.addCode(codes, ["LIGHT"], "lightFragPars");
     this.addCode(codes, ["TOON"], "toonFragPars");
     this.addCode(codes, ["TEST"], "testFragPars");
     
@@ -3523,6 +4033,7 @@ PixSpriteStudioShader = function() {
     codes.push("void main() {");
     
       this.addCode(codes, [], "frag");
+      this.addCode(codes, ["DISPLACEMENT"], "displacementFrag");
       
       //// FRAGMENT
       
@@ -3539,10 +4050,18 @@ PixSpriteStudioShader = function() {
       this.addCode(codes, ["FLOWER"], "flowerFrag");
       this.addCode(codes, ["FLOWER+FUN"], "flowerFunFrag");
       this.addCode(codes, ["WAVERING"], "waveRingFrag");
-      this.addCode(codes, ["NOISE"], "noiseFrag");
+      this.addCode(codes, ["PERLINNOISE"], "perlinNoiseFrag");
+      this.addCode(codes, ["BOOLEANNOISE"], "booleanNoiseFrag");
+      this.addCode(codes, ["CELLNOISE"], "cellNoiseFrag");
+      this.addCode(codes, ["FBMNOISE"], "fbmNoiseFrag");
+      this.addCode(codes, ["VORONOINOISE"], "voronoiNoiseFrag");
+      this.addCode(codes, ["TURBULENTNOISE"], "turbulentNoiseFrag");
+      this.addCode(codes, ["SPARKNOISE"], "sparkNoiseFrag");
+      this.addCode(codes, ["RANDOMNOISE"], "randomNoiseFrag");
       this.addCode(codes, ["MANDELBLOT"], "mandelblotFrag");
       this.addCode(codes, ["JULIA"], "juliaFrag");
       this.addCode(codes, ["SEEMLESSNOISE"], "seemlessNoiseFrag");
+      this.addCode(codes, ["+PERLINNOISE", "+BOOLEANNOISE", "+CELLNOISE", "+FBMNOISE", "+VORONOINOISE", "+TURBULENTNOISE", "+SPARKNOISE", "+RANDOMNOISE", "+SEEMLESSNOISE"], "noiseGraphFrag");
       this.addCode(codes, ["HEIGHT2NORMAL"], "height2NormalFrag");
       this.addCode(codes, ["HEIGHT2NORMALSOBEL"], "height2NormalSobelFrag");
       this.addCode(codes, ["POLARCONVERSION"], "polarConversionFrag");
@@ -3564,6 +4083,7 @@ PixSpriteStudioShader = function() {
       this.addCode(codes, ["SUN"], "sunFrag");
       this.addCode(codes, ["LASER"], "laserFrag");
       this.addCode(codes, ["LASER2"], "laser2Frag");
+      this.addCode(codes, ["LIGHT"], "lightFrag");
       this.addCode(codes, ["COPY"], "copyFrag");
       this.addCode(codes, ["TEST"], "testFrag");
       
@@ -3589,6 +4109,14 @@ PixSpriteStudioShader = function() {
       vertexShader: this.generateVertexShader(),
       fragmentShader: this.generateFragmentShader()
     }, options));
+  }
+  
+  this.createStandardMaterial = function(uniforms) {
+    return new THREE.ShaderMaterial({
+      uniforms: uniforms,
+      vertexShader: this.generateVertexShader(),
+      fragmentShader: this.generateFragmentShader()
+    });
   }
 };
 
