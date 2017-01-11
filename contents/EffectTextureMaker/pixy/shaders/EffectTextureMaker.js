@@ -146,19 +146,19 @@ PixSpriteStudioShaderChunks = {
   //// NOISE COMMON CHUNK
   
   noiseUniforms: {
-    noiseOctave: { value: 6 },
-    noiseFrequency: { value: 2.0 },
-    noiseAmplitude: { value: 0.65 },
-    noisePersistence: { value: 0.5 },
-    noiseGraphEnable: { value: false},
+    cNoiseOctave: { value: 6 },
+    cNoiseFrequency: { value: 2.0 },
+    cNoiseAmplitude: { value: 0.65 },
+    cNoisePersistence: { value: 0.5 },
+    cNoiseGraphEnable: { value: false},
   },
   
   noise: [
-    "uniform int noiseOctave;",
-    "uniform float noiseFrequency;",
-    "uniform float noiseAmplitude;",
-    "uniform float noisePersistence;",
-    "uniform bool noiseGraphEnable;",
+    "uniform int cNoiseOctave;",
+    "uniform float cNoiseFrequency;",
+    "uniform float cNoiseAmplitude;",
+    "uniform float cNoisePersistence;",
+    "uniform bool cNoiseGraphEnable;",
     
     "float rand(float x) {",
     "  return fract(sin(x) * 4358.5453123);",
@@ -210,12 +210,12 @@ PixSpriteStudioShaderChunks = {
     "",
     
     "float pnoise(vec2 p) {",
-    // "  return pnoise(p, noiseOctave, noiseFrequency, noisePersistence);",
+    // "  return pnoise(p, cNoiseOctave, cNoiseFrequency, cNoisePersistence);",
     "  float t = 0.0;",
     "  for (int i=0; i<10; i++) {",
-    "    if (i >= noiseOctave) break;",
+    "    if (i >= cNoiseOctave) break;",
     "    float freq = pow(2.0, float(i));",
-    "    float amp = pow(noisePersistence, float(noiseOctave - i));",
+    "    float amp = pow(cNoisePersistence, float(cNoiseOctave - i));",
     "    t += pirand(vec2(p.x / freq, p.y / freq)) * amp;",
     "  }",
     "  return t;",
@@ -529,21 +529,21 @@ PixSpriteStudioShaderChunks = {
   // https://www.shadertoy.com/view/MtVGWV
   
   toonUniforms: {
-    toonEnable: { value: false },
-    toonDarkBorder: { value: 0.8 },
-    toonLightBorder: { value: 0.95 },
+    cToonEnable: { value: false },
+    cToonDark: { value: 0.8 },
+    cToonLight: { value: 0.95 },
   },
   
   toonFragPars: [
-    "uniform bool toonEnable;",
-    "uniform float toonDarkBorder;",
-    "uniform float toonLightBorder;",
+    "uniform bool cToonEnable;",
+    "uniform float cToonDark;",
+    "uniform float cToonLight;",
   ].join("\n"),
   
   toonFrag: [
-    "  if (toonEnable) {",
-    "    vec3 dark = mix( vec3(0.0), vec3(0.5),  step(toonDarkBorder, pout.color) ) ;",
-    "    vec3 light = mix( dark, vec3(1.0),  step(toonLightBorder, pout.color) ) ;",
+    "  if (cToonEnable) {",
+    "    vec3 dark = mix( vec3(0.0), vec3(0.5),  step(cToonDark, pout.color) ) ;",
+    "    vec3 light = mix( dark, vec3(1.0),  step(cToonLight, pout.color) ) ;",
     // "  vec3 dark = mix( vec3(0.0), vec3( 1.0, 0.4, 0.0),  step(0.8, pout.color) ) ;",
     // "  vec3 light = mix( dark, vec3( 1.0, 0.8, 0.0),  step(0.95, pout.color) ) ;",
     "    pout.color = light;",
@@ -597,19 +597,19 @@ PixSpriteStudioShaderChunks = {
   //// WOOD CHUNK
   
   woodUniforms: {
-    "frequency": { value: 30.0 },
-    "powerExponent": { value: 1.0 },
+    "cFrequency": { value: 30.0 },
+    "cPowerExponent": { value: 1.0 },
   },
   
   woodFragPars: [
-    "uniform float frequency;",
-    "uniform float powerExponent;",
+    "uniform float cFrequency;",
+    "uniform float cPowerExponent;",
   ].join("\n"),
   
   woodFrag: [
-    "float t = sin(length(pin.position) * frequency + time * 5.0);",
+    "float t = sin(length(pin.position) * cFrequency + time * 5.0);",
     // "float t = sin(length(pin.mouse - pin.position) * 30.0 + time * 5.0);",
-    "t = pow(t, powerExponent);",
+    "t = pow(t, cPowerExponent);",
     "pout.color = vec3(t);",
   ].join("\n"),
   
@@ -617,19 +617,19 @@ PixSpriteStudioShaderChunks = {
   //// CIRCLE CHUNK
   
   circleUniforms: {
-    "radius": { value: 1.1 },
-    "powerExponent": { value: 1.0 },
+    "cRadius": { value: 1.1 },
+    "cPowerExponent": { value: 1.0 },
   },
   
   circleFragPars: [
-    "uniform float radius;",
-    "uniform float powerExponent;",
+    "uniform float cRadius;",
+    "uniform float cPowerExponent;",
   ].join("\n"),
   
   circleFrag: [
     // "float t = 1.1 - length(pin.mouse - pin.position);",
-    "float t = radius - length(pin.position);",
-    "t = pow(t, powerExponent);",
+    "float t = cRadius - length(pin.position);",
+    "t = pow(t, cPowerExponent);",
     "pout.color = vec3(t);",
   ].join("\n"),
   
@@ -637,19 +637,19 @@ PixSpriteStudioShaderChunks = {
   //// SOLAR CHUNK
   
   solarUniforms: {
-    "intensity": { value: 0.4 },
-    "powerExponent": { value: 1.0 },
+    "cIntensity": { value: 0.4 },
+    "cPowerExponent": { value: 1.0 },
   },
   
   solarFragPars: [
-    "uniform float intensity;",
-    "uniform float powerExponent;",
+    "uniform float cIntensity;",
+    "uniform float cPowerExponent;",
   ].join("\n"),
   
   solarFrag: [
     // "float t = 1.0 / (length(pin.position) * solarIntensity);",
-    "float t = intensity / (length(pin.position));",
-    "t = pow(t, powerExponent);",
+    "float t = cIntensity / (length(pin.position));",
+    "t = pow(t, cPowerExponent);",
     "pout.color = vec3(t);",
   ].join("\n"),
   
@@ -657,21 +657,21 @@ PixSpriteStudioShaderChunks = {
   //// SPARK CHUNK
   
   sparkUniforms: {
-    "intensity": { value: 0.5 },
-    "powerExponent": { value: 1.0 },
+    "cIntensity": { value: 0.5 },
+    "cPowerExponent": { value: 1.0 },
   },
   
   sparkFragPars: [
-    "uniform float intensity;",
-    "uniform float powerExponent;",
+    "uniform float cIntensity;",
+    "uniform float cPowerExponent;",
   ].join("\n"),
   
   sparkFrag: [
     "vec2 n = normalize(pin.position);",
-    "float t = intensity * 2.0 / length(pin.position);",
+    "float t = cIntensity * 2.0 / length(pin.position);",
     "float r = pnoise(n*resolution+time) * 2.0;",
     "r = max(t-r, 0.0);",
-    "r = pow(r, powerExponent);",
+    "r = pow(r, cPowerExponent);",
     "pout.color = vec3(r);",
   ].join("\n"),
   
@@ -679,20 +679,20 @@ PixSpriteStudioShaderChunks = {
   //// RING CHUNK
   
   ringUniforms: {
-    "radius": { value: 0.5 },
-    "width": { value: 0.1 },
-    "powerExponent": { value: 1.0 },
+    "cRadius": { value: 0.5 },
+    "cWidth": { value: 0.1 },
+    "cPowerExponent": { value: 1.0 },
   },
   
   ringFragPars: [
-    "uniform float radius;",
-    "uniform float width;",
-    "uniform float powerExponent;",
+    "uniform float cRadius;",
+    "uniform float cWidth;",
+    "uniform float cPowerExponent;",
   ].join("\n"),
   
   ringFrag: [
-    "float t = width / (abs(radius - length(pin.position)));",
-    "t = pow(t, powerExponent);",
+    "float t = cWidth / (abs(cRadius - length(pin.position)));",
+    "t = pow(t, cPowerExponent);",
     "pout.color = vec3(t);",
   ].join("\n"),
   
@@ -708,53 +708,53 @@ PixSpriteStudioShaderChunks = {
   //// GRADATION CHUNK
   
   gradationUniforms: {
-    "direction": { value: new THREE.Vector2(0.0, 1.0) },
-    "powerExponent": { value: 1.0 }
+    "cDirection": { value: new THREE.Vector2(0.0, 1.0) },
+    "cPowerExponent": { value: 1.0 }
   },
   
   gradationFragPars: [
-    "uniform vec2 direction;",
-    "uniform float powerExponent;",
+    "uniform vec2 cDirection;",
+    "uniform float cPowerExponent;",
   ].join("\n"),
   
   gradationFrag: [
-    "float len = length(direction);",
+    "float len = length(cDirection);",
     "if (len == 0.0) {",
     "  pout.color = vec3(1.0);",
     "} else {",
-      "vec2 n = normalize(direction);",
-      "vec2 pos = pin.position - (-direction);",
+      "vec2 n = normalize(cDirection);",
+      "vec2 pos = pin.position - (-cDirection);",
       "float t = (dot(pos, n) * 0.5) / len;",
-      "t = pow(t, powerExponent);",
+      "t = pow(t, cPowerExponent);",
       "pout.color = vec3(t);",
     "}",
   ].join("\n"),
   
   
   gradationLineUniforms: {
-    "direction": { value: new THREE.Vector2(0.0, 1.0) },
-    "powerExponent": { value: 1.0 },
-    "offset": { value: 0.0 }
+    "cDirection": { value: new THREE.Vector2(0.0, 1.0) },
+    "cPowerExponent": { value: 1.0 },
+    "cOffset": { value: 0.0 }
   },
   
   gradationLineFragPars: [
-    "uniform vec2 direction;",
-    "uniform float powerExponent;",
-    "uniform float offset;",
+    "uniform vec2 cDirection;",
+    "uniform float cPowerExponent;",
+    "uniform float cOffset;",
   ].join("\n"),
   
   gradationLineFrag: [
-    "float len = length(direction);",
+    "float len = length(cDirection);",
     "if (len == 0.0) {",
     "  pout.color = vec3(1.0);",
     "} else {",
-      "vec2 n = normalize(direction);",
-      "vec2 pos = pin.position - (-direction);",
-      "float t = (dot(pos, n) * 0.5 + offset) / len;",
+      "vec2 n = normalize(cDirection);",
+      "vec2 pos = pin.position - (-cDirection);",
+      "float t = (dot(pos, n) * 0.5 + cOffset) / len;",
       "float r = prand(vec2(pin.uv.x, 0.0)) + 1e-6;",
       "float a = 1.0 / (1.0 - r);",
       "t = a*t - a*r;",
-      "t = pow(t, powerExponent);",
+      "t = pow(t, cPowerExponent);",
       "pout.color = vec3(t);",
     "}",
   ].join("\n"),
@@ -763,19 +763,19 @@ PixSpriteStudioShaderChunks = {
   //// FLASH CHUNK (ZOOM LINE)
   
   flashUniforms: {
-    "frequency": { value: 10.0 },
-    "powerExponent": { value: 1.0 }
+    "cFrequency": { value: 10.0 },
+    "cPowerExponent": { value: 1.0 }
   },
   
   flashFragPars: [
-    "uniform float frequency;",
-    "uniform float powerExponent;",
+    "uniform float cFrequency;",
+    "uniform float cPowerExponent;",
   ].join("\n"),
   
   flashFrag: [
     "float t = atan(pin.position.y, pin.position.x) + time;",
-    "t = sin(t * frequency);",
-    "t = pow(t, powerExponent);",
+    "t = sin(t * cFrequency);",
+    "t = pow(t, cPowerExponent);",
     "pout.color = vec3(t);",
   ].join("\n"),
   
@@ -783,23 +783,23 @@ PixSpriteStudioShaderChunks = {
   //// CONE CHUNK
   
   coneUniforms: {
-    "direction": { value: new THREE.Vector2(0.0, 1.0) },
-    "powerExponent": { value: 1.0 }
+    "cDirection": { value: new THREE.Vector2(0.0, 1.0) },
+    "cPowerExponent": { value: 1.0 }
   },
   
   coneFragPars: [
-    "uniform vec2 direction;",
-    "uniform float powerExponent;",
+    "uniform vec2 cDirection;",
+    "uniform float cPowerExponent;",
   ].join("\n"),
   
   coneFrag: [
-    "vec2 n = normalize(direction);",
-    "float len = length(direction);",
-    "vec2 pos = pin.position - (-direction);",
+    "vec2 n = normalize(cDirection);",
+    "float len = length(cDirection);",
+    "vec2 pos = pin.position - (-cDirection);",
     "float t = (dot(pos, n) * 0.5) / len;",
     // "t /= (length(pin.position) * len * 0.5);",
     "t /= (length(pos) * len * 0.5);",
-    "t = pow(t, powerExponent);",
+    "t = pow(abs(t), cPowerExponent);",
     "pout.color = vec3(t);",
   ].join("\n"),
   
@@ -807,23 +807,23 @@ PixSpriteStudioShaderChunks = {
   //// FLOWER CHUNK
   
   flowerUniforms: {
-    "petals": { value: 6.0 },
-    "radius": { value: 0.5 },
-    "intensity": { value: 0.1 },
-    "powerExponent": { value: 1.0 }
+    "cPetals": { value: 6.0 },
+    "cRadius": { value: 0.5 },
+    "cIntensity": { value: 0.1 },
+    "cPowerExponent": { value: 1.0 }
   },
   
   flowerFragPars: [
-    "uniform float petals;",
-    "uniform float radius;",
-    "uniform float intensity;",
-    "uniform float powerExponent;",
+    "uniform float cPetals;",
+    "uniform float cRadius;",
+    "uniform float cIntensity;",
+    "uniform float cPowerExponent;",
   ].join("\n"),
   
   flowerFrag: [
-    "float u = sin((atan(pin.position.y, pin.position.x) + time * 0.5) * petals) * radius;",
-    "float t = intensity / abs(u - length(pin.position));",
-    "t = pow(t, powerExponent);",
+    "float u = sin((atan(pin.position.y, pin.position.x) + time * 0.5) * floor(cPetals)) * cRadius;",
+    "float t = cIntensity / abs(u - length(pin.position));",
+    "t = pow(abs(t), cPowerExponent);",
     "pout.color = vec3(t);",
   ].join("\n"),
   
@@ -831,25 +831,25 @@ PixSpriteStudioShaderChunks = {
   //// FLOWER+FUN CHUNK
   
   flowerFunUniforms: {
-    "petals": { value: 6.0 },
-    "radius": { value: 0.5 },
-    "offset": { value: 0.2 },
-    "intensity": { value: 0.1 },
-    "powerExponent": { value: 1.0 }
+    "cPetals": { value: 6.0 },
+    "cRadius": { value: 0.5 },
+    "cOffset": { value: 0.2 },
+    "cIntensity": { value: 0.1 },
+    "cPowerExponent": { value: 1.0 }
   },
   
   flowerFunFragPars: [
-    "uniform float petals;",
-    "uniform float radius;",
-    "uniform float offset;",
-    "uniform float intensity;",
-    "uniform float powerExponent;",
+    "uniform float cPetals;",
+    "uniform float cRadius;",
+    "uniform float cOffset;",
+    "uniform float cIntensity;",
+    "uniform float cPowerExponent;",
   ].join("\n"),
   
   flowerFunFrag: [
-    "float u = abs(sin((atan(pin.position.y, pin.position.x) - length(pin.position) + time) * petals) * radius) + offset;",
-    "float t = intensity / abs(u - length(pin.position));",
-    "t = pow(t, powerExponent);",
+    "float u = abs(sin((atan(pin.position.y, pin.position.x) - length(pin.position) + time) * floor(cPetals)) * cRadius) + cOffset;",
+    "float t = cIntensity / abs(u - length(pin.position));",
+    "t = pow(abs(t), cPowerExponent);",
     "pout.color = vec3(t);",
   ].join("\n"),
   
@@ -857,25 +857,25 @@ PixSpriteStudioShaderChunks = {
   //// WAVE RING CHUNK
   
   waveRingUniforms: {
-    "radius": { value: 0.5 },
-    "width": { value: 0.01 },
-    "frequency": { value: 20.0 },
-    "amplitude": { value: 0.01 },
-    "powerExponent": { value: 1.0 }
+    "cRadius": { value: 0.5 },
+    "cWidth": { value: 0.01 },
+    "cFrequency": { value: 20.0 },
+    "cAmplitude": { value: 0.01 },
+    "cPowerExponent": { value: 1.0 }
   },
   
   waveRingFragPars: [
-    "uniform float radius;",
-    "uniform float width;",
-    "uniform float frequency;",
-    "uniform float amplitude;",
-    "uniform float powerExponent;",
+    "uniform float cRadius;",
+    "uniform float cWidth;",
+    "uniform float cFrequency;",
+    "uniform float cAmplitude;",
+    "uniform float cPowerExponent;",
   ].join("\n"),
   
   waveRingFrag: [
-    "float u = sin((atan(pin.position.y, pin.position.x) + time * 0.5) * frequency) * amplitude;",
-    "float t = width / abs(radius + u - length(pin.position));",
-    "t = pow(t, powerExponent);",
+    "float u = sin((atan(pin.position.y, pin.position.x) + time * 0.5) * floor(cFrequency)) * cAmplitude;",
+    "float t = cWidth / abs(cRadius + u - length(pin.position));",
+    "t = pow(abs(t), cPowerExponent);",
     "pout.color = vec3(t);",
   ].join("\n"),
   
@@ -894,15 +894,15 @@ PixSpriteStudioShaderChunks = {
   //// SEEMLESS NOISE CHUNK
   
   seemlessNoiseUniforms: {
-    "noiseScale": { value: 1.0 }
+    "cNoiseScale": { value: 1.0 }
   },
   
   seemlessNoiseFragPars: [
-    "uniform float noiseScale;"
+    "uniform float cNoiseScale;"
   ].join("\n"),
   
   seemlessNoiseFrag: [
-    "float map = min(resolution.x, resolution.y) * noiseScale;",
+    "float map = min(resolution.x, resolution.y) * cNoiseScale;",
     "vec2 t = mod(pin.coord.xy + vec2(time * 10.0), map);",
     "float n = psnoise(t, t / map, vec2(map));",
     "pout.color = vec3(n);",
@@ -924,7 +924,7 @@ PixSpriteStudioShaderChunks = {
   
   booleanNoiseFrag: [
     "vec2 p = pin.uv - time*0.1;",
-    "float s = resolution.x * noiseFrequency;",
+    "float s = resolution.x * cNoiseFrequency;",
     "float lum = float(iqhash2(floor(p*s)/s) > 0.5);",
     "pout.color = vec3(lum);",
     
@@ -937,10 +937,10 @@ PixSpriteStudioShaderChunks = {
   
   cellNoiseFrag: [
     "vec2 p = pin.uv - time*0.1;",
-    "float lum = iqnoise(p * 48.0 * noiseFrequency + 0.5, 0.0, 0.0);",
+    "float lum = iqnoise(p * 48.0 * cNoiseFrequency + 0.5, 0.0, 0.0);",
     "pout.color = vec3(lum);",
     
-    "float graph = iqnoise(p.xx * 48.0 * noiseFrequency + 0.5, 0.0, 0.0);",
+    "float graph = iqnoise(p.xx * 48.0 * cNoiseFrequency + 0.5, 0.0, 0.0);",
   ].join("\n"),
   
   randomNoiseFragPars: [
@@ -986,12 +986,12 @@ PixSpriteStudioShaderChunks = {
     "  float f = 1.0;",
     "  float l = 0.2;",
     "  for (int i=0; i<8; i++) {",
-    "    if (i >= noiseOctave) break;",
+    "    if (i >= cNoiseOctave) break;",
     "    n += snoise(vec3(uv*f, time))*l;",
     // "    f *= 2.0;",
     // "    l *= 0.65;",
-    "    f *= noiseFrequency * 8.0;",
-    "    l *= noiseAmplitude;",
+    "    f *= cNoiseFrequency * 8.0;",
+    "    l *= cNoiseAmplitude;",
     "  }",
     "  return n;",
     "}",
@@ -1023,10 +1023,10 @@ PixSpriteStudioShaderChunks = {
   
   turbulentNoiseFrag: [
     "vec2 p = pin.uv - time*0.1;",
-    "float lum = fbm_ridged(p, noiseOctave, noiseFrequency * 128.0, noiseAmplitude);",
+    "float lum = fbm_ridged(p, cNoiseOctave, cNoiseFrequency * 128.0, cNoiseAmplitude);",
     "pout.color = vec3(lum);",
     
-    "float graph = fbm_ridged(p.xx, noiseOctave, noiseFrequency * 128.0, noiseAmplitude);",
+    "float graph = fbm_ridged(p.xx, cNoiseOctave, cNoiseFrequency * 128.0, cNoiseAmplitude);",
   ].join("\n"),
   
   
@@ -1043,10 +1043,10 @@ PixSpriteStudioShaderChunks = {
   ].join("\n"),
   
   sparkNoiseFrag: [
-    "float lum = fbm_spark(vec3(pin.uv * 16.0 * noiseFrequency, time));",
+    "float lum = fbm_spark(vec3(pin.uv * 16.0 * cNoiseFrequency, time));",
     "pout.color = vec3(lum);",
     
-    "float graph = fbm_spark(vec3(pin.uv.xx * 16.0 * noiseFrequency, time));",
+    "float graph = fbm_spark(vec3(pin.uv.xx * 16.0 * cNoiseFrequency, time));",
   ].join("\n"),
   
   
@@ -1055,10 +1055,10 @@ PixSpriteStudioShaderChunks = {
   
   voronoiNoiseFrag: [
     "vec2 p = pin.uv - time*0.1;",
-    "float lum = iqnoise(p * 48.0 * noiseFrequency, 1.0, 0.0);",
+    "float lum = iqnoise(p * 48.0 * cNoiseFrequency, 1.0, 0.0);",
     "pout.color = vec3(lum);",
     
-    "float graph = iqnoise(p.xx * 48.0 * noiseFrequency, 1.0, 0.0);",
+    "float graph = iqnoise(p.xx * 48.0 * cNoiseFrequency, 1.0, 0.0);",
   ].join("\n"),
   
     // "float fbm_abs(vec2 v, int octaves) {",
@@ -1125,7 +1125,7 @@ PixSpriteStudioShaderChunks = {
     // "pout.color = vec3(n);",
   
   noiseGraphFrag: [
-    "if (noiseGraphEnable) {",
+    "if (cNoiseGraphEnable) {",
     "  graph = clamp(graph, 0.0, 1.0);",
     "  graph = step(graph - fract(pin.uv.y), 0.0);",
     "  pout.color = mix(vec3(0.0, 0.5, 0.0), vec3(1.0), graph);",
@@ -1136,11 +1136,11 @@ PixSpriteStudioShaderChunks = {
   //// HEIGHT2NORMAL CHUNK
   
   height2NormalUniforms: {
-    "heightScale": { value: 10.0 },
+    "cHeightScale": { value: 10.0 },
   },
   
   height2NormalFragPars: [
-    "uniform float heightScale;",
+    "uniform float cHeightScale;",
   ].join("\n"),
     
   // height2NormalFrag: [
@@ -1173,8 +1173,8 @@ PixSpriteStudioShaderChunks = {
     "float s21 = texture2D(tDiffuse, pin.uv + vPixelSize.zy).x;",
     "float s10 = texture2D(tDiffuse, pin.uv + vPixelSize.yx).x;",
     "float s12 = texture2D(tDiffuse, pin.uv + vPixelSize.yz).x;",
-    "vec3 va = normalize(vec3(size.xy,(s21-s01)*heightScale));",
-    "vec3 vb = normalize(vec3(size.yx,(s10-s12)*heightScale));",
+    "vec3 va = normalize(vec3(size.xy,(s21-s01)*cHeightScale));",
+    "vec3 vb = normalize(vec3(size.yx,(s10-s12)*cHeightScale));",
     "vec3 n = cross(va,vb);",
     "pout.color = n*0.5 + 0.5;",
   ].join("\n"),
@@ -1249,7 +1249,7 @@ PixSpriteStudioShaderChunks = {
 			"float Gz = 0.5 * sqrt( 1.0 - Gx * Gx - Gy * Gy );",
 
 			// Make sure the returned normal is of unit length
-      "vec3 n = normalize( vec3( heightScale * Gx, heightScale * Gy, Gz ) );",
+      "vec3 n = normalize( vec3( cHeightScale * Gx, cHeightScale * Gy, Gz ) );",
       
       // Encode
       "pout.color = n*0.5 + 0.5;",
@@ -1261,17 +1261,17 @@ PixSpriteStudioShaderChunks = {
   
   colorBalanceUniforms: {
     // x: cyan red, y: magenta green, z: yellow blue, w: tone
-    "colorBalanceShadows": { value: new THREE.Vector3(0.0, 0.0, 0.0) },
-    "colorBalanceMidtones": { value: new THREE.Vector3(0.0, 0.0, 0.0) },
-    "colorBalanceHighlights": { value: new THREE.Vector3(0.0, 0.0, 0.0) },
-    "colorBalancePreserveLuminosity": { value: false }
+    "cColorBalanceShadows": { value: new THREE.Vector3(0.0, 0.0, 0.0) },
+    "cColorBalanceMidtones": { value: new THREE.Vector3(0.0, 0.0, 0.0) },
+    "cColorBalanceHighlights": { value: new THREE.Vector3(0.0, 0.0, 0.0) },
+    "cColorBalancePreserveLuminosity": { value: false }
   },
   
   colorBalanceFragPars: [
-    "uniform vec3 colorBalanceShadows;",
-    "uniform vec3 colorBalanceMidtones;",
-    "uniform vec3 colorBalanceHighlights;",
-    "uniform bool colorBalancePreserveLuminosity;"
+    "uniform vec3 cColorBalanceShadows;",
+    "uniform vec3 cColorBalanceMidtones;",
+    "uniform vec3 cColorBalanceHighlights;",
+    "uniform bool cColorBalancePreserveLuminosity;"
   ].join("\n"),
   
   // https://gist.github.com/liovch/3168961
@@ -1289,14 +1289,14 @@ PixSpriteStudioShaderChunks = {
     "float c2 = clamp((lightness - b) / a + 0.5, 0.0, 1.0);",
     "float c3 = clamp((lightness + b - 1.0) / -a + 0.5, 0.0, 1.0);",
     "float c4 = clamp((lightness + b - 1.0) / a + 0.5, 0.0, 1.0);",
-    "vec3 shadows = colorBalanceShadows * (c1 * scale);",
-    "vec3 midtones = colorBalanceMidtones * (c2 * c3 * scale);",
-    "vec3 highlights = colorBalanceHighlights * (c4 * scale);",
+    "vec3 shadows = cColorBalanceShadows * (c1 * scale);",
+    "vec3 midtones = cColorBalanceMidtones * (c2 * c3 * scale);",
+    "vec3 highlights = cColorBalanceHighlights * (c4 * scale);",
     
     "vec3 newColor = texel.rgb + shadows + midtones + highlights;",
     "newColor = clamp(newColor, 0.0, 1.0);",
     
-    "if (colorBalancePreserveLuminosity) {",
+    "if (cColorBalancePreserveLuminosity) {",
       "vec3 newHSL = rgb2hsl(newColor);",
       "pout.color = hsl2rgb(vec3(newHSL.x, newHSL.y, lightness));",
     "} else {",
@@ -1454,15 +1454,15 @@ PixSpriteStudioShaderChunks = {
   // https://www.shadertoy.com/view/MdX3zr
   
   flameUniforms: {
-    intensity: { value: 1.0 },
-    flameWidth: { value: 1.0 },
-    scale: { value: 1.0 },
+    cIntensity: { value: 1.0 },
+    cWidth: { value: 1.0 },
+    cScale: { value: 1.0 },
   },
   
   flameFragPars: [
-    "uniform float intensity;",
-    "uniform float flameWidth;",
-    "uniform float scale;",
+    "uniform float cIntensity;",
+    "uniform float cWidth;",
+    "uniform float cScale;",
     
     "float flameNoise(vec3 p) {",
     "  vec3 i = floor(p);",
@@ -1510,14 +1510,14 @@ PixSpriteStudioShaderChunks = {
     "v.x *= resolution.x / resolution.y;",
     
     "vec3 org = vec3(0.0, -2.0, 4.0);",
-    "vec3 dir = normalize(vec3(v.x*1.6 / flameWidth, -v.y, -1.5 * scale));",
+    "vec3 dir = normalize(vec3(v.x*1.6 / cWidth, -v.y, -1.5 * cScale));",
     
     "vec4 p = raymarch(org, dir);",
     "float glow = p.w;",
     
     // "vec4 col = mix(vec4(1.0, 0.5, 0.1, 1.0), vec4(0.1, 0.5, 1.0, 1.0), p.y*0.02 + 0.4);",
     // "col = mix(vec4(0.0), col, pow(glow*2.0, 4.0));",
-    "vec4 col = mix(vec4(0.0), vec4(1.0), pow(glow*2.0*intensity, 4.0));",
+    "vec4 col = mix(vec4(0.0), vec4(1.0), pow(glow*2.0*cIntensity, 4.0));",
     "pout.color = col.xyz;",
     "pout.opacity = col.w;",
   ].join("\n"),
@@ -1527,15 +1527,15 @@ PixSpriteStudioShaderChunks = {
   // http://glslsandbox.com/e#37373.0
   
   cellUniforms: {
-    intensity: { value: 1.0 },
-    powerExponent: { value: 1.0 },
-    size: { value: 1.0 },
+    cIntensity: { value: 1.0 },
+    cPowerExponent: { value: 1.0 },
+    cSize: { value: 1.0 },
   },
   
   cellFragPars: [
-    "uniform float intensity;",
-    "uniform float powerExponent;",
-    "uniform float size;",
+    "uniform float cIntensity;",
+    "uniform float cPowerExponent;",
+    "uniform float cSize;",
     
     "float lengthSqr(vec2 p) { return dot(p,p); }",
     
@@ -1558,15 +1558,15 @@ PixSpriteStudioShaderChunks = {
     "  return sqrt(sqrt(sqrt(",
     "    1.0 * // light",
     // "    worley(p*5.0 + 0.3 + time * 0.525) * ",
-    "    sqrt(worley(p * 50.0 / size + 0.3 + time * -0.15)) * ",
+    "    sqrt(worley(p * 50.0 / cSize + 0.3 + time * -0.15)) * ",
     // "    sqrt(sqrt(worley(p * -10.0 + 9.3))) )));",
     "    1.0 )));",
     "}",
   ].join("\n"),
   
   cellFrag: [
-    "float t = fworley(pin.uv * resolution.xy / 1500.0) * intensity;",
-    "t = pow(t, powerExponent);",
+    "float t = fworley(pin.uv * resolution.xy / 1500.0) * cIntensity;",
+    "t = pow(t, cPowerExponent);",
     // "t *= exp(-lengthSqr(abs(0.7 * pin.uv - 1.0)));",
     // "pout.color = t * vec3(0.1, 1.5*t, 1.2*t + pow(t, 0.5-t));"
     "pout.color = vec3(t);"
@@ -1577,15 +1577,15 @@ PixSpriteStudioShaderChunks = {
   // http://glslsandbox.com/e#37011.6
   
   smokeUniforms: {
-    volume: { value: 3.0 },
-    beta: { value: 4.0 },
-    delta: { value: 0.05 },
+    cVolume: { value: 3.0 },
+    cBeta: { value: 4.0 },
+    cDelta: { value: 0.05 },
   },
   
   smokeFragPars: [
-    "uniform float volume;",
-    "uniform float beta;",
-    "uniform float delta;",
+    "uniform float cVolume;",
+    "uniform float cBeta;",
+    "uniform float cDelta;",
     
     "float hash(float n) { return fract(sin(n) * 783.5453123); }",
     
@@ -1645,13 +1645,13 @@ PixSpriteStudioShaderChunks = {
     "  for (int i=0; i<100; ++i) {",
     "    if (sum.a > 0.99) break;",
     "    vec3 pos = ro + t*rd;",
-    "    float f = fbm(beta * pos + vec3(0.0, 0.0, 0.25) * time);",
+    "    float f = fbm(cBeta * pos + vec3(0.0, 0.0, 0.25) * time);",
     "    float d = map(pos, f, vec3(1.0, 1.0, 0.5));",
     // "    vec4 col = vec4(mix(vec3(0.07, 0.1, 0.2), vec3(1.5), d), 1.0);",
     "    vec4 col = vec4(mix(vec3(0.0), vec3(1.5), d), 1.0);",
-    "    col *= d*volume;",
+    "    col *= d*cVolume;",
     "    sum += col * (1.0 - sum.a);",
-    "    t += delta;",
+    "    t += cDelta;",
     "  }",
     // "  vec3 lighting = light(ro, rd);",
     // "  vec3 rain_cloud = mix(vec3(0.0), lighting, sum.a);",
@@ -1726,15 +1726,15 @@ PixSpriteStudioShaderChunks = {
   // http://glslsandbox.com/e#36774.0
   
   lightningUniforms: {
-    intensity: { value: 1.0 },
-    lightningFrequency: { value: 1.0 },
-    lightningWidth: { value: 7.0 },
+    cIntensity: { value: 1.0 },
+    cFrequency: { value: 1.0 },
+    cWidth: { value: 7.0 },
   },
   
   lightningFragPars: [
-    "uniform float intensity;",
-    "uniform float lightningFrequency;",
-    "uniform float lightningWidth;",
+    "uniform float cIntensity;",
+    "uniform float cFrequency;",
+    "uniform float cWidth;",
     
     "float hash(vec2 p) {",
     "  return fract(sin(dot(vec3(p.xy,1.0), vec3(37.1, 61.7, 12.4))) * 3758.5453123);",
@@ -1768,10 +1768,10 @@ PixSpriteStudioShaderChunks = {
     "  float amp = 80.0 + float(i) * 5.0;",
     "  float period = 0.4;",
     "  float thickness = mix(0.9, 1.0, lightingNoise(uv*10.0));",
-    "  float t = abs(lightningWidth / (sin(uv.x + fbm(uv * lightningFrequency + 4.0*time*period)) * amp) * thickness);",
+    "  float t = abs(cWidth / (sin(uv.x + fbm(uv * cFrequency + 4.0*time*period)) * amp) * thickness);",
     // "  float show = fract(abs(sin(time))) >= 0.0 ? 1.0 : 0.0;",
     // "  finalColor += t * vec3(0.2, 0.2, 1.0);",
-    "  finalColor += t * vec3(0.1) * intensity;",
+    "  finalColor += t * vec3(0.1) * cIntensity;",
     "}",
     
     "pout.color = finalColor;",
@@ -1782,34 +1782,34 @@ PixSpriteStudioShaderChunks = {
   // https://www.shadertoy.com/view/4scXWB
   
   flareUniforms: {
-    intensity: { value: 1.0 },
-    powerExponent: { value: 1.0 },
+    cIntensity: { value: 1.0 },
+    cPowerExponent: { value: 1.0 },
   },
   
   flareFragPars: [
-    "uniform float intensity;",
-    "uniform float powerExponent;",
+    "uniform float cIntensity;",
+    "uniform float cPowerExponent;",
   ].join("\n"),
   
   flareFrag: [
     // rotation hexagon
     "vec2 A = sin(vec2(0.0, 1.57) + time);",
     "vec2 U = abs(pin.position * mat2(A, -A.y, A.x)) * mat2(2.0, 0.0, 1.0, 1.7);",
-    "float t = intensity * 0.5 / max(U.x, U.y);", // glowing-spiky approx of step(max, 0.2)
-    "t = pow(t, powerExponent);",
+    "float t = cIntensity * 0.5 / max(U.x, U.y);", // glowing-spiky approx of step(max, 0.2)
+    "t = pow(t, cPowerExponent);",
     "pout.color = vec3(t);",
   ].join("\n"),
   
   // https://www.shadertoy.com/view/Xs33R2
   
   flare2Uniforms: {
-    "intensity": { value: 1.0 },
-    "powerExponent": { value: 1.0 },
+    "cIntensity": { value: 1.0 },
+    "cPowerExponent": { value: 1.0 },
   },
   
   flare2FragPars: [
-    "uniform float intensity;", 
-    "uniform float powerExponent;",
+    "uniform float cIntensity;", 
+    "uniform float cPowerExponent;",
   ].join("\n"),
   
   flare2Frag: [
@@ -1845,8 +1845,8 @@ PixSpriteStudioShaderChunks = {
     "pint1 += part_stardiag_ifac / (distd1 * dist_factor + 0.01);",
     "pint1 += part_stardiag_ifac / (distd2 * dist_factor + 0.01);",
     // "if (part_int_factor_max * pint1 > 6.0) {",
-      "float pint = part_int_factor_max * (pow(pint1, ppow) / part_int_div) * mp_int * intensity;",
-      "pint = pow(pint, powerExponent);",
+      "float pint = part_int_factor_max * (pow(pint1, ppow) / part_int_div) * mp_int * cIntensity;",
+      "pint = pow(pint, cPowerExponent);",
       "pout.color = vec3(pint);",
     // "} else { pout.color = vec3(0.0); }"
   ].join("\n"),
@@ -1854,13 +1854,13 @@ PixSpriteStudioShaderChunks = {
   
   // https://www.shadertoy.com/view/4sX3Rs#
   flare3Uniforms: {
-    "intensity": { value: 1.0 },
-    "powerExponent":  { value: 1.0 },
+    "cIntensity": { value: 1.0 },
+    "cPowerExponent":  { value: 1.0 },
   },
   
   flare3FragPars: [
-    "uniform float intensity;",
-    "uniform float powerExponent;",
+    "uniform float cIntensity;",
+    "uniform float cPowerExponent;",
 
     "float flareNoise(float x) {",
     // "  return iqnoise(vec2(x,0.0), 0.0, 0.0);",
@@ -1889,7 +1889,7 @@ PixSpriteStudioShaderChunks = {
     "vec2 p = vec2(0.0) - uv;",
     "float ang = atan(p.x, p.y);",
     "float dist = length(p); dist = pow(dist, 0.1);",
-    "float f0 = intensity / (length(uv-p)*16.0+1.0);",
+    "float f0 = cIntensity / (length(uv-p)*16.0+1.0);",
     "f0 = f0+f0*(sin(flareNoise(time + (pos.x+pos.y)*2.2 + ang*4.0+5.954)*16.0)*0.1+dist*0.1+0.8);",
     
     // "float f1 = max(0.01-pow(length(uv+1.2*pos),1.9),.0)*7.0;",
@@ -1922,7 +1922,7 @@ PixSpriteStudioShaderChunks = {
     "c = cc(c, 0.5, 0.1);",
     
     "float t = c.x;",
-    "t = pow(t, powerExponent);",
+    "t = pow(t, cPowerExponent);",
     
     "pout.color = vec3(t);",
     // "pout.color = vec3(f0);",
@@ -2131,13 +2131,13 @@ PixSpriteStudioShaderChunks = {
   // https://www.shadertoy.com/view/ls3GRS
   
   crossUniforms: {
-    "intensity": { value: 0.4 },
-    "powerExponent": { value: 1.0 },
+    "cIntensity": { value: 0.4 },
+    "cPowerExponent": { value: 1.0 },
   },
   
   crossFragPars: [
-    "uniform float intensity;",
-    "uniform float powerExponent;",
+    "uniform float cIntensity;",
+    "uniform float cPowerExponent;",
   ].join("\n"),
   
   crossFrag: [
@@ -2147,11 +2147,11 @@ PixSpriteStudioShaderChunks = {
     
     "vec2 dist = abs(pin.position);",
     "float longDist = max(dist.x, dist.y);",
-    "dist += longDist / 40.0 * (1.0 - intensity) * 10.0;",
+    "dist += longDist / 40.0 * (1.0 - cIntensity) * 10.0;",
     "vec2 uv = magnitude / dist;",
     
     "float t = (uv.x + uv.y) / 2.0;",
-    "t = pow(t, powerExponent);",
+    "t = pow(t, cPowerExponent);",
     "pout.color = vec3(t);",
   ].join("\n"),
   
@@ -2161,41 +2161,41 @@ PixSpriteStudioShaderChunks = {
   // https://www.shadertoy.com/view/Xd3GWn
   
   explosionUniforms: {
-    explosionCameraTilt: { value: 0.0 },
-    explosionCameraPan: { value: 0.0 },
-    explosionRadius: { value: 1.75 },
-    explosionDownScale: { value: 1.25 },
-    explosionGrain: { value: 2.0 },
-    explosionSpeed: { value: 0.3 },
-    explosionBallness: { value: 2.0 },
-    explosionGrowth: { value: 2.2 },
-    explosionFade: { value: 1.6 },
-    // explosionThinoutSmooth: { value: 0.7 },
-    explosionDensity: { value: 1.35 },
-    explosionContrast: { value: 1.0 },
-    explosionRollingInitDamp: { value: 0.3 },
-    explosionRollingSpeed: { value: 2.0 },
-    explosionDelayRange: { value: 0.25 },
-    explosionBallSpread: { value: 1.0 },
+    cExplosionCameraTilt: { value: 0.0 },
+    cExplosionCameraPan: { value: 0.0 },
+    cExplosionRadius: { value: 1.75 },
+    cExplosionDownScale: { value: 1.25 },
+    cExplosionGrain: { value: 2.0 },
+    cExplosionSpeed: { value: 0.3 },
+    cExplosionBallness: { value: 2.0 },
+    cExplosionGrowth: { value: 2.2 },
+    cExplosionFade: { value: 1.6 },
+    // cExplosionThinoutSmooth: { value: 0.7 },
+    cExplosionDensity: { value: 1.35 },
+    cExplosionContrast: { value: 1.0 },
+    cExplosionRollingInitDamp: { value: 0.3 },
+    cExplosionRollingSpeed: { value: 2.0 },
+    cExplosionDelayRange: { value: 0.25 },
+    cExplosionBallSpread: { value: 1.0 },
   },
   
   explosionFragPars: [
-    "uniform float explosionCameraTilt;",
-    "uniform float explosionCameraPan;",
-    "uniform float explosionRadius;",
-    "uniform float explosionDownScale;",
-    "uniform float explosionGrain;",
-    "uniform float explosionSpeed;",
-    "uniform float explosionBallness;",
-    "uniform float explosionGrowth;",
-    "uniform float explosionFade;",
-    // "uniform float explosionThinoutSmooth;",
-    "uniform float explosionDensity;",
-    "uniform float explosionContrast;",
-    "uniform float explosionRollingInitDamp;",
-    "uniform float explosionRollingSpeed;",
-    "uniform float explosionDelayRange;",
-    "uniform float explosionBallSpread;",
+    "uniform float cExplosionCameraTilt;",
+    "uniform float cExplosionCameraPan;",
+    "uniform float cExplosionRadius;",
+    "uniform float cExplosionDownScale;",
+    "uniform float cExplosionGrain;",
+    "uniform float cExplosionSpeed;",
+    "uniform float cExplosionBallness;",
+    "uniform float cExplosionGrowth;",
+    "uniform float cExplosionFade;",
+    // "uniform float cExplosionThinoutSmooth;",
+    "uniform float cExplosionDensity;",
+    "uniform float cExplosionContrast;",
+    "uniform float cExplosionRollingInitDamp;",
+    "uniform float cExplosionRollingSpeed;",
+    "uniform float cExplosionDelayRange;",
+    "uniform float cExplosionBallSpread;",
 
     // "#define NOISE_LUT",
 
@@ -2294,11 +2294,11 @@ PixSpriteStudioShaderChunks = {
 
     // "float tmax = 1.0 + delay_range;",
     "float getTime() {",
-    "  float tmax = 1.0 + explosionDelayRange;",
+    "  float tmax = 1.0 + cExplosionDelayRange;",
     "#if defined (ALTERNATE_MOUSE) && !defined (SHADERTOY_APP)",
     "  if( iMouse.z > 0.0 ) return mouse.y/resolution.y*tmax;",
     "#endif",
-    "  return fract(time * explosionSpeed / tmax) * tmax;",
+    "  return fract(time * cExplosionSpeed / tmax) * tmax;",
     "}",
 
     "float hash( float n ) {",
@@ -2466,8 +2466,8 @@ PixSpriteStudioShaderChunks = {
     // maps 3d position to density
     "float densityFn( in vec3 p, in float r, float t, in vec3 dir, float seed ) {",
       //const float pi = 3.1415926;
-    "  float den = explosionBallness + (explosionGrowth+explosionBallness)*log(t)*r;",
-    "  den -= (2.5+explosionBallness)*pow(t,explosionFade)/r;",
+    "  float den = cExplosionBallness + (cExplosionGrowth+cExplosionBallness)*log(t)*r;",
+    "  den -= (2.5+cExplosionBallness)*pow(t,cExplosionFade)/r;",
         //den = -1.7 - p.y;
     	//den *= 1.+smoothstep(0.75,1.,r);
         
@@ -2485,7 +2485,7 @@ PixSpriteStudioShaderChunks = {
     	// offset noise based on seed
     	// plus a time based offset for the rolling effect (together with the space inversion below)
         //float s = seed-(rolling_speed/(t+rolling_init_damp));
-    "  float s = seed-(explosionRollingSpeed/(sin(min(t*3.,1.57))+explosionRollingInitDamp));",
+    "  float s = seed-(cExplosionRollingSpeed/(sin(min(t*3.,1.57))+cExplosionRollingInitDamp));",
     	//if( iMouse.z > 0.0 ) t += iMouse.y * 0.02;
         //vec3 dir = vec3(0.,1.,0.);
     	//vec3 dir = -0.5*(p - expCenter);
@@ -2493,7 +2493,7 @@ PixSpriteStudioShaderChunks = {
     "  dir *= s;",
 
         // invert space
-    "  p = -explosionGrain*p/(dot(p,p)*explosionDownScale);",
+    "  p = -cExplosionGrain*p/(dot(p,p)*cExplosionDownScale);",
 
         // participating media
     "  float f = fbm( p, dir );",
@@ -2516,7 +2516,7 @@ PixSpriteStudioShaderChunks = {
     // foffset = factor for offset how much the offsetting should be applied. best to pass a time-based value.
     "void calcDens( in vec3 pos, out float rad, out float r, out float rawDens, in float t, in float foffset, out vec4 col, in float bright ) {",
     "  float radiusFromExpCenter = length(pos);",
-    "  rad = radiusFromExpCenter / explosionRadius;",
+    "  rad = radiusFromExpCenter / cExplosionRadius;",
 
     "  r = 0.0;",
     "  rawDens = 0.0;",
@@ -2530,7 +2530,7 @@ PixSpriteStudioShaderChunks = {
     "    vec3 p = pos - balls[k].offset * foffset;",
     "    float radiusFromExpCenter0 = length(p);",
 
-    "    float r0 = explosionDownScale * radiusFromExpCenter0 / explosionRadius;",
+    "    float r0 = cExplosionDownScale * radiusFromExpCenter0 / cExplosionRadius;",
     "    if( r0 > 1.0 ) continue;",
 		// BUG: Skipping for r0 > 1.0 gives some artefacts on later smoke where the inside of sphere
         // is more transparent than the outside (for the parts where other expl balls contribute density in).
@@ -2552,7 +2552,7 @@ PixSpriteStudioShaderChunks = {
 		// highest could be that one who's r0 we will use as r. Maybe.
         // FIX: The bug is only with OLD_COLORING. New coloring should not have this bug anymore.
         
-    "    float rawDens0 = densityFn( p, r0, t0, balls[k].dir, explosion_seed + 33.7*float(k) ) * explosionDensity;",
+    "    float rawDens0 = densityFn( p, r0, t0, balls[k].dir, explosion_seed + 33.7*float(k) ) * cExplosionDensity;",
 
 "#ifndef SHOW_BOUNDS",
     	// thin out the volume at the far extends of the bounding sphere to avoid
@@ -2663,7 +2663,7 @@ PixSpriteStudioShaderChunks = {
     
     // t goes from 0 to 1 + mult delay. that is 0 to 1 is for one explosion ball. the delay for time distribution of the multiple explosion balls.
     // t_norm is 0 to 1 for the whole animation (incl mult delay).
-    "  float tmax = 1.0 + explosionDelayRange;",
+    "  float tmax = 1.0 + cExplosionDelayRange;",
     "  float t_norm = t / tmax;",
     "  float smooth_t = sin(t_norm*2.1);",	//sin(t*2.);
 
@@ -2743,8 +2743,8 @@ PixSpriteStudioShaderChunks = {
     "  float a = time*CAM_ROTATION_SPEED;",
     "  float b = CAM_TILT * sin(a * .014);",
     
-    "  a = explosionCameraPan;",
-    "  b = explosionCameraTilt - 0.5;",
+    "  a = cExplosionCameraPan;",
+    "  b = cExplosionCameraTilt - 0.5;",
     
     "  float phi = b * 3.14;",
     "  float camRadiusProjectedDown = camRadius * cos(phi);",
@@ -2785,12 +2785,12 @@ PixSpriteStudioShaderChunks = {
     "  for ( int k = 1; k < mult_explosions; ++k ) {",
     "    float pseed = variation_seed + 3. * float(k-1);",
     "    float tseed = delay_seed + 3. * float(k-1);",
-    "    vec2 phi = hash2(pseed) * vec2(2.*PI, PI*explosionBallSpread);",
+    "    vec2 phi = hash2(pseed) * vec2(2.*PI, PI*cExplosionBallSpread);",
     "    vec2 tilted = vec2( sin(phi.y), cos(phi.y) );",
     "    vec3 rotated = vec3( tilted.x * cos(phi.x), tilted.y, tilted.x * sin(phi.x) );",
     "    balls[k].offset = 0.7 * rotated;", //hash3(pseed) - 0.5;
     "    balls[k].dir = normalize( balls[k].offset );",
-    "    balls[k].delay = explosionDelayRange * hash(tseed);",
+    "    balls[k].delay = cExplosionDelayRange * hash(tseed);",
     "    pseed += 3.;",
     "    tseed += 3.;",
     "    maxdelay = max(maxdelay, balls[k].delay);",
@@ -2800,7 +2800,7 @@ PixSpriteStudioShaderChunks = {
     // Now stretch the ball explosion delays to the maximum allowed range.
     // So that the last ball starts with a delay of exactly delay_range and thus we do not waste any final time with just empty space.
    	"    for ( int k = 0; k < mult_explosions; ++k ) {",
-    "      balls[k].delay *= explosionDelayRange / maxdelay;",
+    "      balls[k].delay *= cExplosionDelayRange / maxdelay;",
     "    }",
     "  }",
     "}",
@@ -2837,7 +2837,7 @@ PixSpriteStudioShaderChunks = {
     "  float d = 4000.0;",
         
     // does pixel ray intersect with exp bounding sphere?
-    "  vec2 boundingSphereInter = iSphere( cameraPos, rayDir, explosionRadius );",
+    "  vec2 boundingSphereInter = iSphere( cameraPos, rayDir, cExplosionRadius );",
     "  if ( boundingSphereInter.x > 0. ) {",
     		// yes, cast ray
     "    col = raymarch( cameraPos, rayDir, boundingSphereInter, t, d );",
@@ -2846,7 +2846,7 @@ PixSpriteStudioShaderChunks = {
     // smoothstep final color to add contrast
     //col.xyz = col.xyz*col.xyz*(3.0-2.0*col.xyz);
   	//col.xyz = col.xyz*col.xyz*(2.0-col.xyz);	// darker contrast
-    "  col.xyz = col.xyz*col.xyz*(1.0+explosionContrast*(1.0-col.xyz));",
+    "  col.xyz = col.xyz*col.xyz*(1.0+cExplosionContrast*(1.0-col.xyz));",
 
   	// gamma
   	//col.xyz = pow( col.xyz, vec3(1.25) );
@@ -2918,21 +2918,21 @@ PixSpriteStudioShaderChunks = {
   //-------------------------------------------------------------------------------------
   
   explosion2Uniforms: {
-    explosionCameraPan: { value: 0.0 },
-    explosionSpeed: { value: 1.0 },
-    explosionDensity: { value: 1.0 },
-    emission: { value: 0.2 },
-    bloom: { value: 0.0 },
-    color: { value: 1.0 },
+    cExplosionCameraPan: { value: 0.0 },
+    cExplosionSpeed: { value: 1.0 },
+    cExplosionDensity: { value: 1.0 },
+    cEmission: { value: 0.2 },
+    cBloom: { value: 0.0 },
+    cColor: { value: 1.0 },
   },
   
   explosion2FragPars: [
-    "uniform float explosionCameraPan;",
-    "uniform float explosionSpeed;",
-    "uniform float explosionDensity;",
-    "uniform float emission;",
-    "uniform float bloom;",
-    "uniform float color;",
+    "uniform float cExplosionCameraPan;",
+    "uniform float cExplosionSpeed;",
+    "uniform float cExplosionDensity;",
+    "uniform float cEmission;",
+    "uniform float cBloom;",
+    "uniform float cColor;",
     
     // "#define DITHERING",
     // "#define TOENMAPPING",
@@ -2977,7 +2977,7 @@ PixSpriteStudioShaderChunks = {
     "const float nudge = 4.0;", // size of perpendicular vector
     "float normalizer = 1.0 / sqrt(1.0 + nudge*nudge);", // pythagorean theorem on that perpendicular to maintain scale
     "float spiralNoiseC(vec3 p) {",
-    "  float n = -mod(time * 0.8 * explosionSpeed, -2.1);", // noise amount
+    "  float n = -mod(time * 0.8 * cExplosionSpeed, -2.1);", // noise amount
     "  float iter = 2.0;",
     "  for (int i=0; i<8; i++) {",
          // add sin and cos scaled inverse with the frequency
@@ -2997,14 +2997,14 @@ PixSpriteStudioShaderChunks = {
     "float volumetricExplosion(vec3 p) {",
     "  float final = sphere(p, 4.0);",
     // "  final += expNoise(p*12.5)*0.2;",
-    "  final += fbm(p*50.0 * explosionDensity);",
+    "  final += fbm(p*50.0 * cExplosionDensity);",
     "  final += spiralNoiseC(p.zxy*0.4132+333.0)*3.0;", // 1.25
     "  return final;",
     "}",
     
     "float map(vec3 p) {",
     // "  R(p.xz, mouse.x * 0.008 * PI * time*0.1);",
-    "  R(p.xz, explosionCameraPan * PI2);",
+    "  R(p.xz, cExplosionCameraPan * PI2);",
     "  return volumetricExplosion(p/0.6)*0.6;", // scale
     "}",
     
@@ -3084,7 +3084,7 @@ PixSpriteStudioShaderChunks = {
          // the color of light
     "    vec3 lightColor = vec3(1.0, 0.5, 0.25);",
     // "    sum.rgb += (lightColor / exp(lDist*lDist*lDist*0.08)/30.0);",// bloom
-    "    sum.rgb += (lightColor / exp(lDist*lDist*lDist*0.15)/(30.0 - 20.0 * bloom));",// bloom
+    "    sum.rgb += (lightColor / exp(lDist*lDist*lDist*0.15)/(30.0 - 20.0 * cBloom));",// bloom
     
     "    if (d < h) {",
            // compute local density
@@ -3096,7 +3096,7 @@ PixSpriteStudioShaderChunks = {
     
     "      vec4 col = vec4(computeColor(td, lDist), td);",
            // emission
-    "      sum += sum.a * vec4(sum.rgb, 0.0) * emission / lDist;",
+    "      sum += sum.a * vec4(sum.rgb, 0.0) * cEmission / lDist;",
            // uniform scale density
     "      col.a *= 0.2;",
            // colour by alpha
@@ -3122,7 +3122,7 @@ PixSpriteStudioShaderChunks = {
     "}",
     
     "vec3 gray = vec3(rgb2gray(sum.xyz));",
-    "sum.xyz = mix(gray, sum.xyz, color);",
+    "sum.xyz = mix(gray, sum.xyz, cColor);",
     
     "#ifdef TOENMAPPING",
     "pout.color = toneMapFilmicALU(sum.xyz*2.02);",
@@ -3137,15 +3137,15 @@ PixSpriteStudioShaderChunks = {
   // https://www.shadertoy.com/view/XdV3DW by vamoss
   
   coronaUniforms: {
-    intensity: { value: 1.0 },
-    radius: { value: 0.3 },
-    size: { value: 1.0 },
+    cIntensity: { value: 1.0 },
+    cRadius: { value: 0.3 },
+    cSize: { value: 1.0 },
   },
   
   coronaFragPars: [
-    "uniform float intensity;",
-    "uniform float radius;",
-    "uniform float size;",
+    "uniform float cIntensity;",
+    "uniform float cRadius;",
+    "uniform float cSize;",
     
     "float burnNoise(vec3 uv, float res) {",
     "	const vec3 s = vec3(1e0, 1e2, 1e3);",
@@ -3170,7 +3170,7 @@ PixSpriteStudioShaderChunks = {
     "    float power = exp2(float(i));",
     "    c1 += 0.2 * (1.5 / power) * burnNoise(coord + vec3(0.0, -time*0.05, -time*0.01), power*16.0);",
     "  }",
-    "  c1 *= intensity;",
+    "  c1 *= cIntensity;",
     "  return vec3(c1);",
     "}",
     
@@ -3179,10 +3179,10 @@ PixSpriteStudioShaderChunks = {
   
   coronaFrag: [
     
-    "if (length(pin.position) < radius) {",
+    "if (length(pin.position) < cRadius) {",
     "  pout.color = vec3(0.0);",
     "} else {",
-    "  pout.color = burn(pin.position, size);",
+    "  pout.color = burn(pin.position, cSize);",
     "}",
 
   ].join("\n"),
@@ -3192,21 +3192,21 @@ PixSpriteStudioShaderChunks = {
   // https://www.shadertoy.com/view/XsXSWS by xbe
   
   fireUniforms: {
-    intensity: { value: 0.5 },
-    strength: { value: 1.0 },
-    power: { value: 0.1 },
-    range: { value: 2.0 },
-    width: { value: 0.1 },
-    color: { value: 1.0 },
+    cIntensity: { value: 0.5 },
+    cStrength: { value: 1.0 },
+    cPower: { value: 0.1 },
+    cRange: { value: 2.0 },
+    cWidth: { value: 0.1 },
+    cColor: { value: 1.0 },
   },
   
   fireFragPars: [
-    "uniform float intensity;",
-    "uniform float strength;",
-    "uniform float power;",
-    "uniform float range;",
-    "uniform float width;",
-    "uniform float color;",
+    "uniform float cIntensity;",
+    "uniform float cStrength;",
+    "uniform float cPower;",
+    "uniform float cRange;",
+    "uniform float cWidth;",
+    "uniform float cColor;",
     
     // procedural noise from IQ
     "vec2 hash( vec2 p ) {",
@@ -3244,20 +3244,20 @@ PixSpriteStudioShaderChunks = {
   fireFrag: [
 
     "vec2 q = pin.uv;",
-    "q.y *= 2.0 - 1.0 * power;",
-    "float T3 = max(3.0, 1.25 * strength) * time;",
+    "q.y *= 2.0 - 1.0 * cPower;",
+    "float T3 = max(3.0, 1.25 * cStrength) * time;",
     "q.x = mod(q.x, 1.0) - 0.5;",
     "q.y -= 0.25;",
-    "float n = fbm(strength * q - vec2(0, T3));",
-    "float c = 2.0 * intensity - 16.0 * pow(max(0.0, length(q * vec2(3.0 - width*3.0 + q.y*1.5, 0.75)) - n * max(0.0, q.y + 0.25)), 1.2);",
-    "float c1 = n * c * (1.5 - pow((2.50 / range)*pin.uv.y, 4.0));",
+    "float n = fbm(cStrength * q - vec2(0, T3));",
+    "float c = 2.0 * cIntensity - 16.0 * pow(max(0.0, length(q * vec2(3.0 - cWidth*3.0 + q.y*1.5, 0.75)) - n * max(0.0, q.y + 0.25)), 1.2);",
+    "float c1 = n * c * (1.5 - pow((2.50 / cRange)*pin.uv.y, 4.0));",
     "c1 = clamp(c1, 0.0, 1.0);",
     "vec3 col = vec3(1.5*c1, 1.5*c1*c1*c1, c1*c1*c1*c1*c1);",
     
     "float a = c * (1.0 - pow(pin.uv.y, 3.0));",
     "vec3 finalColor = mix(vec3(0.0), col, a);",
     "float gray = rgb2gray(finalColor);",
-    "pout.color = mix(vec3(gray), finalColor, color);",
+    "pout.color = mix(vec3(gray), finalColor, cColor);",
 
   ].join("\n"),
   
@@ -3283,17 +3283,17 @@ PixSpriteStudioShaderChunks = {
   // http://glslsandbox.com/e#36072.2
   
   lensFlareUniforms: {
-    radius: { value: 1.0 },
-    range: { value: 1.0 },
-    color: { value: 0.0 },
-    powerExponent: { value: 1.0 },
+    cRadius: { value: 1.0 },
+    cRange: { value: 1.0 },
+    cColor: { value: 0.0 },
+    cPowerExponent: { value: 1.0 },
   },
   
   lensFlareFragPars: [
-    "uniform float radius;",
-    "uniform float range;",
-    "uniform float color;",
-    "uniform float powerExponent;",
+    "uniform float cRadius;",
+    "uniform float cRange;",
+    "uniform float cColor;",
+    "uniform float cPowerExponent;",
     
     "#define dist 0.05",
     "#define zoom 100.0",
@@ -3310,12 +3310,12 @@ PixSpriteStudioShaderChunks = {
   lensFlareFrag: [
     
     "vec2 uv = pin.uv;",
-    "float tt = radius / abs(distance(uv, vec2(0.5)) * zoom);",
-    "float v = range / abs(length((vec2(0.5) - pin.uv) * vec2(0.03, 1.0)) * (zoom * 10.0));",
+    "float tt = cRadius / abs(distance(uv, vec2(0.5)) * zoom);",
+    "float v = cRange / abs(length((vec2(0.5) - pin.uv) * vec2(0.03, 1.0)) * (zoom * 10.0));",
     
-    "vec3 finalColor = tex2D(uv) * 0.5 * radius;",
-    "tt = pow(tt, powerExponent);",
-    "v = pow(v, powerExponent);",
+    "vec3 finalColor = tex2D(uv) * 0.5 * cRadius;",
+    "tt = pow(tt, cPowerExponent);",
+    "v = pow(v, cPowerExponent);",
     "finalColor += vec3(2.0 * tt, 4.0 * tt, 8.0 * tt);",
     "finalColor += vec3(2.0 * v, 4.0 * v, 8.0 * v);",
     
@@ -3368,7 +3368,7 @@ PixSpriteStudioShaderChunks = {
     "finalColor += e;",
     
     "vec3 gray = vec3(rgb2gray(finalColor));",
-    "pout.color = mix(gray, finalColor, color);",
+    "pout.color = mix(gray, finalColor, cColor);",
 
   ].join("\n"),
   
@@ -3377,14 +3377,14 @@ PixSpriteStudioShaderChunks = {
   // https://www.shadertoy.com/view/MlKGDc by Iulian Marinescu Ghetau
   
   sunUniforms: {
-    "radius": { value: 1.0 },
-    "color": { value: 0.0 },
+    "cRadius": { value: 1.0 },
+    "cColor": { value: 0.0 },
   },
   
   sunFragPars: [
     
-    "uniform float radius;",
-    "uniform float color;",
+    "uniform float cRadius;",
+    "uniform float cColor;",
     
     "struct Ray {",
     "  vec3 o;",
@@ -3396,7 +3396,7 @@ PixSpriteStudioShaderChunks = {
     "  vec3 norm;",
     "};",
     
-    "vec4 obj;",  // xyz - position, w - radius
+    "vec4 obj;",  // xyz - position, w - cRadius
     
     "const float eps = 1e-3;",
     
@@ -3557,7 +3557,7 @@ PixSpriteStudioShaderChunks = {
     // "}",
     
     "void initScene() {",
-    "  obj = vec4(0.0, 0.0, 0.0, 5.0 - 3.5 * (1.0 - radius));",
+    "  obj = vec4(0.0, 0.0, 0.0, 5.0 - 3.5 * (1.0 - cRadius));",
     "}",
     
     // Get a Ray from the Camera position (read from BufA) to the fragment given by the uv coordinates
@@ -3658,7 +3658,7 @@ PixSpriteStudioShaderChunks = {
     "vec3 col = 0.25 * (col0 + col1 + col2 + col3);",
     
     "vec3 gray = vec3(rgb2gray(col));",
-    "pout.color = mix(gray, col, color);",
+    "pout.color = mix(gray, col, cColor);",
     
   ].join("\n"),
   
@@ -3666,22 +3666,22 @@ PixSpriteStudioShaderChunks = {
   // LASER CHUNK
   // http://glslsandbox.com/e#26951.0
   laserUniforms: {
-    "width": { value: 0.4 },
-    "color": { value: 1.0 },
+    "cWidth": { value: 0.4 },
+    "cColor": { value: 1.0 },
   },
   
   laserFragPars: [
-    "uniform float width;",
-    "uniform float color;",
+    "uniform float cWidth;",
+    "uniform float cColor;",
   ].join("\n"),
   
   laserFrag: [
     
-    "float t = abs(width / (sin(pin.position.x + sin(pin.position.y*0.0) * pin.position.y) * 5.0));",
-    "t -= (1.0 - abs(width / (sin(pin.position.x) * 0.5))) * 4.0;",
+    "float t = abs(cWidth / (sin(pin.position.x + sin(pin.position.y*0.0) * pin.position.y) * 5.0));",
+    "t -= (1.0 - abs(cWidth / (sin(pin.position.x) * 0.5))) * 4.0;",
     "vec3 c = vec3(t*0.1, t*0.4, t*0.8);",
     "vec3 g = vec3(rgb2gray(c));",
-    "pout.color = mix(g, c, color);",
+    "pout.color = mix(g, c, cColor);",
 
   ].join("\n"),
   
@@ -3690,13 +3690,13 @@ PixSpriteStudioShaderChunks = {
   // http://glslsandbox.com/e#37112.0
   
   laser2Uniforms: {
-    width: { value: 0.5 },
-    innerWidth: { value: 0.4 }
+    cWidth: { value: 0.5 },
+    cInnerWidth: { value: 0.4 }
   },
   
   laser2FragPars: [
-    "uniform float width;",
-    "uniform float innerWidth;",
+    "uniform float cWidth;",
+    "uniform float cInnerWidth;",
     // 
     // "float Capsule(vec2 p, vec2 a, float r) {",
     // "  vec2 pa = p - a, ba = -a*2.0;",
@@ -3715,10 +3715,10 @@ PixSpriteStudioShaderChunks = {
     // "  dist = clamp(t, 0.0, dist);",
     // "}",
     
-    "float dist = width / abs(pin.position.x);",
+    "float dist = cWidth / abs(pin.position.x);",
     "dist = clamp(pow(dist, 10.0), 0.0, 1.0);",
     
-    "float d2 = (0.1 * innerWidth) / abs(pin.position.x);",
+    "float d2 = (0.1 * cInnerWidth) / abs(pin.position.x);",
     "dist -= clamp(pow(d2, 2.0), 0.0, 1.0) * 0.5;",
     
     // "vec3 c = vec3(dist*0.1, dist*0.4, dist*0.8);",
@@ -3731,24 +3731,25 @@ PixSpriteStudioShaderChunks = {
   // http://glslsandbox.com/e#30670.0
   
   lightUniforms: {
-    radius: { value: 1.0 },
-    powerExponent: { value: 1.0 },
-    color: { value: 1.0 }
+    cRadius: { value: 1.0 },
+    cPowerExponent: { value: 1.0 },
+    cColor: { value: 1.0 }
   },
   
   lightFragPars: [
-    "uniform float radius;",
-    "uniform float powerExponent;",
-    "uniform float color;"
+    "uniform float cRadius;",
+    "uniform float cPowerExponent;",
+    "uniform float cColor;"
   ].join("\n"),
   
   lightFrag: [
     
-    "float size = 200.0 * radius;",
-    "float lum = pow(size/length(pin.coord - resolution*0.5), powerExponent);",
+    "float size = 200.0 * cRadius;",
+    "float lum = size/length(pin.coord - resolution*0.5);",
     "vec3 c = vec3(lum, pow(max(lum*0.9,0.0), 2.0)*0.4, pow(max(lum*0.8, 0.0), 3.0)*0.15);",
+    "c = pow(c, vec3(cPowerExponent));",
     "vec3 g = vec3(rgb2gray(c));",
-    "pout.color = mix(g, c, color);",
+    "pout.color = mix(g, c, cColor);",
   ].join("\n"),
   
   //// BLOCKS

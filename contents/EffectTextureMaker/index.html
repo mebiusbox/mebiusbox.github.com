@@ -425,15 +425,15 @@
           },
           
           resetColorBalance: function() {
-            effectController.colorBalanceShadowsR = 0.0;
-            effectController.colorBalanceShadowsG = 0.0;
-            effectController.colorBalanceShadowsB = 0.0;
-            effectController.colorBalanceMidtonesR = 0.0;
-            effectController.colorBalanceMidtonesG = 0.0;
-            effectController.colorBalanceMidtonesB = 0.0;
-            effectController.colorBalanceHighlightsR = 0.0;
-            effectController.colorBalanceHighlightsG = 0.0;
-            effectController.colorBalanceHighlightsB = 0.0;
+            effectController.cColorBalanceShadowsR = 0.0;
+            effectController.cColorBalanceShadowsG = 0.0;
+            effectController.cColorBalanceShadowsB = 0.0;
+            effectController.cColorBalanceMidtonesR = 0.0;
+            effectController.cColorBalanceMidtonesG = 0.0;
+            effectController.cColorBalanceMidtonesB = 0.0;
+            effectController.cColorBalanceHighlightsR = 0.0;
+            effectController.cColorBalanceHighlightsG = 0.0;
+            effectController.cColorBalanceHighlightsB = 0.0;
             for (var i in guiCB.__controllers) {
               guiCB.__controllers[i].updateDisplay();
             }
@@ -446,33 +446,33 @@
           resolution: '512',
           polarConversion: false,
           
-          heightScale: 2.0,
+          cHeightScale: 2.0,
           normalMap: false,
           
           // common parameters
-          frequency: 30.0,
-          amplitude: 0.01,
-          intensity: 0.5,
-          directionX: 0.0001,
-          directionY: 1.0,
-          powerExponent: 1.0,
-          radius: 1.0,
-          size: 1.0,
-          width: 1.0,
-          color: 1.0,
-          radius: 0.5,
-          petals: 6.0,
-          offset: 0.2,
-          volume: 3.0,
-          beta: 4.0,
-          delta: 0.05,
-          scale: 1.0,
-          innerWidth: 0.4,
-          strength: 1.0,
-          power: 1.0,
-          range: 2.0,
-          emission: 1.0,
-          bloom: 1.0,
+          cFrequency: 30.0,
+          cAmplitude: 0.01,
+          cIntensity: 0.5,
+          cDirectionX: 0.0001,
+          cDirectionY: 1.0,
+          cPowerExponent: 1.0,
+          cRadius: 1.0,
+          cSize: 1.0,
+          cWidth: 1.0,
+          cColor: 1.0,
+          cRadius: 0.5,
+          cPetals: 6.0,
+          cOffset: 0.2,
+          cVolume: 3.0,
+          cBeta: 4.0,
+          cDelta: 0.05,
+          cScale: 1.0,
+          cInnerWidth: 0.4,
+          cStrength: 1.0,
+          cPower: 1.0,
+          cRange: 2.0,
+          cEmission: 1.0,
+          cBloom: 1.0,
           
           // circleRadius: 1.1,
           // ringRadius: 0.5,
@@ -484,11 +484,11 @@
           // smokeVolume: 3.0,
           // smokeBeta: 4.0,
           // smokeDelta: 0.05,
-          flameWidth: 1.0,
+          // flameWidth: 1.0,
           // flameScale: 1.0,
           // cellSize: 1.0,
-          lightningFrequency: 1.0,
-          lightningWidth: 7.0,
+          // lightningFrequency: 1.0,
+          // lightningWidth: 7.0,
           // coronaRadius: 0.3,
           // coronaSize: 1.0,
           // 
@@ -503,9 +503,9 @@
           // laserInnerWidth: 0.4,
           // laserColor: 1.0,
           
-          toonEnable: false,
-          toonDarkBorder: 0.8,
-          toonLightBorder: 0.95,
+          cToonEnable: false,
+          cToonDark: 0.8,
+          cToonLight: 0.95,
           
           // fireStrength: 1.0,
           // firePower: 1.0,
@@ -513,43 +513,43 @@
           // fireWidth: 0.1,
           // fireColor: 0.0001,
           
-          explosionCameraTilt: 0.0,
-          explosionCameraPan: 0.0,
-          explosionRadius: 1.75,
-          explosionDownScale: 1.25,
-          explosionGrain: 2.0,
-          explosionSpeed: 0.3,
-          explosionBallness: 2.0,
-          explosionGrowth: 2.2,
-          explosionFade: 1.6,
-          explosionDensity: 1.35,
-          explosionContrast: 1.0,
-          explosionRollingInitDamp: 0.3,
-          explosionRollingSpeed: 2.0,
-          explosionDelayRange: 0.25,
-          explosionBallSpread: 1.0,
-          explosionBloom: 0.0,
-          explosionEmission: 0.2,
-          explosionColor: 1.0,
+          cExplosionCameraTilt: 0.0,
+          cExplosionCameraPan: 0.0,
+          cExplosionRadius: 1.75,
+          cExplosionDownScale: 1.25,
+          cExplosionGrain: 2.0,
+          cExplosionSpeed: 0.3,
+          cExplosionBallness: 2.0,
+          cExplosionGrowth: 2.2,
+          cExplosionFade: 1.6,
+          cExplosionDensity: 1.35,
+          cExplosionContrast: 1.0,
+          cExplosionRollingInitDamp: 0.3,
+          cExplosionRollingSpeed: 2.0,
+          cExplosionDelayRange: 0.25,
+          cExplosionBallSpread: 1.0,
+          cExplosionBloom: 0.0,
+          cExplosionEmission: 0.2,
+          cExplosionColor: 1.0,
           
-          noiseOctave: 8,
-          noiseFrequency: 1.0,
-          noiseAmplitude: 0.65,
-          noisePersistence: 0.5,
-          noiseScale: 1.0,
-          noiseSphereEnable: false,
-          noiseGraphEnable: false,
+          cNoiseOctave: 8,
+          cNoiseFrequency: 1.0,
+          cNoiseAmplitude: 0.65,
+          cNoisePersistence: 0.5,
+          cNoiseScale: 1.0,
+          cNoiseSphereEnable: false,
+          cNoiseGraphEnable: false,
           
-          colorBalanceShadowsR: 0.0001,
-          colorBalanceShadowsG: 0.0001,
-          colorBalanceShadowsB: 0.0001,
-          colorBalanceMidtonesR: 0.0001,
-          colorBalanceMidtonesG: 0.0001,
-          colorBalanceMidtonesB: 0.0001,
-          colorBalanceHighlightsR: 0.0001,
-          colorBalanceHighlightsG: 0.0001,
-          colorBalanceHighlightsB: 0.0001,
-          colorBlanacePreserveLuminosity: false,
+          cColorBalanceShadowsR: 0.0001,
+          cColorBalanceShadowsG: 0.0001,
+          cColorBalanceShadowsB: 0.0001,
+          cColorBalanceMidtonesR: 0.0001,
+          cColorBalanceMidtonesG: 0.0001,
+          cColorBalanceMidtonesB: 0.0001,
+          cColorBalanceHighlightsR: 0.0001,
+          cColorBalanceHighlightsG: 0.0001,
+          cColorBalanceHighlightsB: 0.0001,
+          cColorBlanacePreserveLuminosity: false,
           
           type: "Wood",
           // type: "TEST",
@@ -596,26 +596,26 @@
         // resetParameters();
         
         h = gui.addFolder("Toon");
-        h.add(effectController, "toonEnable").name("enable");
-        h.add(effectController, "toonDarkBorder", 0.0, 1.0).name("dark");
-        h.add(effectController, "toonLightBorder", 0.0, 1.0).name("light");
+        h.add(effectController, "cToonEnable").name("enable");
+        h.add(effectController, "cToonDark", 0.0, 1.0).name("dark");
+        h.add(effectController, "cToonLight", 0.0, 1.0).name("light");
         
         gui.add(effectController, "polarConversion");
         
         h = gui.addFolder("NormalMap");
         h.add(effectController, "normalMap").name("Generate");
-        h.add(effectController, "heightScale", 0.0, 10.0);
+        h.add(effectController, "cHeightScale", 0.0, 10.0);
         
         h = gui.addFolder("ColorBalance");
-        h.add(effectController, "colorBalanceShadowsR", -1.0, 1.0, 0.025).name("Shadows-R");
-        h.add(effectController, "colorBalanceShadowsG", -1.0, 1.0, 0.025).name("Shadows-G");
-        h.add(effectController, "colorBalanceShadowsB", -1.0, 1.0, 0.025).name("Shadows-B");
-        h.add(effectController, "colorBalanceMidtonesR", -1.0, 1.0, 0.025).name("Midtones-R");
-        h.add(effectController, "colorBalanceMidtonesG", -1.0, 1.0, 0.025).name("Midtones-G");
-        h.add(effectController, "colorBalanceMidtonesB", -1.0, 1.0, 0.025).name("Midtones-B");
-        h.add(effectController, "colorBalanceHighlightsR", -1.0, 1.0, 0.025).name("Highlights-R");
-        h.add(effectController, "colorBalanceHighlightsG", -1.0, 1.0, 0.025).name("Highlights-G");
-        h.add(effectController, "colorBalanceHighlightsB", -1.0, 1.0, 0.025).name("Highlights-B");
+        h.add(effectController, "cColorBalanceShadowsR", -1.0, 1.0, 0.025).name("Shadows-R");
+        h.add(effectController, "cColorBalanceShadowsG", -1.0, 1.0, 0.025).name("Shadows-G");
+        h.add(effectController, "cColorBalanceShadowsB", -1.0, 1.0, 0.025).name("Shadows-B");
+        h.add(effectController, "cColorBalanceMidtonesR", -1.0, 1.0, 0.025).name("Midtones-R");
+        h.add(effectController, "cColorBalanceMidtonesG", -1.0, 1.0, 0.025).name("Midtones-G");
+        h.add(effectController, "cColorBalanceMidtonesB", -1.0, 1.0, 0.025).name("Midtones-B");
+        h.add(effectController, "cColorBalanceHighlightsR", -1.0, 1.0, 0.025).name("Highlights-R");
+        h.add(effectController, "cColorBalanceHighlightsG", -1.0, 1.0, 0.025).name("Highlights-G");
+        h.add(effectController, "cColorBalanceHighlightsB", -1.0, 1.0, 0.025).name("Highlights-B");
         h.add(effectController, 'resetColorBalance');
         // h.add(effectController, "colorBlanacePreserveLuminosity");
         guiCB = h;
@@ -645,111 +645,131 @@
         }
         
         var items = {
-          frequency: { minValue: 0.0, maxValue: 50.0, name: "Frequency" },
-          powerExponent: { minValue: 0.0, maxValue:50.0, name: "PowerExponent" },
-          amplitude: { minValue: 0.0, maxValue: 0.2, name: "Amplitude" },
-          intensity: { minValue: 0.0, maxValue: 1.0, name: "Intensity" },
-          directionX: { minValue: -1.0, maxValue: 1.0, name: "Direction X" },
-          directionY: { minValue: -1.0, maxValue: 1.0, name: "Direction Y" },
-          radius: { minValue: 0.0, maxValue: 2.0, name: "Radius" },
-          width: { minValue: 0.0, maxValue: 1.0, name: "Width" },
-          offset: { minValue: 0.0, maxValue: 1.0, name: "Offset" },
-          petals: { minValue: 1.0, maxValue: 20.0, name: "Petals" },
-          volume: { minValue: 1, maxValue: 10, name: "Volume" },
-          beta: { minValue: 1, maxValue: 10, name: "Beta" },
-          delta: { minValue: 0.01, maxValue: 0.2, name: "Delta" },
-          scale: { minValue: 0.1, maxValue: 1.0, name: "Scale" },
-          size: { minValue: 0.1, maxValue: 5.0, name: "Size" },
-          color: { minValue: 0.0, maxValue: 1.0, name: "Color" },
-          innerWidth: { minValue: 0.0, maxValue: 1.0, name: "Inner Width" },
-          strength: { minValue: 0.0, maxValue: 5.0, name: "Strength" },
-          power: { minValue: 0.0, maxValue: 1.0, name: "Power" },
-          range: { minValue: 0.0, maxValue: 5.0, name: "Range" },
+          cFrequency: { minValue: 0.0, maxValue: 50.0, name: "Frequency" },
+          cPowerExponent: { minValue: 0.0, maxValue:5.0, name: "PowerExponent" },
+          cAmplitude: { minValue: 0.0, maxValue: 0.2, name: "Amplitude" },
+          cIntensity: { minValue: 0.0, maxValue: 1.0, name: "Intensity" },
+          cDirectionX: { minValue: -1.0, maxValue: 1.0, name: "Direction X" },
+          cDirectionY: { minValue: -1.0, maxValue: 1.0, name: "Direction Y" },
+          cRadius: { minValue: 0.0, maxValue: 2.0, name: "Radius" },
+          cWidth: { minValue: 0.0, maxValue: 1.0, name: "Width" },
+          cOffset: { minValue: 0.0, maxValue: 1.0, name: "Offset" },
+          cPetals: { minValue: 1, maxValue: 20, name: "Petals" },
+          cVolume: { minValue: 1, maxValue: 10, name: "Volume" },
+          cBeta: { minValue: 1, maxValue: 10, name: "Beta" },
+          cDelta: { minValue: 0.01, maxValue: 0.2, name: "Delta" },
+          cScale: { minValue: 0.1, maxValue: 1.0, name: "Scale" },
+          cSize: { minValue: 0.1, maxValue: 5.0, name: "Size" },
+          cColor: { minValue: 0.0, maxValue: 1.0, name: "Color" },
+          cInnerWidth: { minValue: 0.0, maxValue: 1.0, name: "Inner Width" },
+          cStrength: { minValue: 0.0, maxValue: 5.0, name: "Strength" },
+          cPower: { minValue: 0.0, maxValue: 1.0, name: "Power" },
+          cRange: { minValue: 0.0, maxValue: 5.0, name: "Range" },
           
-          flameWidth: { minValue: 0.1, maxValue: 2.0, name: "Width" },
+          cExplosionCameraTilt: { minValue: 0.0, maxValue: 1.0, name: "CameraTilt" },
+          cExplosionCameraPan: { minValue: 0.0, maxValue: 1.0, name: "CameraPan" },
+          cExplosionRadius: { minValue: 1.0, maxValue: 2.0, name: "Radius" },
+          cExplosionDownScale: { minValue: 1.0, maxValue: 2.0, name: "DownScale" },
+          cExplosionGrain: { minValue: 1.0, maxValue: 5.0, name: "Grain" },
+          cExplosionSpeed: { minValue: 0.1, maxValue: 2.0, name: "Speed" },
+          cExplosionBallness: { minValue: 2.0, maxValue: 50.0, name: "Ballness" },
+          cExplosionGrowth: { minValue: 0.1, maxValue: 3.0, name: "Growth" },
+          cExplosionFade: { minValue: 1.0, maxValue: 5.0, name: "Fade" },
+          cExplosionDensity: { minValue: 0.1, maxValue: 4.0, name: "Density" },
+          cExplosionContrast: { minValue: 0.1, maxValue: 4.0, name: "Contrast" },
+          cExplosionRollingInitDamp: { minValue: 0.1, maxValue: 2.0, name: "RollingInitDamp" },
+          cExplosionRollingSpeed: { minValue: 0.0, maxValue: 4.0, name: "RollingSpeed" },
+          cExplosionDelayRange: { minValue: 0.1, maxValue: 2.0, name: "DelayRange" },
+          cExplosionBallSpread: { minValue: 0.1, maxValue: 5.0, name: "BallSpread" },
           
-          lightningFrequency: { minValue: 0.0, maxValue: 2.0, name: "Frequency" },
-          lightningWidth: { minValue: 1.0, maxValue: 10.0, name: "Width" },
+          cEmission: { minValue: 0.0, maxValue: 1.0, name: "Emission" },
+          cBloom: { minValue: 0.0, maxValue: 1.0, name: "Bloom" },
           
-          explosionCameraTilt: { minValue: 0.0, maxValue: 1.0, name: "CameraTilt" },
-          explosionCameraPan: { minValue: 0.0, maxValue: 1.0, name: "CameraPan" },
-          explosionRadius: { minValue: 1.0, maxValue: 2.0, name: "Radius" },
-          explosionDownScale: { minValue: 1.0, maxValue: 2.0, name: "DownScale" },
-          explosionGrain: { minValue: 1.0, maxValue: 5.0, name: "Grain" },
-          explosionSpeed: { minValue: 0.1, maxValue: 2.0, name: "Speed" },
-          explosionBallness: { minValue: 2.0, maxValue: 50.0, name: "Ballness" },
-          explosionGrowth: { minValue: 0.1, maxValue: 3.0, name: "Growth" },
-          explosionFade: { minValue: 1.0, maxValue: 5.0, name: "Fade" },
-          explosionDensity: { minValue: 0.1, maxValue: 4.0, name: "Density" },
-          explosionContrast: { minValue: 0.1, maxValue: 4.0, name: "Contrast" },
-          explosionRollingInitDamp: { minValue: 0.1, maxValue: 2.0, name: "RollingInitDamp" },
-          explosionRollingSpeed: { minValue: 0.0, maxValue: 4.0, name: "RollingSpeed" },
-          explosionDelayRange: { minValue: 0.1, maxValue: 2.0, name: "DelayRange" },
-          explosionBallSpread: { minValue: 0.1, maxValue: 5.0, name: "BallSpread" },
-          
-          emission: { minValue: 0.0, maxValue: 1.0, name: "Emission" },
-          bloom: { minValue: 0.0, maxValue: 1.0, name: "Bloom" },
-          
-          noiseOctave: { minValue: 1, maxValue: 8, name: "noiseOctave" },
-          noiseFrequency: { minValue: 0.0, maxValue: 2.0, name: "noiseFrequency" },
-          noisePersistence: { minValue: 0.0, maxValue: 1.0, name: "noisePersistence" },
-          noiseAmplitude: { minValue: 0.0, maxValue: 1.0, name: "noiseAmplitude" },
-          noiseScale: { minValue: 0.0, maxValue: 1.0, name: "noiseScale" },
-          noiseSphereEnable: { name: "noiseSphere" },
-          noiseGraphEnable: { name: "noiseGraph" },
+          cNoiseOctave: { minValue: 1, maxValue: 8, name: "NoiseOctave" },
+          cNoiseFrequency: { minValue: 0.0, maxValue: 2.0, name: "NoiseFrequency" },
+          cNoisePersistence: { minValue: 0.0, maxValue: 1.0, name: "NoisePersistence" },
+          cNoiseAmplitude: { minValue: 0.0, maxValue: 1.0, name: "NoiseAmplitude" },
+          cNoiseScale: { minValue: 0.0, maxValue: 1.0, name: "NoiseScale" },
+          cNoiseSphereEnable: { name: "NoiseSphere" },
+          cNoiseGraphEnable: { name: "NoiseGraph" },
+        };
+        
+        var overrideItems = {
+          Circle: {
+            cPowerExponent: { minValue: 0.0, maxValue: 50.0 }
+          },
+          Gradation: {
+            cPowerExponent: { minValue: 0.0, maxValue: 50.0 }
+          },
+          GradationLine: {
+            cPowerExponent: { minValue: 0.0, maxValue: 50.0 }
+          },
+          Cone: {
+            cPowerExponent: { minValue: 0.0, maxValue: 50.0 }
+          },
+          Cell: {
+            cPowerExponent: { minValue: 0.0, maxValue: 50.0 }
+          },
+          Flame: {
+            cWidth: { minValue: 0.1, maxValue: 2.0 }
+          },
+          Lightning: {
+            cFrequency: { minValue: 0.0, maxValue: 2.0 },
+            cWidth: { minValue: 1.0, maxValue: 10.0 }
+          }
         };
         
         // "Wood", "Circle", "Solar", "Corona", "Spark", "Ring", "Gradation", "GradationLine", "Flash", "Cone", "Flower", "FlowerFun", "WaveRing", "Smoke", "Flame", "Fire", "Cell", "Lightning", "Flare", "Flare2", "Flare3", "LensFlare", "Sun", "MagicCircle",
         // "Explosion", "Explosion2", "Cross", "Laser", "Laser2", "Light",
         // "PerlinNoise", "SeemlessNoise", "BooleanNoise", "CellNoise", "TurbulentNoise", "FbmNoise", "RandomNoise", "VoronoiNoise", "SparkNoise",
         var parsTable = {
-          Wood:   ["frequency", "powerExponent"],
-          Circle: ["radius", "powerExponent"],
-          Solar:  ["intensity", "powerExponent"],
-          Spark:  ["intensity", "powerExponent"],
-          Ring:   ["radius", "width", "powerExponent"],
-          Gradation: ["directionX", "directionY", "powerExponent"],
-          GradationLine: ["directionX", "directionY", "offset", "powerExponent"],
-          Flash:  ["frequency", "powerExponent"],
-          Cone:   ["directionX", "directionY", "powerExponent"],
-          Flower: ["petals", "radius", "intensity", "powerExponent"],
-          FlowerFun: ["petals", "radius", "offset", "intensity", "powerExponent"],
-          WaveRing: ["radius", "width", "frequency", "amplitude", "powerExponent"],
-          Flame:  ["intensity", "flameWidth", "scale" ],
-          Cell:   ["intensity", "powerExponent", "size" ],
-          Smoke:  ["volume", "beta", "delta"],
-          Lightning: ["intensity", "lightningFrequency", "lightningWidth"],
-          Flare:  ["intensity", "powerExponent"],
-          Flare2: ["intensity", "powerExponent"],
-          Flare3: ["intensity", "powerExponent"],
+          Wood:   ["cFrequency", "cPowerExponent"],
+          Circle: ["cRadius", "cPowerExponent"],
+          Solar:  ["cIntensity", "cPowerExponent"],
+          Spark:  ["cIntensity", "cPowerExponent"],
+          Ring:   ["cRadius", "cWidth", "cPowerExponent"],
+          Gradation: ["cDirectionX", "cDirectionY", "cPowerExponent"],
+          GradationLine: ["cDirectionX", "cDirectionY", "cOffset", "cPowerExponent"],
+          Flash:  ["cFrequency", "cPowerExponent"],
+          Cone:   ["cDirectionX", "cDirectionY", "cPowerExponent"],
+          Flower: ["cPetals", "cRadius", "cIntensity", "cPowerExponent"],
+          FlowerFun: ["cPetals", "cRadius", "cOffset", "cIntensity", "cPowerExponent"],
+          WaveRing: ["cRadius", "cWidth", "cFrequency", "cAmplitude", "cPowerExponent"],
+          Flame:  ["cIntensity", "cWidth", "cScale" ],
+          Cell:   ["cIntensity", "cPowerExponent", "cSize" ],
+          Smoke:  ["cVolume", "cBeta", "cDelta"],
+          Lightning: ["cIntensity", "cFrequency", "cWidth"],
+          Flare:  ["cIntensity", "cPowerExponent"],
+          Flare2: ["cIntensity", "cPowerExponent"],
+          Flare3: ["cIntensity", "cPowerExponent"],
           MagicCircle: [],
-          Cross:  ["intensity", "powerExponent"],
+          Cross:  ["cIntensity", "cPowerExponent"],
           Explosion: [
-            "explosionCameraTilt", "explosionCameraPan",
-            "explosionRadius", "explosionDownScale", "explosionGrain", "explosionSpeed",
-            "explosionBallness", "explosionGrowth", "explosionFade", "explosionDensity",
-            "explosionContrast", "explosionRollingInitDamp", "explosionRollingSpeed",
-            "explosionDelayRange", "explosionBallSpread"],
+            "cExplosionCameraTilt", "cExplosionCameraPan",
+            "cExplosionRadius", "cExplosionDownScale", "cExplosionGrain", "cExplosionSpeed",
+            "cExplosionBallness", "cExplosionGrowth", "cExplosionFade", "cExplosionDensity",
+            "cExplosionContrast", "cExplosionRollingInitDamp", "cExplosionRollingSpeed",
+            "cExplosionDelayRange", "cExplosionBallSpread"],
           Explosion2: [
-            "explosionCameraPan", "explosionSpeed", "explosionDensity",
-            "emission", "bloom", "color"],
-          Corona: ["intensity", "radius", "size"],
-          Fire: ["intensity", "strength", "power", "range", "width", "color"],
-          LensFlare: ["radius", "range", "color", "powerExponent"],
-          Sun:  ["radius", "color"],
-          Laser: ["width", "color"],
-          Laser2: ["width", "innerWidth"],
-          Light: ["radius", "powerExponent", "color"],
+            "cExplosionCameraPan", "cExplosionSpeed", "cExplosionDensity",
+            "cEmission", "cBloom", "cColor"],
+          Corona: ["cIntensity", "cRadius", "cSize"],
+          Fire: ["cIntensity", "cStrength", "cPower", "cRange", "cWidth", "cColor"],
+          LensFlare: ["cRadius", "cRange", "cColor", "cPowerExponent"],
+          Sun:  ["cRadius", "cColor"],
+          Laser: ["cWidth", "cColor"],
+          Laser2: ["cWidth", "cInnerWidth"],
+          Light: ["cRadius", "cPowerExponent", "cColor"],
           
-          PerlinNoise: ["noiseOctave", "noisePersistence", "noiseSphereEnable", "noiseGraphEnable"],
-          SeemlessNoise: ["noiseOctave", "noisePersistence", "noiseScale", "noiseSphereEnable", "noiseGraphEnable"],
-          BooleanNoise: ["noiseFrequency", "noiseSphereEnable", "noiseGraphEnable"],
-          CellNoise: ["noiseFrequency", "noiseSphereEnable", "noiseGraphEnable"],
-          RandomNoise: ["noiseFrequency", "noiseSphereEnable", "noiseGraphEnable"],
-          FbmNoise: ["noiseOctave", "noiseAmplitude", "noiseFrequency", "noiseSphereEnable", "noiseGraphEnable"],
-          TurbulentNoise: ["noiseOctave", "noiseAmplitude", "noiseFrequency", "noiseSphereEnable", "noiseGraphEnable"],
-          SparkNoise: ["noiseFrequency", "noiseSphereEnable", "noiseGraphEnable"],
-          VoronoiNoise: ["noiseFrequency", "noiseSphereEnable", "noiseGraphEnable"]
+          PerlinNoise: ["cNoiseOctave", "cNoisePersistence", "cNoiseSphereEnable", "cNoiseGraphEnable"],
+          SeemlessNoise: ["cNoiseOctave", "cNoisePersistence", "cNoiseScale", "cNoiseSphereEnable", "cNoiseGraphEnable"],
+          BooleanNoise: ["cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
+          CellNoise: ["cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
+          RandomNoise: ["cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
+          FbmNoise: ["cNoiseOctave", "cNoiseAmplitude", "cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
+          TurbulentNoise: ["cNoiseOctave", "cNoiseAmplitude", "cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
+          SparkNoise: ["cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
+          VoronoiNoise: ["cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"]
         };
         
         var pars = parsTable[effectController.type];
@@ -759,7 +779,20 @@
             guiParsItems.push(guiPars.add(effectController, pars[i]).name(item.name));
           }
           else {
-            guiParsItems.push(guiPars.add(effectController, pars[i], item.minValue, item.maxValue).name(item.name));
+            var override = false;
+            if (effectController.type in overrideItems) {
+              if (pars[i] in overrideItems[effectController.type]) {
+                override = true;
+              }
+            }
+            
+            if (override) {
+              var overrideItem = overrideItems[effectController.type][ pars[i] ];
+              guiParsItems.push(guiPars.add(effectController, pars[i], overrideItem.minValue, overrideItem.maxValue).name(item.name));
+            }
+            else {
+              guiParsItems.push(guiPars.add(effectController, pars[i], item.minValue, item.maxValue).name(item.name));
+            }
           }
         }
           
@@ -915,25 +948,25 @@
           }
           
           // PixSetShaderParameter(layer.uniforms, "heightScale", effectController.heightScale);
-          PixSetShaderParameter(layer.uniforms, "colorBalanceShadows", 
+          PixSetShaderParameter(layer.uniforms, "cColorBalanceShadows", 
             new THREE.Vector3(
-              effectController.colorBalanceShadowsR,
-              effectController.colorBalanceShadowsG,
-              effectController.colorBalanceShadowsB));
-          PixSetShaderParameter(layer.uniforms, "colorBalanceMidtones", 
+              effectController.cColorBalanceShadowsR,
+              effectController.cColorBalanceShadowsG,
+              effectController.cColorBalanceShadowsB));
+          PixSetShaderParameter(layer.uniforms, "cColorBalanceMidtones", 
             new THREE.Vector3(
-              effectController.colorBalanceMidtonesR,
-              effectController.colorBalanceMidtonesG,
-              effectController.colorBalanceMidtonesB));
-          PixSetShaderParameter(layer.uniforms, "colorBalanceHighlights", 
+              effectController.cColorBalanceMidtonesR,
+              effectController.cColorBalanceMidtonesG,
+              effectController.cColorBalanceMidtonesB));
+          PixSetShaderParameter(layer.uniforms, "cColorBalanceHighlights", 
             new THREE.Vector3(
-              effectController.colorBalanceHighlightsR,
-              effectController.colorBalanceHighlightsG,
-              effectController.colorBalanceHighlightsB));
-          PixSetShaderParameter(layer.uniforms, "direction",
+              effectController.cColorBalanceHighlightsR,
+              effectController.cColorBalanceHighlightsG,
+              effectController.cColorBalanceHighlightsB));
+          PixSetShaderParameter(layer.uniforms, "cDirection",
             new THREE.Vector2(
-              effectController.directionX,
-              effectController.directionY));
+              effectController.cDirectionX,
+              effectController.cDirectionY));
         
           scene.overrideMaterial = layer.material;
           renderer.render(scene, dummyCamera, target);
@@ -954,7 +987,7 @@
           // }
         }
         
-        if (effectController.noiseSphereEnable) {
+        if (effectController.cNoiseSphereEnable) {
           noiseUniforms.tDisplacement.value = layers[layers.length-2].renderTarget.texture;
           renderer.render(noiseScene, camera);
         }
