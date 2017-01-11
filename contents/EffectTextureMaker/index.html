@@ -459,6 +459,8 @@
           cRadius: 1.0,
           cSize: 1.0,
           cWidth: 1.0,
+          cHeight: 1.0,
+          cDepth: 1.0,
           cColor: 1.0,
           cRadius: 0.5,
           cPetals: 6.0,
@@ -473,6 +475,16 @@
           cRange: 2.0,
           cEmission: 1.0,
           cBloom: 1.0,
+          cLightX: 1.0,
+          cLightY: 1.0,
+          cLightZ: 1.0,
+          cAmbient: 1.0,
+          cSmoothness: 1.0,
+          cSmoothnessPower: 1.0,
+          cThickness: 1.0,
+          cThicknessPower: 1.0,
+          cCameraTilt: 0.0,
+          cCameraPan: 0.0,
           
           // circleRadius: 1.1,
           // ringRadius: 0.5,
@@ -513,8 +525,6 @@
           // fireWidth: 0.1,
           // fireColor: 0.0001,
           
-          cExplosionCameraTilt: 0.0,
-          cExplosionCameraPan: 0.0,
           cExplosionRadius: 1.75,
           cExplosionDownScale: 1.25,
           cExplosionGrain: 2.0,
@@ -552,7 +562,7 @@
           cColorBlanacePreserveLuminosity: false,
           
           type: "Wood",
-          // type: "TEST",
+          // type: "Test",
         };
         
         var h;
@@ -573,7 +583,7 @@
         
         h.add(effectController, "type", [
           "Wood", "Circle", "Solar", "Corona", "Spark", "Ring", "Gradation", "GradationLine", "Flash", "Cone", "Flower", "FlowerFun", "WaveRing", "Smoke", "Flame", "Fire", "Cell", "Lightning", "Flare", "Flare2", "Flare3", "LensFlare", "Sun", "MagicCircle",
-          "Explosion", "Explosion2", "Cross", "Laser", "Laser2", "Light",
+          "Explosion", "Explosion2", "Cross", "Laser", "Laser2", "Light", "Cloud",
           "PerlinNoise", "SeemlessNoise", "BooleanNoise", "CellNoise", "TurbulentNoise", "FbmNoise", "RandomNoise", "VoronoiNoise", "SparkNoise",
         ]).onChange(function(value) {
           
@@ -653,6 +663,8 @@
           cDirectionY: { minValue: -1.0, maxValue: 1.0, name: "Direction Y" },
           cRadius: { minValue: 0.0, maxValue: 2.0, name: "Radius" },
           cWidth: { minValue: 0.0, maxValue: 1.0, name: "Width" },
+          cHeight: { minValue: 0.0, maxValue: 1.0, name: "Height" },
+          cDepth: { minValue: 0.0, maxValue: 1.0, name: "Depth" },
           cOffset: { minValue: 0.0, maxValue: 1.0, name: "Offset" },
           cPetals: { minValue: 1, maxValue: 20, name: "Petals" },
           cVolume: { minValue: 1, maxValue: 10, name: "Volume" },
@@ -665,9 +677,20 @@
           cStrength: { minValue: 0.0, maxValue: 5.0, name: "Strength" },
           cPower: { minValue: 0.0, maxValue: 1.0, name: "Power" },
           cRange: { minValue: 0.0, maxValue: 5.0, name: "Range" },
+          cEmission: { minValue: 0.0, maxValue: 1.0, name: "Emission" },
+          cBloom: { minValue: 0.0, maxValue: 1.0, name: "Bloom" },
+          cLightX: { minValue: -1.0, maxValue: 1.0, name: "Light X" },
+          cLightY: { minValue: -1.0, maxValue: 1.0, name: "Light Y" },
+          cLightZ: { minValue: -1.0, maxValue: 1.0, name: "Light Z" },
+          cAmbient: { minValue: 0.0, maxValue: 1.0, name: "Ambient" },
+          cSmoothness: { minValue: 0.0, maxValue: 1.0, name: "Smoothness" },
+          cSmoothnessPower: { minValue: 1.0, maxValue: 5.0, name: "Smoothness Power" },
+          cThickness: { minValue: 0.0, maxValue: 1.0, name: "Thickness" },
+          cThicknessPower: { minValue: 1.0, maxValue: 5.0, name: "Thickness Power" },
           
-          cExplosionCameraTilt: { minValue: 0.0, maxValue: 1.0, name: "CameraTilt" },
-          cExplosionCameraPan: { minValue: 0.0, maxValue: 1.0, name: "CameraPan" },
+          cCameraTilt: { minValue: 0.0, maxValue: 1.0, name: "CameraTilt" },
+          cCameraPan: { minValue: 0.0, maxValue: 1.0, name: "CameraPan" },
+          
           cExplosionRadius: { minValue: 1.0, maxValue: 2.0, name: "Radius" },
           cExplosionDownScale: { minValue: 1.0, maxValue: 2.0, name: "DownScale" },
           cExplosionGrain: { minValue: 1.0, maxValue: 5.0, name: "Grain" },
@@ -681,9 +704,6 @@
           cExplosionRollingSpeed: { minValue: 0.0, maxValue: 4.0, name: "RollingSpeed" },
           cExplosionDelayRange: { minValue: 0.1, maxValue: 2.0, name: "DelayRange" },
           cExplosionBallSpread: { minValue: 0.1, maxValue: 5.0, name: "BallSpread" },
-          
-          cEmission: { minValue: 0.0, maxValue: 1.0, name: "Emission" },
-          cBloom: { minValue: 0.0, maxValue: 1.0, name: "Bloom" },
           
           cNoiseOctave: { minValue: 1, maxValue: 8, name: "NoiseOctave" },
           cNoiseFrequency: { minValue: 0.0, maxValue: 2.0, name: "NoiseFrequency" },
@@ -745,13 +765,14 @@
           MagicCircle: [],
           Cross:  ["cIntensity", "cPowerExponent"],
           Explosion: [
-            "cExplosionCameraTilt", "cExplosionCameraPan",
+            "cCameraTilt", "cCameraPan",
             "cExplosionRadius", "cExplosionDownScale", "cExplosionGrain", "cExplosionSpeed",
             "cExplosionBallness", "cExplosionGrowth", "cExplosionFade", "cExplosionDensity",
             "cExplosionContrast", "cExplosionRollingInitDamp", "cExplosionRollingSpeed",
             "cExplosionDelayRange", "cExplosionBallSpread"],
           Explosion2: [
-            "cExplosionCameraPan", "cExplosionSpeed", "cExplosionDensity",
+            "cCameraPan", 
+            "cExplosionSpeed", "cExplosionDensity",
             "cEmission", "cBloom", "cColor"],
           Corona: ["cIntensity", "cRadius", "cSize"],
           Fire: ["cIntensity", "cStrength", "cPower", "cRange", "cWidth", "cColor"],
@@ -760,6 +781,11 @@
           Laser: ["cWidth", "cColor"],
           Laser2: ["cWidth", "cInnerWidth"],
           Light: ["cRadius", "cPowerExponent", "cColor"],
+          Cloud: [
+            "cWidth", "cHeight", "cDepth", 
+            "cIntensity", "cLightX", "cLightY", "cLightZ", "cAmbient",
+            "cSmoothness", "cSmoothnessPower", "cThickness", "cThicknessPower", 
+            "cCameraTilt", "cCameraPan"],
           
           PerlinNoise: ["cNoiseOctave", "cNoisePersistence", "cNoiseSphereEnable", "cNoiseGraphEnable"],
           SeemlessNoise: ["cNoiseOctave", "cNoisePersistence", "cNoiseScale", "cNoiseSphereEnable", "cNoiseGraphEnable"],
@@ -769,7 +795,8 @@
           FbmNoise: ["cNoiseOctave", "cNoiseAmplitude", "cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
           TurbulentNoise: ["cNoiseOctave", "cNoiseAmplitude", "cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
           SparkNoise: ["cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
-          VoronoiNoise: ["cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"]
+          VoronoiNoise: ["cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
+          Test: [],
         };
         
         var pars = parsTable[effectController.type];

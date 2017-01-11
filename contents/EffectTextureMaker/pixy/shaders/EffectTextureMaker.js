@@ -2161,8 +2161,8 @@ PixSpriteStudioShaderChunks = {
   // https://www.shadertoy.com/view/Xd3GWn
   
   explosionUniforms: {
-    cExplosionCameraTilt: { value: 0.0 },
-    cExplosionCameraPan: { value: 0.0 },
+    cCameraTilt: { value: 0.0 },
+    cCameraPan: { value: 0.0 },
     cExplosionRadius: { value: 1.75 },
     cExplosionDownScale: { value: 1.25 },
     cExplosionGrain: { value: 2.0 },
@@ -2180,8 +2180,8 @@ PixSpriteStudioShaderChunks = {
   },
   
   explosionFragPars: [
-    "uniform float cExplosionCameraTilt;",
-    "uniform float cExplosionCameraPan;",
+    "uniform float cCameraTilt;",
+    "uniform float cCameraPan;",
     "uniform float cExplosionRadius;",
     "uniform float cExplosionDownScale;",
     "uniform float cExplosionGrain;",
@@ -2743,8 +2743,8 @@ PixSpriteStudioShaderChunks = {
     "  float a = time*CAM_ROTATION_SPEED;",
     "  float b = CAM_TILT * sin(a * .014);",
     
-    "  a = cExplosionCameraPan;",
-    "  b = cExplosionCameraTilt - 0.5;",
+    "  a = cCameraPan;",
+    "  b = cCameraTilt - 0.5;",
     
     "  float phi = b * 3.14;",
     "  float camRadiusProjectedDown = camRadius * cos(phi);",
@@ -2918,7 +2918,7 @@ PixSpriteStudioShaderChunks = {
   //-------------------------------------------------------------------------------------
   
   explosion2Uniforms: {
-    cExplosionCameraPan: { value: 0.0 },
+    cCameraPan: { value: 0.0 },
     cExplosionSpeed: { value: 1.0 },
     cExplosionDensity: { value: 1.0 },
     cEmission: { value: 0.2 },
@@ -2927,7 +2927,7 @@ PixSpriteStudioShaderChunks = {
   },
   
   explosion2FragPars: [
-    "uniform float cExplosionCameraPan;",
+    "uniform float cCameraPan;",
     "uniform float cExplosionSpeed;",
     "uniform float cExplosionDensity;",
     "uniform float cEmission;",
@@ -3004,7 +3004,7 @@ PixSpriteStudioShaderChunks = {
     
     "float map(vec3 p) {",
     // "  R(p.xz, mouse.x * 0.008 * PI * time*0.1);",
-    "  R(p.xz, cExplosionCameraPan * PI2);",
+    "  R(p.xz, cCameraPan * PI2);",
     "  return volumetricExplosion(p/0.6)*0.6;", // scale
     "}",
     
@@ -3796,10 +3796,204 @@ PixSpriteStudioShaderChunks = {
 
   ].join("\n"),
   
+  
+  //// CLOUD CHUNK
+  // https://www.shadertoy.com/view/XsfXW8 by FabriceNeyret2
+  
+  cloudUniforms: {
+    cCameraTilt: { value: 0.2 },
+    cCameraPan:  { value: 0.0 },
+    cWidth: { value: 1.0 },
+    cHeight: { value: 0.65 },
+    cDepth: { value: 0.65 },
+    cLightX: { value: -0.4 },
+    cLightY: { value: 0.0 },
+    cLightZ: { value: 1.0 },
+    cIntensity: { value: 1.0 },
+    cAmbient: { value: 0.1 },
+    cSmoothness: { value: 1.0 },
+    cSmoothnessPower: { value: 3.0 },
+    cThickness: { value: 0.7 },
+    cThicknessPower: { value: 3.0 },
+  },
+
+  cloudFragPars: [
+    "uniform float cCameraTilt;",
+    "uniform float cCameraPan;",
+    "uniform float cWidth;",
+    "uniform float cHeight;",
+    "uniform float cDepth;",
+    "uniform float cIntensity;",
+    "uniform float cLightX;",
+    "uniform float cLightY;",
+    "uniform float cLightZ;",
+    "uniform float cAmbient;",
+    "uniform float cSmoothness;",
+    "uniform float cSmoothnessPower;",
+    "uniform float cThickness;",
+    "uniform float cThicknessPower;",
+    // "vec3 R = vec3(2.0, 3.0, 2.0);",
+    // "vec3 L = normalize(vec3(-0.4, 0.0, 1.0));",
+    // "#define AMBIENT 0.1",
+    // "float t = time;",
+    
+    
+// --- noise functions from https://www.shadertoy.com/view/XslGRr
+// Created by inigo quilez - iq/2013
+// License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+
+    "mat3 m = mat3( 0.00,  0.80,  0.60,",
+    "              -0.80,  0.36, -0.48,",
+    "              -0.60, -0.48,  0.64 );",
+
+    "float hash( float n ) {",    // in [0,1]
+    "    return fract(sin(n)*43758.5453);",
+    "}",
+
+    "float noise( in vec3 x ) {", // in [0,1]
+    "  vec3 p = floor(x);",
+    "  vec3 f = fract(x);",
+
+    "  f = f*f*(3.0-2.0*f);",
+
+    "  float n = p.x + p.y*57.0 + 113.0*p.z;",
+
+    "  float res = mix(mix(mix( hash(n+  0.0), hash(n+  1.0),f.x),",
+    "                      mix( hash(n+ 57.0), hash(n+ 58.0),f.x),f.y),",
+    "                  mix(mix( hash(n+113.0), hash(n+114.0),f.x),",
+    "                      mix( hash(n+170.0), hash(n+171.0),f.x),f.y),f.z);",
+    "  return res;",
+    "}",
+    
+    "float fbm( vec3 p ) {",    // in [0,1]
+    "  p += time;",
+    "  float f;",
+    "  f  = 0.5000*noise( p ); p = m*p*2.02;",
+    "  f += 0.2500*noise( p ); p = m*p*2.03;",
+    "  f += 0.1250*noise( p ); p = m*p*2.01;",
+    "  f += 0.0625*noise( p );",
+    "  return f;",
+    "}",
+    
+    "float snoise2(in vec3 x) {", // in [-1,1]
+    "  return 2.0 * noise(x) - 1.0;",
+    "}",
+    
+    "float sfbm( vec3 p ) {",    // in [0,1]
+    "  p += time;",
+    "  float f;",
+    "  f  = 0.5000*snoise2( p ); p = m*p*2.02;",
+    "  f += 0.2500*snoise2( p ); p = m*p*2.03;",
+    "  f += 0.1250*snoise2( p ); p = m*p*2.01;",
+    "  f += 0.0625*snoise2( p );",
+    "  return f;",
+    "}",
+    
+    // --- view matrix when looking T from O with [-1,1]x[-1,1] screen at dist d
+    "mat3 lookat(vec3 O, vec3 T, float d) {",
+    "  mat3 M;",
+    "  vec3 OT = normalize(T-O);",
+    "  M[0] = OT;",
+    "  M[2] = normalize(vec3(0.0, 0.0, 1.0)-OT.z*OT)/d;",
+    "  M[1] = cross(M[2], OT);",
+    "  return M;",
+    "}",
+    
+    // --- ray -  ellipsoid intersection
+    // if true, return P,N and thickness l
+    "bool intersectEllipsoid(vec3 R, vec3 O, vec3 D, out vec3 P, out vec3 N, out float l) {",
+    "  vec3 OR = O/R, DR = D/R;", // to space where ellipsoid is a sphere
+    // P=O+tD & |P|=1 -> solve t in O^2 + 2(O.D)t + D^2.t^2 = 1
+    "  float OD = dot(OR,DR), OO = dot(OR,OR), DD = dot(DR,DR);",
+    "  float d = OD*OD - (OO-1.0)*DD;",
+    
+    "  if (!((d >= 0.0) && (OD < 0.0) && (OO > 1.0))) return false;",
+    // ray intersects the ellipsoid (and not in our back)
+    // note that t>0 <=> -OD>0 &  OD^2 > OD^-(OO-1.0)*DD -> |O|>1
+    
+    "  float t = (-OD-sqrt(d))/DD;",
+    // return intersection point, normal and distance
+    "  P = O + t*D;",
+    "  N = normalize(P/(R*R));",
+    "  l = 2.0 * sqrt(d)/DD;",
+    
+    "  return true;",
+    "}",
+    
+    // --- Gardner textured ellipsoids (sort of)
+    // 's' index corresponds to Garner faked silhouette
+    // 't' index corresponds to interior term faked by mid-surface
+    
+    // "float ks, ps, ki, pi;", // smoothness/thickness parameters
+    // "float l;",
+    
+    "void drawObj(vec3 O, mat3 M, vec2 pos, int mode, inout vec3 color) {",
+    "  vec3 R = vec3(3.0*cDepth, 3.0*cWidth, 3.0*cHeight);",
+    "  vec3 D = normalize(M*vec3(1.0,pos));", // ray
+    "  vec3 L = normalize(vec3(cLightX, cLightY, cLightZ));",
+    
+    "  vec3 P, N; float l;",
+    "  if (!intersectEllipsoid(R, O, D, P, N, l)) return;",
+    
+    "  vec3 Pm = P + 0.5 * l * D;", // 0.5: deepest point inside cloud.
+    "  vec3 Nm = normalize(Pm/(R*R));", // it's normal
+    "  vec3 Nn = normalize(P/R);",
+    "  float nl = clamp(dot(N,L), 0.0, 1.0) * cIntensity;", // ratio of light-facing (for lighting)
+    "  float nd = clamp(-dot(Nn,D), 0.0, 1.0);", // ratio of camera-facing (for silhouette)
+    "  float ns = fbm(P), ni = fbm(Pm+10.0);",
+    "  float A, l0 = 3.0;",
+    // "  l += l*(l/l0-1.0)/(1.0+l*l/(l0*l0));", // optical depth modified at silhouette
+    "  l = clamp(l-6.0*ni, 0.0, 1e10);",
+    "  float As = pow(cSmoothness*nd, cSmoothnessPower);", // silhouette
+    "  float Ai = 1.0 - pow(cThickness, cThicknessPower*l);", // interior
+    
+    "  As = clamp(As-ns, 0.0, 1.0)*2.0;", // As = 2.0*pow(As, 0.6)
+    "  if (mode == 2) {",
+    "    A = 1.0 - (1.0 - As)*(1.0 - Ai);", // mul Ti and Ts
+    "  } else {",
+    "    A = (mode == 0) ? Ai : As;",
+    "  }",
+    
+    "  A = clamp(A, 0.0, 1.0);",
+    "  nl = 0.8 * (nl + ((mode == 0) ? fbm(Pm-10.0) : fbm(P+10.0)));",
+    
+    "#if 0", // noise bump
+    "  N = normalize(N - 0.1*(dFdx(A)*M[1] + dFdy(A)*M[2])*resolution.y);",
+    "  nl = clamp(dot(N,L), 0.0, 1.0);",
+    "#endif",
+    
+    "  vec3 col = vec3(mix(nl, 1.0, cAmbient));",
+    "  color = mix(color, col, A);",
+    "}",
+  ].join("\n"),
+  
+  cloudFrag: [
+    
+    "vec2 uv = pin.position;",
+    // "float z = -PI/2.0*cCameraTilt;",
+    "float z = -3.14/2.0*cCameraTilt;",
+    // "ks = 1.0; ps = 3.0; ki=0.9; pi=3.0;",
+    "float t = -PI/2.0*cCameraPan;",
+    // "t = -PI/2.0 * mouse.x;",
+    // "z = -PI/2.0 * mouse.y;",
+    
+    "vec3 O = vec3(-15.0*cos(t)*cos(z), 15.0*sin(t)*cos(z), 15.0*sin(z));", // camera
+    "float compas = t-0.2 * uv.x;",
+    "vec2 dir = vec2(cos(compas), sin(compas));",
+    
+    "mat3 M = lookat(O, vec3(0.0), 5.0);",
+    // "vec2 dx = vec2(1.0, 0.0);",
+    "drawObj(O, M, uv, 2, pout.color);",
+    // "drawObj(O, M, 1.5*(uv+dx), 0, pout.color);",
+    // "drawObj(O, M, 1.5*(uv-dx), 1, pout.color);",
+    // "pout.color = vec3(1.0, 0.0, 0.0);"
+
+  ].join("\n"),
+  
   //// TEST CHUNK
 
   testFragPars: [
-  
+
   ].join("\n"),
   
   testFrag: [
@@ -4010,6 +4204,7 @@ PixSpriteStudioShader = function() {
     this.addUniform(uniforms, ["LASER"], "laserUniforms");
     this.addUniform(uniforms, ["LASER2"], "laser2Uniforms");
     this.addUniform(uniforms, ["LIGHT"], "lightUniforms");
+    this.addUniform(uniforms, ["CLOUD"], "cloudUniforms");
     this.addUniform(uniforms, ["TOON"], "toonUniforms");
     
     return THREE.UniformsUtils.clone(THREE.UniformsUtils.merge(uniforms));
@@ -4084,6 +4279,7 @@ PixSpriteStudioShader = function() {
     this.addCode(codes, ["LASER"], "laserFragPars");
     this.addCode(codes, ["LASER2"], "laser2FragPars");
     this.addCode(codes, ["LIGHT"], "lightFragPars");
+    this.addCode(codes, ["CLOUD"], "cloudFragPars");
     this.addCode(codes, ["TOON"], "toonFragPars");
     this.addCode(codes, ["TEST"], "testFragPars");
     
@@ -4142,6 +4338,7 @@ PixSpriteStudioShader = function() {
       this.addCode(codes, ["LASER"], "laserFrag");
       this.addCode(codes, ["LASER2"], "laser2Frag");
       this.addCode(codes, ["LIGHT"], "lightFrag");
+      this.addCode(codes, ["CLOUD"], "cloudFrag");
       this.addCode(codes, ["COPY"], "copyFrag");
       this.addCode(codes, ["TEST"], "testFrag");
       
