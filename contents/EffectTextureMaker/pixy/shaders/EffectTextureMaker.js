@@ -4211,7 +4211,7 @@ PixSpriteStudioShaderChunks = {
   
   mandaraFrag: [
     
-    "vec2 p = pin.position;",
+    "vec2 p = pin.position * 0.7;",
     "vec2 f = vec2(length(p), atan(p.y, p.x));",
     "float T0 = cos(0.3*time);",
     "float T1 = 0.5 + 0.5*T0;",
