@@ -7,8 +7,8 @@ PixSpriteStudioShaderChunks = {
     "precision highp float;",
     "#define PI 3.14159265359",
     "#define PI2 6.28318530718",
-    "#define RECIPROCAL_PI 0.31830988618",
-    "#define RECIPROCAL_PI2 0.15915494",
+    "#define INV_PI 0.31830988618",
+    "#define INV_PI2 0.15915494",
     "#define LOG2 1.442695",
     "#define EPSILON 1e-6",
     "",
@@ -24,6 +24,9 @@ PixSpriteStudioShaderChunks = {
     "float pow5(const in float x) { float x2 = x*x; return x2*x2*x; }",
     "float averate(const in vec3 color) { return dot(color, vec3(0.3333)); }",
     "",
+    "mat2 rotate2d(float angle) {",
+    "  return mat2(cos(angle), -sin(angle), sin(angle), cos(angle));",
+    "}",
     
     "struct PSInput {",
     "  vec2 position;",
@@ -143,6 +146,68 @@ PixSpriteStudioShaderChunks = {
     "",
   ].join("\n"),
   
+  //// GRADIENT CHUNK
+  // http://g3d.cs.williams.edu/websvn/filedetails.php?repname=g3d&path=%2FG3D10%2Fdata-files%2Fshader%2Fgradient.glsl
+  
+  gradient: [
+    "vec3 hueGradient(float t) {",
+    "  vec3 p = abs(fract(t+vec3(1.0,2.0/3.0,1.0/3.0))*6.0 - 3.0);",
+    "  return clamp(p-1.0, 0.0, 1.0);",
+    "}",
+    
+    "vec3 techGradient(float t) {",
+    "  return pow(vec3(t+0.01), vec3(120.0, 10.0, 180.0));",
+    "}",
+    
+    "vec3 fireGradient(float t) {",
+    "  return max(pow(vec3(min(t*1.02,1.0)), vec3(1.7,25.0,100.0)),",
+    "             vec3(0.06 * pow(max(1.0 - abs(t-0.35), 0.0), 5.0)));",
+    "}",
+    
+    "vec3 desertGradient(float t) {",
+    "  float s = sqrt(clamp(1.0 - (t - 0.4) / 0.6, 0.0, 1.0));",
+    "  vec3 sky = sqrt(mix(vec3(1, 1, 1), vec3(0, 0.8, 1.0), smoothstep(0.4, 0.9, t)) * vec3(s, s, 1.0));",
+    "  vec3 land = mix(vec3(0.7, 0.3, 0.0), vec3(0.85, 0.75 + max(0.8 - t * 20.0, 0.0), 0.5), pow2(t / 0.4));",
+    "  return clamp((t > 0.4) ? sky : land, 0.0, 1.0) * clamp(1.5 * (1.0 - abs(t - 0.4)), 0.0, 1.0);",
+    "}",
+
+    "vec3 electricGradient(float t) {",
+    "  return clamp( vec3(t * 8.0 - 6.3, pow2(smoothstep(0.6, 0.9, t)), pow(t, 3.0) * 1.7), 0.0, 1.0);",
+    "}",
+
+    "vec3 neonGradient(float t) {",
+    "  return clamp(vec3(t * 1.3 + 0.1, pow2(abs(0.43 - t) * 1.7), (1.0 - t) * 1.7), 0.0, 1.0);",
+    "}",
+
+    "vec3 heatmapGradient(float t) {",
+    "  return clamp((pow(t, 1.5) * 0.8 + 0.2) * vec3(smoothstep(0.0, 0.35, t) + t * 0.5, smoothstep(0.5, 1.0, t), max(1.0 - t * 1.7, t * 7.0 - 6.0)), 0.0, 1.0);",
+    "}",
+
+    "vec3 rainbowGradient(float t) {",
+    "  vec3 c = 1.0 - pow(abs(vec3(t) - vec3(0.65, 0.5, 0.2)) * vec3(3.0, 3.0, 5.0), vec3(1.5, 1.3, 1.7));",
+    "  c.r = max((0.15 - pow2(abs(t - 0.04) * 5.0)), c.r);",
+    "  c.g = (t < 0.5) ? smoothstep(0.04, 0.45, t) : c.g;",
+    "  return clamp(c, 0.0, 1.0);",
+    "}",
+
+    "vec3 brightnessGradient(float t) {",
+    "  return vec3(t * t);",
+    "}",
+
+    "vec3 grayscaleGradient(float t) {",
+    "  return vec3(t);",
+    "}",
+
+    "vec3 stripeGradient(float t) {",
+    "  return vec3(mod(floor(t * 32.0), 2.0) * 0.2 + 0.8);",
+    "}",
+
+    "vec3 ansiGradient(float t) {",
+    "  return mod(floor(t * vec3(8.0, 4.0, 2.0)), 2.0);",
+    "}",
+
+  ].join("\n"),
+  
   //// NOISE COMMON CHUNK
   
   noiseUniforms: {
@@ -154,6 +219,7 @@ PixSpriteStudioShaderChunks = {
   },
   
   noise: [
+    "#define NOISE_OCTAVE_MAX 10",
     "uniform int cNoiseOctave;",
     "uniform float cNoiseFrequency;",
     "uniform float cNoiseAmplitude;",
@@ -164,33 +230,97 @@ PixSpriteStudioShaderChunks = {
     "  return fract(sin(x) * 4358.5453123);",
     "}",
     
-    // expects values in the range of [0,1]x[0,1], returns values in the [0,1] range.
-    // do not collapse into a single function per: http://byteblacksmith.com/improvements-to-the-canonical-one-liner-glsl-rand-for-opengl-es-2-0/
-    "highp float rand(const in vec2 uv) {",
-    "  const highp float a = 12.9898, b = 78.233, c = 43758.5453;",
-    "  highp float dt = dot(uv.xy, vec2(a,b)), sn = mod(dt, PI);",
-    "  return fract(sin(sn) * c);",
-    "}",
-
-    "float pinterpolate(float a, float b, float x) {",
-    "  float f = (1.0 - cos(x * PI)) * 0.5;",
-    "  return a * (1.0 - f) + b * f;",
-    "}",
-    "",
-    
-    "float prand(vec2 p) {",
+    "float rand(vec2 p) {",
     "  return fract(sin(dot(p, vec2(12.9898,78.233))) * 43758.5453);",
     "}",
     "",
     
-    "float pirand(vec2 p) {",
+    // expects values in the range of [0,1]x[0,1], returns values in the [0,1] range.
+    // do not collapse into a single function per: http://byteblacksmith.com/improvements-to-the-canonical-one-liner-glsl-rand-for-opengl-es-2-0/
+    "highp float rand2(const in vec2 uv) {",
+    "  const highp float a = 12.9898, b = 78.233, c = 43758.5453;",
+    "  highp float dt = dot(uv.xy, vec2(a,b)), sn = mod(dt, PI);",
+    "  return fract(sin(sn) * c);",
+    "}",
+    
+    "float cosine(float a, float b, float x) {",
+    "  float f = (1.0 - cos(x * PI)) * 0.5;",
+    "  return a * (1.0 - f) + b * f;",
+    "}",
+    
+    "float bicosine(float tl, float tr, float bl, float br, float x, float y) {",
+    "  return cosine(cosine(tl,tr,x), cosine(bl,br,x), y);",
+    "}",
+    "",
+    
+    "float linear(float a, float b, float t) {",
+    "  return a + (b-a)*t;",
+    "}",
+    
+    "float bilinear(float tl, float tr, float bl, float br, float x, float y) {",
+    "  return linear(linear(tl,tr,x), linear(bl,br,x), y);",
+    "}",
+    
+    "float cubic(float a, float b, float x) {",
+    "  float f = x*x*(3.0 - 2.0*x);", // 3x^2 + 2x
+    "  return a * (1.0 - f) + b * f;",
+    "}",
+    
+    "float bicubic(float tl, float tr, float bl, float br, float x, float y) {",
+    "  return cubic(cubic(tl,tr,x), cubic(bl,br,x), y);",
+    "}",
+    
+    "float quintic(float a, float b, float x) {",
+    "  float f = x*x*x*(x*(x*6.0 - 15.0)+10.0);", // 6x^5 - 15x^4 + 10x^3
+    "  return a * (1.0 - f) + b * f;",
+    "}",
+    
+    "float biquintic(float tl, float tr, float bl, float br, float x, float y) {",
+    "  return quintic(quintic(tl,tr,x), quintic(bl,br,x), y);",
+    "}",
+    
+    // Value Noise by Inigo Quilez - iq/2013
+    // https://www.shadertoy.com/view/lsf3WH
+    "vec2 vrand(vec2 p) {",
+    "  p = vec2(dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3)));",
+    "  return -1.0 + 2.0 * fract(sin(p)*43758.5453123);",
+    "}",
+    
+    // gradation noise
+    "float vnoise(vec2 p) {",
     "  vec2 i = floor(p);",
     "  vec2 f = fract(p);",
-    "  vec4 v = vec4(prand(vec2(i.x,       i.y)),",
-    "                prand(vec2(i.x + 1.0, i.y)),",
-    "                prand(vec2(i.x,       i.y + 1.0)),",
-    "                prand(vec2(i.x + 1.0, i.y + 1.0)));",
-    "  return pinterpolate(pinterpolate(v.x, v.y, f.x), pinterpolate(v.z, v.w, f.x), f.y);",
+    "  vec2 u = f*f*(3.0-2.0*f);",
+    "  return mix(mix(dot(vrand(i+vec2(0.0,0.0)), f-vec2(0.0,0.0)),",
+    "                 dot(vrand(i+vec2(1.0,0.0)), f-vec2(1.0,0.0)), u.x),",
+    "             mix(dot(vrand(i+vec2(0.0,1.0)), f-vec2(0.0,1.0)),",
+    "                 dot(vrand(i+vec2(1.0,1.0)), f-vec2(1.0,1.0)), u.x), u.y);",
+    "}",
+    "",
+    
+    "float plerp(vec2 p) {",
+    "  vec2 i = floor(p);",
+    "  vec2 f = fract(p);",
+    "  return bicosine(rand(i+vec2(0.0,0.0)),",
+    "                  rand(i+vec2(1.0,0.0)),",
+    "                  rand(i+vec2(0.0,1.0)),",
+    "                  rand(i+vec2(1.0,1.0)), f.x, f.y);",
+    // "  vec4 v = vec4(rand(vec2(i.x,       i.y)),",
+    // "                rand(vec2(i.x + 1.0, i.y)),",
+    // "                rand(vec2(i.x,       i.y + 1.0)),",
+    // "                rand(vec2(i.x + 1.0, i.y + 1.0)));",
+    // "  return cosine(cosine(v.x, v.y, f.x), cosine(v.z, v.w, f.x), f.y);",
+    "}",
+    
+    "float pnoise(vec2 p) {",
+    "  float t = 0.0;",
+    "  for (int i=0; i<NOISE_OCTAVE_MAX; i++) {",
+    "    if (i >= cNoiseOctave) break;",
+    "    float freq = pow(2.0, float(i));",
+    "    float amp = pow(cNoisePersistence, float(cNoiseOctave - i));",
+    "    t += plerp(vec2(p.x / freq, p.y / freq)) * amp;",
+    "  }",
+    "  return t;",
     "}",
     "",
     
@@ -198,9 +328,9 @@ PixSpriteStudioShaderChunks = {
     "  float t = 0.0;",
     "  float maxAmplitude = EPSILON;",
     "  float amplitude = 1.0;",
-    "  for (int i=0; i<10; i++) {",
+    "  for (int i=0; i<NOISE_OCTAVE_MAX; i++) {",
     "    if (i >= octave) break;",
-    "    t += pirand(p * frequency) * amplitude;",
+    "    t += plerp(p * frequency) * amplitude;",
     "    frequency *= 2.0;",
     "    maxAmplitude += amplitude;",
     "    amplitude *= persistence;",
@@ -209,26 +339,14 @@ PixSpriteStudioShaderChunks = {
     "}",
     "",
     
-    "float pnoise(vec2 p) {",
-    // "  return pnoise(p, cNoiseOctave, cNoiseFrequency, cNoisePersistence);",
-    "  float t = 0.0;",
-    "  for (int i=0; i<10; i++) {",
-    "    if (i >= cNoiseOctave) break;",
-    "    float freq = pow(2.0, float(i));",
-    "    float amp = pow(cNoisePersistence, float(cNoiseOctave - i));",
-    "    t += pirand(vec2(p.x / freq, p.y / freq)) * amp;",
-    "  }",
-    "  return t;",
-    "}",
-    "",
-    
-    "float pnoise_ridged(vec2 p, int octave, float frequency, float persistence) {",
+    // ridged noise
+    "float rpnoise(vec2 p, int octave, float frequency, float persistence) {",
     "  float t = 0.0;",
     "  float maxAmplitude = EPSILON;",
     "  float amplitude = 1.0;",
-    "  for (int i=0; i<8; i++) {",
+    "  for (int i=0; i<NOISE_OCTAVE_MAX; i++) {",
     "    if (i >= octave) break;",
-    "    t += ((1.0 - abs(pirand(p * frequency))) * 2.0 - 1.0) * amplitude;",
+    "    t += ((1.0 - abs(plerp(p * frequency))) * 2.0 - 1.0) * amplitude;",
     "    frequency *= 2.0;",
     "    maxAmplitude += amplitude;",
     "    amplitude *= persistence;",
@@ -268,7 +386,7 @@ PixSpriteStudioShaderChunks = {
     // Use the mouse to blend between different patterns:
     // cell noise   u=0,v=0
     // voronoi      u=1,v=0
-    // perlin noise u=0,v1=
+    // perlin noise u=0,v=1
     // voronoise    u=1,v=1
     // More info here: http://iquilezles.org/www/articles/voronoise/voronoise.htm
     // psudo-random number generator
@@ -303,6 +421,17 @@ PixSpriteStudioShaderChunks = {
     "    }",
     "  }",
     "  return va/wt;",
+    "}",
+    
+    // https://www.shadertoy.com/view/MdX3Rr by inigo quilez
+    "const mat2 iqfbmM = mat2(0.8,-0.6,0.6,0.8);",
+    "float iqfbm( in vec2 p ) {",
+    "  float f = 0.0;",
+    "  f += 0.5000*pnoise( p ); p = iqfbmM*p*2.02;",
+    "  f += 0.2500*pnoise( p ); p = iqfbmM*p*2.03;",
+    "  f += 0.1250*pnoise( p ); p = iqfbmM*p*2.01;",
+    "  f += 0.0625*pnoise( p );",
+    "  return f/0.9375;",
     "}",
     
     
@@ -1006,14 +1135,14 @@ PixSpriteStudioShaderChunks = {
   ].join("\n"),
   
   turbulentNoiseFragPars: [
-    "float fbm_ridged(vec2 v, int octaves, float frequency, float amplitude) {",
+    "float fbm(vec2 v, int octaves, float frequency, float amplitude) {",
     "  const mat2 m = mat2( 0.00, 0.80, -0.80,  0.36 );",
     "  vec2 q = v;",
     "  float f = 0.0;",
-    "  f  = 0.5000 * pnoise_ridged(q, octaves, frequency, amplitude); q = m*q*2.01;",
-    "  f += 0.2500 * pnoise_ridged(q, octaves, frequency, amplitude); q = m*q*2.02;",
-    "  f += 0.1250 * pnoise_ridged(q, octaves, frequency, amplitude); q = m*q*2.03;",
-    "  f += 0.0625 * pnoise_ridged(q, octaves, frequency, amplitude); q = m*q*2.01;",
+    "  f  = 0.5000 * rpnoise(q, octaves, frequency, amplitude); q = m*q*2.01;",
+    "  f += 0.2500 * rpnoise(q, octaves, frequency, amplitude); q = m*q*2.02;",
+    "  f += 0.1250 * rpnoise(q, octaves, frequency, amplitude); q = m*q*2.03;",
+    "  f += 0.0625 * rpnoise(q, octaves, frequency, amplitude);",
     
     "  f = f*1.2 + 0.5;",
     // "  f = sqrt(f);",
@@ -1023,15 +1152,15 @@ PixSpriteStudioShaderChunks = {
   
   turbulentNoiseFrag: [
     "vec2 p = pin.uv - time*0.1;",
-    "float lum = fbm_ridged(p, cNoiseOctave, cNoiseFrequency * 128.0, cNoiseAmplitude);",
+    "float lum = fbm(p, cNoiseOctave, cNoiseFrequency * 128.0, cNoiseAmplitude);",
     "pout.color = vec3(lum);",
     
-    "float graph = fbm_ridged(p.xx, cNoiseOctave, cNoiseFrequency * 128.0, cNoiseAmplitude);",
+    "float graph = fbm(p.xx, cNoiseOctave, cNoiseFrequency * 128.0, cNoiseAmplitude);",
   ].join("\n"),
   
   
   sparkNoiseFragPars: [
-    "float fbm_spark(vec3 v) {",
+    "float fbm(vec3 v) {",
     "  float n = 0.0;",
     "  n += 1.0000 * abs(snoise(v));",
     "  n += 0.5000 * abs(snoise(v*2.0));",
@@ -1043,10 +1172,10 @@ PixSpriteStudioShaderChunks = {
   ].join("\n"),
   
   sparkNoiseFrag: [
-    "float lum = fbm_spark(vec3(pin.uv * 16.0 * cNoiseFrequency, time));",
+    "float lum = fbm(vec3(pin.uv * 16.0 * cNoiseFrequency, time));",
     "pout.color = vec3(lum);",
     
-    "float graph = fbm_spark(vec3(pin.uv.xx * 16.0 * cNoiseFrequency, time));",
+    "float graph = fbm(vec3(pin.uv.xx * 16.0 * cNoiseFrequency, time));",
   ].join("\n"),
   
   
@@ -1589,7 +1718,7 @@ PixSpriteStudioShaderChunks = {
     
     "float hash(float n) { return fract(sin(n) * 783.5453123); }",
     
-    "float smokeNoise(in vec3 x) {",
+    "float noise(in vec3 x) {",
     "  vec3 p = floor(x);",
     "  vec3 f = fract(x);",
     "  f = f*f*(3.0-2.0*f);",
@@ -1602,10 +1731,10 @@ PixSpriteStudioShaderChunks = {
     
     "float fbm(vec3 p) {",
     "  float f;",
-    "  f = 0.50000 * smokeNoise(p); p = p*2.02;",
-    "  f += 0.2500 * smokeNoise(p); p = p*2.03;",
-    "  f += 0.1250 * smokeNoise(p); p = p*2.01;",
-    "  f += 0.0625 * smokeNoise(p);",
+    "  f = 0.50000 * noise(p); p = p*2.02;",
+    "  f += 0.2500 * noise(p); p = p*2.03;",
+    "  f += 0.1250 * noise(p); p = p*2.01;",
+    "  f += 0.0625 * noise(p);",
     "  return f;",
     "}",
     
@@ -1740,7 +1869,7 @@ PixSpriteStudioShaderChunks = {
     "  return fract(sin(dot(vec3(p.xy,1.0), vec3(37.1, 61.7, 12.4))) * 3758.5453123);",
     "}",
     
-    "float lightingNoise(in vec2 p) {",
+    "float noise(in vec2 p) {",
     "  vec2 i = floor(p);",
     "  vec2 f = fract(p);",
     "  f *= f * (3.0 - 2.0 * f);",
@@ -1751,9 +1880,9 @@ PixSpriteStudioShaderChunks = {
     
     "float fbm(vec2 p) {",
     "  float v = 0.0;",
-    "  v += lightingNoise(p*1.0) * 0.5;",
-    "  v += lightingNoise(p*2.0) * 0.25;",
-    "  v += lightingNoise(p*4.0) * 0.125;",
+    "  v += noise(p*1.0) * 0.5;",
+    "  v += noise(p*2.0) * 0.25;",
+    "  v += noise(p*4.0) * 0.125;",
     "  return v;",
     "}",
 
@@ -1767,7 +1896,7 @@ PixSpriteStudioShaderChunks = {
     "for (int i=0; i<3; ++i) {",
     "  float amp = 80.0 + float(i) * 5.0;",
     "  float period = 0.4;",
-    "  float thickness = mix(0.9, 1.0, lightingNoise(uv*10.0));",
+    "  float thickness = mix(0.9, 1.0, noise(uv*10.0));",
     "  float t = abs(cWidth / (sin(uv.x + fbm(uv * cFrequency + 4.0*time*period)) * amp) * thickness);",
     // "  float show = fract(abs(sin(time))) >= 0.0 ? 1.0 : 0.0;",
     // "  finalColor += t * vec3(0.2, 0.2, 1.0);",
@@ -1862,15 +1991,16 @@ PixSpriteStudioShaderChunks = {
     "uniform float cIntensity;",
     "uniform float cPowerExponent;",
 
-    "float flareNoise(float x) {",
+    "float noise(float x) {",
     // "  return iqnoise(vec2(x,0.0), 0.0, 0.0);",
-    "  return pnoise(vec2(x*16.0,0.0));",
+    // "  return pnoise(vec2(x*16.0,0.0));",
+    "  return pnoise(vec2(x,0.0), 1, 2.0, 0.5);",
       // "float map = min(resolution.x, resolution.y);",
       // "vec2 t = mod(vec2(x,0.0), map);",
       // "return snoise(t, t / map, vec2(map));",
     "}",
     
-    "float flareNoise(vec2 x) {",
+    "float noise(vec2 x) {",
     "  return iqnoise(x*512.0, 0.0, 0.0);",
     // "  return noise(x*0.1);",
     "}",
@@ -1890,7 +2020,7 @@ PixSpriteStudioShaderChunks = {
     "float ang = atan(p.x, p.y);",
     "float dist = length(p); dist = pow(dist, 0.1);",
     "float f0 = cIntensity / (length(uv-p)*16.0+1.0);",
-    "f0 = f0+f0*(sin(flareNoise(time + (pos.x+pos.y)*2.2 + ang*4.0+5.954)*16.0)*0.1+dist*0.1+0.8);",
+    "f0 = f0+f0*(sin(noise(time + (pos.x+pos.y)*2.2 + ang*4.0+5.954)*16.0)*0.1+dist*0.1+0.8);",
     
     // "float f1 = max(0.01-pow(length(uv+1.2*pos),1.9),.0)*7.0;",
 	  // "float f2 = max(1.0/(1.0+32.0*pow(length(uvd+0.8*pos),2.0)),.0)*00.25;",
@@ -1918,7 +2048,7 @@ PixSpriteStudioShaderChunks = {
     "c+=vec3(f0);",
     
     "c *= vec3(1.4, 1.2, 1.0);",
-    "c -= flareNoise(pin.uv) * 0.015;",
+    "c -= noise(pin.uv) * 0.015;",
     "c = cc(c, 0.5, 0.1);",
     
     "float t = c.x;",
@@ -2946,7 +3076,7 @@ PixSpriteStudioShaderChunks = {
     "  return -1.0 + 2.0 * fract(sin(p)*43758.5453123);",
     "}",
     
-    "float expNoise(in vec3 p) {",
+    "float noise(in vec3 p) {",
     "  vec3 i = floor(p);",
     "  vec3 f = fract(p);",
     "  vec3 u = f*f*(3.0-2.0*f);",
@@ -2961,7 +3091,7 @@ PixSpriteStudioShaderChunks = {
     "}",
     
     "float fbm(vec3 p) {",
-    "  return expNoise(p*0.6125)*0.5 + expNoise(p*0.125)*0.25 + expNoise(p*0.25)*0.125 + expNoise(p*0.4)*0.2;",
+    "  return noise(p*0.6125)*0.5 + noise(p*0.125)*0.25 + noise(p*0.25)*0.125 + noise(p*0.4)*0.2;",
     "}",
     
     "float sphere(vec3 p, float r) {",
@@ -3108,7 +3238,7 @@ PixSpriteStudioShaderChunks = {
     "    td += 1.0 / 70.0;",
     
     "    #ifdef DITHERING",
-    "    d = abs(d) * (0.8 + 0.2*rand(seed*vec2(i)*0.123));",
+    "    d = abs(d) * (0.8 + 0.2*rand2(seed*vec2(i)*0.123));",
     "    #endif",
          // trying to optimize step size
     // "    t += max(d*0.25, 0.01);",
@@ -3147,7 +3277,7 @@ PixSpriteStudioShaderChunks = {
     "uniform float cRadius;",
     "uniform float cSize;",
     
-    "float burnNoise(vec3 uv, float res) {",
+    "float noise(vec3 uv, float res) {",
     "	const vec3 s = vec3(1e0, 1e2, 1e3);",
     "	uv *= res;",
     "	vec3 uv0 = floor(mod(uv, res))*s;",
@@ -3168,7 +3298,7 @@ PixSpriteStudioShaderChunks = {
     "  vec3 coord = vec3(atan(p.x, p.y) / PI2 + 0.5, length(p) * 0.4, 0.5);",
     "  for (int i=0; i<=3; i++) {",
     "    float power = exp2(float(i));",
-    "    c1 += 0.2 * (1.5 / power) * burnNoise(coord + vec3(0.0, -time*0.05, -time*0.01), power*16.0);",
+    "    c1 += 0.2 * (1.5 / power) * noise(coord + vec3(0.0, -time*0.05, -time*0.01), power*16.0);",
     "  }",
     "  c1 *= cIntensity;",
     "  return vec3(c1);",
@@ -3215,7 +3345,7 @@ PixSpriteStudioShaderChunks = {
     "	return -1.0 + 2.0*fract(sin(p)*43758.5453123);",
     "}",
 
-    "float flameNoise( in vec2 p ) {",
+    "float noise( in vec2 p ) {",
     "	const float K1 = 0.366025404; // (sqrt(3)-1)/2;",
     "	const float K2 = 0.211324865; // (3-sqrt(3))/6;",
     "	vec2 i = floor( p + (p.x+p.y)*K1 );",
@@ -3231,10 +3361,10 @@ PixSpriteStudioShaderChunks = {
     "float fbm(vec2 uv) {",
     "	float f;",
     "	mat2 m = mat2( 1.6,  1.2, -1.2,  1.6 );",
-    "	f  = 0.5000*flameNoise( uv ); uv = m*uv;",
-    "	f += 0.2500*flameNoise( uv ); uv = m*uv;",
-    "	f += 0.1250*flameNoise( uv ); uv = m*uv;",
-    "	f += 0.0625*flameNoise( uv ); uv = m*uv;",
+    "	f  = 0.5000*noise( uv ); uv = m*uv;",
+    "	f += 0.2500*noise( uv ); uv = m*uv;",
+    "	f += 0.1250*noise( uv ); uv = m*uv;",
+    "	f += 0.0625*noise( uv ); uv = m*uv;",
     "	f = 0.5 + 0.5*f;",
     "	return f;",
     "}",
@@ -3445,7 +3575,7 @@ PixSpriteStudioShaderChunks = {
     // I tried the Iq's faster version but it shows discontinuities when you zoom in very close
     "float hash(float n) { return fract(sin(n) * 783.5453123); }",
     
-    "float smokeNoise(in vec3 x) {",
+    "float noise(in vec3 x) {",
     "  vec3 p = floor(x);",
     "  vec3 f = fract(x);",
     "  f = f*f*(3.0-2.0*f);",
@@ -3460,10 +3590,10 @@ PixSpriteStudioShaderChunks = {
     "  const mat3 m = mat3(1.0);",
     "  vec3 q = 0.1 * p;",
     "  float f;",
-    "  f = 0.5000 * smokeNoise(q); q = m*q*2.01;",
-    "  f += 0.2500 * smokeNoise(q); q = m*q*2.02;",
-    "  f += 0.1250 * smokeNoise(q); q = m*q*2.03;",
-    "  f += 0.0625 * smokeNoise(q);",
+    "  f = 0.5000 * noise(q); q = m*q*2.01;",
+    "  f += 0.2500 * noise(q); q = m*q*2.02;",
+    "  f += 0.1250 * noise(q); q = m*q*2.03;",
+    "  f += 0.0625 * noise(q);",
     "  return f;",
     "}",
     
@@ -3990,6 +4120,167 @@ PixSpriteStudioShaderChunks = {
 
   ].join("\n"),
   
+  //// MANDALAS CHUNK
+  // https://www.shadertoy.com/view/4tdSDr
+  
+  mandalasUniforms: {
+  },
+  
+  mandalasFragPars: [
+  ].join("\n"),
+  
+  mandalasFrag: [
+    
+    "#define S 4",
+    "vec2 I = pin.coord;",
+    "vec2 R = resolution;",
+    "I = I+I-R;",
+    "vec4 O = vec4(1.0,1.0,0.0,0.0);",
+    "mat2 M;",
+    "for (int i=0; i<S+S; i++) {",
+    "  M = mat2(O.y=cos(O.x=acos(-1.0)*float(i)/float(S)), O.z=sin(O.x), -O.z,O.y);",
+    "  I *= M;",
+    "  O.a = max(O.a, calc((I+R)/(R+R)));",
+    "}",
+    "pout.color = O.aaa;",
+  ].join("\n"),
+  
+  
+  //// MANDARA CHUNK
+  // https://www.shadertoy.com/view/MtcSz4
+  
+  mandaraUniforms: {
+    cRadius: { value: 0.7325 },
+    cInnerRadius: { value: 0.430 },
+    cInnerRadius2: { value: 0.235 },
+  },
+
+  mandaraFragPars: [
+    
+    "uniform float cRadius;",
+    "uniform float cInnerRadius;",
+    "uniform float cInnerRadius2;",
+    
+    "float circle(vec2 p, float r, float width) {",
+    "  float d = 0.0;",
+    "  d += smoothstep(1.0, 0.0, width*abs(p.x-r));",
+    "  return d;",
+    "}",
+    
+    "float arc(vec2 p, float r, float a, float width) {",
+    "  float d = 0.0;",
+    "  if (abs(p.y) < a) {",
+    "    d += smoothstep(1.0, 0.0, width*abs(p.x-r));",
+    "  }",
+    "  return d;",
+    "}",
+    
+    "float rose(vec2 p, float t, float width) {",
+    "  const float a0 = 6.0;",
+    "  float d = 0.0;",
+    "  p.x *= 7.0 + 8.0 * t;",
+    "  d += smoothstep(1.0, 0.0, width*abs(p.x-sin(a0*p.y)));",
+    "  d += smoothstep(1.0, 0.0, width*abs(p.x-abs(sin(a0*p.y))));",
+    "  d += smoothstep(1.0, 0.0, width*abs(abs(p.x)-sin(a0*p.y)));",
+    "  d += smoothstep(1.0, 0.0, width*abs(abs(p.x)-abs(sin(a0*p.y))));",
+    "  return d;",
+    "}",
+    
+    "float rose2(vec2 p, float t, float width) {",
+    "  const float a0 = 6.0;",
+    "  float d = 0.0;",
+    "  p.x *= 7.0 + 8.0 * t;",
+    "  d += smoothstep(1.0, 0.0, width*abs(p.x-cos(a0*p.y)));",
+    "  d += smoothstep(1.0, 0.0, width*abs(p.x-abs(cos(a0*p.y))));",
+    "  d += smoothstep(1.0, 0.0, width*abs(abs(p.x)-cos(a0*p.y)));",
+    "  d += smoothstep(1.0, 0.0, width*abs(abs(p.x)-abs(cos(a0*p.y))));",
+    "  return d;",
+    "}",
+    
+    "float spiral(vec2 p, float width) {",
+    "  float d = 0.0;",
+    "  d += smoothstep(1.0, 0.0, width*abs(p.x-0.5*p.y/PI));",
+    "  d += smoothstep(1.0, 0.0, width*abs(p.x-0.5*abs(p.y)/PI));",
+    "  d += smoothstep(1.0, 0.0, width*abs(abs(p.x)-0.5*p.y/PI));",
+    "  d += smoothstep(1.0, 0.0, width*abs(abs(p.x)-0.5*abs(p.y)/PI));",
+    "  return d;",
+    "}",
+    
+
+  ].join("\n"),
+  
+  mandaraFrag: [
+    
+    "vec2 p = pin.position;",
+    "vec2 f = vec2(length(p), atan(p.y, p.x));",
+    "float T0 = cos(0.3*time);",
+    "float T1 = 0.5 + 0.5*T0;",
+    "float T2 = sin(0.15*time);",
+    
+    "float m0 = 0.0;",
+    "float m1 = 0.0;",
+    "float m2 = 0.0;",
+    "float m3 = 0.0;",
+    "float m4 = 0.0;",
+    
+    "if (f.x < cRadius) {",
+    "  f.y += 0.1 * time;",
+    "  vec2 c;",
+    "  vec2 f2;",
+    
+    "  c = vec2(0.225 -0.1*T0, PI/4.0);",
+    "  if (f.x < 0.25) {",
+    "    for (float i=0.0; i<2.0; ++i) {",
+    "      f2 = mod(f,c)-0.5*c;",
+    "      m0 += spiral(vec2(f2.x, f2.y), 192.0);",
+    "    }",
+    "  }",
+    
+    "  c = vec2(0.225 -0.1*T0, PI/4.0);",
+    "  if (f.x < cInnerRadius) {",
+    "    for (float i=0.0; i<2.0; ++i) {",
+    "      f.y += PI/8.0;",
+    "      f2 = mod(f,c)-0.5*c;",
+    "      m1 += rose((0.75-0.5*T0)*f2, 0.4*T1, 24.0);",
+    "      m1 += rose2((0.5+0.5*T1)*f2, 0.2+0.2*T0, 36.0);",
+    "    }",
+    "  }",
+    
+    "  c = vec2(0.6 -0.2*T0, PI/4.0);",
+    "  if (f.x > cInnerRadius2) {",
+    "    for (float i=0.0; i<2.0; ++i) {",
+    "      f.y += PI/8.0;",
+    "      f2 = mod(f,c)-0.5*c;",
+    "      m2 += spiral(vec2((0.25+0.5*T1)*f2.x, f2.y), 392.0);",
+    // "      m2 += rose2((1.0+0.25*T0)*f2, 0.5, 24.0);",
+    "    }",
+    "  }",
+    
+    // "  c = vec2(0.4 -0.23*T0, PI/4.0);",
+    // "  if (f.x < 0.265) {",
+    // "    for (float i=0.0; i<2.0; ++i) {",
+    // "      f.y += PI/8.0;",
+    // "      f2 = mod(f,c)-0.5*c;",
+    // "      m3 += spiral(f2, 256.0);",
+    // "      m3 += rose(f2, 1.5*T1, 16.0);",
+    // "    }",
+    // "  }",
+    
+    "  m4 += circle(f, 0.040, 192.0);",
+    "  m4 += circle(f, cInnerRadius2, 192.0);",
+    "  m4 += circle(f, cInnerRadius, 192.0);",
+    
+    "}",
+    
+    // "m4 += circle(f, cRadius, 192.0);",
+    
+    // color
+    "float z = m0+m1+m2+m3+m4;",
+    "z *= z;",
+    "z = clamp(z, 0.0, 1.0);",
+    "pout.color = vec3(z);",
+  ].join("\n"),
+  
   //// TEST CHUNK
 
   testFragPars: [
@@ -4205,6 +4496,7 @@ PixSpriteStudioShader = function() {
     this.addUniform(uniforms, ["LASER2"], "laser2Uniforms");
     this.addUniform(uniforms, ["LIGHT"], "lightUniforms");
     this.addUniform(uniforms, ["CLOUD"], "cloudUniforms");
+    this.addUniform(uniforms, ["MANDARA"], "mandaraUniforms");
     this.addUniform(uniforms, ["TOON"], "toonUniforms");
     
     return THREE.UniformsUtils.clone(THREE.UniformsUtils.merge(uniforms));
@@ -4234,6 +4526,7 @@ PixSpriteStudioShader = function() {
     var codes = [];
     this.addCode(codes, [], "common");
     this.addCode(codes, [], "color");
+    this.addCode(codes, [], "gradient");
     this.addCode(codes, [], "noise");
     this.addCode(codes, [], "raymarch");
     this.addCode(codes, [], "fragPars");
@@ -4280,6 +4573,7 @@ PixSpriteStudioShader = function() {
     this.addCode(codes, ["LASER2"], "laser2FragPars");
     this.addCode(codes, ["LIGHT"], "lightFragPars");
     this.addCode(codes, ["CLOUD"], "cloudFragPars");
+    this.addCode(codes, ["MANDARA"], "mandaraFragPars");
     this.addCode(codes, ["TOON"], "toonFragPars");
     this.addCode(codes, ["TEST"], "testFragPars");
     
@@ -4339,6 +4633,7 @@ PixSpriteStudioShader = function() {
       this.addCode(codes, ["LASER2"], "laser2Frag");
       this.addCode(codes, ["LIGHT"], "lightFrag");
       this.addCode(codes, ["CLOUD"], "cloudFrag");
+      this.addCode(codes, ["MANDARA"], "mandaraFrag");
       this.addCode(codes, ["COPY"], "copyFrag");
       this.addCode(codes, ["TEST"], "testFrag");
       

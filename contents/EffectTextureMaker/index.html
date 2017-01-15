@@ -457,6 +457,8 @@
           cDirectionY: 1.0,
           cPowerExponent: 1.0,
           cRadius: 1.0,
+          cInnerRadius: 1.0,
+          cInnerRadius2: 1.0,
           cSize: 1.0,
           cWidth: 1.0,
           cHeight: 1.0,
@@ -582,7 +584,7 @@
         });
         
         h.add(effectController, "type", [
-          "Wood", "Circle", "Solar", "Corona", "Spark", "Ring", "Gradation", "GradationLine", "Flash", "Cone", "Flower", "FlowerFun", "WaveRing", "Smoke", "Flame", "Fire", "Cell", "Lightning", "Flare", "Flare2", "Flare3", "LensFlare", "Sun", "MagicCircle",
+          "Wood", "Circle", "Solar", "Corona", "Spark", "Ring", "Gradation", "GradationLine", "Flash", "Cone", "Flower", "FlowerFun", "WaveRing", "Smoke", "Flame", "Fire", "Cell", "Lightning", "Flare", "Flare2", "Flare3", "LensFlare", "Sun", "MagicCircle", "Mandara",
           "Explosion", "Explosion2", "Cross", "Laser", "Laser2", "Light", "Cloud",
           "PerlinNoise", "SeemlessNoise", "BooleanNoise", "CellNoise", "TurbulentNoise", "FbmNoise", "RandomNoise", "VoronoiNoise", "SparkNoise",
         ]).onChange(function(value) {
@@ -662,6 +664,8 @@
           cDirectionX: { minValue: -1.0, maxValue: 1.0, name: "Direction X" },
           cDirectionY: { minValue: -1.0, maxValue: 1.0, name: "Direction Y" },
           cRadius: { minValue: 0.0, maxValue: 2.0, name: "Radius" },
+          cInnerRadius: { minValue: 0.0, maxValue: 2.0, name: "InnerRadius" },
+          cInnerRadius2: { minValue: 0.0, maxValue: 2.0, name: "InnerRadius2" },
           cWidth: { minValue: 0.0, maxValue: 1.0, name: "Width" },
           cHeight: { minValue: 0.0, maxValue: 1.0, name: "Height" },
           cDepth: { minValue: 0.0, maxValue: 1.0, name: "Depth" },
@@ -763,6 +767,7 @@
           Flare2: ["cIntensity", "cPowerExponent"],
           Flare3: ["cIntensity", "cPowerExponent"],
           MagicCircle: [],
+          Mandara: ["cRadius", "cInnerRadius", "cInnerRadius2"],
           Cross:  ["cIntensity", "cPowerExponent"],
           Explosion: [
             "cCameraTilt", "cCameraPan",
