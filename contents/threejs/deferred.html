@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>three.js</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <style>
+    body {
+      font-family: Monospace;
+      background-color: #000;
+      margin: 0px;
+      overflow: hidden;
+    }
+    
+    canvas {
+      display: block;
+      position: absolute;
+      /*top: 0;*/
+      left: 0;
+      right: 0;
+      /*bottom: 0;*/
+      margin: auto;
+    }
+    
+    #info {
+      color: #fff;
+      position: absolute;
+      top: 10px;
+      width: 100%;
+      text-align: center;
+      z-index: 100;
+      display: block;
+    }
+    
+    a { color: skyblue }
+    .button { background: #999; color: #eee; padding: 0.2em 0.5em; cursor: pointer }
+    .highlight { background: orange; color: #fff; }
+    
+    span {
+      display: inline-block;
+      width: 60px;
+      float: left;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- <canvas id="canvas"></canvas> -->
+  <div id="info">
+    <a href="http://threejs.org" target="_blank">three.js</a>
+    <div>Deferred</div>
+  </div>
+  
+  <!-- <script src="js/three.min.js"></script> -->
+  <script src="js/three.min.r81dev.mrt.js"></script>
+  <script src="js/BufferGeometryUtils.js"></script>
+  <script src="js/libs/dat.gui.min.js"></script>
+  <script src="js/libs/stats.min.js"></script>
+  <script src="js/controls/OrbitControls.js"></script>
+  <script src="js/shaders/CopyShader.js"></script>
+  <script src="pixy/ScreenSprite.js"></script>
+  
+  <script id="viewVert" type="x-shader/x-vertex">
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+  </script>
+  <script id="viewFrag" type="x-shader/x-fragment">
+  uniform sampler2D tDiffuse;
+  uniform int type;
+  varying vec2 vUv;
+  void main() {
+    vec4 diffuse = texture2D(tDiffuse, vUv);
+    if (type == 0) {
+      gl_FragColor = vec4(diffuse.xyz, 1.0);
+    } else if (type == 1) {
+      gl_FragColor = vec4(diffuse.www, 1.0);
+    } else if (type == 2) {
+      gl_FragColor = vec4(diffuse.xxx, 1.0);
+    } else if (type == 3) {
+      gl_FragColor = vec4(diffuse.yyy, 1.0);
+    } else if (type == 4) {
+      gl_FragColor = vec4(diffuse.zzz, 1.0);
+    } else if (type == 5) {
+      gl_FragColor = vec4(diffuse.xyz*2.0-1.0, 1.0);
+    } else {
+      gl_FragColor = diffuse;
+    }
+  }
+  </script>
+  
+  <script id="geometryVert" type="x-shader/x-vertex">
+  #extension GL_EXT_draw_buffers : require
+  // http://en.wikibooks.org/wiki/GLSL_Programming/Applying_Matrix_Transformations
+  vec3 inverseTransformDirection(in vec3 dir, in mat4 matrix) {
+    return normalize((vec4(dir, 0.0) * matrix).xyz);
+  }
+  uniform mat4 projectionMatrix;
+  uniform mat4 modelViewMatrix;
+  uniform mat4 modelMatrix;
+  attribute vec3 position;
+  attribute vec3 normal;
+  attribute vec4 tangent;
+  attribute vec2 uv;
+  varying vec4 vHPosition;
+  varying vec3 vNormal;
+  varying vec3 vTangent;
+  varying vec3 vBinormal;
+  varying vec2 vUv;
+  void main() {
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    vHPosition = gl_Position;
+    vNormal = normalize(mat3(modelMatrix[0].xyz, modelMatrix[1].xyz, modelMatrix[2].xyz) * normal);
+    vTangent = normalize(mat3(modelMatrix[0].xyz, modelMatrix[1].xyz, modelMatrix[2].xyz) * tangent.xyz);
+    // vNormal = inverseTransformDirection(normal, modelMatrix);
+    // vTangent = inverseTransformDirection(tangent.xyz, modelMatrix);
+    vBinormal = normalize(cross(vNormal, vTangent) * tangent.w);
+    vUv = uv;
+  }
+  </script>
+  <script id="geometryFrag" type="x-shader/x-fragment">
+  #extension GL_EXT_draw_buffers : require
+  precision mediump float;
+  uniform sampler2D tDiffuse;
+  uniform sampler2D tSpecular;
+  uniform sampler2D tNormal;
+  uniform float bumpiness;
+  varying vec4 vHPosition;
+  varying vec3 vNormal;
+  varying vec3 vTangent;
+  varying vec3 vBinormal;
+  varying vec2 vUv;
+  void main() {
+    vec4 normalRGBA = texture2D(tNormal, vUv);
+    vec3 bump = (normalRGBA.rgb - vec3(0.5)) * bumpiness;
+    vec3 Nn = normalize(vNormal + bump.x * vTangent + bump.y * vBinormal);
+    // vec3 Nn = normalize(vNormal);
+    gl_FragData[0] = vec4(Nn * 0.5 + 0.5, vHPosition.z / vHPosition.w);
+    gl_FragData[1] = texture2D(tDiffuse, vUv);
+    gl_FragData[2] = texture2D(tSpecular, vUv);
+  }
+  </script>
+  
+  <script id="lightVert" type="x-shader/x-vertex">
+  #extension GL_EXT_draw_buffers : require
+  uniform mat4 projectionMatrix;
+  uniform mat4 modelViewMatrix;
+  attribute vec3 position;
+  attribute vec2 uv;
+  varying vec2 vUv;
+  void main() {
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    vUv = uv;
+  }
+  </script>
+  <script id="lightFrag" type="x-shader/x-fragment">
+  #extension GL_EXT_draw_buffers : require
+  precision mediump float;
+  #define saturate(x) clamp(x, 0.0, 1.0)
+  // #define NUM_POINT_LIGHT 300
+  struct PointLight {
+    vec3 position;
+    vec3 color;
+  };
+  uniform PointLight pointLights[NUM_POINT_LIGHT];
+  uniform int numPointLights;
+  uniform float cutoffDistance;
+  uniform float decayExponent;
+  uniform vec3 viewPosition;
+  uniform mat4 inverseViewProjection;
+  uniform sampler2D gbuf0; // [rgb-] normal [---w] depth
+  varying vec2 vUv;
+    void main() {
+    vec4 normalDepth = texture2D(gbuf0, vUv);
+    // vec4 diffuse = texture2D(gbuf1, vUv);
+    // vec4 specular = texture2D(gbuf2, vUv);
+    vec4 HPos = inverseViewProjection * vec4(vUv*2.0-1.0, normalDepth.w, 1.0);
+    vec3 worldPosition = HPos.xyz / HPos.w;
+    vec3 Nn = normalDepth.xyz * 2.0 - 1.0;
+    vec3 viewDir = normalize(viewPosition - worldPosition);
+    
+    vec3 sumDiff = vec3(0.0);
+    vec3 sumSpec = vec3(0.0);
+    // sumDiff += 0.2 * diffuse.xyz; // ambient
+    for (int i=0; i<NUM_POINT_LIGHT; ++i) {
+      if (i >= numPointLights) break;
+      
+      vec3 L = pointLights[i].position - worldPosition;
+      float Ld = length(L);
+      float Lc = 0.0;
+      if (cutoffDistance == 0.0 || Ld < cutoffDistance) {
+        Lc = pow(saturate(-Ld / cutoffDistance + 1.0), decayExponent);
+      }
+      vec3 Ln = normalize(L);
+      float ldn = max(dot(Ln,Nn), 0.0);
+      
+      vec3 H = normalize(viewDir + Ln);
+      float HoN = dot(H, Nn);
+      float pw = max(HoN / (50.0 * (1.0 - HoN) + HoN), 0.0);
+      float specPow = step(0.0, ldn) * pw;
+      
+      sumDiff += ldn*Lc*pointLights[i].color;
+      sumSpec += specPow*Lc*pointLights[i].color;
+    }
+    gl_FragData[0] = vec4(sumDiff, 1.0);
+    gl_FragData[1] = vec4(sumSpec, 1.0);
+  }
+  </script>
+  
+  <script id="compositeVert" type="x-shader/x-vertex">
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+  </script>
+  <script id="compositeFrag" type="x-shader/x-fragment">
+  uniform sampler2D lbuf0; // [rgb-] diffuse light
+  uniform sampler2D lbuf1; // [rgb-] specular light
+  uniform sampler2D gbuf1; // [rgb-] diffuse
+  uniform sampler2D gbuf2; // [rgb-] specular
+  varying vec2 vUv;
+    void main() {
+    vec4 diffuseLight = texture2D(lbuf0, vUv);
+    vec4 specularLight = texture2D(lbuf1, vUv);
+    vec4 diffuse = texture2D(gbuf1, vUv);
+    vec4 specular = texture2D(gbuf2, vUv);
+    
+    vec3 color = vec3(0.0);
+    color += 0.2 * diffuse.xyz; // ambient
+    color += diffuseLight.xyz * diffuse.xyz;
+    color += specularLight.xyz * specular.xyz;
+    gl_FragColor = vec4(color, 1.0);
+  }
+  </script>
+  
+  <script>
+    var camera, scene, postScene, lightSphere, renderer, canvas;
+    var parameters;
+    var numMaxLights = 300;
+    var lights = [];
+    var deferred = {};
+    var stats;
+    var clock = new THREE.Clock();
+    var time = 0.0;
+    
+    init();
+    animate();
+    
+    function init() {
+      initGraphics();
+      initDeferred();
+      initScene();
+      initGui();
+      window.addEventListener('resize', onWindowResize, false);
+    }
+    
+    function initGraphics() {
+      
+      renderer = new THREE.WebGLRenderer({antialias: true});
+      renderer.setClearColor(0x999999);
+      renderer.setPixelRatio(window.devicePixelRatio);
+      var w = (window.innerWidth > 1280) ? 1280 : window.innerWidth;
+      var h = (window.innerWidth > 720) ? 720 : window.innerHeight;
+      renderer.setSize(w, h);
+      
+      if ( !renderer.extensions.get( "OES_texture_float" ) ) {
+	  	alert( "No OES_texture_float support for float textures." );
+		  return;
+	  }
+  
+      if (!renderer.extensions.get('WEBGL_draw_buffers')) {
+        supportsMRT = false;
+        console.log('not support WEBGL_draw_buffers.');
+        return;
+      }
+      
+      container = document.createElement('div');
+      document.body.appendChild(container);
+      
+      canvas = renderer.domElement;
+      container.appendChild(canvas);
+      
+      // document.body.appendChild(canvas);
+      
+      stats = new Stats();
+      document.body.appendChild(stats.dom);
+    }
+    
+    function initScene() {
+      
+      scene = new THREE.Scene();
+      scene.add(new THREE.AmbientLight(0x999999));
+      
+      camera = new THREE.PerspectiveCamera(35, canvas.width / canvas.height, 1, 500);
+      camera.position.set(0.0, 34.74, 61.33);
+      camera.add(new THREE.PointLight(0xffffff, 0.8));
+      scene.add(camera);
+      
+      geometry = new THREE.PlaneBufferGeometry(50,50);
+      THREE.BufferGeometryUtils.computeTangents(geometry);
+      mesh = new THREE.Mesh(geometry, deferred.geometryMaterial);
+      mesh.rotation.x = -Math.PI * 0.5;
+      scene.add(mesh);
+      
+      mesh = new THREE.Mesh(geometry, deferred.geometryMaterial);
+      mesh.position.y = 25.0;
+      mesh.position.z = -25.0;
+      scene.add(mesh);
+      
+      mesh = new THREE.Mesh(geometry, deferred.geometryMaterial);
+      mesh.position.y = 25.0;
+      mesh.position.z = 25.0;
+      mesh.rotation.y = Math.PI;
+      scene.add(mesh);
+      
+      mesh = new THREE.Mesh(geometry, deferred.geometryMaterial);
+      mesh.position.x = -25.0;
+      mesh.position.y = 25.0;
+      mesh.rotation.y = Math.PI*0.5;
+      scene.add(mesh);
+      
+      mesh = new THREE.Mesh(geometry, deferred.geometryMaterial);
+      mesh.position.x = 25.0;
+      mesh.position.y = 25.0;
+      mesh.rotation.y = -Math.PI*0.5;
+      scene.add(mesh);
+      
+      geometry = new THREE.SphereBufferGeometry(8,32,32);
+      THREE.BufferGeometryUtils.computeTangents(geometry);
+      mesh = new THREE.Mesh(geometry, deferred.geometryMaterial);
+      mesh.position.y = 15;
+      scene.add(mesh);
+      
+      postScene = new THREE.Scene();
+      // postScene.add(new THREE.AxisHelper(20));
+      
+      var geo = new THREE.SphereBufferGeometry(1.0, 8, 8);
+      var numLights = 200;
+      for (var i=0; i<numLights; ++i) {
+        var light = {};
+        light.position = new THREE.Vector3();
+        light.position.x = Math.random() * 50.0 - 25.0;
+        light.position.y = 10.0 + Math.random() * 10.0;
+        light.position.z = Math.random() * 50.0 - 25.0;
+        light.color = new THREE.Color();
+        light.color.setRGB(Math.random(), Math.random(), Math.random());
+        light.time = Math.random() * Math.PI;
+        light.mesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({color:light.color.getHex(), wireframe:true}));
+        light.mesh.position.copy(light.position);
+        postScene.add(light.mesh);
+        lights.push(light);
+      }
+      
+      var controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.addEventListener('change', onCameraPositionChanged);
+      controls.target.set(0, 13.0, 0);
+      // controls.addEventListener('change', render);
+      // controls.target.set(0, 1.2, 2);
+      controls.update();
+    }
+    
+    function initDeferred() {
+      
+      // gbuf
+      deferred.gbuf = new THREE.WebGLMultiRenderTarget(window.innerWidth, window.innerHeight);
+      deferred.gbuf.texture.format = THREE.RGBAFormat;
+      deferred.gbuf.texture.minFilter = THREE.NearestFilter;
+      deferred.gbuf.texture.magFilter = THREE.NearestFilter;
+      deferred.gbuf.texture.type = THREE.FloatType;
+      deferred.gbuf.texture.generateMipmaps = false;
+      deferred.gbuf.stencilBuffer = false;
+      deferred.gbuf.depthBuffer = true;
+      deferred.gbuf.attachments.push(deferred.gbuf.texture.clone());
+      deferred.gbuf.attachments.push(deferred.gbuf.texture.clone());
+      deferred.gbuf.attachments[0].name = 'normal+depth';
+      deferred.gbuf.attachments[1].name = 'diffuse';
+      deferred.gbuf.attachments[2].name = 'specular';
+      
+      // lbuf
+      deferred.lbuf = new THREE.WebGLMultiRenderTarget(window.innerWidth, window.innerHeight);
+      deferred.lbuf.texture.format = THREE.RGBAFormat;
+      deferred.lbuf.texture.minFilter = THREE.NearestFilter;
+      deferred.lbuf.texture.magFilter = THREE.NearestFilter;
+      deferred.lbuf.texture.type = THREE.FloatType;
+      deferred.lbuf.texture.generateMipmaps = false;
+      deferred.lbuf.stencilBuffer = false;
+      deferred.lbuf.depthBuffer = false;
+      deferred.lbuf.attachments.push(deferred.lbuf.texture.clone());
+      deferred.lbuf.attachments[0].name = 'diffuse';
+      deferred.lbuf.attachments[1].name = 'specular';
+      
+      var textureLoader = new THREE.TextureLoader();
+      var textureColor = textureLoader.load('assets/textures/SlateTiles/SlateTiles_col.png');
+      textureColor.wrapS = textureColor.wrapT = THREE.RepeatWrapping;
+      var textureNormal = textureLoader.load('assets/textures/SlateTiles/SlateTiles_nrm.png');
+      textureNormal.wrapS = textureNormal.wrapT = THREE.RepeatWrapping;
+      var textureSpecular = textureLoader.load('assets/textures/SlateTiles/SlateTiles_spec.png');
+      textureSpecular.wrapS = textureSpecular.wrapT = THREE.RepeatWrapping;
+      
+      deferred.geometryMaterial = new THREE.RawShaderMaterial({
+        uniforms: {
+           tDiffuse: { value: textureColor },
+           tSpecular: { value: textureSpecular },
+           tNormal: { value: textureNormal },
+           bumpiness: { value: 1.0 },
+        },
+        vertexShader: document.getElementById("geometryVert").innerHTML,
+        fragmentShader: document.getElementById("geometryFrag").innerHTML,
+      });
+      
+      deferred.lightMaterial = new THREE.RawShaderMaterial({
+        defines: {
+          NUM_POINT_LIGHT: numMaxLights
+        },
+        uniforms: {
+          gbuf0: { value: null },
+          pointLights: { value: [] },
+          numPointLights: { value: 0 },
+          inverseViewProjection: { value: new THREE.Matrix4() },
+          viewPosition: { value: new THREE.Vector3() },
+          cutoffDistance: { value: 10.0 },
+          decayExponent: { value: 3.0 }
+        },
+        vertexShader: document.getElementById("lightVert").innerHTML,
+        fragmentShader: document.getElementById("lightFrag").innerHTML,
+      });
+      for (var i=0; i<numMaxLights; ++i) {
+        deferred.lightMaterial.uniforms.pointLights.value.push(
+          {
+            position: new THREE.Vector3(),
+            color: new THREE.Color()
+          }
+        );
+      }
+      
+      deferred.compositeMaterial = new THREE.ShaderMaterial({
+        uniforms: {
+          lbuf0: { value: null },
+          lbuf1: { value: null },
+          gbuf1: { value: null },
+          gbuf2: { value: null }
+        },
+        vertexShader: document.getElementById("compositeVert").innerHTML,
+        fragmentShader: document.getElementById("compositeFrag").innerHTML,
+      });
+      
+      deferred.scene = new THREE.Scene();
+      deferred.camera = new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+      deferred.scene.add(new THREE.Mesh(
+        new THREE.PlaneGeometry(2,2),
+        deferred.lightMaterial));
+        
+      // for debug
+      // deferred.copyMaterial = new THREE.ShaderMaterial({
+      //   uniforms: THREE.UniformsUtils.clone(THREE.CopyShader.uniforms),
+      //   vertexShader: THREE.CopyShader.vertexShader,
+      //   fragmentShader: THREE.CopyShader.fragmentShader,
+      //   depthTest: false,
+      //   depthWrite: false
+      // });
+      deferred.viewMaterial = new THREE.ShaderMaterial({
+        uniforms: {
+          tDiffuse: { value: null },
+          type: { value: 0 },
+        },
+        vertexShader: document.getElementById("viewVert").innerHTML,
+        fragmentShader: document.getElementById("viewFrag").innerHTML,
+        depthTest: false,
+        depthWrite: false
+      });
+      
+      deferred.viewGBuf0 = new PixScreenSprite(deferred.viewMaterial, canvas);
+      deferred.viewGBuf0.position.set(10,10);
+      deferred.viewGBuf0.size.set(100,100);
+      deferred.viewGBuf0.update();
+      
+      deferred.viewGBuf1 = new PixScreenSprite(deferred.viewMaterial, canvas);
+      deferred.viewGBuf1.position.set(10,120);
+      deferred.viewGBuf1.size.set(100,100);
+      deferred.viewGBuf1.update();
+      
+      deferred.viewGBuf2 = new PixScreenSprite(deferred.viewMaterial, canvas);
+      deferred.viewGBuf2.position.set(10,230);
+      deferred.viewGBuf2.size.set(100,100);
+      deferred.viewGBuf2.update();
+      
+      deferred.viewGBuf3 = new PixScreenSprite(deferred.viewMaterial, canvas);
+      deferred.viewGBuf3.position.set(10,340);
+      deferred.viewGBuf3.size.set(100,100);
+      deferred.viewGBuf3.update();
+      
+      deferred.viewGBuf4 = new PixScreenSprite(deferred.viewMaterial, canvas);
+      deferred.viewGBuf4.position.set(10,450);
+      deferred.viewGBuf4.size.set(100,100);
+      deferred.viewGBuf4.update();
+      
+      deferred.viewGBuf5 = new PixScreenSprite(deferred.viewMaterial, canvas);
+      deferred.viewGBuf5.position.set(10,560);
+      deferred.viewGBuf5.size.set(100,100);
+      deferred.viewGBuf5.update();
+    }
+    
+    function initGui() {
+      parameters = {
+        cutoffDistance: 20.0,
+        decay: 3.0,
+        numLights: 100,
+        bumpiness: 1.0,
+        debug: false
+      };
+      
+      var gui = new dat.GUI();
+      gui.add(parameters, "cutoffDistance", 1.0, 50.0);
+      gui.add(parameters, "decay", 1.0, 10.0);
+      gui.add(parameters, "numLights", 1, 200);
+      gui.add(parameters, "bumpiness", 0.0, 10.0);
+      gui.add(parameters, "debug");
+    }
+    
+    function onCameraPositionChanged() {
+      console.log(camera.position);
+    }
+    
+    function onWindowResize() {
+      camera.aspect = canvas.width / canvas.height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(canvas.width, canvas.height);
+      render();
+    }
+    
+    function animate() {
+      time += clock.getDelta();
+      requestAnimationFrame(animate, renderer.domElement);
+      render();
+    }
+    
+    function render() {
+      
+      stats.update();
+      
+      deferred.geometryMaterial.uniforms.bumpiness.value = parameters.bumpiness;
+      
+      var viewProjection = new THREE.Matrix4();
+      camera.updateMatrix(); // update local matrix
+      camera.updateMatrixWorld(); // update world matrix
+      camera.updateProjectionMatrix();
+      camera.matrixWorldInverse.getInverse(camera.matrixWorld);
+      viewProjection.identity();
+      viewProjection.multiply(camera.projectionMatrix);
+      viewProjection.multiply(camera.matrixWorldInverse);
+      
+      deferred.lightMaterial.uniforms.gbuf0.value = deferred.gbuf.attachments[0];
+      // deferred.lightMaterial.uniforms.lightPosition.value.copy(lightSphere.position);
+      var pos = new THREE.Vector3();
+      for (var i=0; i<lights.length; ++i) {
+        pos.copy(lights[i].position);
+        pos.x += Math.sin(time + lights[i].time) * 5.0;
+        pos.y += Math.sin(time + lights[i].time * 2.0) * 10.0;
+        pos.z += Math.cos(time + lights[i].time) * 5.0;
+        deferred.lightMaterial.uniforms.pointLights.value[i].position.copy(pos);
+        deferred.lightMaterial.uniforms.pointLights.value[i].color.copy(lights[i].color);
+        lights[i].mesh.position.copy(pos);
+        
+      if (parameters.debug) {
+          lights[i].mesh.scale.set(parameters.cutoffDistance, parameters.cutoffDistance, parameters.cutoffDistance);
+          lights[i].mesh.material.wireframe = true;
+        } else {
+          lights[i].mesh.scale.set(0.1,0.1,0.1);
+          lights[i].mesh.material.wireframe = false;
+        }
+        
+        if (i < parameters.numLights) {
+          lights[i].mesh.visible = true;
+        }
+        else {
+          lights[i].mesh.visible = false;
+        }
+      }
+      // deferred.lightMaterial.uniforms.numPointLights.value = lights.length;
+      deferred.lightMaterial.uniforms.numPointLights.value = parameters.numLights;
+      deferred.lightMaterial.uniforms.cutoffDistance.value = parameters.cutoffDistance;
+      deferred.lightMaterial.uniforms.decayExponent.value = parameters.decay;
+      deferred.lightMaterial.uniforms.inverseViewProjection.value.getInverse(viewProjection);
+      deferred.lightMaterial.uniforms.viewPosition.value.copy(camera.position);
+      
+      deferred.compositeMaterial.uniforms.gbuf1.value = deferred.gbuf.attachments[1];
+      deferred.compositeMaterial.uniforms.gbuf2.value = deferred.gbuf.attachments[2];
+      deferred.compositeMaterial.uniforms.lbuf0.value = deferred.lbuf.attachments[0];
+      deferred.compositeMaterial.uniforms.lbuf1.value = deferred.lbuf.attachments[1];
+
+      //// geometry pass
+      
+      renderer.setClearColor(0x000000);
+      renderer.setClearAlpha(0);
+      renderer.render(scene, camera, deferred.gbuf);
+      
+      //// light pass
+      
+      renderer.render(deferred.scene, deferred.camera, deferred.lbuf);
+      
+      //// composite pass
+      
+      deferred.scene.overrideMaterial = deferred.compositeMaterial;
+      renderer.render(deferred.scene, deferred.camera);
+      deferred.scene.overrideMaterial = null;
+      
+      //// view pass
+      
+      renderer.autoClear = false;
+      
+      renderer.clearDepth();
+      renderer.render(postScene, camera);
+      
+      deferred.viewMaterial.uniforms.tDiffuse.value = deferred.gbuf.attachments[0];
+      deferred.viewMaterial.uniforms.type.value = 1;
+      deferred.viewGBuf0.render(renderer);
+      
+      deferred.viewMaterial.uniforms.tDiffuse.value = deferred.gbuf.attachments[0];
+      deferred.viewMaterial.uniforms.type.value = 0; // or 5
+      deferred.viewGBuf1.render(renderer);
+      
+      deferred.viewMaterial.uniforms.tDiffuse.value = deferred.gbuf.attachments[1];
+      deferred.viewMaterial.uniforms.type.value = 0;
+      deferred.viewGBuf2.render(renderer);
+      
+      deferred.viewMaterial.uniforms.tDiffuse.value = deferred.gbuf.attachments[2];
+      deferred.viewGBuf3.render(renderer);
+      
+      deferred.viewMaterial.uniforms.tDiffuse.value = deferred.lbuf.attachments[0];
+      deferred.viewGBuf4.render(renderer);
+      
+      deferred.viewMaterial.uniforms.tDiffuse.value = deferred.lbuf.attachments[1];
+      deferred.viewGBuf5.render(renderer);
+      
+      renderer.autoClear = true;
+    }
+  </script>
+</body>
+</html>
