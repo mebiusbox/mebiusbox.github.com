@@ -127,19 +127,25 @@
   uniform sampler2D tSpecular;
   uniform sampler2D tNormal;
   uniform float bumpiness;
+  uniform sampler2D tAO;
+  uniform float aoStrength;
+  uniform float aoPower;
   varying vec4 vHPosition;
   varying vec3 vNormal;
   varying vec3 vTangent;
   varying vec3 vBinormal;
   varying vec2 vUv;
   void main() {
+    vec4 diffuseRGBA = texture2D(tDiffuse, vUv);
+    vec4 specularRGBA = texture2D(tSpecular, vUv);
     vec4 normalRGBA = texture2D(tNormal, vUv);
+    vec4 aoRGBA = texture2D(tAO, vUv);
     vec3 bump = (normalRGBA.rgb - vec3(0.5)) * bumpiness;
     vec3 Nn = normalize(vNormal + bump.x * vTangent + bump.y * vBinormal);
     // vec3 Nn = normalize(vNormal);
     gl_FragData[0] = vec4(Nn * 0.5 + 0.5, vHPosition.z / vHPosition.w);
-    gl_FragData[1] = texture2D(tDiffuse, vUv);
-    gl_FragData[2] = texture2D(tSpecular, vUv);
+    gl_FragData[1] = vec4(diffuseRGBA.xyz, mix(1.0, pow(abs(aoRGBA.r),aoPower), aoStrength));
+    gl_FragData[2] = specularRGBA;
   }
   </script>
   
@@ -219,7 +225,7 @@
   <script id="compositeFrag" type="x-shader/x-fragment">
   uniform sampler2D lbuf0; // [rgb-] diffuse light
   uniform sampler2D lbuf1; // [rgb-] specular light
-  uniform sampler2D gbuf1; // [rgb-] diffuse
+  uniform sampler2D gbuf1; // [rgb-] diffuse [---w] ambient occulusion
   uniform sampler2D gbuf2; // [rgb-] specular
   varying vec2 vUv;
     void main() {
@@ -230,8 +236,8 @@
     
     vec3 color = vec3(0.0);
     color += 0.2 * diffuse.xyz; // ambient
-    color += diffuseLight.xyz * diffuse.xyz;
-    color += specularLight.xyz * specular.xyz;
+    color += diffuseLight.xyz * diffuse.xyz * diffuse.w;
+    color += specularLight.xyz * specular.xyz * diffuse.w;
     gl_FragColor = vec4(color, 1.0);
   }
   </script>
@@ -355,7 +361,7 @@
       }
       
       var controls = new THREE.OrbitControls(camera, renderer.domElement);
-      controls.addEventListener('change', onCameraPositionChanged);
+      // controls.addEventListener('change', onCameraPositionChanged);
       controls.target.set(0, 13.0, 0);
       // controls.addEventListener('change', render);
       // controls.target.set(0, 1.2, 2);
@@ -389,7 +395,7 @@
       deferred.lbuf.stencilBuffer = false;
       deferred.lbuf.depthBuffer = false;
       deferred.lbuf.attachments.push(deferred.lbuf.texture.clone());
-      deferred.lbuf.attachments[0].name = 'diffuse';
+      deferred.lbuf.attachments[0].name = 'diffuse+ao';
       deferred.lbuf.attachments[1].name = 'specular';
       
       var textureLoader = new THREE.TextureLoader();
@@ -399,6 +405,8 @@
       textureNormal.wrapS = textureNormal.wrapT = THREE.RepeatWrapping;
       var textureSpecular = textureLoader.load('assets/textures/SlateTiles/SlateTiles_spec.png');
       textureSpecular.wrapS = textureSpecular.wrapT = THREE.RepeatWrapping;
+      var textureAO = textureLoader.load('assets/textures/SlateTiles/SlateTiles_ao.png');
+      textureAO.wrapS = textureAO.wrapT = THREE.RepeatWrapping;
       
       deferred.geometryMaterial = new THREE.RawShaderMaterial({
         uniforms: {
@@ -406,6 +414,9 @@
            tSpecular: { value: textureSpecular },
            tNormal: { value: textureNormal },
            bumpiness: { value: 1.0 },
+           tAO: { value: textureAO },
+           aoStrength: { value: 1.0 },
+           aoPower: { value: 1.0 },
         },
         vertexShader: document.getElementById("geometryVert").innerHTML,
         fragmentShader: document.getElementById("geometryFrag").innerHTML,
@@ -472,35 +483,23 @@
         depthWrite: false
       });
       
-      deferred.viewGBuf0 = new PixScreenSprite(deferred.viewMaterial, canvas);
-      deferred.viewGBuf0.position.set(10,10);
-      deferred.viewGBuf0.size.set(100,100);
-      deferred.viewGBuf0.update();
+      deferred.views = [];
       
-      deferred.viewGBuf1 = new PixScreenSprite(deferred.viewMaterial, canvas);
-      deferred.viewGBuf1.position.set(10,120);
-      deferred.viewGBuf1.size.set(100,100);
-      deferred.viewGBuf1.update();
+      function createView(x, y, texture, type) {
+        var sprite = new PixScreenSprite(deferred.viewMaterial, canvas);
+        sprite.position.set(x, y);
+        sprite.size.set(100,100);
+        sprite.update();
+        return { sprite: sprite, texture: texture, type: type };
+      }
       
-      deferred.viewGBuf2 = new PixScreenSprite(deferred.viewMaterial, canvas);
-      deferred.viewGBuf2.position.set(10,230);
-      deferred.viewGBuf2.size.set(100,100);
-      deferred.viewGBuf2.update();
-      
-      deferred.viewGBuf3 = new PixScreenSprite(deferred.viewMaterial, canvas);
-      deferred.viewGBuf3.position.set(10,340);
-      deferred.viewGBuf3.size.set(100,100);
-      deferred.viewGBuf3.update();
-      
-      deferred.viewGBuf4 = new PixScreenSprite(deferred.viewMaterial, canvas);
-      deferred.viewGBuf4.position.set(10,450);
-      deferred.viewGBuf4.size.set(100,100);
-      deferred.viewGBuf4.update();
-      
-      deferred.viewGBuf5 = new PixScreenSprite(deferred.viewMaterial, canvas);
-      deferred.viewGBuf5.position.set(10,560);
-      deferred.viewGBuf5.size.set(100,100);
-      deferred.viewGBuf5.update();
+      deferred.views.push(createView(10, 10, deferred.gbuf.attachments[0], 1));
+      deferred.views.push(createView(10, 120, deferred.gbuf.attachments[0], 0));
+      deferred.views.push(createView(10, 230, deferred.gbuf.attachments[1], 1));
+      deferred.views.push(createView(10, 340, deferred.gbuf.attachments[1], 0));
+      deferred.views.push(createView(10, 450, deferred.gbuf.attachments[2], 0));
+      deferred.views.push(createView(120, 10, deferred.lbuf.attachments[0], 0));
+      deferred.views.push(createView(120, 120, deferred.lbuf.attachments[1], 0));
     }
     
     function initGui() {
@@ -509,6 +508,8 @@
         decay: 3.0,
         numLights: 100,
         bumpiness: 1.0,
+        aoStrength: 1.0,
+        aoPower: 1.0,
         debug: false
       };
       
@@ -517,6 +518,8 @@
       gui.add(parameters, "decay", 1.0, 10.0);
       gui.add(parameters, "numLights", 1, 200);
       gui.add(parameters, "bumpiness", 0.0, 10.0);
+      gui.add(parameters, "aoStrength", 0.0, 1.0);
+      gui.add(parameters, "aoPower", 1.0, 10.0);
       gui.add(parameters, "debug");
     }
     
@@ -542,6 +545,8 @@
       stats.update();
       
       deferred.geometryMaterial.uniforms.bumpiness.value = parameters.bumpiness;
+      deferred.geometryMaterial.uniforms.aoStrength.value = parameters.aoStrength;
+      deferred.geometryMaterial.uniforms.aoPower.value = parameters.aoPower;
       
       var viewProjection = new THREE.Matrix4();
       camera.updateMatrix(); // update local matrix
@@ -614,26 +619,11 @@
       renderer.clearDepth();
       renderer.render(postScene, camera);
       
-      deferred.viewMaterial.uniforms.tDiffuse.value = deferred.gbuf.attachments[0];
-      deferred.viewMaterial.uniforms.type.value = 1;
-      deferred.viewGBuf0.render(renderer);
-      
-      deferred.viewMaterial.uniforms.tDiffuse.value = deferred.gbuf.attachments[0];
-      deferred.viewMaterial.uniforms.type.value = 0; // or 5
-      deferred.viewGBuf1.render(renderer);
-      
-      deferred.viewMaterial.uniforms.tDiffuse.value = deferred.gbuf.attachments[1];
-      deferred.viewMaterial.uniforms.type.value = 0;
-      deferred.viewGBuf2.render(renderer);
-      
-      deferred.viewMaterial.uniforms.tDiffuse.value = deferred.gbuf.attachments[2];
-      deferred.viewGBuf3.render(renderer);
-      
-      deferred.viewMaterial.uniforms.tDiffuse.value = deferred.lbuf.attachments[0];
-      deferred.viewGBuf4.render(renderer);
-      
-      deferred.viewMaterial.uniforms.tDiffuse.value = deferred.lbuf.attachments[1];
-      deferred.viewGBuf5.render(renderer);
+      for (var i=0; i<deferred.views.length; ++i) {
+        deferred.viewMaterial.uniforms.tDiffuse.value = deferred.views[i].texture;
+        deferred.viewMaterial.uniforms.type.value = deferred.views[i].type;
+        deferred.views[i].sprite.render(renderer);
+      }
       
       renderer.autoClear = true;
     }
