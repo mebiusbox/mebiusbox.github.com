@@ -59,6 +59,10 @@
   <script src="js/controls/OrbitControls.js"></script>
   <script src="js/shaders/CopyShader.js"></script>
   <script src="pixy/ScreenSprite.js"></script>
+  <script src="pixy/shaders/LuminosityShader.js"></script>
+  <script src="pixy/shaders/ToneMapShader.js"></script>
+  <script src="pixy/post/Composer.js"></script>
+  <script src="pixy/post/UnrealBloomPass.js"></script>
   
   <script id="viewVert" type="x-shader/x-vertex">
   varying vec2 vUv;
@@ -248,6 +252,7 @@
     var numMaxLights = 300;
     var lights = [];
     var deferred = {};
+    var post = {};
     var stats;
     var clock = new THREE.Clock();
     var time = 0.0;
@@ -259,6 +264,7 @@
       initGraphics();
       initDeferred();
       initScene();
+      initPost();
       initGui();
       window.addEventListener('resize', onWindowResize, false);
     }
@@ -502,14 +508,49 @@
       deferred.views.push(createView(120, 120, deferred.lbuf.attachments[1], 0));
     }
     
+    function initPost() {
+      var pars = {
+        minFilter: THREE.LinearFilter,
+        magFilter: THREE.LinearFilter,
+        format: THREE.RGBFormat,
+        stencilBuffer: false
+      };
+      var parsF = {
+        minFilter: THREE.LinearFilter,
+        magFilter: THREE.LinearFilter,
+        format: THREE.RGBFormat,
+        stencilBuffer: false,
+        type: THREE.FloatType,
+      };
+      
+      post.rtScene = new THREE.WebGLRenderTarget(canvas.width, canvas.height, parsF);
+      post.rtBloom = new THREE.WebGLRenderTarget(canvas.width, canvas.height, parsF);
+      post.copyPass = new PixShaderPass(THREE.CopyShader);
+      post.copyPass.uniforms.tDiffuse.value = post.rtScene.texture;
+      post.bloomPass = new PixUnrealBloomPass(new THREE.Vector2(canvas.width, canvas.height), 1.5, 0.4, 0.85);
+      post.toneMapPass = new PixShaderPass(PixToneMapShader);
+      post.toneMapPass.uniforms.tDiffuse.value = post.rtScene.texture;
+      post.composer = new PixComposer(renderer);
+      post.composer.addPass(post.bloomPass, post.rtScene, post.rtScene);
+      post.composer.addPass(post.toneMapPass, post.rtScene, null);
+      post.composer.addPass(post.copyPass, post.rtScene, null);
+    }
+    
     function initGui() {
       parameters = {
-        cutoffDistance: 20.0,
-        decay: 3.0,
+        cutoffDistance: 25.0,
+        decay: 2.0,
         numLights: 100,
         bumpiness: 1.0,
         aoStrength: 1.0,
         aoPower: 1.0,
+        bloom: true,
+        bloomStrength: 1.5, 
+        bloomRadius: 0.4,
+        bloomThreshold: 0.85,
+        toneMapping: true,
+        exposure: 3.0,
+        whitePoint: 5.0,
         debug: false
       };
       
@@ -520,6 +561,13 @@
       gui.add(parameters, "bumpiness", 0.0, 10.0);
       gui.add(parameters, "aoStrength", 0.0, 1.0);
       gui.add(parameters, "aoPower", 1.0, 10.0);
+      gui.add(parameters, "bloom");
+      gui.add(parameters, "bloomRadius", 0.0, 2.0);
+      gui.add(parameters, "bloomStrength", 0.0, 5.0);
+      gui.add(parameters, "bloomThreshold", 0.0, 1.0);
+      gui.add(parameters, "toneMapping");
+      gui.add(parameters, "exposure", 0.0, 10.0);
+      gui.add(parameters, "whitePoint", 0.0, 10.0);
       gui.add(parameters, "debug");
     }
     
@@ -609,8 +657,20 @@
       //// composite pass
       
       deferred.scene.overrideMaterial = deferred.compositeMaterial;
-      renderer.render(deferred.scene, deferred.camera);
+      renderer.render(deferred.scene, deferred.camera, post.rtScene);
       deferred.scene.overrideMaterial = null;
+      
+      //// Bloom + Tone Mapping
+      
+      post.bloomPass.enabled = parameters.bloom;
+      post.bloomPass.strength = parameters.bloomStrength;
+      post.bloomPass.radius = parameters.bloomRadius;
+      post.bloomPass.threshold = parameters.bloomThreshold;
+      post.toneMapPass.enabled = parameters.toneMapping;
+      post.toneMapPass.uniforms.exposure.value = parameters.exposure;
+      post.toneMapPass.uniforms.whitePoint.value = parameters.whitePoint;
+      post.copyPass.enabled = !parameters.toneMapping;
+      post.composer.render();
       
       //// view pass
       
