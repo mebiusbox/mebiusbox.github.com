@@ -209,9 +209,8 @@
     vec4 diffuseRGBA = texture2D(tDiffuse, vUv);
     vec4 roughnessRGBA = texture2D(tRoughness, vUv);
     vec3 Nn = perturbNormalArb(-vViewPosition, normalize(vNormal), dHdxy_fwd());
-    gl_FragData[0] = vec4(Nn * 0.5 + 0.5, vHPosition.z / vHPosition.w);
+    gl_FragData[0] = vec4(Nn * 0.5 + 0.5, 0.0);
     gl_FragData[1] = vec4(diffuseRGBA.xyz, roughnessRGBA.r);
-    gl_FragData[2] = packDepthToRGBA(vHPosition.z / vHPosition.w);
   }
   </script>
   
