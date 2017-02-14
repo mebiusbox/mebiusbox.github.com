@@ -391,7 +391,7 @@
       finalColor += irradiance * NoL * (cdiff2 + cspec2);
     
       vec3 indirect_irradiance = getLightProbeIndirectIrradiance(Nn, GGXRoughnessToBlinnExponent(roughnessFactor), 10) * PI;
-      vec3 diffIBL = indirect_irradiance * cdiff;
+      vec3 diffIBL = indirect_irradiance * cdiff2;
       finalColor += diffIBL;
       
       // float NoV = saturate(dot(Nn, viewDir));
