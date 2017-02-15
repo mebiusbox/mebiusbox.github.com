@@ -47,13 +47,19 @@
   <!-- <script src="js/three.min.js"></script> -->
   <script src="js/three.min.r81dev.mrt.js"></script>
   <script src="js/BufferGeometryUtils.js"></script>
+  <!-- <script src="js/Encodings.js"></script> -->
   <script src="js/libs/dat.gui.min.js"></script>
   <script src="js/libs/stats.min.js"></script>
   <script src="js/controls/OrbitControls.js"></script>
   <script src="js/shaders/CopyShader.js"></script>
+  <!-- <script src="js/loaders/RGBELoader.js"></script> -->
+  <!-- <script src="js/loaders/HDRCubeTextureLoader.js"></script> -->
+  <!-- <script src="js/pmrem/PMREMGenerator.js"></script> -->
+  <!-- <script src="js/pmrem/PMREMCubeUVPacker.js"></script> -->
   <script src="pixy/ScreenSprite.js"></script>
   <script src="pixy/shaders/LuminosityShader.js"></script>
   <script src="pixy/shaders/ToneMapShader.js"></script>
+  <script src="pixy/shaders/AAShader.js"></script>
   <script src="pixy/post/Composer.js"></script>
   <script src="pixy/post/UnrealBloomPass.js"></script>
   
@@ -135,8 +141,8 @@
       vNormal = normalize(normalMatrix * normal);
       vUv = uv;
     }
-    </script>
-    <script id="geometryFrag" type="x-shader/x-fragment">
+  </script>
+  <script id="geometryFrag" type="x-shader/x-fragment">
     #extension GL_EXT_draw_buffers : require
     precision mediump float;
     uniform float metalness;
@@ -150,7 +156,6 @@
       gl_FragData[1] = vec4(vec3(0.25, 0.4, 0.75), roughness);
     }
   </script>
-  
   <script id="lightVert" type="x-shader/x-vertex">
     #extension GL_EXT_draw_buffers : require
     uniform mat4 projectionMatrix;
@@ -172,18 +177,40 @@
     #define RECIPROCAL_PI 0.31830988618
     #define saturate(x) clamp(x, 0.0, 1.0)
     float pow2(const in float x) { return x*x; }
+    float rcp(const in float x) { return 1.0/x; }
+    //-----------------------------------------------------
     vec3 transformDirection(in vec3 dir, in mat4 matrix) {
       return normalize((matrix * vec4(dir, 0.0)).xyz);
     }
     vec3 inverseTransformDirection(in vec3 dir, in mat4 matrix) {
       return normalize((vec4(dir, 0.0) * matrix).xyz);
     }
+    //-----------------------------------------------------
     vec4 GammaToLinear(in vec4 value, in float gammaFactor) {
       return vec4(pow(value.xyz, vec3(gammaFactor)), value.w);
     }
     vec4 LinearToGamma(in vec4 value, in float gammaFactor) {
       return vec4(pow(value.xyz, vec3(1.0/gammaFactor)), value.w);
     }
+    vec4 RGBEToLinear(in vec4 value) {
+      return vec4(value.rgb * exp2(value.a * 255.0 - 128.0), 1.0);
+    }
+    vec4 LinearToRGBE(in vec4 value) {
+      float maxComponent = max(max(value.r, value.g), value.b);
+      float fExp = clamp(ceil(log2(maxComponent)), -128.0, 127.0);
+      return vec4(value.rgb / exp2(fExp), (fExp + 128.0) / 255.0);
+    }
+    // reference: http://iwasbeingirony.blogspot.ca/2010/06/difference-between-rgbm-and-rgbd.html
+    vec4 RGBMToLinear(in vec4 value, in float maxRange) {
+      return vec4(value.rgb * value.a * maxRange, 1.0);
+    }
+    vec4 LinearToRGBM(in vec4 value, in float maxRange) {
+      float maxRGB = max(max(value.r, value.g), value.b);
+      float M = clamp(maxRGB / maxRange, 0.0, 1.0);
+      M = ceil(M * 255.0) / 255.0;
+      return vec4(value.rgb / (M * maxRange), M);
+    }
+    //-----------------------------------------------------
     // #define NUM_POINT_LIGHT 300
     struct PointLight {
       vec3 position;
@@ -203,10 +230,11 @@
     uniform sampler2D gbuf0; // [rgb-] normal [---w] metalness
     uniform sampler2D gbuf1; // [rgb-] albedo [---w] roughness
     uniform sampler2D tDepth;
-    uniform samplerCube tEnvCube;
+    uniform samplerCube tEnvMap;
+    uniform int envMapEncoding;
+    uniform bool orenNayerEnable;
     uniform vec3 diffuseColor;
     varying vec2 vUv;
-    
     
     // [ Lazarov 2013 "Getting More Physical in Call of Duty: Black Ops II" ]
     // Adaptation to fit our G term
@@ -241,25 +269,50 @@
     }
     
     vec3 getLightProbeIndirectIrradiance(const in vec3 N, const in float blinnShininessExponent, const in int maxMipLevel) {
-      // return textureCube(tEnvCube, N, float(maxMipLevel)).rgb * reflectionStrength;
-      // return GammaToLinear(textureCube(tEnvCube, N, float(maxMipLevel)), 2.2).rgb * reflectionStrength;
-      return GammaToLinear(textureCubeLodEXT(tEnvCube, N, float(maxMipLevel)), 2.2).rgb * reflectionStrength;
+      if (envMapEncoding == 1) {
+        return RGBEToLinear(textureCubeLodEXT(tEnvMap, N, float(maxMipLevel))).rgb * reflectionStrength;
+      }
+      else if (envMapEncoding == 2) {
+        return RGBMToLinear(textureCubeLodEXT(tEnvMap, N, float(maxMipLevel)), 16.0).rgb * reflectionStrength;
+      }
+      // return textureCube(tEnvMap, N, float(maxMipLevel)).rgb * reflectionStrength;
+      // return GammaToLinear(textureCube(tEnvMap, N, float(maxMipLevel)), 2.2).rgb * reflectionStrength;
+      return GammaToLinear(textureCubeLodEXT(tEnvMap, N, float(maxMipLevel)), 2.2).rgb * reflectionStrength;
     }
     
     vec3 getLightProbeIndirectRadiance(const in vec3 V, const in vec3 N, const in float blinnShininessExponent, const in int maxMipLevel) {
       vec3 reflectVec = reflect(-V, N);
       float specMipLevel = getSpecularMipLevel(blinnShininessExponent, maxMipLevel);
-      // return textureCube(tEnvCube, reflectVec, specMipLevel).rgb * reflectionStrength;
-      // return GammaToLinear(textureCube(tEnvCube, reflectVec, specMipLevel), 2.2).rgb * reflectionStrength;
-      return GammaToLinear(textureCubeLodEXT(tEnvCube, reflectVec, specMipLevel), 2.2).rgb * reflectionStrength;
+      // return textureCube(tEnvMap, reflectVec, specMipLevel).rgb * reflectionStrength;
+      // return GammaToLinear(textureCube(tEnvMap, reflectVec, specMipLevel), 2.2).rgb * reflectionStrength;
+      
+      if (envMapEncoding == 1) {
+        return RGBEToLinear(textureCubeLodEXT(tEnvMap, reflectVec, specMipLevel)).rgb * reflectionStrength;
+      }
+      else if (envMapEncoding == 2) {
+        return RGBMToLinear(textureCubeLodEXT(tEnvMap, reflectVec, specMipLevel), 16.0).rgb * reflectionStrength;
+      }
+      
+      return GammaToLinear(textureCubeLodEXT(tEnvMap, reflectVec, specMipLevel), 2.2).rgb * reflectionStrength;
     }
-    
-    
-    
-    
     
     vec3 DiffuseLambert(vec3 diffuseColor) {
       return RECIPROCAL_PI * diffuseColor;
+    }
+    
+    // KANSAI CEDEC2015: Final Fantasy 零式HD リマスター
+    vec3 DiffuseOrenNayer(vec3 diffuseColor, float NoV, float NoL, float LoV, float roughness) {
+      float s = LoV - NoL * NoV;
+      float t = rcp(max(NoL, NoV) + 0.00001);
+      t = (s < 0.0) ? 1.0 : t;
+      float st = s*t;
+      
+      // ラフネスが 0.0 ～ 1.0 になるように限定すると高速近似可能
+      // 参照：A tiny improvement of Oren-Nayer reflectance model
+      // http://mimosa-pudica.net/improved-oren-nayar.html
+      float a = rcp((PI * 0.5 - 2.0/3.0) * roughness + PI);
+      float b = roughness * a;
+      return diffuseColor * NoL * (a + b*st);
     }
     
     float D_GGX(float a, float NoH) {
@@ -334,9 +387,16 @@
       float a = pow2(roughness);
       // "float a = max(0.001, roughness * roughness);",
       
-      vec3 cdiff = DiffuseLambert(albedoColor);
-      vec3 cspec = Specular(specularColor, H, V, L, a, NoL, NoV, NoH, VoH, LoV);
-      return Lc * NoL * (cdiff + cspec);
+      if (orenNayerEnable) {
+        vec3 cdiff = Lc * DiffuseOrenNayer(albedoColor, NoV, NoL, LoV, roughness);
+        vec3 cspec = Lc * NoL * Specular(specularColor, H, V, L, a, NoL, NoV, NoH, VoH, LoV);
+        return cdiff + cspec;
+      }
+      else {
+        vec3 cdiff = DiffuseLambert(albedoColor);
+        vec3 cspec = Specular(specularColor, H, V, L, a, NoL, NoV, NoH, VoH, LoV);
+        return Lc * NoL * (cdiff + cspec);
+      }
     }
   
     void main() {
@@ -380,15 +440,20 @@
       float LoV = saturate(dot(L, V));
       float a = pow2(roughnessFactor);
       vec3 cdiff2 = DiffuseLambert(cdiff);
+      if (orenNayerEnable) {
+        cdiff2 = irradiance * DiffuseOrenNayer(cdiff, NoV, NoL, LoV, roughnessFactor);
+      }
+      else {
+        cdiff2 = irradiance * NoL * DiffuseLambert(cdiff);
+      }
+      finalColor += cdiff2;
+      
       // vec3 cspec2 = Specular(cspec, H, V, L, a, NoL, NoV, NoH, VoH, LoV);
       float D = Specular_D(a, NoH);
       float G = Specular_G(a, NoV, NoL, NoH, VoH, LoV);
       vec3 F = Specular_F(cspec, V, H) / (4.0 * NoL * NoV + 1e-5);
-      if (debug >= 8.0) {
-        F = Specular_F_UE4(cspec, V, H) / (4.0 * NoL * NoV + 1e-5);
-      }
-      vec3 cspec2 = F*(G*D);
-      finalColor += irradiance * NoL * (cdiff2 + cspec2);
+      vec3 cspec2 = irradiance * NoL * F*(G*D);
+      finalColor += cspec2;
     
       vec3 indirect_irradiance = getLightProbeIndirectIrradiance(Nn, GGXRoughnessToBlinnExponent(roughnessFactor), 10) * PI;
       vec3 diffIBL = indirect_irradiance * cdiff2;
@@ -402,10 +467,10 @@
       gl_FragColor = LinearToGamma(vec4(finalColor, 1.0), 2.2);
       
       if (debug >= 7.0) {
-        gl_FragColor = LinearToGamma(vec4(diffIBL,1.0), 2.2);
+        gl_FragColor = LinearToGamma(vec4(specIBL,1.0), 2.2);
       }
       else if (debug >= 6.0) {
-        gl_FragColor = LinearToGamma(vec4(specIBL,1.0), 2.2);
+        gl_FragColor = LinearToGamma(vec4(diffIBL,1.0), 2.2);
       }
       else if (debug >= 5.0) {
         gl_FragColor.xyz = F;
@@ -417,10 +482,10 @@
         gl_FragColor.xyz = vec3(D);
       }
       else if (debug >= 2.0) {
-        gl_FragColor = LinearToGamma(vec4(cspec2 * irradiance * NoL, 1.0), 2.2);
+        gl_FragColor = LinearToGamma(vec4(cspec2, 1.0), 2.2);
       }
       else if (debug >= 1.0) {
-        gl_FragColor = LinearToGamma(vec4(cdiff2 * irradiance * NoL, 1.0), 2.2);
+        gl_FragColor = LinearToGamma(vec4(cdiff2, 1.0), 2.2);
       }
     }
   </script>
@@ -431,6 +496,7 @@
     var lights = [];
     var deferred = {};
     var post = {};
+    var cubeMaps = {};
     var stats;
     var clock = new THREE.Clock();
     var time = 0.0;
@@ -484,9 +550,6 @@
     }
     
     function initScene() {
-      
-      var color = new THREE.Color(0.25, 0.4, 0.75);
-      console.log(color.getHex().toString(16));
       
       scene = new THREE.Scene();
       scene.add(new THREE.AmbientLight(0x999999));
@@ -563,19 +626,70 @@
       deferred.gbuf.attachments[0].name = 'normal+metalness';
       deferred.gbuf.attachments[1].name = 'albedo+roughness';
       
-      var path = 'assets/textures/cube/skybox/';
-      var urls = [
-        path + 'px.jpg', path + 'nx.jpg',
-        path + 'py.jpg', path + 'ny.jpg',
-        path + 'pz.jpg', path + 'nz.jpg'
-      ];
-      textureCube = new THREE.CubeTextureLoader().load(urls, function(loadedCubeMap) {
-        loadedCubeMap.generateMipmaps = true;
-        loadedCubeMap.needsUpdate = true;
+      var genCubeUrls = function(prefix, postfix) {
+        return [
+          prefix + 'px' + postfix, prefix + 'nx' + postfix,
+          prefix + 'py' + postfix, prefix + 'ny' + postfix,
+          prefix + 'pz' + postfix, prefix + 'nz' + postfix
+        ];
+      };
+      
+      // var hdrUrls = genCubeUrls('assets/textures/cube/pisaHDR/', '.hdr');
+      // new THREE.HDRCubeTextureLoader().load(THREE.UnsignedByteType, hdrUrls, function(hdrCubeMap) {
+      //   // var pmremGenerator = new THREE.PMREMGenerator(hdrCubeMap);
+      //   // pmremGenerator.update(renderer);
+      //   // 
+      //   // var pmremCubeUVPacker = new THREE.PMREMCubeUVPacker(pmremGenerator.cubeLods);
+      //   // pmremCubeUVPacker.update(renderer);
+      //   // 
+      //   // cubeMaps.hdrRenderTarget = pmremCubeUVPacker.CubeUVRenderTarget;
+      //   cubeMaps.hdrTexture = hdrCubeMap;
+      // });
+      
+      var ldrUrls = genCubeUrls('assets/textures/cube/pisa/', '.png');
+      new THREE.CubeTextureLoader().load(ldrUrls, function(ldrCubeMap) {
+        // ldrCubeMap.encoding = THREE.GammaEncoding;
+        
+        // var pmremGenerator = new THREE.PMREMGenerator(ldrCubeMap);
+        // pmremGenerator.update(renderer);
+        // 
+        // var pmremCubeUVPacker = new THREE.PMREMCubeUVPacker(pmremGenerator.cubeLods);
+        // pmremCubeUVPacker.update(renderer);
+        // 
+        // cubeMaps.ldrRenderTarget = pmremCubeUVPacker.CubeUVRenderTarget;
+        cubeMaps.ldrTexture = ldrCubeMap;
         deferred.backScene = new THREE.Scene();
-        deferred.backScene.background = textureCube;
-        // console.log(maxLodLevel(loadedCubeMap.images[0].width, loadedCubeMap.images[0].height));
+        deferred.backScene.background = ldrCubeMap;
       });
+      
+      var rgbmUrls = genCubeUrls('assets/textures/cube/pisaRGBM16/', '.png');
+      new THREE.CubeTextureLoader().load(rgbmUrls, function(rgbmCubeMap) {
+        // rgbmCubeMap.encoding = THREE.RGBM16Encoding;
+        
+        // var pmremGenerator = new THREE.PMREMGenerator(rgbmCubeMap);
+        // pmremGenerator.update(renderer);
+        // 
+        // var pmremCubeUVPacker = new THREE.PMREMCubeUVPacker(pmremGenerator.cubeLods);
+        // pmremCubeUVPacker.update(renderer);
+        // 
+        // cubeMaps.rgbmRenderTarget = pmremCubeUVPacker.CubeUVRenderTarget;
+        cubeMaps.rgbmTexture = rgbmCubeMap;
+        onCubeMapChanged(parameters.envMap);
+      });
+      
+      // var path = 'assets/textures/cube/skybox/';
+      // var urls = [
+      //   path + 'px.jpg', path + 'nx.jpg',
+      //   path + 'py.jpg', path + 'ny.jpg',
+      //   path + 'pz.jpg', path + 'nz.jpg'
+      // ];
+      // textureCube = new THREE.CubeTextureLoader().load(urls, function(loadedCubeMap) {
+      //   loadedCubeMap.generateMipmaps = true;
+      //   loadedCubeMap.needsUpdate = true;
+      //   deferred.backScene = new THREE.Scene();
+      //   deferred.backScene.background = textureCube;
+      //   // console.log(maxLodLevel(loadedCubeMap.images[0].width, loadedCubeMap.images[0].height));
+      // });
       
       deferred.geometryMaterial = new THREE.RawShaderMaterial({
         uniforms: {
@@ -594,13 +708,15 @@
           gbuf0: { value: null },
           gbuf1: { value: null },
           tDepth: { value: null },
-          tEnvCube: { value: textureCube },
+          tEnvMap: { value: null },
+          envMapEncoding: { value: 0 },
           diffuseColor: { value: new THREE.Color() },
           reflectionStrength: { value: 1.0 },
           pointLights: { value: [] },
           viewInverse: { value: new THREE.Matrix4() },
           viewProjectionInverse: { value: new THREE.Matrix4() },
           viewPosition: { value: new THREE.Vector3() },
+          orenNayerEnable: { value: false },
           debug: { value: 0.0 },
         },
         vertexShader: document.getElementById("lightVert").innerHTML,
@@ -675,20 +791,27 @@
       
       post.rtScene = new THREE.WebGLRenderTarget(canvas.width, canvas.height, parsF);
       post.rtBloom = new THREE.WebGLRenderTarget(canvas.width, canvas.height, parsF);
+      post.rtSceneLDR = new THREE.WebGLRenderTarget(canvas.width, canvas.height, pars);
       post.copyPass = new PixShaderPass(THREE.CopyShader);
       post.copyPass.uniforms.tDiffuse.value = post.rtScene.texture;
       post.bloomPass = new PixUnrealBloomPass(new THREE.Vector2(canvas.width, canvas.height), 1.5, 0.4, 0.85);
       post.toneMapPass = new PixShaderPass(PixToneMapShader);
       post.toneMapPass.uniforms.tDiffuse.value = post.rtScene.texture;
+      post.antiAliasPass = new PixShaderPass(PixFXAAShader);
+      post.antiAliasPass.uniforms.resolution.value = new THREE.Vector2(1.0/canvas.width, 1.0/window.innerHeight);
+      post.antiAliasCopyPass = new PixShaderPass(THREE.CopyShader);
       post.composer = new PixComposer(renderer);
       post.composer.addPass(post.bloomPass, post.rtScene, post.rtScene);
-      post.composer.addPass(post.toneMapPass, post.rtScene, null);
-      post.composer.addPass(post.copyPass, post.rtScene, null);
+      post.composer.addPass(post.toneMapPass, post.rtScene, post.rtSceneLDR);
+      post.composer.addPass(post.copyPass, post.rtScene, post.rtSceneLDR);
+      post.composer.addPass(post.antiAliasPass, post.rtSceneLDR, null);
+      post.composer.addPass(post.antiAliasCopyPass, post.rtSceneLDR, null);
     }
     
     function initGui() {
       parameters = {
         color: 0x3f66bf,
+        orenNayer: false,
         reflectionStrength: 1.0,
         bloom: false,
         bloomStrength: 1.5, 
@@ -697,12 +820,16 @@
         toneMapping: false,
         exposure: 3.0,
         whitePoint: 5.0,
+        envMap: 'RGBM16',
+        antialias: false,
         debug: 'disable',
-        debugValue: 0.0
+        debugValue: 0.0,
+        pause: false
       };
       
       var gui = new dat.GUI();
       gui.addColor(parameters, "color");
+      gui.add(parameters, "orenNayer");
       gui.add(parameters, "reflectionStrength", 0.0, 2.0);
       gui.add(parameters, "bloom");
       gui.add(parameters, "bloomRadius", 0.0, 2.0);
@@ -711,6 +838,8 @@
       gui.add(parameters, "toneMapping");
       gui.add(parameters, "exposure", 0.0, 10.0);
       gui.add(parameters, "whitePoint", 0.0, 10.0);
+      gui.add(parameters, "envMap", [/*'HDR', */'LDR', 'RGBM16']).onChange(onCubeMapChanged);
+      gui.add(parameters, "antialias").name("FXAA");
       gui.add(parameters, "debug", ['disable','diffuse','specular','D','G','F','diffuseIBL','specularIBL']).onChange( function(value) {
         if (value == 'diffuse') {
           parameters.debugValue = 1.5;
@@ -739,6 +868,7 @@
         
         deferred.lightMaterial.uniforms.debug.value = parameters.debugValue;
       });
+      gui.add(parameters, "pause");
     }
     
     function onCameraPositionChanged() {
@@ -752,8 +882,25 @@
       render();
     }
     
+    function onCubeMapChanged(value) {
+      if (value == 'HDR') {
+        deferred.lightMaterial.uniforms.tEnvMap.value = cubeMaps.hdrTexture;
+        deferred.lightMaterial.uniforms.envMapEncoding.value = 1;
+      }
+      else if (value == 'LDR') {
+        deferred.lightMaterial.uniforms.tEnvMap.value = cubeMaps.ldrTexture;
+        deferred.lightMaterial.uniforms.envMapEncoding.value = 0;
+      }
+      else if (value == 'RGBM16') {
+        deferred.lightMaterial.uniforms.tEnvMap.value = cubeMaps.rgbmTexture;
+        deferred.lightMaterial.uniforms.envMapEncoding.value = 2;
+      }
+    }
+    
     function animate() {
-      time += clock.getDelta();
+      if (!parameters.pause) {
+        time += clock.getDelta();
+      }
       requestAnimationFrame(animate, renderer.domElement);
       render();
     }
@@ -811,6 +958,7 @@
       deferred.lightMaterial.uniforms.viewPosition.value.copy(camera.position);
       deferred.lightMaterial.uniforms.diffuseColor.value.setHex(parameters.color);
       deferred.lightMaterial.uniforms.reflectionStrength.value = parameters.reflectionStrength;
+      deferred.lightMaterial.uniforms.orenNayerEnable.value = parameters.orenNayer;
       
       // geometry pass
       
@@ -837,6 +985,8 @@
       post.toneMapPass.uniforms.exposure.value = parameters.exposure;
       post.toneMapPass.uniforms.whitePoint.value = parameters.whitePoint;
       post.copyPass.enabled = !parameters.toneMapping;
+      post.antiAliasPass.enabled = parameters.antialias;
+      post.antiAliasCopyPass.enabled = !parameters.antialias;
       post.composer.render();
       
       // view pass
