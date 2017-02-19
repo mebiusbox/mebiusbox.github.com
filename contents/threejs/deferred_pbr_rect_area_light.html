@@ -41,7 +41,7 @@
   <!-- <canvas id="canvas"></canvas> -->
   <div id="info">
     <a href="http://threejs.org" target="_blank">three.js</a>
-    <div>Deferred (PBR)</div>
+    <div>Deferred (PBR + Area Light)</div>
   </div>
   
   <!-- <script src="js/three.min.js"></script> -->
@@ -239,6 +239,7 @@
     #define NVERTS 4
     uniform vec3 lightverts[NVERTS];
     uniform mat4 lightMatrixWorld;
+    uniform int numVerts;
     uniform sampler2D gbuf0; // [rgb-] normal [---w] depth
     uniform sampler2D gbuf1; // [rgb-] albedo [---w] roughness
     uniform sampler2D tDepth;
@@ -353,7 +354,7 @@
       
       vec3 cdiff = DiffuseLambert(albedoColor);
       vec3 cspec = Specular(specularColor, H, V, L, a, NoL, NoV, NoH, VoH, LoV);
-      
+      // cdiff = vec3(0.0);
       return Lc * NoL * (cdiff + cspec);
     }
     
@@ -395,34 +396,53 @@
       vec4 lpos[NVERTS];
       vec3 lvec[NVERTS];
       
-      vec4 vViewPosition = cameraMatrix * vec4(worldPosition, 1.0);
-      
       // direction vectors from point to area light corners
       for (int i=0; i<NVERTS; ++i) {
-        lpos[i] = cameraMatrix * lightMatrixWorld * vec4(lightverts[i], 1.0); // in camera space
-        lvec[i] = normalize(lpos[i].xyz - vViewPosition.xyz); // dir from vertex to area light
+        lpos[i] = lightMatrixWorld * vec4(lightverts[i], 1.0); // in camera space
+        lvec[i] = normalize(lpos[i].xyz - worldPosition.xyz); // dir from vertex to area light
       }
       
       // bail if the point is on the wrong side of the light... there must be a better way...
       float tmp = dot(lvec[0], cross((lpos[2]-lpos[0]).xyz, (lpos[1]-lpos[0]).xyz));
-      if (tmp <= 0.0) {
+      // if (tmp <= 0.0) {
         // vector irradiance at point
         vec3 lightVec = vec3(0.0);
-        for (int i=0; i<NVERTS; ++i) {
-          vec3 v0 = lvec[i];
-          vec3 v1 = lvec[int(mod(float(i+1), float(NVERTS)))];
-          lightVec += acos(dot(v0,v1)) * normalize(cross(v0,v1));
+        if (numVerts == 3) {
+          for (int i=0; i<3; ++i) {
+            vec3 v0 = lvec[i];
+            vec3 v1 = lvec[int(mod(float(i+1), float(3)))];
+            if (tmp > 0.0) {
+              lightVec += acos(dot(v0,v1)) * normalize(cross(v1,v0));
+            }
+            else {
+              lightVec += acos(dot(v0,v1)) * normalize(cross(v0,v1));
+            }
+          }
+        }
+        else {
+          for (int i=0; i<NVERTS; ++i) {
+            vec3 v0 = lvec[i];
+            vec3 v1 = lvec[int(mod(float(i+1), float(NVERTS)))];
+            if (tmp > 0.0) {
+              lightVec += acos(dot(v0,v1)) * normalize(cross(v1,v0));
+            }
+            else {
+              lightVec += acos(dot(v0,v1)) * normalize(cross(v0,v1));
+            }
+          }
         }
         
         // irradiance factor at point
-        float factor = max(dot(lightVec, vNn), 0.0) / (2.0 * PI);
+        float factor = max(dot(lightVec, Nn), 0.0) / (2.0 * PI);
         
         vec3 irradiance = lightColor * lightIntensity * factor;
         irradiance *= PI; // punctual light
 
-        vec3 Ln = transformDirection(lightVec, viewInverse);
-        finalColor += ComputeLight(cdiff, cspec, Nn, roughnessFactor, Ln, irradiance, viewDir);
-      }
+        vec3 Ln = lightVec;
+        float NoL = saturate(dot(Nn, Ln));
+        finalColor += irradiance * NoL * DiffuseLambert(cdiff);
+        // finalColor += ComputeLight(cdiff, cspec, Nn, roughnessFactor, Ln, irradiance, viewDir);
+      // }
           
       vec3 indirect_irradiance = getLightProbeIndirectIrradiance(Nn, GGXRoughnessToBlinnExponent(roughnessFactor), 10) * PI;
       vec3 diffIBL = indirect_irradiance * DiffuseLambert(cdiff);
@@ -436,7 +456,8 @@
     }
   </script>
   <script>
-    var camera, scene, postScene, lightSphere, renderer, canvas;
+    var camera, scene, postScene, renderer, canvas;
+    var areaLight = {};
     var parameters;
     var numMaxLights = 300;
     var lights = [];
@@ -446,7 +467,7 @@
     var stats;
     var clock = new THREE.Clock();
     var time = 0.0;
-    var delta = 0.004 * 5.0;
+    var delta = 0.004 * 4.0;
     
     init();
     animate();
@@ -540,26 +561,41 @@
       postScene = new THREE.Scene();
       // postScene.add(new THREE.AxisHelper(20));
       
-      geometry = new THREE.PlaneGeometry(40, 25);
+      geometry = new THREE.PlaneGeometry(30, 25);
       var material = new THREE.MeshBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.7, side: THREE.FrontSide});
-      areaLight = new THREE.Mesh(geometry, material);
-      areaLight.position.set(0,25,-25);
-      areaLight.rotation.set(0,0,0);
-      areaLight.scale.set(1,1,1);
-      postScene.add(areaLight);
+      areaLight.rectMesh = new THREE.Mesh(geometry, material);
+      areaLight.rectMesh.position.set(0,25,-25);
+      areaLight.rectMesh.rotation.set(0,0,0);
+      areaLight.rectMesh.scale.set(1,1,1);
+      postScene.add(areaLight.rectMesh);
       
       // wireframe hack
-      areaLight.add(new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({wireframe: true})));
+      areaLight.rectMesh.add(new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({wireframe: true})));
+      
+      geometry = new THREE.Geometry();
+      geometry.vertices.push(new THREE.Vector3(0,10,0));
+      geometry.vertices.push(new THREE.Vector3(-10,-10,0));
+      geometry.vertices.push(new THREE.Vector3(10,-10,0));
+      geometry.faces.push(new THREE.Face3(0,1,2));
+      areaLight.triMesh = new THREE.Mesh(geometry, material);
+      areaLight.triMesh.position.set(0,25,-25);
+      areaLight.triMesh.rotation.set(0,0,0);
+      areaLight.triMesh.scale.set(1,1,1);
+      postScene.add(areaLight.triMesh);
+      
+      // wireframe hack
+      areaLight.triMesh.add(new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({wireframe: true})));
+      areaLight.triMesh.visible = false;
       
       // areaLight verts
-      var vertices = areaLight.geometry.vertices;
-      var verts = [];
-      verts.push(vertices[0]);
-      verts.push(vertices[1]);
-      verts.push(vertices[3]); // swap 2 & 3; must be in clockwise order; they are not
-      verts.push(vertices[2]);
-      deferred.lightMaterial.uniforms.lightverts.value = verts;
-      deferred.lightMaterial.uniforms.lightMatrixWorld.value = areaLight.matrixWorld;
+      var vertices = areaLight.rectMesh.geometry.vertices;
+      areaLight.verts = [];
+      areaLight.verts.push(vertices[0]);
+      areaLight.verts.push(vertices[1]);
+      areaLight.verts.push(vertices[3]); // swap 2 & 3; must be in clockwise order; they are not
+      areaLight.verts.push(vertices[2]);
+      deferred.lightMaterial.uniforms.lightverts.value = areaLight.verts;
+      deferred.lightMaterial.uniforms.lightMatrixWorld.value = areaLight.rectMesh.matrixWorld;
       
       // var geo = new THREE.SphereBufferGeometry(1.0, 8, 8);
       // var numLights = 200;
@@ -667,6 +703,7 @@
           lightIntensity: { value: 1.0 },
           lightverts: { value: [] },
           lightMatrixWorld: { value: new THREE.Matrix4() },
+          numVerts: { value: 4 },
         },
         vertexShader: document.getElementById("lightVert").innerHTML,
         fragmentShader: document.getElementById("lightFrag").innerHTML,
@@ -784,6 +821,7 @@
         toneMapping: true,
         exposure: 3.0,
         whitePoint: 5.0,
+        shape: "Rectangle",
         debug: false
       };
       
@@ -801,6 +839,31 @@
       gui.add(parameters, "toneMapping");
       gui.add(parameters, "exposure", 0.0, 10.0);
       gui.add(parameters, "whitePoint", 0.0, 10.0);
+      gui.add(parameters, "shape", ["Rectangle","Triangle"]).onChange(function(value) {
+        if (value === "Rectangle") {
+          var vertices = areaLight.rectMesh.geometry.vertices;
+          areaLight.verts[0] = vertices[0];
+          areaLight.verts[1] = vertices[1];
+          areaLight.verts[2] = vertices[3];
+          areaLight.verts[3] = vertices[2];
+          // deferred.lightMaterial.uniforms.lightverts.value = areaLight.verts;
+          deferred.lightMaterial.uniforms.lightMatrixWorld.value = areaLight.rectMesh.matrixWorld;
+          deferred.lightMaterial.uniforms.numVerts.value = 4;
+          areaLight.rectMesh.visible = true;
+          areaLight.triMesh.visible = false;
+        }
+        else if (value === "Triangle") {
+          var vertices = areaLight.triMesh.geometry.vertices;
+          areaLight.verts[0] = vertices[0];
+          areaLight.verts[1] = vertices[1];
+          areaLight.verts[2] = vertices[2];
+          // deferred.lightMaterial.uniforms.lightverts.value = areaLight.verts;
+          deferred.lightMaterial.uniforms.lightMatrixWorld.value = areaLight.triMesh.matrixWorld;
+          deferred.lightMaterial.uniforms.numVerts.value = 3;
+          areaLight.rectMesh.visible = false;
+          areaLight.triMesh.visible = true;
+        }
+      });
       // gui.add(parameters, "debug");
     }
     
@@ -818,8 +881,10 @@
     function animate() {
       // time += clock.getDelta();
       
-      areaLight.position.set(0,25+25*Math.sin(time), Math.min(-20*Math.cos(time),0));
-      areaLight.rotation.set(Math.min(time, Math.PI/2), 0, 0);
+      areaLight.rectMesh.position.set(0,25+25*Math.sin(time), Math.min(-22*Math.cos(time),0));
+      areaLight.rectMesh.rotation.set(Math.min(time, Math.PI/2), 0, 0);
+      areaLight.triMesh.position.set(0,25+25*Math.sin(time), Math.min(-22*Math.cos(time),0));
+      areaLight.triMesh.rotation.set(Math.min(time, Math.PI/2), 0, 0);
       
       time += delta;
       if (time > 4.4 || time < 0) delta = -delta;
