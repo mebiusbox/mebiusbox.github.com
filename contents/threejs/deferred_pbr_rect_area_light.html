@@ -206,6 +206,7 @@
     #define RECIPROCAL_PI 0.31830988618
     #define saturate(x) clamp(x, 0.0, 1.0)
     float pow2(const in float x) { return x*x; }
+    //------------------------------------------------------------
     vec3 transformDirection(in vec3 dir, in mat4 matrix) {
       return normalize((matrix * vec4(dir, 0.0)).xyz);
     }
@@ -218,6 +219,20 @@
     vec4 LinearToGamma(in vec4 value, in float gammaFactor) {
       return vec4(pow(value.xyz, vec3(1.0/gammaFactor)), value.w);
     }
+    //------------------------------------------------------------
+    // http://stackoverflow.com/questions/17021264/improved-area-lighting-in-webgl-threejs
+    // https://www.gamedev.net/topic/552315-glsl-area-light-implementation/
+    vec3 projectOnPlane(in vec3 p , in vec3 pc, in vec3 pn) {
+      float distance = dot(pn, p-pc);
+      return p - distance*pn;
+    }
+    int sideOfPlane(in vec3 p, in vec3 pc, in vec3 pn) {
+      if (dot(p-pc,pn) >= 0.0) return 1; else return 0;
+    }
+    vec3 linePlaneIntersect(in vec3 lp, in vec3 lv, in vec3 pc, in vec3 pn) {
+      return lp + lv*(dot(pn,pc-lp) / dot(pn,lv));
+    }
+    //------------------------------------------------------------
     // #define NUM_POINT_LIGHT 300
     struct PointLight {
       vec3 position;
@@ -229,6 +244,7 @@
     uniform float cutoffDistance;
     uniform float decayExponent;
     uniform float metalness;
+    uniform float roughness;
     uniform float reflectionStrength;
     uniform vec3 viewPosition;
     uniform mat4 viewInverse;
@@ -236,6 +252,8 @@
     uniform mat4 cameraMatrix;
     uniform vec3 lightColor;
     uniform float lightIntensity;
+    uniform float lightWidth;
+    uniform float lightHeight;
     #define NVERTS 4
     uniform vec3 lightverts[NVERTS];
     uniform mat4 lightMatrixWorld;
@@ -253,10 +271,10 @@
     // Adaptation to fit our G term
     // ref: https://www.unrealengine.com/blog/physically-based-shading-on-mobile - environmentBRDF for GGX on mobile
     // BRDF_Specular_GGX_Environment
-    vec3 EnvBRDFApprox(vec3 specularColor, float roughness, float NoV) {
+    vec3 EnvBRDFApprox(vec3 specularColor, float roughnessFactor, float NoV) {
       const vec4 c0 = vec4(-1, -0.0275, -0.572, 0.022);
       const vec4 c1 = vec4(1, 0.0425, 1.04, -0.04 );
-      vec4 r = roughness * c0 + c1;
+      vec4 r = roughnessFactor * c0 + c1;
       float a004 = min(r.x * r.x, exp2(-9.28 * NoV)) * r.x + r.y;
       vec2 AB = vec2(-1.04, 1.04) * a004 + r.zw;
       return specularColor * AB.x + AB.y;
@@ -341,7 +359,7 @@
       return F * (G * D);
     }
     
-    vec3 ComputeLight(vec3 albedoColor, vec3 specularColor, vec3 N, float roughness, vec3 L, vec3 Lc, vec3 V) {
+    vec3 ComputeLight(vec3 albedoColor, vec3 specularColor, vec3 N, float roughnessFactor, vec3 L, vec3 Lc, vec3 V) {
       // Compute some useful values
       float NoL = saturate(dot(N, L));
       float NoV = saturate(dot(N, V));
@@ -350,12 +368,27 @@
       float VoH = saturate(dot(V, H));
       float LoV = saturate(dot(L, V));
       
-      float a = pow2(roughness);
+      float a = pow2(roughnessFactor);
       
       vec3 cdiff = DiffuseLambert(albedoColor);
       vec3 cspec = Specular(specularColor, H, V, L, a, NoL, NoV, NoH, VoH, LoV);
       // cdiff = vec3(0.0);
       return Lc * NoL * (cdiff + cspec);
+    }
+    
+    vec3 Specular_AreaLight(vec3 specularColor, vec3 N, float roughnessFactor, vec3 L, vec3 Lc, vec3 V) {
+      // Compute some useful values
+      float NoL = saturate(dot(N, L));
+      float NoV = saturate(dot(N, V));
+      vec3 H = normalize(L+V);
+      float NoH = saturate(dot(N, H));
+      float VoH = saturate(dot(V, H));
+      float LoV = saturate(dot(L, V));
+      
+      float a = pow2(roughnessFactor);
+      
+      vec3 cspec = Specular(specularColor, H, V, L, a, NoL, NoV, NoH, VoH, LoV);
+      return Lc * NoL * cspec;
     }
     
     void main() {
@@ -373,38 +406,24 @@
       Nn = transformDirection(Nn, viewInverse);
       vec3 viewDir = normalize(viewPosition - worldPosition);
       
-      float roughnessFactor = max(0.04, diffuseRoughness.w);
+      float roughnessFactor = max(0.04, mix(diffuseRoughness.w, 1.0, roughness));
       vec3 cdiff = mix(diffuse.xyz, vec3(0.0), metalness);
       vec3 cspec = mix(vec3(0.04), diffuse.xyz, metalness);
 
       vec3 finalColor = vec3(0.0);
-      // for (int i=0; i<NUM_POINT_LIGHT; ++i) {
-      //   if (i >= numPointLights) break;
-      //   
-      //   vec3 L = pointLights[i].position - worldPosition;
-      //   float Ld = length(L);
-      //   if (cutoffDistance == 0.0 || Ld < cutoffDistance) {
-      //     
-      //     float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), decayExponent);
-      //     vec3 irradiance = pointLights[i].color * Lc;
-      //     irradiance *= PI; // punctual light
-      //     
-      //     vec3 Ln = normalize(L);
-      //     finalColor += ComputeLight(cdiff, cspec, Nn, roughnessFactor, Ln, irradiance, viewDir);
-      //   }
-      // }
+      
       vec4 lpos[NVERTS];
       vec3 lvec[NVERTS];
       
       // direction vectors from point to area light corners
       for (int i=0; i<NVERTS; ++i) {
-        lpos[i] = lightMatrixWorld * vec4(lightverts[i], 1.0); // in camera space
+        lpos[i] = lightMatrixWorld * vec4(lightverts[i], 1.0); // in world space
         lvec[i] = normalize(lpos[i].xyz - worldPosition.xyz); // dir from vertex to area light
       }
       
       // bail if the point is on the wrong side of the light... there must be a better way...
       float tmp = dot(lvec[0], cross((lpos[2]-lpos[0]).xyz, (lpos[1]-lpos[0]).xyz));
-      // if (tmp <= 0.0) {
+      if (tmp <= 0.0) {
         // vector irradiance at point
         vec3 lightVec = vec3(0.0);
         if (numVerts == 3) {
@@ -421,14 +440,21 @@
         }
         else {
           for (int i=0; i<NVERTS; ++i) {
-            vec3 v0 = lvec[i];
-            vec3 v1 = lvec[int(mod(float(i+1), float(NVERTS)))];
-            if (tmp > 0.0) {
-              lightVec += acos(dot(v0,v1)) * normalize(cross(v1,v0));
-            }
-            else {
-              lightVec += acos(dot(v0,v1)) * normalize(cross(v0,v1));
-            }
+            
+            vec3 L = lpos[i].xyz - worldPosition;
+            float Ld = length(L);
+            // if (cutoffDistance == 0.0 || Ld < cutoffDistance) {
+            //   float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), decayExponent);
+              float Lc = 1.0;
+              vec3 v0 = lvec[i];
+              vec3 v1 = lvec[int(mod(float(i+1), float(NVERTS)))];
+              if (tmp > 0.0) {
+                lightVec += acos(dot(v0,v1)) * normalize(cross(v1,v0)) * Lc;
+              }
+              else {
+                lightVec += acos(dot(v0,v1)) * normalize(cross(v0,v1)) * Lc;
+              }
+            // }
           }
         }
         
@@ -438,11 +464,55 @@
         vec3 irradiance = lightColor * lightIntensity * factor;
         irradiance *= PI; // punctual light
 
-        vec3 Ln = lightVec;
-        float NoL = saturate(dot(Nn, Ln));
+        float NoL = saturate(dot(Nn, lightVec));
         finalColor += irradiance * NoL * DiffuseLambert(cdiff);
         // finalColor += ComputeLight(cdiff, cspec, Nn, roughnessFactor, Ln, irradiance, viewDir);
       // }
+      
+      vec3 planePosition = (lpos[0].xyz + lpos[1].xyz + lpos[2].xyz + lpos[3].xyz) / 4.0;
+      float width = lightWidth;
+      float height = lightHeight;
+      // float width = abs(lightverts[0].x);
+      // float height = abs(lightverts[0].y);
+      vec3 planeNormal = (lightMatrixWorld * vec4(0,0,1,1)).xyz;
+      vec3 right = (lightMatrixWorld * vec4(1,0,0,1)).xyz;
+      planeNormal = normalize(planeNormal - planePosition);
+      right = normalize(right - planePosition);
+      vec3 up = normalize(cross(right, planeNormal));
+      
+      // project onto plane and calculate direction from center to the projection
+      vec3 projection = projectOnPlane(worldPosition, planePosition, planeNormal);
+      vec3 dir = projection - planePosition;
+      
+      // calculate distance from area
+      vec2 diagonal = vec2(dot(dir,right), dot(dir,up));
+      vec2 nearest2D = vec2(clamp(diagonal.x, -width, width), clamp(diagonal.y, -height, height));
+      vec3 nearestPointInside = planePosition + (right*nearest2D.x + up*nearest2D.y);
+      
+      float dist = distance(worldPosition, nearestPointInside); // real distance to area rectangle
+      vec3 Ln = normalize(nearestPointInside - worldPosition);
+      NoL = dot(planeNormal, -Ln);
+      if (NoL > 0.0 && sideOfPlane(worldPosition, planePosition, planeNormal) == 1) { // looking at the plane
+        // shoot a ray to calculate specular
+        vec3 R = reflect(-viewDir, Nn);
+        vec3 E = linePlaneIntersect(worldPosition, -R, planePosition, planeNormal);
+        float specAngle = dot(-R, planeNormal);
+        if (specAngle > 0.0) {
+          vec3 dirSpec = E - planePosition;
+          vec2 dirSpec2D = vec2(dot(dirSpec,right), dot(dirSpec,up));
+          vec2 nearestSpec2D = vec2(clamp(dirSpec2D.x,-width,width), clamp(dirSpec2D.y,-height,height));
+          
+          // float specFactor = 1.0 - clamp(length(nearestSpec2D-dirSpec2D) * shininess, 0.0, 1.0);
+          // finalColor += cspec * specFactor * specAngle;
+          
+          float Ld = length(nearestSpec2D-dirSpec2D);
+          if (Ld < cutoffDistance) {
+            float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), decayExponent);
+            finalColor += Specular_AreaLight(cspec, Nn, roughnessFactor, R, irradiance * Lc * specAngle, viewDir);
+          }
+        }
+      }
+    }
           
       vec3 indirect_irradiance = getLightProbeIndirectIrradiance(Nn, GGXRoughnessToBlinnExponent(roughnessFactor), 10) * PI;
       vec3 diffIBL = indirect_irradiance * DiffuseLambert(cdiff);
@@ -561,7 +631,7 @@
       postScene = new THREE.Scene();
       // postScene.add(new THREE.AxisHelper(20));
       
-      geometry = new THREE.PlaneGeometry(30, 25);
+      geometry = new THREE.PlaneGeometry(1, 1);
       var material = new THREE.MeshBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.7, side: THREE.FrontSide});
       areaLight.rectMesh = new THREE.Mesh(geometry, material);
       areaLight.rectMesh.position.set(0,25,-25);
@@ -586,6 +656,28 @@
       // wireframe hack
       areaLight.triMesh.add(new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({wireframe: true})));
       areaLight.triMesh.visible = false;
+      
+      //
+      // areaLight.center = new THREE.Mesh(
+      //   new THREE.SphereGeometry(2,16,16),
+      //   new THREE.MeshBasicMaterial({color:0xff0000}));
+      // postScene.add(areaLight.center);
+      // 
+      // areaLight.projection = new THREE.Mesh(
+      //   new THREE.SphereGeometry(2,16,16),
+      //   new THREE.MeshBasicMaterial({color:0x00ff00}));
+      // postScene.add(areaLight.projection);
+      // 
+      // areaLight.nearest = new THREE.Mesh(
+      //   new THREE.SphereGeometry(2,16,16),
+      //   new THREE.MeshBasicMaterial({color:0x0000ff}));
+      // postScene.add(areaLight.nearest);
+      // 
+      // areaLight.up = new THREE.Mesh(
+      //   new THREE.SphereGeometry(2,16,16),
+      //   new THREE.MeshBasicMaterial({color:0xffff00}));
+      // postScene.add(areaLight.up);
+      
       
       // areaLight verts
       var vertices = areaLight.rectMesh.geometry.vertices;
@@ -689,6 +781,7 @@
           tDepth: { value: null },
           tEnvCube: { value: textureCube },
           metalness: { value: 1.0 },
+          roughness: { value: 1.0 },
           reflectionStrength: { value: 1.0 },
           pointLights: { value: [] },
           numPointLights: { value: 0 },
@@ -701,6 +794,8 @@
           
           lightColor: { value: new THREE.Color() },
           lightIntensity: { value: 1.0 },
+          lightWidth: { value: 1.0 },
+          lightHeight: { value: 1.0 },
           lightverts: { value: [] },
           lightMatrixWorld: { value: new THREE.Matrix4() },
           numVerts: { value: 4 },
@@ -809,26 +904,31 @@
     function initGui() {
       parameters = {
         metalness: 0.5,
-        // cutoffDistance: 25.0,
-        // decay: 2.0,
+        roughness: 0.0,
+        cutoffDistance: 5.0,
+        decay: 2.0,
         // numLights: 50,
         bumpiness: 0.3,
         reflectionStrength: 0.05,
-        bloom: true,
+        bloom: false,
         bloomStrength: 1.5, 
         bloomRadius: 0.4,
         bloomThreshold: 0.85,
-        toneMapping: true,
+        toneMapping: false,
         exposure: 3.0,
         whitePoint: 5.0,
         shape: "Rectangle",
+        intensity: 1.0,
+        width: 30.0,
+        height: 25.0,
         debug: false
       };
       
       var gui = new dat.GUI();
       gui.add(parameters, "metalness", 0.0, 1.0);
-      // gui.add(parameters, "cutoffDistance", 1.0, 50.0);
-      // gui.add(parameters, "decay", 1.0, 10.0);
+      gui.add(parameters, "roughness", 0.0, 1.0);
+      gui.add(parameters, "cutoffDistance", 1.0, 50.0);
+      gui.add(parameters, "decay", 1.0, 10.0);
       // gui.add(parameters, "numLights", 1, 200);
       gui.add(parameters, "bumpiness", -1.0, 1.0);
       gui.add(parameters, "reflectionStrength", 0.0, 2.0);
@@ -839,7 +939,8 @@
       gui.add(parameters, "toneMapping");
       gui.add(parameters, "exposure", 0.0, 10.0);
       gui.add(parameters, "whitePoint", 0.0, 10.0);
-      gui.add(parameters, "shape", ["Rectangle","Triangle"]).onChange(function(value) {
+      gui.add(parameters, "shape", ["Rectangle"]).onChange(function(value) {
+      // gui.add(parameters, "shape", ["Rectangle","Triangle"]).onChange(function(value) {
         if (value === "Rectangle") {
           var vertices = areaLight.rectMesh.geometry.vertices;
           areaLight.verts[0] = vertices[0];
@@ -864,6 +965,9 @@
           areaLight.triMesh.visible = true;
         }
       });
+      gui.add(parameters, "intensity", 0.0, 10.0);
+      gui.add(parameters, "width", 1.0, 50.0);
+      gui.add(parameters, "height", 1.0, 50.0);
       // gui.add(parameters, "debug");
     }
     
@@ -885,6 +989,62 @@
       areaLight.rectMesh.rotation.set(Math.min(time, Math.PI/2), 0, 0);
       areaLight.triMesh.position.set(0,25+25*Math.sin(time), Math.min(-22*Math.cos(time),0));
       areaLight.triMesh.rotation.set(Math.min(time, Math.PI/2), 0, 0);
+      
+      // var vertices = areaLight.rectMesh.geometry.vertices;
+      // var planePosition = new THREE.Vector3(0);
+      // for (var i=0; i<4; ++i) {
+      //   planePosition.add(vertices[i]);
+      // }
+      // planePosition.multiplyScalar(1.0/4.0);
+      // planePosition.applyMatrix4(areaLight.rectMesh.matrixWorld);
+      // areaLight.center.position.copy(planePosition);
+      // 
+      // var planeNormal = new THREE.Vector3(0,0,5);
+      // planeNormal.applyMatrix4(areaLight.rectMesh.matrixWorld);
+      // // areaLight.projection.position.copy(planeNormal);
+      // 
+      // var right = new THREE.Vector3(5,0,0);
+      // right.applyMatrix4(areaLight.rectMesh.matrixWorld);
+      // // areaLight.nearest.position.copy(right);
+      // 
+      // planeNormal.sub(planePosition).normalize();
+      // right.sub(planePosition).normalize();
+      // var up = new THREE.Vector3().crossVectors(right, planeNormal).normalize();
+      // up.multiplyScalar(5).add(planePosition);
+      // // areaLight.up.position.copy(up);
+      // 
+      // var p = new THREE.Vector3(10,15,0);
+      // var proj = p.clone();
+      // proj.sub(planePosition);
+      // var distance = proj.dot(planeNormal);
+      // proj.copy(planeNormal);
+      // proj.multiplyScalar(distance);
+      // proj.subVectors(p, proj);
+      // areaLight.projection.position.copy(proj);
+      // 
+      // var halfW = Math.abs(vertices[0].x);
+      // var halfH = Math.abs(vertices[0].h);
+      // var nearestOffset = new THREE.Vector3().subVectors(proj, planePosition);
+      // var nx = nearestOffset.dot(right);
+      // nx = Math.max(nx, -halfW);
+      // nx = Math.min(nx, halfW);
+      // var ny = nearestOffset.dot(up);
+      // ny = Math.max(ny, -halfH);
+      // ny = Math.min(ny, halfH);
+      // var nearest = planePosition.clone();
+      // nearest.add(nearestOffset.copy(right).multiplyScalar(nx));
+      // nearest.add(nearestOffset.copy(up).multiplyScalar(ny));
+      // areaLight.nearest.position.copy(nearest);
+      // 
+      // var viewDir = camera.getWorldDirection();
+      // var normal = new THREE.Vector3(0,1,0);
+      // var reflect = viewDir.clone().reflect(normal);
+      // var v = new THREE.Vector3();
+      // var d1 = v.subVectors(planePosition, new THREE.Vector3(0)).dot(planeNormal);
+      // var d2 = planeNormal.dot(reflect);
+      // var E = v.copy(reflect).multiplyScalar(d1/d2)
+      // // areaLight.up.position.copy(reflect).multiplyScalar(10).add(p);
+      // areaLight.up.position.copy(E);
       
       time += delta;
       if (time > 4.4 || time < 0) delta = -delta;
@@ -940,14 +1100,20 @@
       
       // deferred.lightMaterial.uniforms.numPointLights.value = lights.length;
       // deferred.lightMaterial.uniforms.numPointLights.value = parameters.numLights;
-      // deferred.lightMaterial.uniforms.cutoffDistance.value = parameters.cutoffDistance;
-      // deferred.lightMaterial.uniforms.decayExponent.value = parameters.decay;
+      deferred.lightMaterial.uniforms.cutoffDistance.value = parameters.cutoffDistance;
+      deferred.lightMaterial.uniforms.decayExponent.value = parameters.decay;
       deferred.lightMaterial.uniforms.viewInverse.value.copy(camera.matrixWorld);
       deferred.lightMaterial.uniforms.viewProjectionInverse.value.getInverse(viewProjection);
       deferred.lightMaterial.uniforms.viewPosition.value.copy(camera.position);
       deferred.lightMaterial.uniforms.cameraMatrix.value.getInverse(camera.matrixWorld);
       deferred.lightMaterial.uniforms.metalness.value = parameters.metalness;
+      deferred.lightMaterial.uniforms.roughness.value = parameters.roughness;
       deferred.lightMaterial.uniforms.reflectionStrength.value = parameters.reflectionStrength;
+      deferred.lightMaterial.uniforms.lightIntensity.value = parameters.intensity;
+      areaLight.rectMesh.scale.set(parameters.width, parameters.height, 1);
+      deferred.lightMaterial.uniforms.lightWidth.value = parameters.width*0.5; // half
+      deferred.lightMaterial.uniforms.lightHeight.value = parameters.height*0.5; // half
+
 
       //// geometry pass
       
