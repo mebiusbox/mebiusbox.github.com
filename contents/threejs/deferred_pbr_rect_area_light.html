@@ -233,15 +233,86 @@
       return lp + lv*(dot(pn,pc-lp) / dot(pn,lv));
     }
     //------------------------------------------------------------
+    // Real-time Collision Detection
     vec3 closestPointPToRay(in vec3 p, in vec3 start, in vec3 dir) {
       float t = max(dot(p-start, dir) / dot(dir,dir), 0.0);
       return start + dir*t;
     }
     vec3 closestPointPToSegment(in vec3 p, in vec3 a, in vec3 b) {
       vec3 ab = b-a;
-      float t = clamp(dot(p-a, ab) / dot(ab,ab), 0.0, 1.0);
-      return a + ab*t;
+      float t = dot(p-a,ab);
+      if (t <= 0.0) {
+        return a;
+      }
+      else {
+        float denom = dot(ab,ab);
+        if (t >= denom) {
+          return b;
+        }
+        
+        return a + ab*(t/denom);
+      }
+      // vec3 ab = b-a;
+      // float t = clamp(dot(p-a, ab) / dot(ab,ab), 0.0, 1.0);
+      // return a + ab*t;
     }
+    
+    vec3 closestPointPToTriangle(in vec3 p, in vec3 a, in vec3 b, in vec3 c) {
+      // Check if P in vertex region outside A
+      vec3 ap = p-a;
+      vec3 ab = b-a;
+      vec3 ac = c-a;
+      float d1 = dot(ab,ap);
+      float d2 = dot(ac,ap);
+      if (d1 <= 0.0 && d2 <= 0.0) {
+        return a; // voronoi=0. barycentric coordinates (1,0,0)
+      }
+      
+      vec3 bp = p-b;
+      
+      // Check if P in vertex region outside B
+      float d3 = dot(ab,bp);
+      float d4 = dot(ac,bp);
+      if (d3 >= 0.0 && d4 <= d3) {
+        return b; // voronoi=1. barycentric coordinates (0,1,0)
+      }
+      
+      // Check if P in edge region of AB,k if so return projection of P onto AB
+      float vc = d1*d4 - d3*d2;
+      if (vc <= 0.0 && d1 >= 0.0 && d3 <= 0.0) {
+        // float v = d1/(d1-d3)
+        return a + ab * (d1/(d1-d3)); // voronoi=2. barycentric coordinates (1-v,v,0)
+      }
+      
+      // Check if P in vertex region outside C
+      vec3 cp = p-c;
+      float d5 = dot(ab, cp);
+      float d6 = dot(ac, cp);
+      if (d6 >= 0.0 && d5 <= d6) {
+        return c; // voronoi=3. barycentric coordinates (0,0,1)
+      }
+      
+      // Check if P in edge region of AC, if so return projection of P onto AC
+      float vb = d5*d2 - d1*d6;
+      if (vb <= 0.0 && d2 >= 0.0 && d6 <= 0.0) {
+        // float w = d2/(d2-d6)
+        return a + ac * (d2/(d2-d6)); // voronoi=4. barycentric cooridnates (1-w,w,0)
+      }
+      
+      // Check if P in edge region of BC, if so return projection of P onto BC
+      float va = d3*d6 - d5*d4;
+      if (va <= 0.0 && (d4-d3) >= 0.0 && (d5-d6) >= 0.0) {
+        // float w = (d4-d3)/(d4-d3+d5-d6)
+        return b + (c-b) * ((d4-d3)/(d4-d3+d5-d6)); // voronoi=5. barycentric coordinates (0,1-w,w)
+      }
+      
+      // P inside face region. Compute Q through its barycentric coordinates (u,v,w)
+      float denom = 1.0 / (va+vb+vc);
+      float v = vb * denom;
+      float w = vc * denom;
+      return a + ab*v + ac*w; // voronoi=6
+    }
+    
     int pointInTriangle(in vec3 p, in vec3 a, in vec3 b, in vec3 c) {
       a -= p;
       b -= p;
@@ -290,49 +361,7 @@
     // area light
     // http://jsfiddle.net/hh74z2ft/1/
     
-    // [ Lazarov 2013 "Getting More Physical in Call of Duty: Black Ops II" ]
-    // Adaptation to fit our G term
-    // ref: https://www.unrealengine.com/blog/physically-based-shading-on-mobile - environmentBRDF for GGX on mobile
-    // BRDF_Specular_GGX_Environment
-    vec3 EnvBRDFApprox(vec3 specularColor, float roughnessFactor, float NoV) {
-      const vec4 c0 = vec4(-1, -0.0275, -0.572, 0.022);
-      const vec4 c1 = vec4(1, 0.0425, 1.04, -0.04 );
-      vec4 r = roughnessFactor * c0 + c1;
-      float a004 = min(r.x * r.x, exp2(-9.28 * NoV)) * r.x + r.y;
-      vec2 AB = vec2(-1.04, 1.04) * a004 + r.zw;
-      return specularColor * AB.x + AB.y;
-    }
-    
-    // three.js (bsdfs.glsl)
-    // source: http://simonstechblog.blogspot.ca/2011/12/microfacet-brdf.html
-    float GGXRoughnessToBlinnExponent(const in float ggxRoughness) {
-      return 2.0 / pow2(ggxRoughness + 0.0001) - 2.0;
-    }
-    
-    float BlinnExponentToGGXRoughness(const in float blinnExponent) {
-      return sqrt(2.0 / (blinnExponent + 2.0));
-    }
-    
-    // taken from here: http://casual-effects.blogspot.ca/2011/08/plausible-environment-lighting-in-two.html
-    float getSpecularMipLevel(const in float blinnShininessExponent, const in int maxMipLevel) {
-      float maxMipLevelScalar = float(maxMipLevel);
-      float desiredMipLevel = maxMipLevelScalar - 0.79248 - 0.5 * log2(pow2(blinnShininessExponent)+1.0);
-      
-      // clamp to allowable LOD ranges
-      return clamp(desiredMipLevel, 0.0, maxMipLevelScalar);
-    }
-    
-    vec3 getLightProbeIndirectIrradiance(const in vec3 N, const in float blinnShininessExponent, const in int maxMipLevel) {
-      return GammaToLinear(textureCubeLodEXT(tEnvCube, N, float(maxMipLevel)), 2.2).rgb * reflectionStrength;
-    }
-    
-    vec3 getLightProbeIndirectRadiance(const in vec3 V, const in vec3 N, const in float blinnShininessExponent, const in int maxMipLevel) {
-      vec3 reflectVec = reflect(-V, N);
-      float specMipLevel = getSpecularMipLevel(blinnShininessExponent, maxMipLevel);
-      return GammaToLinear(textureCubeLodEXT(tEnvCube, reflectVec, specMipLevel), 2.2).rgb * reflectionStrength;
-    }
-    
-    
+    //--------------------------------------------------
     vec3 DiffuseLambert(vec3 diffuseColor) {
       return RECIPROCAL_PI * diffuseColor;
     }
@@ -395,10 +424,9 @@
       
       vec3 cdiff = DiffuseLambert(albedoColor);
       vec3 cspec = Specular(specularColor, H, V, L, a, NoL, NoV, NoH, VoH, LoV);
-      // cdiff = vec3(0.0);
       return Lc * NoL * (cdiff + cspec);
     }
-    
+    //--------------------------------------------------
     vec3 Specular_AreaLight(vec3 specularColor, vec3 N, float roughnessFactor, vec3 L, vec3 Lc, vec3 V) {
       // Compute some useful values
       float NoL = saturate(dot(N, L));
@@ -413,7 +441,230 @@
       vec3 cspec = Specular(specularColor, H, V, L, a, NoL, NoV, NoH, VoH, LoV);
       return Lc * NoL * cspec;
     }
+    //--------------------------------------------------
+    vec3 ComputeAreaLight_Triangle(in vec3 albedoColor, in vec3 specularColor, in float roughnessFactor, in vec3 P, in vec3 N, in vec3 V) {
+      
+      vec3 finalColor = vec3(0);
+      vec4 lpos[3];
+      vec3 lvec[3];
+      
+      // direction vectors from point to area light corners
+      for (int i=0; i<3; ++i) {
+        lpos[i] = lightMatrixWorld * vec4(lightverts[i], 1.0); // in world space
+        lvec[i] = normalize(lpos[i].xyz - P); // dir from vertex to area light
+      }
+      
+      // bail if the point is on the wrong side of the light... there must be a better way...
+      float tmp = dot(lvec[0], cross((lpos[2]-lpos[0]).xyz, (lpos[1]-lpos[0]).xyz));
+      if (tmp > 0.0) return finalColor;
+      
+      // vector irradiance at point
+      vec3 lightVec = vec3(0.0);
+      for (int i=0; i<3; ++i) {
+        vec3 v0 = lvec[i];
+        vec3 v1 = lvec[int(mod(float(i+1), float(3)))];
+        // if (tmp > 0.0) { // double side
+        //   lightVec += acos(dot(v0,v1)) * normalize(cross(v1,v0));
+        // }
+        // else {
+          lightVec += acos(dot(v0,v1)) * normalize(cross(v0,v1));
+        // }
+      }
+      
+      // irradiance factor at point
+      float factor = max(dot(lightVec, N), 0.0) / (2.0 * PI);
+      
+      vec3 irradiance = lightColor * lightIntensity * factor;
+      irradiance *= PI; // punctual light
+      
+      
+      vec3 planePosition = (lpos[0].xyz + lpos[1].xyz + lpos[2].xyz) / 3.0;
+      vec3 planeNormal = (lightMatrixWorld * vec4(0,0,1,1)).xyz;
+      planeNormal = normalize(planeNormal - planePosition);
+      
+      // project onto plane and calculate direction from center to the projection
+      // vec3 projection = projectOnPlane(P, planePosition, planeNormal);
+      
+      // calculate distance from area
+      // vec3 nearestPointInside = closestPointPToTriangle(projection, lpos[0].xyz, lpos[1].xyz, lpos[2].xyz);
+      // float Ld = distance(P, nearestPointInside);
+      // if (cutoffDistance == 0.0 || Ld < cutoffDistance) {
+      //   float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), 2.0);
+        // float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), decayExponent);
+        float NoL = saturate(dot(N, lightVec));
+        finalColor += irradiance * NoL * DiffuseLambert(albedoColor);
+      //   finalColor += irradiance * NoL * Lc * DiffuseLambert(albedoColor);
+      // }
+      
+      /// SPECULAR
+      
+      // shoot a ray to calculate specular
+      vec3 R = reflect(-V, N);
+      vec3 E = linePlaneIntersect(P, -R, planePosition, planeNormal);
+      float specAngle = dot(-R, planeNormal);
+      if (specAngle > 0.0) {
+        
+        if (pointInTriangle(E, lpos[0].xyz, lpos[1].xyz, lpos[2].xyz) == 1) {
+          finalColor += Specular_AreaLight(specularColor, N, roughnessFactor, R, irradiance * specAngle, V);
+        }
+        else {
+          vec3 nearestPointInside = closestPointPToTriangle(E, lpos[0].xyz, lpos[1].xyz, lpos[2].xyz);
+          float Ld = length(nearestPointInside-E);
+          // vec3 cp1 = closestPointPToSegment(E, lpos[0].xyz, lpos[1].xyz);
+          // vec3 cp2 = closestPointPToSegment(E, lpos[1].xyz, lpos[2].xyz);
+          // vec3 cp3 = closestPointPToSegment(E, lpos[2].xyz, lpos[0].xyz);
+          // float cpd1 = length(cp1 - E);
+          // float cpd2 = length(cp2 - E);
+          // float cpd3 = length(cp3 - E);
+          // float Ld = min(cpd1, min(cpd2, cpd3));
+          // float Ld = cpd1;
+          // if (cpd2 < cpd1 && cpd2 < cpd3) {
+          //   Ld = cpd2;
+          // }
+          // else if (cpd3 < cpd1 && cpd3 < cpd2) {
+          //   Ld = cpd3;
+          // }
+          if (cutoffDistance == 0.0 || Ld < cutoffDistance) {
+            float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), decayExponent);
+            finalColor += Specular_AreaLight(specularColor, N, roughnessFactor, R, irradiance * Lc * specAngle, V);
+          }
+        }
+      }
+      return finalColor;
+    }
+    //--------------------------------------------------
+    vec3 ComputeAreaLight_Rectangle(in vec3 albedoColor, in vec3 specularColor, in float roughnessFactor, in vec3 P, in vec3 N, in vec3 V) {
+      vec3 finalColor = vec3(0);
+      vec4 lpos[NVERTS];
+      vec3 lvec[NVERTS];
+      
+      // direction vectors from point to area light corners
+      for (int i=0; i<NVERTS; ++i) {
+        lpos[i] = lightMatrixWorld * vec4(lightverts[i], 1.0); // in world space
+        lvec[i] = normalize(lpos[i].xyz - P); // dir from vertex to area light
+      }
+      
+      // bail if the point is on the wrong side of the light... there must be a better way...
+      float tmp = dot(lvec[0], cross((lpos[2]-lpos[0]).xyz, (lpos[1]-lpos[0]).xyz));
+      if (tmp > 0.0) return finalColor;
+      
+      // vector irradiance at point
+      vec3 lightVec = vec3(0.0);
+      for (int i=0; i<NVERTS; ++i) {
+        vec3 v0 = lvec[i];
+        vec3 v1 = lvec[int(mod(float(i+1), float(NVERTS)))];
+        // if (tmp > 0.0) { // double side
+        //   lightVec += acos(dot(v0,v1)) * normalize(cross(v1,v0));
+        // }
+        // else {
+          lightVec += acos(dot(v0,v1)) * normalize(cross(v0,v1));
+        // }
+      }
+      
+      // irradiance factor at point
+      float factor = max(dot(lightVec, N), 0.0) / (2.0 * PI);
+      
+      vec3 irradiance = lightColor * lightIntensity * factor;
+      irradiance *= PI; // punctual light
+      
+      
+      vec3 planePosition = (lpos[0].xyz + lpos[1].xyz + lpos[2].xyz + lpos[3].xyz) / 4.0;
+      float width = lightWidth;
+      float height = lightHeight;
+      vec3 planeNormal = (lightMatrixWorld * vec4(0,0,1,1)).xyz;
+      vec3 right = (lightMatrixWorld * vec4(1,0,0,1)).xyz;
+      planeNormal = normalize(planeNormal - planePosition);
+      right = normalize(right - planePosition);
+      vec3 up = normalize(cross(right, planeNormal));
+      
+      // project onto plane and calculate direction from center to the projection
+      // vec3 projection = projectOnPlane(P, planePosition, planeNormal);
+      // vec3 dir = projection - planePosition;
+      
+      // calculate distance from area
+      // vec2 diagonal = vec2(dot(dir,right), dot(dir,up));
+      // vec2 nearest2D = vec2(clamp(diagonal.x, -width, width), clamp(diagonal.y, -height, height));
+      // vec3 nearestPointInside = planePosition + (right*nearest2D.x + up*nearest2D.y);
+      
+      // float Ld = distance(P, nearestPointInside); // real distance to area rectangle
+      // if (cutoffDistance == 0.0 || Ld < cutoffDistance) {
+      //   float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), 2.0);
+        float NoL = saturate(dot(N, lightVec));
+        finalColor += irradiance * NoL * DiffuseLambert(albedoColor);
+      // }
+      
+      // shoot a ray to calculate specular
+      vec3 R = reflect(-V, N);
+      vec3 E = linePlaneIntersect(P, -R, planePosition, planeNormal);
+      float specAngle = dot(-R, planeNormal);
+      if (specAngle > 0.0) {
+        vec3 dirSpec = E - planePosition;
+        vec2 dirSpec2D = vec2(dot(dirSpec,right), dot(dirSpec,up));
+        vec2 nearestSpec2D = vec2(clamp(dirSpec2D.x,-width,width), clamp(dirSpec2D.y,-height,height));
+        
+        float Ld = length(nearestSpec2D-dirSpec2D);
+        if (cutoffDistance == 0.0 || Ld < cutoffDistance) {
+          float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), decayExponent);
+          finalColor += Specular_AreaLight(specularColor, N, roughnessFactor, R, irradiance * Lc * specAngle, V);
+        }
+      }
+      
+      return finalColor;
+    }
+    //--------------------------------------------------
+    // [ Lazarov 2013 "Getting More Physical in Call of Duty: Black Ops II" ]
+    // Adaptation to fit our G term
+    // ref: https://www.unrealengine.com/blog/physically-based-shading-on-mobile - environmentBRDF for GGX on mobile
+    // BRDF_Specular_GGX_Environment
+    vec3 EnvBRDFApprox(vec3 specularColor, float roughnessFactor, float NoV) {
+      const vec4 c0 = vec4(-1, -0.0275, -0.572, 0.022);
+      const vec4 c1 = vec4(1, 0.0425, 1.04, -0.04 );
+      vec4 r = roughnessFactor * c0 + c1;
+      float a004 = min(r.x * r.x, exp2(-9.28 * NoV)) * r.x + r.y;
+      vec2 AB = vec2(-1.04, 1.04) * a004 + r.zw;
+      return specularColor * AB.x + AB.y;
+    }
     
+    // three.js (bsdfs.glsl)
+    // source: http://simonstechblog.blogspot.ca/2011/12/microfacet-brdf.html
+    float GGXRoughnessToBlinnExponent(const in float ggxRoughness) {
+      return 2.0 / pow2(ggxRoughness + 0.0001) - 2.0;
+    }
+    
+    float BlinnExponentToGGXRoughness(const in float blinnExponent) {
+      return sqrt(2.0 / (blinnExponent + 2.0));
+    }
+    
+    // taken from here: http://casual-effects.blogspot.ca/2011/08/plausible-environment-lighting-in-two.html
+    float getSpecularMipLevel(const in float blinnShininessExponent, const in int maxMipLevel) {
+      float maxMipLevelScalar = float(maxMipLevel);
+      float desiredMipLevel = maxMipLevelScalar - 0.79248 - 0.5 * log2(pow2(blinnShininessExponent)+1.0);
+      
+      // clamp to allowable LOD ranges
+      return clamp(desiredMipLevel, 0.0, maxMipLevelScalar);
+    }
+    
+    vec3 getLightProbeIndirectIrradiance(const in vec3 N, const in float blinnShininessExponent, const in int maxMipLevel) {
+      return GammaToLinear(textureCubeLodEXT(tEnvCube, N, float(maxMipLevel)), 2.2).rgb * reflectionStrength;
+    }
+    
+    vec3 getLightProbeIndirectRadiance(const in vec3 V, const in vec3 N, const in float blinnShininessExponent, const in int maxMipLevel) {
+      vec3 reflectVec = reflect(-V, N);
+      float specMipLevel = getSpecularMipLevel(blinnShininessExponent, maxMipLevel);
+      return GammaToLinear(textureCubeLodEXT(tEnvCube, reflectVec, specMipLevel), 2.2).rgb * reflectionStrength;
+    }
+    
+    vec3 ComputeDiffuseIBL(in vec3 albedoColor, in float roughnessFactor, in vec3 N) {
+      vec3 irradiance = getLightProbeIndirectIrradiance(N, GGXRoughnessToBlinnExponent(roughnessFactor), 10) * PI;
+      return irradiance * DiffuseLambert(albedoColor);
+    }
+    
+    vec3 ComputeSpecularIBL(in vec3 specularColor, in float roughnessFactor, in vec3 N, in vec3 V) {
+      float NoV = saturate(dot(N, V));
+      vec3 radiance = getLightProbeIndirectRadiance(V, N, GGXRoughnessToBlinnExponent(roughnessFactor), 10);
+      return radiance * EnvBRDFApprox(specularColor, roughnessFactor, NoV);
+    }
+    //--------------------------------------------------
     void main() {
       vec4 normalDepth = texture2D(gbuf0, vUv);
       if (normalDepth.x + normalDepth.y + normalDepth.z == 0.0) discard;
@@ -425,7 +676,6 @@
       vec4 HPos = viewProjectionInverse * vec4(vUv*2.0-1.0, depth, 1.0);
       vec3 worldPosition = HPos.xyz / HPos.w;
       vec3 Nn = normalDepth.xyz * 2.0 - 1.0;
-      vec3 vNn = Nn;
       Nn = transformDirection(Nn, viewInverse);
       vec3 viewDir = normalize(viewPosition - worldPosition);
       
@@ -435,182 +685,15 @@
 
       vec3 finalColor = vec3(0.0);
       
-      vec4 lpos[NVERTS];
-      vec3 lvec[NVERTS];
-      
-      // direction vectors from point to area light corners
-      for (int i=0; i<NVERTS; ++i) {
-        lpos[i] = lightMatrixWorld * vec4(lightverts[i], 1.0); // in world space
-        lvec[i] = normalize(lpos[i].xyz - worldPosition.xyz); // dir from vertex to area light
-      }
-      
-      // bail if the point is on the wrong side of the light... there must be a better way...
-      float tmp = dot(lvec[0], cross((lpos[2]-lpos[0]).xyz, (lpos[1]-lpos[0]).xyz));
-      if (tmp <= 0.0) {
-        // vector irradiance at point
-        vec3 lightVec = vec3(0.0);
-        if (numVerts == 3) {
-          for (int i=0; i<3; ++i) {
-            vec3 v0 = lvec[i];
-            vec3 v1 = lvec[int(mod(float(i+1), float(3)))];
-            if (tmp > 0.0) {
-              lightVec += acos(dot(v0,v1)) * normalize(cross(v1,v0));
-            }
-            else {
-              lightVec += acos(dot(v0,v1)) * normalize(cross(v0,v1));
-            }
-          }
-        }
-        else {
-          for (int i=0; i<NVERTS; ++i) {
-            
-            vec3 L = lpos[i].xyz - worldPosition;
-            float Ld = length(L);
-            // if (cutoffDistance == 0.0 || Ld < cutoffDistance) {
-            //   float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), decayExponent);
-              float Lc = 1.0;
-              vec3 v0 = lvec[i];
-              vec3 v1 = lvec[int(mod(float(i+1), float(NVERTS)))];
-              if (tmp > 0.0) {
-                lightVec += acos(dot(v0,v1)) * normalize(cross(v1,v0)) * Lc;
-              }
-              else {
-                lightVec += acos(dot(v0,v1)) * normalize(cross(v0,v1)) * Lc;
-              }
-            // }
-          }
-        }
-        
-        // irradiance factor at point
-        float factor = max(dot(lightVec, Nn), 0.0) / (2.0 * PI);
-        
-        vec3 irradiance = lightColor * lightIntensity * factor;
-        irradiance *= PI; // punctual light
-
-        float NoL = saturate(dot(Nn, lightVec));
-        finalColor += irradiance * NoL * DiffuseLambert(cdiff);
-        // finalColor += ComputeLight(cdiff, cspec, Nn, roughnessFactor, Ln, irradiance, viewDir);
-      // }
-      
       if (numVerts == 3) {
-        vec3 planePosition = (lpos[0].xyz + lpos[1].xyz + lpos[2].xyz) / 3.0;
-        vec3 planeNormal = (lightMatrixWorld * vec4(0,0,1,1)).xyz;
-        planeNormal = normalize(planeNormal - planePosition);
-        
-        // project onto plane and calculate direction from center to the projection
-        vec3 projection = projectOnPlane(worldPosition, planePosition, planeNormal);
-        vec3 dir = projection - planePosition;
-        
-        // calculate distance from area
-        vec3 cp1 = closestPointPToSegment(projection, lpos[0].xyz, lpos[1].xyz);
-        vec3 cp2 = closestPointPToSegment(projection, lpos[1].xyz, lpos[2].xyz);
-        vec3 cp3 = closestPointPToSegment(projection, lpos[2].xyz, lpos[0].xyz);
-        float cpd1 = length(cp1 - projection);
-        float cpd2 = length(cp2 - projection);
-        float cpd3 = length(cp3 - projection);
-        vec3 nearestPointInside = cp1;
-        if (cpd2 < cpd1 && cpd2 < cpd3) {
-          nearestPointInside = cp2;
-        }
-        else if (cpd3 < cpd1 && cpd3 < cpd2) {
-          nearestPointInside = cp3;
-        }
-        
-        float dist = distance(worldPosition, nearestPointInside); // real distance to area rectangle
-        vec3 Ln = normalize(nearestPointInside - worldPosition);
-        NoL = dot(planeNormal, -Ln);
-      if (NoL > 0.0 && sideOfPlane(worldPosition, planePosition, planeNormal) == 1) { // looking at the plane
-          // shoot a ray to calculate specular
-          vec3 R = reflect(-viewDir, Nn);
-          vec3 E = linePlaneIntersect(worldPosition, -R, planePosition, planeNormal);
-          float specAngle = dot(-R, planeNormal);
-          if (specAngle > 0.0) {
-            
-            if (pointInTriangle(E, lpos[0].xyz, lpos[1].xyz, lpos[2].xyz) == 1) {
-              finalColor += Specular_AreaLight(cspec, Nn, roughnessFactor, R, irradiance * specAngle, viewDir);
-            }
-            else {
-              cp1 = closestPointPToSegment(E, lpos[0].xyz, lpos[1].xyz);
-              cp2 = closestPointPToSegment(E, lpos[1].xyz, lpos[2].xyz);
-              cp3 = closestPointPToSegment(E, lpos[2].xyz, lpos[0].xyz);
-              cpd1 = length(cp1 - E);
-              cpd2 = length(cp2 - E);
-              cpd3 = length(cp3 - E);
-              float Ld = cpd1;
-              if (cpd2 < cpd1 && cpd2 < cpd3) {
-                Ld = cpd2;
-              }
-              else if (cpd3 < cpd1 && cpd3 < cpd2) {
-                Ld = cpd3;
-              }
-              float d = length(lpos[0].xyz - worldPosition);
-              if (d < Ld) Ld = d;
-              d = length(lpos[1].xyz - worldPosition);
-              if (d < Ld) Ld = d;
-              d = length(lpos[2].xyz - worldPosition);
-              if (d < Ld) Ld = d;
-              if (Ld < cutoffDistance) {
-                float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), decayExponent);
-                finalColor += Specular_AreaLight(cspec, Nn, roughnessFactor, R, irradiance * Lc * specAngle, viewDir);
-              }
-            }
-          }
-        }
+        finalColor += ComputeAreaLight_Triangle(cdiff, cspec, roughnessFactor, worldPosition.xyz, Nn, viewDir);
       }
       else {
-        vec3 planePosition = (lpos[0].xyz + lpos[1].xyz + lpos[2].xyz + lpos[3].xyz) / 4.0;
-        float width = lightWidth;
-        float height = lightHeight;
-        // float width = abs(lightverts[0].x);
-        // float height = abs(lightverts[0].y);
-        vec3 planeNormal = (lightMatrixWorld * vec4(0,0,1,1)).xyz;
-        vec3 right = (lightMatrixWorld * vec4(1,0,0,1)).xyz;
-        planeNormal = normalize(planeNormal - planePosition);
-        right = normalize(right - planePosition);
-        vec3 up = normalize(cross(right, planeNormal));
-        
-        // project onto plane and calculate direction from center to the projection
-        vec3 projection = projectOnPlane(worldPosition, planePosition, planeNormal);
-        vec3 dir = projection - planePosition;
-        
-        // calculate distance from area
-        vec2 diagonal = vec2(dot(dir,right), dot(dir,up));
-        vec2 nearest2D = vec2(clamp(diagonal.x, -width, width), clamp(diagonal.y, -height, height));
-        vec3 nearestPointInside = planePosition + (right*nearest2D.x + up*nearest2D.y);
-        
-        float dist = distance(worldPosition, nearestPointInside); // real distance to area rectangle
-        vec3 Ln = normalize(nearestPointInside - worldPosition);
-        NoL = dot(planeNormal, -Ln);
-        if (NoL > 0.0 && sideOfPlane(worldPosition, planePosition, planeNormal) == 1) { // looking at the plane
-          // shoot a ray to calculate specular
-          vec3 R = reflect(-viewDir, Nn);
-          vec3 E = linePlaneIntersect(worldPosition, -R, planePosition, planeNormal);
-          float specAngle = dot(-R, planeNormal);
-          if (specAngle > 0.0) {
-            vec3 dirSpec = E - planePosition;
-            vec2 dirSpec2D = vec2(dot(dirSpec,right), dot(dirSpec,up));
-            vec2 nearestSpec2D = vec2(clamp(dirSpec2D.x,-width,width), clamp(dirSpec2D.y,-height,height));
-            
-            // float specFactor = 1.0 - clamp(length(nearestSpec2D-dirSpec2D) * shininess, 0.0, 1.0);
-            // finalColor += cspec * specFactor * specAngle;
-            
-            float Ld = length(nearestSpec2D-dirSpec2D);
-            if (Ld < cutoffDistance) {
-              float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), decayExponent);
-              finalColor += Specular_AreaLight(cspec, Nn, roughnessFactor, R, irradiance * Lc * specAngle, viewDir);
-            }
-          }
-        }
-    }
-  }
-          
-      vec3 indirect_irradiance = getLightProbeIndirectIrradiance(Nn, GGXRoughnessToBlinnExponent(roughnessFactor), 10) * PI;
-      vec3 diffIBL = indirect_irradiance * DiffuseLambert(cdiff);
-      finalColor += diffIBL;
+        finalColor += ComputeAreaLight_Rectangle(cdiff, cspec, roughnessFactor, worldPosition.xyz, Nn, viewDir);
+      }
       
-      float NoV = saturate(dot(Nn, viewDir));
-      vec3 radiance = getLightProbeIndirectRadiance(viewDir, Nn, GGXRoughnessToBlinnExponent(roughnessFactor), 10);
-      finalColor += radiance * EnvBRDFApprox(cspec, roughnessFactor, NoV);
+      finalColor += ComputeDiffuseIBL(cdiff, roughnessFactor, Nn);
+      finalColor += ComputeSpecularIBL(cspec, roughnessFactor, Nn, viewDir);
       
       gl_FragColor = LinearToGamma(vec4(finalColor, 1.0), 2.2);
     }
@@ -733,11 +816,10 @@
       areaLight.rectMesh.add(new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({wireframe: true})));
       
       var w = Math.sqrt(3);
-      var s = 10.0;
       geometry = new THREE.Geometry();
-      geometry.vertices.push(new THREE.Vector3(0,2*s,0));
-      geometry.vertices.push(new THREE.Vector3(-s*w,-s,0));
-      geometry.vertices.push(new THREE.Vector3(s*w,-s,0));
+      geometry.vertices.push(new THREE.Vector3(0,2,0));
+      geometry.vertices.push(new THREE.Vector3(-w,-1,0));
+      geometry.vertices.push(new THREE.Vector3(w,-1,0));
       geometry.faces.push(new THREE.Face3(0,1,2));
       areaLight.triMesh = new THREE.Mesh(geometry, material);
       areaLight.triMesh.position.set(0,25,-25);
@@ -763,7 +845,7 @@
       //   new THREE.SphereGeometry(2,16,16),
       //   new THREE.MeshBasicMaterial({color:0x0000ff}));
       // postScene.add(areaLight.nearest);
-      // 
+      
       // areaLight.up = new THREE.Mesh(
       //   new THREE.SphereGeometry(2,16,16),
       //   new THREE.MeshBasicMaterial({color:0xffff00}));
@@ -1009,17 +1091,20 @@
         exposure: 3.0,
         whitePoint: 5.0,
         shape: "Rectangle",
-        intensity: 1.0,
+        intensity: 3.0,
         width: 30.0,
         height: 25.0,
-        debug: false
+        size: 10.0,
+        rotation: 0.0,
+        debug: false,
+        pause: false,
       };
       
       var gui = new dat.GUI();
       gui.add(parameters, "metalness", 0.0, 1.0);
       gui.add(parameters, "roughness", 0.0, 1.0);
-      gui.add(parameters, "cutoffDistance", 1.0, 50.0);
-      gui.add(parameters, "decay", 1.0, 10.0);
+      gui.add(parameters, "cutoffDistance", 0.0, 100.0);
+      gui.add(parameters, "decay", 1.0, 50.0);
       // gui.add(parameters, "numLights", 1, 200);
       gui.add(parameters, "bumpiness", -1.0, 1.0);
       gui.add(parameters, "reflectionStrength", 0.0, 2.0);
@@ -1030,7 +1115,6 @@
       gui.add(parameters, "toneMapping");
       gui.add(parameters, "exposure", 0.0, 10.0);
       gui.add(parameters, "whitePoint", 0.0, 10.0);
-      // gui.add(parameters, "shape", ["Rectangle"]).onChange(function(value) {
       gui.add(parameters, "shape", ["Rectangle","Triangle"]).onChange(function(value) {
         if (value === "Rectangle") {
           var vertices = areaLight.rectMesh.geometry.vertices;
@@ -1057,8 +1141,11 @@
         }
       });
       gui.add(parameters, "intensity", 0.0, 10.0);
-      gui.add(parameters, "width", 1.0, 50.0);
-      gui.add(parameters, "height", 1.0, 50.0);
+      gui.add(parameters, "width", 1.0, 50.0).name("width(Rect)");
+      gui.add(parameters, "height", 1.0, 50.0).name("height(Rect)");
+      gui.add(parameters, "size", 1.0, 20.0).name("size(Triangle)");
+      gui.add(parameters, "rotation", 0.0, 360.0);
+      gui.add(parameters, "pause");
       // gui.add(parameters, "debug");
     }
     
@@ -1077,11 +1164,15 @@
       // time += clock.getDelta();
       
       areaLight.rectMesh.position.set(0,25+25*Math.sin(time), Math.min(-22*Math.cos(time),0));
-      areaLight.rectMesh.rotation.set(Math.min(time, Math.PI/2), 0, 0);
+      areaLight.rectMesh.rotation.set(Math.min(time, Math.PI/2), 0, THREE.Math.degToRad(parameters.rotation));
       areaLight.triMesh.position.set(0,25+25*Math.sin(time), Math.min(-22*Math.cos(time),0));
-      areaLight.triMesh.rotation.set(Math.min(time, Math.PI/2), 0, 0);
+      areaLight.triMesh.rotation.set(Math.min(time, Math.PI/2), 0, THREE.Math.degToRad(parameters.rotation));
+      areaLight.triMesh.scale.set(parameters.size, parameters.size, 1);
       
       // var vertices = areaLight.triMesh.geometry.vertices;
+      // areaLight.center.position.copy(vertices[0]).applyMatrix4(areaLight.triMesh.matrixWorld);
+      // areaLight.projection.position.copy(vertices[2]).applyMatrix4(areaLight.triMesh.matrixWorld);
+      // areaLight.nearest.position.copy(vertices[1]).applyMatrix4(areaLight.triMesh.matrixWorld);
       // var planePosition = new THREE.Vector3(0);
       // for (var i=0; i<3; ++i) {
       //   planePosition.add(vertices[i]);
@@ -1150,8 +1241,10 @@
       // // areaLight.up.position.copy(reflect).multiplyScalar(10).add(p);
       // areaLight.up.position.copy(E);
       
-      time += delta;
-      if (time > 4.4 || time < 0) delta = -delta;
+      if (!parameters.pause) {
+        time += delta;
+        if (time > 4.4 || time < 0) delta = -delta;
+      }
       
       requestAnimationFrame(animate, renderer.domElement);
       render();
