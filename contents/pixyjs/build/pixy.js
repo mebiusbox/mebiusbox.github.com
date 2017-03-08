@@ -72,11 +72,15 @@
 	  bumpiness: { value: 1.0 }
 	};
 
+	var castShadowFrag = "  float d = vShadowMapUV.z / vShadowMapUV.w;\r\n  gl_FragColor = packDepthToRGBA(d);";
+
+	var castShadowFragPars = "varying vec4 vShadowMapUV;";
+
 	var castShadowUniforms = {
 	  lightViewProjectionMatrix: { value: new THREE.Matrix4() }
 	};
 
-	var castShadowVert = "  vec4 hpos = lightViewProjectionMatrix * modelMatrix * vec4(position, 1.0);\r\nvShadowMapUV = hpos;";
+	var castShadowVert = "  vec4 hpos = lightViewProjectionMatrix * modelMatrix * vec4(position, 1.0);\r\n  vShadowMapUV = hpos;";
 
 	var castShadowVertPars = "uniform mat4 lightViewProjectionMatrix;\r\nvarying vec4 vShadowMapUV;";
 
@@ -116,7 +120,7 @@
 
 	var depthFragPars = "#include <packing>";
 
-	var depthShadowFrag = "  gl_FragColor.xyz = vec3(unpackRGBAToDepth(texture2D(tShadow, vUv)));\r\n// gl_FragColor.xyz = vec3(DecodeFloatRGBA(texture2D(tShadow, vUv)));\r\n// gl_FragColor.xyz = texture2D(tShadow, vUv).aaa;\r\n  gl_FragColor.a = 1.0;";
+	var depthShadowFrag = "  gl_FragColor.xyz = vec3(unpackRGBAToDepth(texture2D(tShadow, vUv)));\r\n// gl_FragColor.xyz = vec3(DecodeFloatRGBA(texture2D(tShadow, vUv)));\r\n// gl_FragColor.xyz = texture2D(tShadow, vUv).aaa;\r\n  // gl_FragColor.xyz = texture2D(tShadow, vUv).xyz;\r\n  gl_FragColor.a = 1.0;";
 
 	var depthShadowFragPars = "uniform sampler2D tShadow;";
 
@@ -192,7 +196,7 @@
 	var glassVert = "  vScreenPos.xy = vScreenPos.xy * 0.5 + (0.5 * hpos.w);";
 
 	var grassUniforms = {
-	  grassWindDirection: { value: new THREE.Vector3() },
+	  grassWindDirection: { value: new THREE.Vector3(1,0,0) },
 	  grassWindPower: { value: 1.0 },
 	  grassTime: { value: 0.0 }
 	};
@@ -305,6 +309,8 @@
 	  ]}
 	};
 
+	var lightsStandardDisneyFrag = "material.specularRoughness = roughnessFactor;\r\n\r\nfloat luminance = 0.3 * material.diffuseColor.x + 0.6 * material.diffuseColor.y + 0.1 * material.diffuseColor.z;\r\nvec3 tint = luminance > 0.0 ? material.diffuseColor / luminance : vec3(1.0);\r\nspecularColor = mix(0.5 * 0.08 * mix(vec3(1.0), tint, SpecularTint), material.diffuseColor, Metallic);\r\n\r\n//material.specularColor = mix(vec3(0.04), material.diffuseColor, metalnessFactor);\r\n//material.diffuseColor = material.diffuseColor * (1.0 - metalnessFactor);\r\nMetallic = metalnessFactor;";
+
 	var lightsStandardFrag = "material.specularRoughness = roughnessFactor;\r\nmaterial.specularColor = mix(vec3(0.04), material.diffuseColor, metalnessFactor);\r\nmaterial.diffuseColor = material.diffuseColor * (1.0 - metalnessFactor);";
 
 	var lineGlowFrag = "    float lineGlowDist = abs(dot(vWorldPosition, normalize(lineGlowPlane.xyz)) - lineGlowPlane.w);\r\n    reflectedLight.indirectSpecular += max(1.0 - lineGlowDist / lineGlowRange, 0.0) * lineGlowPower * lineGlowColor;";
@@ -369,7 +375,7 @@
 	  overlay5Scale: { value: 1.0 }
 	};
 
-	var packing = "// #include <packing>\r\nvec3 packNormalToRGB(const in vec3 normal) {\r\n  return normalize(normal) * 0.5 + 0.5;\r\n}\r\nvec3 unpackRGBToNormal(const in vec3 rgb) {\r\n  return 1.0 - 2.0 * rgb.xyz;\r\n}\r\n\r\nconst vec3 PackFactors = vec3(255.0, 65025.0, 16581375.0);\r\nconst vec4 UnpackFactors = vec4(1.0, 1.0 / PackFactors);\r\nconst float ShiftRight8 = 1.0 / 255.0;\r\n// const float PackUpscale = 256.0 / 255.0; // fraction -> 0..1 (including 1)\r\n// const float UnpackDownscale = 255.0 / 256.0; // 0..1 -> fraction (excluding 1)\r\n// const vec3 PackFactors = vec3(256.0, 65535.0, 16777216.0);\r\n// const vec4 UnpackFactors = UnpackDownscale / vec4(1.0, PackFactors);\r\n// const float ShiftRight8 = 1.0 / 256.0;\r\nvec4 packDepthToRGBA(float v) {\r\n  vec4 r = vec4(v, fract(PackFactors * v));\r\n  r.xyz -= r.yzw * ShiftRight8;\r\n//   return r * PackUpscale;\r\n  return r;\r\n}\r\n\r\nfloat unpackRGBAToDepth(vec4 rgba) {\r\n  return dot(rgba, UnpackFactors);\r\n}\r\n\r\n\r\n// NOTE: viewZ/eyeZ is < 0 when in front of the camera per OpenGL conventions\r\n\r\nfloat viewZToOrthographicDepth(const in float viewZ, const in float near, const in float far) {\r\n  return (viewZ + near) / (near - far);\r\n}\r\n\r\nfloat orthographicDepthToViewZ(const in float linearClipZ, const in float near, const in float far) {\r\n  return linearClipZ * (near - far) - near;\r\n}\r\n\r\nfloat viewZToPerspectiveDepth(const in float viewZ, const in float near, const in float far) {\r\n  return ((near + viewZ) * far) / ((far - near) * viewZ);\r\n}\r\n\r\nfloat perspectiveDepthToViewZ(const in float invClipZ, const in float near, const in float far) {\r\n  return (near * far) / ((far - near) * invClipZ - far);\r\n}";
+	var packing = "vec3 packNormalToRGB(const in vec3 normal) {\r\n  return normalize(normal) * 0.5 + 0.5;\r\n}\r\nvec3 unpackRGBToNormal(const in vec3 rgb) {\r\n  return 1.0 - 2.0 * rgb.xyz;\r\n}\r\n\r\nconst vec3 PackFactors = vec3(255.0, 65025.0, 16581375.0);\r\nconst vec4 UnpackFactors = vec4(1.0, 1.0 / PackFactors);\r\nconst float ShiftRight8 = 1.0 / 255.0;\r\n// const float PackUpscale = 256.0 / 255.0; // fraction -> 0..1 (including 1)\r\n// const float UnpackDownscale = 255.0 / 256.0; // 0..1 -> fraction (excluding 1)\r\n// const vec3 PackFactors = vec3(256.0, 65535.0, 16777216.0);\r\n// const vec4 UnpackFactors = UnpackDownscale / vec4(1.0, PackFactors);\r\n// const float ShiftRight8 = 1.0 / 256.0;\r\nvec4 packDepthToRGBA(float v) {\r\n  vec4 r = vec4(v, fract(PackFactors * v));\r\n  r.xyz -= r.yzw * ShiftRight8;\r\n//   return r * PackUpscale;\r\n  return r;\r\n}\r\n\r\nfloat unpackRGBAToDepth(vec4 rgba) {\r\n  return dot(rgba, UnpackFactors);\r\n}\r\n\r\n\r\n// NOTE: viewZ/eyeZ is < 0 when in front of the camera per OpenGL conventions\r\n\r\nfloat viewZToOrthographicDepth(const in float viewZ, const in float near, const in float far) {\r\n  return (viewZ + near) / (near - far);\r\n}\r\n\r\nfloat orthographicDepthToViewZ(const in float linearClipZ, const in float near, const in float far) {\r\n  return linearClipZ * (near - far) - near;\r\n}\r\n\r\nfloat viewZToPerspectiveDepth(const in float viewZ, const in float near, const in float far) {\r\n  return ((near + viewZ) * far) / ((far - near) * viewZ);\r\n}\r\n\r\nfloat perspectiveDepthToViewZ(const in float invClipZ, const in float near, const in float far) {\r\n  return (near * far) / ((far - near) * invClipZ - far);\r\n}";
 
 	var parallaxMapFrag = "  vec3 vv = vViewPosition * mat3(vTangent, vBinormal, -vNormal);\r\n  uv += (texture2D(tNormal, vUv).r * parallaxHeight * parallaxScale) * vv.xy;\r\n// uv += (texture2D(tNormal, vUv).a * parallaxHeight + parallaxScale) * vv.xy;";
 
@@ -484,6 +490,10 @@
 	  specularStrength: { value: 1.0 }
 	};
 
+	var standardDisneyFrag = "  vec3 X = vTangent;\r\n  vec3 Y = vBinormal;\r\n  float NoL = saturate(dot(N, L));\r\n  float NoV = saturate(dot(N, V));\r\n  vec3 H = normalize(L+V);\r\n  float NoH = saturate(dot(N, H));\r\n  float VoH = saturate(dot(V, H));\r\n  float LoV = saturate(dot(L, V));\r\n  float LoH = saturate(dot(L, H));\r\n  float a = max(0.001, pow2(material.specularRoughness));\r\n        \r\n  float luminance = 0.3 * material.diffuseColor.x + 0.6 * material.diffuseColor.y + 0.1 * material.diffuseColor.z;\r\n        \r\n  vec3 tint = luminance > 0.0 ? material.diffuseColor / luminance : vec3(1.0);\r\n  specularColor = mix(0.5 * 0.08 * mix(vec3(1.0), tint, SpecularTint), material.diffuseColor, Metallic);\r\n  vec3 CSheen = mix(vec3(1.0), tint, SheenTint);\r\n        \r\n  // Diffuse fresnel - go from 1 at normal incidence to .5 at grazing\r\n  // and mxi in diffuse retro-reflection based on roughness\r\n  float FL = F_Schlick_Disney(NoL);\r\n  float FV = F_Schlick_Disney(NoV);\r\n  float Fd90 = 0.5 + 2.0 * LoH * LoH * a;\r\n  float Fd = mix(1.0, Fd90, FL) * mix(1.0, Fd90, FV);\r\n        \r\n  // Based on Hanrahan-Krueger brdf approximation of isotropic bssrdf\r\n  // 1.25 scale is used to (roughly) preserve albedo\r\n  // Fss90 used to \"flatten\" retroreflection based on roughness\r\n  float Fss90 = LoH * LoH * a;\r\n  float Fss = mix(1.0, Fss90, FL) * mix(1.0, Fss90, FV);\r\n  float ss = 1.25 * (Fss * (1.0 / (NoL + NoV + 1e-5) - 0.5) + 0.5);\r\n        \r\n  // Specular\r\n  float aspect = sqrt(1.0 - Anisotropic * 0.9);\r\n  float ax = max(0.001, pow2(a) / aspect);\r\n  float ay = max(0.001, pow2(a) * aspect);\r\n  float Ds = GTR2_aniso(NoH, dot(H, X), dot(H, Y), ax, ay);\r\n  float FH = F_Schlick_Disney(LoH);\r\n  vec3 Fs = mix(specularColor, vec3(1.0), FH);\r\n  float roughg = pow2(a * 0.5 + 0.5);\r\n  float Gs = smithG_GGX(NoL , roughg) * smithG_GGX(NoV, roughg);\r\n        \r\n  // Sheen\r\n  vec3 Fsheen = FH * Sheen * CSheen;\r\n        \r\n  // Clearcoat (ior = 1.5 -> F0 = 0.04)\r\n  float Dr = GTR1(NoH, mix(0.1, 0.001, ClearcoatGloss));\r\n  float Fr = mix(0.04, 1.0, FH);\r\n  float Gr = smithG_GGX(NoL, 0.25) * smithG_GGX(NoV, 0.25);\r\n  diffuse = ((1.0 / PI) * mix(Fd, ss, Subsurface) * material.diffuseColor + Fsheen) * (1.0 - Metallic);\r\n  reflectedLight.directDiffuse += (diffuse + Gs*Fs*Ds + 0.25*Clearcoat*Gr*Fr*Dr) * NoL * Lc;\r\n  reflectedLight.directSpecular += (0.25*Clearcoat*Gr*Fr*Dr) * NoL * Lc;";
+
+	var standardDisneyFragPars = "uniform float Subsurface;\r\nuniform float SpecularTint;\r\nuniform float Anisotropic;\r\nuniform float Sheen;\r\nuniform float SheenTint;\r\nuniform float Clearcoat;\r\nuniform float ClearcoatGloss;\r\nfloat Metallic;";
+
 	var standardFrag = "  vec3 N = geometry.normal;\r\n  vec3 L = directLight.direction;\r\n  vec3 V = geometry.viewDir;\r\n\r\n  float NoL = saturate(dot(N, L));\r\n  float NoV = saturate(dot(N, V));\r\n  vec3 H = normalize(L+V);\r\n  float NoH = saturate(dot(N, H));\r\n  float VoH = saturate(dot(V, H));\r\n  float LoV = saturate(dot(L, V));\r\n          \r\n  float a = pow2(material.specularRoughness);\r\n\r\n  vec3 cdiff = DiffuseLambert(material.diffuseColor);\r\n  vec3 cspec = PBR_Specular_CookTorrance(material.specularColor, H, V, L, a, NoL, NoV, NoH, VoH, LoV);\r\n\r\n  vec3 irradiance = directLight.color * NoL;\r\n  irradiance *= PI; // punctual light\r\n\r\n  reflectedLight.directDiffuse += cdiff * irradiance;\r\n  reflectedLight.directSpecular += cspec * irradiance;";
 
 	var standardFragPars = "uniform float roughness;\r\nuniform float metalness;\r\n\r\nfloat PBR_Specular_D(float a, float NoH) {\r\n  // return D_BlinnPhong(a, NoH);\r\n  // return D_Beckmann(a, NoH);\r\n  return D_GGX(a, NoH);\r\n}\r\n\r\nfloat PBR_Specular_G(float a, float NoV, float NoL, float NoH, float VoH, float LoV) {\r\n  // return G_Implicit(a, NoV, NoL);\r\n  // return G_Neuman(a, NoV, NoL);\r\n  // return G_CookTorrance(a, NoV, NoL, NoH, VoH);\r\n  // return G_Keleman(a, NoV, NoL, LoV);\r\n  // return G_Smith_Beckmann(a, NoV, NoL);\r\n  // return G_Smith_GGX(a, NoV, NoL);\r\n  return G_Smith_Schlick_GGX(a, NoV, NoL);\r\n  // return G_SmithCorrelated_GGX(a, NoV, NoL);\r\n}\r\n\r\nvec3 PBR_Specular_F(vec3 specularColor, vec3 H, vec3 V) {\r\n  // return F_None(specularColor);\r\n  // return F_Schlick(specularColor, H, V);\r\n  return F_SchlickApprox(specularColor, saturate(dot(H,V)));\r\n  // return F_CookTorrance(specularColor, H, V);\r\n}\r\n\r\n// Calculates specular intensity according to the Cook - Torrance model\r\n// F: Fresnel - 入射角に対する反射光の量\r\n// D: Microfacet Distribution - 与えられた方向に向いているマイクロファセットの割合\r\n// G: Geometrical Attenuation - マイクロファセットの自己シャドウ\r\nvec3 PBR_Specular_CookTorrance(vec3 specularColor, vec3 H, vec3 V, vec3 L, float a, float NoL, float NoV, float NoH, float VoH, float LoV) {\r\n  float D = PBR_Specular_D(a, NoH);\r\n  float G = PBR_Specular_G(a, NoV, NoL, NoH, VoH, LoV);\r\n  vec3 F = PBR_Specular_F(specularColor, V, H) / (4.0 * NoL * NoV + 1e-5);\r\n  return F * (D*G);\r\n}\r\n";
@@ -592,6 +602,8 @@
 		bumpMapFrag: bumpMapFrag,
 		bumpMapFragPars: bumpMapFragPars,
 		bumpMapUniforms: bumpMapUniforms,
+		castShadowFrag: castShadowFrag,
+		castShadowFragPars: castShadowFragPars,
 		castShadowUniforms: castShadowUniforms,
 		castShadowVert: castShadowVert,
 		castShadowVertPars: castShadowVertPars,
@@ -668,6 +680,7 @@
 		lightsSpotFrag: lightsSpotFrag,
 		lightsSpotFragUnroll: lightsSpotFragUnroll,
 		lightsSpotUniforms: lightsSpotUniforms,
+		lightsStandardDisneyFrag: lightsStandardDisneyFrag,
 		lightsStandardFrag: lightsStandardFrag,
 		lineGlowFrag: lineGlowFrag,
 		lineGlowFragPars: lineGlowFragPars,
@@ -725,6 +738,8 @@
 		specularMapFragPars: specularMapFragPars,
 		specularMapUniforms: specularMapUniforms,
 		specularUniforms: specularUniforms,
+		standardDisneyFrag: standardDisneyFrag,
+		standardDisneyFragPars: standardDisneyFragPars,
 		standardFrag: standardFrag,
 		standardFragPars: standardFragPars,
 		standardOrenNayarFrag: standardOrenNayarFrag,
@@ -1583,17 +1598,17 @@
 	      
 	      codes.push("  vec4 mvPosition = viewMatrix * vec4(vWorldPosition, 1.0);");
 	      codes.push("  vec4 hpos = projectionMatrix * mvPosition;");
-	    }
 	    
-	    if (this._checkKeys(["+NORMALMAP","+ANISOTROPY","+OVERLAYNORMAL"])) {
-	      codes.push("  vNormal.xyz = inverseTransformDirection(objectNormal, modelMatrix);");
-	    }
-	    else {
-	      codes.push("  vNormal.xyz = normalMatrix * objectNormal;");
-	    }
+	      if (this._checkKeys(["+NORMALMAP","+ANISOTROPY","+OVERLAYNORMAL"])) {
+	        codes.push("  vNormal.xyz = inverseTransformDirection(objectNormal, modelMatrix);");
+	      }
+	      else {
+	        codes.push("  vNormal.xyz = normalMatrix * objectNormal;");
+	      }
 	    
-	    codes.push("  vViewPosition = -mvPosition.xyz;");
-	    codes.push("");
+	      codes.push("  vViewPosition = -mvPosition.xyz;");
+	      codes.push("");
+	    }
 	    
 	    // chunk here
 	    if (this._checkKeys(["+COLORMAP","+NORMALMAP","+BUMPMAP","+OVERLAY","+DEPTHSHADOW","+CLOUDS"])) {
@@ -2718,6 +2733,103 @@
 	  };
 	};
 
+	var ScreenSprite = function(material, canvas) {
+	  
+	  var sw = window.innerWidth;
+	  var sh = window.innerHeight;
+	  if (canvas) {
+	    sw = canvas.width;
+	    sh = canvas.height;
+	  }
+	  
+	  var scope = this;
+	  var frame = {
+	    x: 10, y: 10, width: sw, height: sh
+	  };
+	  
+	  var camera = new THREE.OrthographicCamera(-sw/2, sw/2, sh/2, -sh/2, 1, 10);
+	  camera.position.set(0,0,2);
+	  var scene = new THREE.Scene();
+	  var plane = new THREE.PlaneBufferGeometry(frame.width, frame.height);
+	  var mesh = new THREE.Mesh(plane, material);
+	  scene.add(mesh);
+	  
+	  function resetPosition() {
+	    scope.position.set(scope.position.x, scope.position.y);
+	  }
+	  
+	  // API
+	  
+	  // Set to false to disable displaying this sprite
+	  this.enabled = true;
+	  
+	  // Set the size of the displayed sprite on the HUD
+	  this.size = {
+	    width: frame.width,
+	    height: frame.height,
+	    set: function(width, height) {
+	      this.width = width;
+	      this.height = height;
+	      mesh.scale.set(this.width / frame.width, this.height / frame.height, 1);
+	      
+	      // Reset the position as it is off when we scale stuff
+	      resetPosition();
+	    }
+	  };
+	  
+	  // Set the position of the displayed sprite on the HUD
+	  this.position = {
+	    x: frame.x,
+	    y: frame.y,
+	    set: function(x,y) {
+	      this.x = x;
+	      this.y = y;
+	      var width = scope.size.width;
+	      var height = scope.size.height;
+	      mesh.position.set(-sw/2 + width / 2 + this.x, sh/2 - height/2 - this.y, 0);
+	    }
+	  };
+	  
+	  this.render = function(renderer) {
+	    if (this.enabled) {
+	      // console.log(camera);
+	      renderer.render(scene, camera);
+	    }
+	  };
+	  
+	  this.updateForWindowResize = function() {
+	    if (this.enabled) {
+	      sw = window.innerWidth;
+	      sh = window.innerHeight;
+	      camera.left = -window.innerWidth / 2;
+	      camera.right = window.innerWidth / 2;
+	      camera.top = window.innerHeight / 2;
+	      camera.bottom = -window.innerHeight / 2;
+	    }
+	  };
+	  
+	  this.updateForCanvasResize = function(canvas) {
+	    if (this.enabled) {
+	      sw = canvas.width;
+	      sh = canvas.height;
+	      camera.left = -canvas.width / 2;
+	      camera.right = canvas.width / 2;
+	      camera.top = canvas.height / 2;
+	      camera.bottom = -canvas.height / 2;
+	    }
+	  };
+	  
+	  this.update = function() {
+	    this.position.set(this.position.x, this.position.y);
+	    this.size.set(this.size.width, this.size.height);
+	  };
+	  
+	  // Force an update to set position/size
+	  this.update();
+	};
+
+	ScreenSprite.prototype.constructor = ScreenSprite;
+
 	// import './polyfills.js';
 	// export { ShaderLib } from './shaders/ShaderLib.js';
 
@@ -2729,6 +2841,7 @@
 	exports.Solar = Solar;
 	exports.Ocean = Ocean;
 	exports.HeightField = HeightField;
+	exports.ScreenSprite = ScreenSprite;
 	exports.any = any;
 	exports.all = all;
 	exports.radians = radians;
