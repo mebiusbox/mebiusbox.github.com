@@ -459,6 +459,17 @@
 
 	var screenVertPars = "varying vec4 vScreenPos;";
 
+	var skyDomeFrag = "  float h = normalize(vWorldPosition + offset).y;\r\n  reflectedLight.indirectDiffuse += mix(bottomColor, topColor, max(pow(max(h, 0.0), exponent), 0.0));";
+
+	var skyDomeFragPars = "uniform vec3 topColor;\r\nuniform vec3 bottomColor;\r\nuniform float offset;\r\nuniform float exponent;";
+
+	var skyDomeUniforms = {
+	  topColor: { value: new THREE.Color(0x0077ff) },
+	  bottomColor: { value: new THREE.Color(0xffffff) },
+	  offset: { value: 33 },
+	  exponent: { value: 0.6 }
+	};
+
 	var skyFrag = "  // https://github.com/SimonWallner/kocmoc-demo/blob/RTVIS/media/shaders/scattering.glsl\r\n\r\n  float sunfade = 1.0 - clamp(1.0 - exp((skySunPosition.y / 450000.0)), 0.0, 1.0);\r\n  // luminance = 1.0; // vPos.y / 450000.0 + 0.5; // skySunPosition.y / 450000.0 * 1.0 + 0.5\r\n  // reflectedLight.indirectDiffuse += vec3(sunfade);\",\r\n\r\n  float rayleighCoefficient = skyRayleigh - (1.0 * (1.0 - sunfade));\r\n\r\n  vec3 sunDirection = normalize(skySunPosition);\r\n\r\n  float sunE = sunIntensity(dot(sunDirection, up));\r\n\r\n  // extinction (absorbition + out scattering)\r\n  // rayleigh coefiiceneints\r\n  // vec3 betaR = totalRayleigh(lambda) * reyleighCoefficient;\r\n  vec3 betaR = simplifiedRayleigh() * rayleighCoefficient;\r\n\r\n  // mie coefficients\r\n  vec3 betaM = totalMie(lambda, K, skyTurbidity) * skyMieCoefficient;\r\n\r\n  // optical length\r\n  // cutoff angle at 90 to avoid singularity in next formula\r\n  float zenithAngle = acos(max(0.0, dot(up, -geometry.viewDir)));\r\n  float sR = rayleighZenithLength / (cos(zenithAngle) + 0.15 * pow(93.885 - ((zenithAngle * 180.0) / pi), -1.253));\r\n  float sM = mieZenithLength / (cos(zenithAngle) + 0.15 * pow(93.885 - ((zenithAngle * 180.0) / pi), -1.253));\r\n\r\n  // combined extinction factor\r\n  vec3 Fex = exp(-(betaR * sR + betaM * sM));\r\n\r\n  // in scattering\r\n\r\n  float cosTheta = dot(-geometry.viewDir, sunDirection);\r\n\r\n  // float rPhase = rayleighPhase(cosTheta);\r\n  float rPhase = rayleighPhase(cosTheta * 0.5 + 0.5);\r\n  vec3 betaRTheta = betaR * rPhase;\r\n\r\n  float mPhase = hgPhase(cosTheta, skyMieDirectionalG);\r\n  vec3 betaMTheta = betaM * mPhase;\r\n\r\n  // vec3 Lin = sunE * ((betaRTheta + betaMTheta) / (betaR + betaM)) * (1.0 - Fex);\r\n  vec3 Lin = pow(sunE * ((betaRTheta + betaMTheta) / (betaR + betaM)) * (1.0 - Fex), vec3(1.5));\r\n  Lin *= mix(vec3(1.0), pow(sunE * ((betaRTheta + betaMTheta) / (betaR + betaM)) * Fex, vec3(0.5)), clamp(pow(1.0 - dot(up, sunDirection), 5.0), 0.0, 1.0));\r\n\r\n  // nightsky\r\n  // float theta = acos(-geometry.viewDir.y); // elevation --> y-axis [-pi/2, pi/2]\r\n  // float phi = atan(-geometry.viewDir.z, -geometry.viewDir.x); // azimuth ---> x-axis [-pi/2, pi/2]\r\n  // vec2 uv = vec2(phi, theta) / vec2(2.0*pi, pi) + vec2(0.5, 0.0);\r\n  // vec3 L0 = texture2D(tSky, uv).rgb * Fex;\r\n  // vec3 L0 = texture2D(tSky, uv).rgb + 0.1 * Fex;\r\n  vec3 L0 = vec3(0.1) * Fex;\r\n\r\n  // composition + solar disc\r\n  // if (cosTheta > sunAngularDiameterCos) {\r\n  //   L0 += sunE * Fex;\r\n  // }\r\n  float sundisk = smoothstep(sunAngularDiameterCos, sunAngularDiameterCos + 0.00002, cosTheta);\r\n  // \"if (-geometry.viewDir.y > 0.0) {\r\n  L0 += (sunE * 19000.0 * Fex) * sundisk;\r\n\r\n  // vec3 whiteScale = 1.0 / Uncharted2ToneMapping(vec3(W));\r\n  vec3 whiteScale = 1.0 / Uncharted2Tonemap(vec3(W));\r\n  // vec3 whiteScale = Uncharted2Tonemap(vec3(toneMappingWhitePoint));\r\n\r\n  vec3 texColor = (Lin + L0);\r\n  texColor *= 0.04;\r\n  texColor += vec3(0.0, 0.001, 0.0025) * 0.3;\r\n\r\n  float g_fMaxLuminance = 1.0;\r\n  float fLumScaled = 0.1 / skyLuminance;\r\n  float fLumCompressed = (fLumScaled * (1.0 + (fLumScaled / (g_fMaxLuminance * g_fMaxLuminance)))) / (1.0 + fLumScaled);\r\n\r\n  float ExposureBias = fLumCompressed;\r\n\r\n  // vec3 curr = Uncharted2ToneMapping((log2(2.0 / pow(skyLuminance, 4.0))) * texColor);\r\n  vec3 curr = Uncharted2Tonemap((log2(2.0 / pow(skyLuminance, 4.0))) * texColor * toneMappingExposure);\r\n  vec3 color = curr * whiteScale;\r\n\r\n  reflectedLight.indirectDiffuse += pow(color, vec3(1.0 / (1.2 + (1.2 * sunfade))));\r\n  // reflectedLight.indirectDiffuse += vec3(uv.x, uv.y, 0.0);\r\n  // reflectedLight.indirectDiffuse += Lin + L0;\r\n  // reflectedLight.indirectDiffuse += texColor;\r\n  // reflectedLight.indirectDiffuse += L0;\r\n  // reflectedLight.indirectDiffuse += Lin;\r\n  // reflectedLight.indirectDiffuse += vec3(cosTheta);\r\n  // reflectedLight.indirectDiffuse += vec3(sundisk);\r\n  // reflectedLight.indirectDiffuse += vec3(max(dot(sunDirection, up), 0.0));\r\n  // reflectedLight.indirectDiffuse += vec3(sunE);";
 
 	var skyFragPars = "// https://github.com/SimonWallner/kocmoc-demo/blob/RTVIS/media/shaders/scattering.glsl\r\n\r\n// uniform sampler2D tSky;\r\nuniform float skyLuminance;\r\nuniform float skyTurbidity;\r\nuniform float skyRayleigh;\r\nuniform float skyMieCoefficient;\r\nuniform float skyMieDirectionalG;\r\nuniform vec3 skySunPosition;\r\n\r\n// constants for atmospheric scattering\r\nconst float e = 2.71828182845904523536028747135266249775724709369995957;\r\nconst float pi = 3.141592653589793238462643383279502884197169;\r\nconst float n = 1.0003; // refractive index of air\r\nconst float N = 2.545E25; // number of molecules per unit volume for air at 288.15K and 1013mb (sea level -45 celsius)\r\nconst float pn = 0.035; // depolatization factor for standard air\r\n\r\n// wavelength of used primaries, according to preetham\r\nconst vec3 lambda = vec3(680E-9, 550E-9, 450E-9);\r\n\r\n// mie stuff\r\n// K koefficient for the primaries\r\nconst vec3 K = vec3(0.686, 0.678, 0.666);\r\nconst float v = 4.0;\r\n\r\n// optical length at zenith for molecules\r\nconst float rayleighZenithLength = 8.4E3;\r\nconst float mieZenithLength = 1.25E3;\r\nconst vec3 up = vec3(0.0, 1.0, 0.0);\r\n\r\nconst float EE = 1000.0; \r\nconst float sunAngularDiameterCos = 0.999956676946448443553574619906976478926848692873900859324; // 66 arc seconds -> degrees, and the cosine of that\r\n\r\n// earth shadow hack\r\nconst float cutoffAngle = pi / 1.95;\r\nconst float steepness = 1.5;\r\n\r\n// Compute total rayleigh coefficient for a set of wavelengths (usually the tree primaries)\r\n// @param lambda wavelength in m\r\nvec3 totalRayleigh(vec3 lambda) {\r\n  return (8.0 * pow(pi, 3.0) * pow(pow(n, 2.0) - 1.0, 2.0) * (6.0 + 3.0 * pn)) / (3.0 * N * pow(lambda, vec3(4.0)) * (6.0 - 7.0 * pn));\r\n}\r\n\r\n// see http://blenderartists.org/forum/showthread.php?321110-Shaders-and-Skybox-madness\r\n// A simplied version of the total Rayleigh scattering to works on browsers that use ANGLE\r\nvec3 simplifiedRayleigh() {\r\n  return 0.0005 / vec3(94, 40, 18);\r\n//   return 0.0054532832366 / (3.0 * 2.545E25 * pow(lambda, vec3(4.0)) * 6.245);\r\n}\r\n\r\n// Reileight phase function as a function of cos(theta)\r\nfloat rayleighPhase(float cosTheta) {\r\n// NOTE: there are a few scale factors for the phase function\r\n// (1) as give bei Preetheam, normalized over the sphere with 4pi sr\r\n// (2) normalized to intergral = 1\r\n// (3) nasa: integrates to 9pi / 4, looks best\r\n  return (3.0 / (16.0 * pi)) * (1.0 + pow(cosTheta, 2.0));\r\n//   return (1.0 / (3.0 * pi)) * (1.0 + pow(cosTheta, 2.0));\r\n//   return (3.0 / 4.0) * (1.0 + pow(cosTheta, 2.0));\r\n}\r\n\r\n// total mie scattering coefficient\r\n// @param labmda set of wavelengths in m\r\n// @param K corresponding scattering param\r\n// @param T turbidity, somewhere in the range of 0 to 20\r\nvec3 totalMie(vec3 lambda, vec3 K, float T) {\r\n// not the formula given py Preetham\r\n  float c = (0.2 * T) * 10E-18;\r\n  return 0.434 * c * pi * pow((2.0 * pi) / lambda, vec3(v - 2.0)) * K;\r\n}\r\n\r\n// Henyey-Greenstein approximataion as a function of cos(theta)\r\n// @param cosTheta\r\n// @param g geometric constant that defines the shape of the ellipse\r\nfloat hgPhase(float cosTheta, float g) {\r\n  return (1.0 / (4.0 * pi)) * ((1.0 - pow(g, 2.0)) / pow(1.0 - 2.0 * g * cosTheta + pow(g, 2.0), 1.5));\r\n}\r\n\r\nfloat sunIntensity(float zenithAngleCos) {\r\n// This function originally used 'exp(n)', but it returns an incorrect value\r\n// on Samsung S6 phones. So it has been replaced with the equivalent 'pow(e,n)'\r\n// See https://github.com/mrdoob/three.js/issues/8382\r\n  return EE * max(0.0, 1.0 - pow(e, -((cutoffAngle - acos(zenithAngleCos)) / steepness)));\r\n}\r\n\r\n// float logLuminance(vec3 c) {\r\n//   return log(c.r * 0.2126 + c.g * 0.7152 + c.b * 0.0722);\r\n// }\r\n\r\n// Filmic ToneMapping http://filmicgames.com/archives/75\",\r\nfloat A = 0.15;\r\nfloat B = 0.50;\r\nfloat C = 0.10;\r\nfloat D = 0.20;\r\nfloat E = 0.02;\r\nfloat F = 0.30;\r\nfloat W = 1000.0;\r\nvec3 Uncharted2Tonemap(vec3 x) {\r\n  return ((x*(A*x + C*B) + D*E) / (x*(A*x + B) + D*F)) - E/F;\r\n}";
@@ -575,6 +586,10 @@
 	  rollOff: { value: 0.3 },
 	  velvetStrength: { value: 0.3 }
 	};
+
+	var worldPositionVert = "  vWorldPosition = (modelMatrix * vec4(transformed, 1.0)).xyz;";
+
+	var worldPositionVertFragPars = "varying vec3 vWorldPosition;";
 
 	var ShaderChunk = {
 		accumulateFrag: accumulateFrag,
@@ -729,6 +744,9 @@
 		roughnessMapUniforms: roughnessMapUniforms,
 		screenVert: screenVert,
 		screenVertPars: screenVertPars,
+		skyDomeFrag: skyDomeFrag,
+		skyDomeFragPars: skyDomeFragPars,
+		skyDomeUniforms: skyDomeUniforms,
 		skyFrag: skyFrag,
 		skyFragPars: skyFragPars,
 		skyUniforms: skyUniforms,
@@ -770,6 +788,8 @@
 		velvetFrag: velvetFrag,
 		velvetFragPars: velvetFragPars,
 		velvetUniforms: velvetUniforms,
+		worldPositionVert: worldPositionVert,
+		worldPositionVertFragPars: worldPositionVertFragPars,
 	};
 
 	var ShaderUtils = {
@@ -820,14 +840,33 @@
 	    };
 
 	    {
-	      parameters.baseColor = shader.uniforms.diffuseColor.value.getHex();
-	      parameters.opacity = shader.uniforms.opacity.value;
 	      h = gui.addFolder("Base");
-	      h.addColor(parameters, "baseColor").onChange(function(value) {
-	        shader.uniforms.diffuseColor.value.setHex(value);
-	        callback("baseColor", value);
-	      });
-	      h.add(parameters, "opacity", 0.0, 1.0).onChange(function(value) { updateCallback("opacity", value); });
+	      
+	      if (shader._checkKey("SKYDOME")) {
+	        parameters.topColor = shader.uniforms.topColor.value.getHex();
+	        parameters.bottomColor = shader.uniforms.bottomColor.value.getHex();
+	        parameters.exponent = shader.uniforms.exponent.value;
+	      
+	        h.addColor(parameters, "topColor").onChange(function(value) {
+	          shader.uniforms.topColor.value.setHex(value);
+	          callback("topColor", value);
+	        });
+	        h.addColor(parameters, "bottomColor").onChange(function(value) {
+	          shader.uniforms.bottomColor.value.setHex(value);
+	          callback("bottomColor", value);
+	        });
+	        h.add(parameters, "exponent", 0.0, 1.0).onChange(function(value) { updateCallback("exponent", value); });
+	      }
+	      else {
+	        parameters.baseColor = shader.uniforms.diffuseColor.value.getHex();
+	        parameters.opacity = shader.uniforms.opacity.value;
+	      
+	        h.addColor(parameters, "baseColor").onChange(function(value) {
+	          shader.uniforms.diffuseColor.value.setHex(value);
+	          callback("baseColor", value);
+	        });
+	        h.add(parameters, "opacity", 0.0, 1.0).onChange(function(value) { updateCallback("opacity", value); });
+	      }
 	      
 	      if (shader._checkKey("STANDARD")) {
 	        parameters.roughness = shader.uniforms.roughness.value;
@@ -1521,6 +1560,7 @@
 	    this._addUniform(result, ["DISPLACEMENTMAP"], "displacementMapUniforms");
 	    this._addUniform(result, ["CLIPPINGPLANE"], "clippingPlaneUniforms");
 	    this._addUniform(result, ["SKY"], "skyUniforms");
+	    this._addUniform(result, ["SKYDOME"], "skyDomeUniforms");
 	    this._addUniform(result, ["GRASS"], "grassUniforms");
 	    this._addUniform(result, ["OVERLAY"], "overlayUniforms");
 	    this._addUniform(result, ["OVERLAYNORMAL"], "overlayNormalUniforms");
@@ -1554,7 +1594,7 @@
 	    
 	    this._addCode(codes, [], "common");
 	    this._addCode(codes, ["+CASTSHADOW", "+RECEIVESHADOW"], "packing");
-	    codes.push("varying vec3 vWorldPosition;");
+	    this._addCode(codes, [], "worldPositionVertFragPars");
 	    codes.push("varying vec3 vViewPosition;");
 	    codes.push("varying vec3 vNormal;");
 	    codes.push("");
@@ -1591,9 +1631,7 @@
 	      codes.push("  vec3 objectNormal = vec3(normal);");
 	      
 	      this._addCode(codes, ["DISPLACEMENTMAP"], "displacementMapVert");
-	      
-	      codes.push("  vWorldPosition = (modelMatrix * vec4(transformed, 1.0)).xyz;");
-	      
+	      this._addCode(codes, [], "worldPositionVert");
 	      this._addCode(codes, ["GRASS"], "grassVert");
 	      
 	      codes.push("  vec4 mvPosition = viewMatrix * vec4(vWorldPosition, 1.0);");
@@ -1693,11 +1731,11 @@
 	    
 	    codes.push("uniform vec3 diffuseColor;");
 	    codes.push("uniform float opacity;");
-	    codes.push("varying vec3 vWorldPosition;");
 	    codes.push("varying vec3 vNormal;");
 	    codes.push("varying vec3 vViewPosition;");
 	    codes.push("");
 	    
+	    this._addCode(codes, [], "worldPositionVertFragPars");
 	    this._addCode(codes, ["STANDARD"], "bsdfs");
 	    this._addCode(codes, ["STANDARD"], "standardFragPars");
 	    this._addCode(codes, ["STANDARD", "ROUGHNESSMAP"], "roughnessMapFragPars");
@@ -1731,6 +1769,7 @@
 	    this._addCode(codes, ["HEIGHTFOG", "HEIGHTFOGMAP"], "heightFogMapFragPars");
 	    this._addCode(codes, ["CLIPPINGPLANE"], "clippingPlaneFragPars");
 	    this._addCode(codes, ["SKY"], "skyFragPars");
+	    this._addCode(codes, ["SKYDOME"], "skyDomeFragPars");
 	    this._addCode(codes, ["OVERLAY"], "overlayFragPars");
 	    this._addCode(codes, ["OVERLAYNORMAL"], "overlayNormalFragPars");
 	    this._addCode(codes, ["DITHER"], "ditherFragPars");
@@ -1799,6 +1838,7 @@
 	      if (this._checkKeys(["-SKY", "-NOLIT"])) {
 	        codes.push(this._generateLightsFrag(numDirectLight, numPointLight, numSpotLight));
 	      }
+	      this._addCode(codes, ["SKYDOME"], "skyDomeFrag");
 	      this._addCode(codes, ["REFLECTION", "FRESNEL"], "fresnelFrag");
 	      this._addCode(codes, ["REFLECTION", "-FRESNEL", "STANDARD"], "reflectionStandardFrag");
 	      this._addCode(codes, ["REFLECTION", "-FRESNEL", "-STANDARD"], "reflectionFrag");
@@ -2643,6 +2683,276 @@
 	//   }
 	// };
 
+	/**
+	 * A shadow Mesh that follows a shadow-casting Mesh in the scene, but is confined to a single plane.
+	 * 
+	 * based on: Three.js/samples/js/objects/shadowMesh.js
+	 */
+	var ShadowMesh = function(mesh, materialOption) {
+	  
+	  var shadowMaterial = new THREE.MeshBasicMaterial(Object.assign({
+	    color: 0x000000,
+	    transparent: true,
+	    opacity: 0.6,
+	    depthWrite: false
+	  }, materialOption));
+	  
+	  THREE.Mesh.call(this, mesh.geometry, shadowMaterial);
+	  
+	  this.meshMatrix = mesh.matrixWorld;
+	  this.frustumCulled = false;
+	  this.matrixAutoUpdate = false;
+	};
+
+	ShadowMesh.prototype = Object.create(THREE.Mesh.prototype);
+	ShadowMesh.prototype.constructor = ShadowMesh;
+
+	ShadowMesh.prototype.update = function() {
+	  
+	  var shadowMatrix = new THREE.Matrix4();
+	  
+	  return function(plane, lightPosition4D) {
+	    // based on
+	    // https://www.opengl.org/archives/resources/features/StencilTalk/tsld021.htm
+	    
+	    var dot = plane.normal.x * lightPosition4D.x +
+	      plane.normal.y * lightPosition4D.y + 
+	      plane.normal.z * lightPosition4D.z + 
+	      - plane.constant * lightPosition4D.w;
+	      
+	    var sme = shadowMatrix.elements;
+	    
+	    sme[ 0] = dot - lightPosition4D.x * plane.normal.x;
+	    sme[ 4] = - lightPosition4D.x * plane.normal.y;
+	    sme[ 8] = - lightPosition4D.x * plane.normal.z;
+	    sme[12] = - lightPosition4D.x * - plane.constant;
+	    
+	    sme[ 1] = - lightPosition4D.y * plane.normal.x;
+	    sme[ 5] = dot - lightPosition4D.y * plane.normal.y;
+	    sme[ 9] = - lightPosition4D.y * plane.normal.z;
+	    sme[13] = - lightPosition4D.y * - plane.constant;
+	    
+	    sme[ 2] = - lightPosition4D.z * plane.normal.x;
+	    sme[ 6] = - lightPosition4D.z * plane.normal.y;
+	    sme[10] = dot - lightPosition4D.z * plane.normal.z;
+	    sme[14] = - lightPosition4D.z * - plane.constant;
+	    
+	    sme[ 3] = - lightPosition4D.w * plane.normal.x;
+	    sme[ 7] = - lightPosition4D.w * plane.normal.y;
+	    sme[11] = - lightPosition4D.w * plane.normal.z;
+	    sme[15] = dot - lightPosition4D.w * - plane.constant;
+	    
+	    this.matrix.multiplyMatrices(shadowMatrix, this.meshMatrix);
+	  };
+	}();
+
+	var GPUParticleShader = {
+	  uniforms: {
+	    tDiffuse: { value: null },
+	    time: { value: 0.0 },
+	    timeRange: { value: 5.0 },
+	    color: { value: new THREE.Color(1,1,1)},
+	    opacity: { value: 1.0 },
+	    particleSize: { value: 0.75 },
+	    screenWidth: { value: window.innerWidth },
+	    timeOffset: { value: 0.0 },
+	    numFrames: { value: 1 },
+	    frameDuration: { value: 1 },
+	    additiveFactor: { value: 0 },
+	    viewSize: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+	    tDepth: { value: null },
+	    cameraNearFar: { value: new THREE.Vector2(1,100) }
+	  },
+	  
+	  vertexShader: [
+	    "precision highp float;",
+	    
+	    "uniform mat4 modelViewMatrix;",
+	    "uniform mat4 projectionMatrix;",
+	    "uniform float time;",
+	    "uniform float timeRange;",
+	    "uniform float timeOffset;",
+	    "uniform float particleSize;",
+	    "uniform float screenWidth;",
+	    
+	    "attribute vec3 position;",
+	    "attribute vec4 velocitySpinStart;",
+	    "attribute vec4 accelerationSpinSpeed;",
+	    "attribute vec4 startSizeEndSizeStartTimeLifeTime;",
+	    
+	    "varying vec4 vSpinLifeTime;",
+	    "varying vec4 vClipPosition;",
+	    
+	    "void main() {",
+	    "  float startSize = startSizeEndSizeStartTimeLifeTime.x;",
+	    "  float endSize = startSizeEndSizeStartTimeLifeTime.y;",
+	    "  float startTime = startSizeEndSizeStartTimeLifeTime.z;",
+	    "  float lifeTime = startSizeEndSizeStartTimeLifeTime.w;",
+	    "  vec3 velocity = velocitySpinStart.xyz;",
+	    "  float spinStart = velocitySpinStart.w;",
+	    "  vec3 acceleration = accelerationSpinSpeed.xyz;",
+	    "  float spinSpeed = accelerationSpinSpeed.w;",
+	    
+	    "  float localTime = mod((time - timeOffset - startTime), timeRange);",
+	    "  float percentLife = localTime / lifeTime;",
+	    
+	    "  vec3 newPosition = position + velocity * localTime + acceleration * localTime * localTime;",
+	    "  vec4 mvPosition = modelViewMatrix * vec4(newPosition, 1.0);",
+	    "  gl_Position = projectionMatrix * mvPosition;",
+	    "  vClipPosition = gl_Position;",
+	    
+	    "  float currentSize = particleSize * mix(startSize, endSize, percentLife);",
+	    "  currentSize *= step(0.0, percentLife);",
+	    "  currentSize *= step(-1.0, -percentLife);",
+	    "  if (currentSize == 0.0) gl_Position = vec4(-100000000.0);",
+	    
+	    "  vec4 projectedCorner = projectionMatrix * vec4(currentSize, currentSize, mvPosition.z, mvPosition.w);",
+	    "  gl_PointSize = screenWidth * projectedCorner.x / projectedCorner.w;",
+	    "  percentLife *= step(0.0, percentLife);",
+	    "  percentLife *= step(-1.0, -percentLife);",
+	    "  vSpinLifeTime = vec4(spinStart, spinSpeed, percentLife, localTime);",
+	    "}"
+	  ].join("\n"),
+	  
+	  fragmentShader: [
+	    "precision highp float;",
+	    
+	    "uniform sampler2D tDiffuse;",
+	    "uniform sampler2D tDepth;",
+	    "uniform vec3 color;",
+	    "uniform float opacity;",
+	    "uniform float time;",
+	    "uniform float numFrames;",
+	    "uniform float frameDuration;",
+	    "uniform vec2 cameraNearFar;",
+	    "uniform vec2 viewSize;",
+	    "uniform float additiveFactor;",
+	    
+	    "varying vec4 vSpinLifeTime;",
+	    "varying vec4 vClipPosition;",
+	    
+	    "float linearizeDepth(float depth, vec2 cameraNearFar) {",
+	    "  return -cameraNearFar.y * cameraNearFar.x / (depth * (cameraNearFar.y - cameraNearFar.x) - cameraNearFar.y);",
+	    "}",
+	    
+	    "void main() {",
+	    "  float spinStart = vSpinLifeTime.x;",
+	    "  float spinSpeed = vSpinLifeTime.y;",
+	    "  float percentLife = vSpinLifeTime.z;",
+	    "  float localTime = vSpinLifeTime.w;",
+	    
+	    "  const float frameStart = 0.0;",
+	    "  vec2 texcoord = vec2(gl_PointCoord.x, 1.0-gl_PointCoord.y)-0.5;",
+	    "  float s = sin(spinStart + spinSpeed * time);",
+	    "  float c = cos(spinStart + spinSpeed * time);",
+	    "  vec2 rotatedCoord1 = vec2(texcoord.x * c + texcoord.y * s, -texcoord.x * s + texcoord.y * c) + 0.5;",
+	    "  rotatedCoord1 = clamp(rotatedCoord1, 0.0, 1.0);",
+	    // "  vec2 rotatedCoord2 = rotatedCoord1;",
+	    
+	    "  float frame1 = mod(floor(localTime / frameDuration + frameStart), numFrames);",
+	    "  float uOffset1 = frame1 / numFrames;",
+	    "  rotatedCoord1.x = uOffset1 + (rotatedCoord1.x) * (1.0 / numFrames);",
+	    "  vec4 pixel1 = texture2D(tDiffuse, rotatedCoord1);",
+	    // "  pixel1.xyz *= pixel1.xyz;",
+	    
+	    // INTERPORATE PARTICLE FRAMES
+	    // "  float frame2 = mod(floor(localTime / frameDuration + frameStart + 1.0), numFrames);",
+	    // "  float uOffset2 = frame2 / numFrames;",
+	    // "  float frameTime = fract(localTime / frameDuration + frameStart);",
+	    // "  rotatedCoord2.x = uOffset2 + rotatedCoord2.x * (1.0 / numFrames);",
+	    // "  vec4 pixel2 = texture2D(tDiffuse, rotatedCoord2);",
+	    // "  pixel2.xyz *= pixel2.xyz;",
+	    // "  pixel1 = mix(pixel1, pixel2, frameTime);",
+	    
+	    "  if (pixel1.a < 0.001) discard;",
+	    
+	    "  vec2 screenCoord = gl_FragCoord.xy / viewSize;",
+	    "  float myDepth = vClipPosition.z / vClipPosition.w;",
+	    "  float myLinearDepth = linearizeDepth(myDepth, cameraNearFar);",
+	    "  float sceneDepth = texture2D(tDepth, screenCoord).x * 2.0 - 1.0;",
+	    "  float sceneLinearDepth = linearizeDepth(sceneDepth, cameraNearFar);",
+	    "  const float scale = 0.1;",
+	    "  float zFade = clamp(scale * abs(myLinearDepth - sceneLinearDepth), 0.0, 1.0);",
+	    "  if (myDepth > sceneDepth) discard;",
+	    
+	    "  vec4 particleColor = pixel1 * vec4(color, opacity);",
+	    "  particleColor.a *= zFade;",
+	    "  gl_FragColor = particleColor;",
+	    "}"
+	  ].join("\n")
+	};
+
+	var GPUParticle = function(numParticles, initCallback) {
+	  
+	  var geo = new THREE.BufferGeometry();
+	  var positions = new Float32Array(numParticles * 3);
+	  var velocitySpinStartArray = new Float32Array(numParticles * 4);
+	  var accelerationSpinSpeedArray = new Float32Array(numParticles * 4);
+	  var startSizeEndSizeStartTimeLifeTimeArray = new Float32Array(numParticles * 4);
+	  
+	  var pars = {
+	    position: new THREE.Vector3(),
+	    velocity: new THREE.Vector3(),
+	    acceleration: new THREE.Vector3(),
+	    spinStart: 0,
+	    spinSpeed: 0,
+	    startSize: 1,
+	    endSize: 1,
+	    startTime: 0,
+	    lifeTime: 1
+	  };
+	  
+	  var ofs3 = 0;
+	  var ofs4 = 0;
+	  for (var i=0; i<numParticles; ++i) {
+	    
+	    initCallback(i, pars);
+	    
+	    positions[ofs3+0] = pars.position.x;
+	    positions[ofs3+1] = pars.position.y;
+	    positions[ofs3+2] = pars.position.z;
+	    
+	    velocitySpinStartArray[ofs4+0] = pars.velocity.x;
+	    velocitySpinStartArray[ofs4+1] = pars.velocity.y;
+	    velocitySpinStartArray[ofs4+2] = pars.velocity.z;
+	    
+	    accelerationSpinSpeedArray[ofs4+0] = pars.acceleration.x;
+	    accelerationSpinSpeedArray[ofs4+1] = pars.acceleration.y;
+	    accelerationSpinSpeedArray[ofs4+2] = pars.acceleration.z;
+	    
+	    velocitySpinStartArray[ofs4+3] = pars.spinStart;
+	    accelerationSpinSpeedArray[ofs4+3] = pars.spinSpeed;
+	    
+	    startSizeEndSizeStartTimeLifeTimeArray[ofs4+0] = pars.startSize;
+	    startSizeEndSizeStartTimeLifeTimeArray[ofs4+1] = pars.endSize;
+	    startSizeEndSizeStartTimeLifeTimeArray[ofs4+2] = pars.startTime;
+	    startSizeEndSizeStartTimeLifeTimeArray[ofs4+3] = pars.lifeTime;
+	    
+	    ofs3 += 3;
+	    ofs4 += 4;
+	  }
+	  
+	  geo.addAttribute('position', new THREE.BufferAttribute(positions, 3));
+	  geo.addAttribute('velocitySpinStart', new THREE.BufferAttribute(velocitySpinStartArray, 4));
+	  geo.addAttribute('accelerationSpinSpeed', new THREE.BufferAttribute(accelerationSpinSpeedArray, 4));
+	  geo.addAttribute('startSizeEndSizeStartTimeLifeTime', new THREE.BufferAttribute(startSizeEndSizeStartTimeLifeTimeArray, 4));
+	  
+	  var material = new THREE.RawShaderMaterial({
+	    uniforms: THREE.UniformsUtils.clone(GPUParticleShader.uniforms),
+	    vertexShader: GPUParticleShader.vertexShader,
+	    fragmentShader: GPUParticleShader.fragmentShader,
+	    transparent: true,
+	    depthTest: true,
+	    depthWrite: false,
+	    blending: THREE.AdditiveBlending
+	  });
+	  
+	  THREE.Points.call(this, geo, material);
+	};
+
+	GPUParticle.prototype = Object.create(THREE.Points.prototype);
+	GPUParticle.prototype.constructor = GPUParticle;
+
 	var HeightField = function() {
 	  
 	  this.generate = function(img, scale) {
@@ -2840,6 +3150,8 @@
 	exports.Shader = Shader;
 	exports.Solar = Solar;
 	exports.Ocean = Ocean;
+	exports.ShadowMesh = ShadowMesh;
+	exports.GPUParticle = GPUParticle;
 	exports.HeightField = HeightField;
 	exports.ScreenSprite = ScreenSprite;
 	exports.any = any;

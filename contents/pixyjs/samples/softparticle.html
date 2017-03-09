@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>three.js</title>
+    <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+      body {
+        color: #fff;
+        font-family: Monospace;
+        font-size: 13px;
+        text-align: center;
+        font-weight: bold;
+        
+        background-color: #000;
+        margin: 0px;
+        overflow: hidden;
+      }
+      
+      #info {
+        position: absolute;
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+        color: #fff;
+      }
+      
+      #progress { 
+        color: red,
+        top: 7em;
+        width: 100px;
+        font-size: 3em;
+        font-variant: samll-caps;
+        font-weight: bold;
+        position: absolute;
+        z-index: 100;
+        text-align: center;
+        text-shadow: #000 0px 0px 10px;
+        display: none;
+      }
+      
+      #progressbar {
+        text-align: center;
+        background: white;
+        width: 250px;
+        height: 10px;
+      }
+      
+      #bar {
+        background: #d00;
+        width: 50px;
+        height: 10px;
+      }
+      
+      a { color: orange; }
+    </style>
+  </head>
+  <body>
+    <div id="info">
+      <a href="https://github.com/mebiusbox/pixy.js">pixy.js</a> + <a href="http://threejs.org" target="_blank">three.js</a> - Soft, GPU particle
+    </div>
+    <div id="progress">
+      <span id="message">Loading...</span>
+      <center>
+        <div id="progressbar" class="shadow"><div id="bar" class="shadow"></div></div>
+      </center>
+    </center>
+    
+    <script src="js/three.min.js"></script>
+    <script src="js/controls/OrbitControls.js"></script>
+    <script src="js/Detector.js"></script>
+    <script src="js/libs/dat.gui.min.js"></script>
+    <script src="js/libs/stats.min.js"></script>
+    <script src="js/geometries/TeapotBufferGeometry.js"></script>
+    <script src="js/BufferGeometryUtils.js"></script>
+    <script src="../build/pixy.js"></script>
+    <script>
+      if (!Detector.webgl) Detector.addGetWebGLMessage();
+      
+      var camera, controls, scene, renderer;
+      var effectScene, renderTarget, particles;
+      var stats, clock = new THREE.Clock();
+      var lights = {};
+      var textures = {};
+      var shader;
+      var gui, parameters;
+      var ready = false;
+      var time = 0.0;
+      
+      init();
+      // render();
+      animate();
+      
+      function init() {
+        
+        initGraphics();
+        initScene();
+        initPost();
+        initGui();
+        
+        // EVENTS
+        
+        window.addEventListener('resize', onWindowResize, false);
+        
+        THREE.DefaultLoadingManager.onProgress = function(item, loaded, total) {
+          var bar = 250;
+          bar = Math.floor(bar * loaded / total);
+          document.getElementById("bar").style.width = bar + "px";
+          
+          console.log(item, loaded, total);
+          
+          if (loaded == total) {
+            ready = true;
+            document.getElementById("message").style.display = "none";
+            document.getElementById("progressbar").style.display = "none";
+            document.getElementById("progress").style.display = "none";
+            console.log("ready");
+          }
+        };
+      }
+      
+      function initGraphics() {
+        container = document.createElement('div');
+        document.body.appendChild(container);
+        
+        // RENDERER
+        
+        renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer.setClearColor(0x999999);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        // renderer.gammaInput = false;
+        // renderer.gammaOutput = false;
+        // renderer.autoClear = false;
+        container.appendChild(renderer.domElement);
+        
+        // STATS
+        
+        stats = new Stats();
+				container.appendChild(stats.dom);
+      }
+      
+      function initScene() {
+        
+        // scene itself
+        scene = new THREE.Scene();
+        
+        // MARK: CAMERA
+        
+        camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 500);
+        camera.up.set(0,0,1);
+        camera.position.set(18.35, -69.41, 7.25);
+        // camera.add(new THREE.PointLight(0xffff, 0.8));
+        scene.add(camera);
+        
+        // MARK: RENDER TARGET
+        
+        renderTarget = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight);
+        renderTarget.texture.format = THREE.RGBFormat;
+        renderTarget.texture.minFilter = THREE.NearestFilter,
+        renderTarget.texture.magFilter = THREE.NearestFilter,
+        renderTarget.texture.generateMipmaps = false;
+        renderTarget.stencilBuffer = false;
+        renderTarget.depthBuffer = true;
+        renderTarget.depthTexture = new THREE.DepthTexture();
+        renderTarget.depthTexture.type = THREE.UnsignedShortType;
+        
+        // MARK: CONTROLS
+        
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.target.set(0,0,0);
+        // controls.addEventListener('change', render);
+        
+        // MARK: LIGHTS
+        
+        // lights.ambient = new THREE.AmbientLight(0x333333);
+        // scene.add(lights.ambient);
+        
+        // lights.direct = new THREE.DirectionalLight(0xFFFFFF, 1.0);
+        // scene.add(lights.direct);
+        // lights.directHelper = new THREE.DirectionalLightHelper(lights.direct, 0.5);
+        // scene.add(lights.directHelper);
+        
+        // MARK: MATERIALS
+        
+        // MARK: TEXTURES
+        
+        var loadTexture = function(loader, path) {
+          return loader.load(path, function(texture) {
+            // texture.wrapS = THREE.RepeatWrapping;
+            // texture.wrapT = THREE.RepeatWrapping;
+          });
+        };
+        var textureLoader = new THREE.TextureLoader();
+        var snowFlakeTexture = loadTexture(textureLoader, 'assets/textures/sprites/snowflake2.png');
+        
+        // MARK: ENVIRONMENT MAP
+        
+        // var path = 'assets/textures/cube/skybox/';
+        // var urls = [
+        //   path + 'px.jpg', path + 'nx.jpg',
+        //   path + 'py.jpg', path + 'ny.jpg',
+        //   path + 'pz.jpg', path + 'nz.jpg'
+        // ];
+        // 
+        // shader.uniforms.tEnvMap.value = new THREE.CubeTextureLoader().load(urls, function(texture) {
+        //   texture.generateMipmaps = true;
+        //   texture.needsUpdate = true;
+        //   scene.background = texture; 
+        // });
+        
+        // MARK: MODELS
+        
+        particles = new PIXY.GPUParticle(10000, function(index, pars) {
+          pars.position.set((Math.random()-0.5)*100.0, (Math.random()-0.5)*100.0, 40.0);
+          pars.velocity.set(Math.random()*-10, Math.random()*-10, -10.0 + Math.random());
+          pars.acceleration.set(0,0,0);
+          pars.spinStart = 0;
+          pars.spinSpeed = 5.0;
+          pars.startSize = 1.0 + Math.random() * 0.5;
+          pars.endSize = 0.0;
+          pars.startTime = 2.0 + Math.random() * 10.0;
+          pars.lifeTime = 5.0;
+        });
+        
+        particles.material.uniforms.tDiffuse.value = snowFlakeTexture;
+        particles.material.uniforms.tDepth.value = renderTarget.depthTexture;
+        // particles.material.uniforms.particleSize.value = 0.75;
+        // console.log(particles);
+        
+        effectScene = new THREE.Scene();
+        effectScene.add(particles);
+        
+        var geo = new THREE.PlaneBufferGeometry(100,100);
+        var mesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({color:0x808080}));
+        scene.add(mesh);
+        
+        // scene.add(new THREE.AxisHelper(10));
+        // scene.add(new THREE.GridHelper(20,20));
+      }
+      
+      function initGui() {
+        
+        // shader.uniforms.diffuseColor.value.setHex(0xff0000);
+        // shader.uniforms.directLights.value[0].direction.set(-1,1,1).normalize();
+        // shader.uniforms.bumpiness.value = 0.01;
+        // shader.uniforms.roughness.value = 0.0;
+        // shader.uniforms.metalness.value = 0.5;
+        
+        // results = PIXY.ShaderUtils.GenerateShaderParametersGUI(shader);
+        // gui = results.gui;
+        // parameters = results.parameters;
+      }
+      
+      function initPost() {
+      }
+      
+      // EVENT HANDLERS
+      
+      function onWindowResize() {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        
+        render();
+      }
+      
+      function animate() {
+        time += clock.getDelta();
+        requestAnimationFrame(animate, renderer.domElement);
+        render();
+      }
+      
+      function render() {
+        
+        if (!ready) return;
+        
+        stats.update();
+        
+        particles.material.uniforms.time.value = time;
+        particles.material.uniforms.screenWidth.value = window.innerWidth;
+        particles.material.uniforms.viewSize.value.set(window.innerWidth, window.innerHeight);
+        particles.material.uniforms.cameraNearFar.value.set(camera.near, camera.far);
+        
+        renderer.autoClear = false;
+        renderer.clear();
+        renderer.clearTarget(renderTarget);
+        renderer.render(scene, camera, renderTarget);
+        renderer.render(scene, camera);
+        renderer.render(effectScene, camera);
+        renderer.autoClear = true;
+      }
+
+    </script>
+  </body>
+</html>
