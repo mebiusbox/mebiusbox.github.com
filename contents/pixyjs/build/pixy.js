@@ -459,7 +459,7 @@
 	  ]}
 	};
 
-	var lightsFragPars = "bool testLightInRange(const in float lightDistance, const in float cutoffDistance) {\r\n  return any(bvec2(cutoffDistance == 0.0, lightDistance < cutoffDistance));\r\n}\r\n\r\nfloat punctualLightIntensityToIrradianceFactor(const in float lightDistance, const in float cutoffDistance, const in float decayExponent) {\r\n  \r\n  if (decayExponent > 0.0) {\r\n  \r\n// #if defined(PHYSICALLY_CORRECT_LIGHTS)\r\n  // based upon Frostbite 3 Moving to Physically-based Rendering\r\n  // page 32, equation 26: E[window1]\r\n  // http://www.frostbite.com/wp-content/uploads/2014/11/course_notes_moving_frostbite_to_pbr_v2.pdf\r\n  // this is intended to be used to spot and point lights who are represented as mulinouse intensity\r\n  // but who must be converted to luminous irradiance for surface lighting calculation\r\n  \r\n  // float distanceFalloff = 1.0 / max(pow(lightDistance, decayExponent), 0.01);\r\n  // float maxDistanceCutoffFactor = pow2(saturate(1.0 - pow4(lightDistance / cutoffDistance)));\r\n  // return distanceFalloff * maxDistanceCutoffFactor;\r\n// #else\r\n    return pow(saturate(-lightDistance / cutoffDistance + 1.0), decayExponent);\r\n// #endif\r\n  }\r\n\r\n  return 1.0;\r\n}\r\n\r\nstruct DirectLight {\r\n  vec3 direction;\r\n  vec3 color;\r\n};\r\n\r\nvoid getDirectLightIrradiance(const in DirectLight directionalLight, const in GeometricContext geometry, out IncidentLight directLight) {\r\n  directLight.color = directionalLight.color;\r\n  directLight.direction = directionalLight.direction;\r\n  directLight.visible = true;\r\n}\r\n\r\nstruct PointLight {\r\n  vec3 position;\r\n  vec3 color;\r\n  float distance;\r\n  float decay;\r\n};\r\n\r\nvoid getPointDirectLightIrradiance(const in PointLight pointLight, const in GeometricContext geometry, out IncidentLight directLight) {\r\n  vec3 L = pointLight.position - geometry.position;\r\n  directLight.direction = normalize(L);\r\n\r\n  float lightDistance = length(L);\r\n\r\n  if (testLightInRange(lightDistance, pointLight.distance)) {\r\n    directLight.color = pointLight.color;\r\n    directLight.color *= punctualLightIntensityToIrradianceFactor(lightDistance, pointLight.distance, pointLight.decay);\r\n    directLight.visible = true;\r\n  } else {\r\n    directLight.color = vec3(0.0);\r\n    directLight.visible = false;\r\n  }\r\n}\r\n\r\nstruct SpotLight {\r\n  vec3 position;\r\n  vec3 direction;\r\n  vec3 color;\r\n  float distance;\r\n  float decay;\r\n  float coneCos;\r\n  float penumbraCos;\r\n};\r\n\r\nvoid getSpotDirectLightIrradiance(const in SpotLight spotLight, const in GeometricContext geometry, out IncidentLight directLight) {\r\n  vec3 L = spotLight.position - geometry.position;\r\n  directLight.direction = normalize(L);\r\n\r\n  float lightDistance = length(L);\r\n  float angleCos = dot(directLight.direction, spotLight.direction);\r\n\r\n  if (all(bvec2(angleCos > spotLight.coneCos, testLightInRange(lightDistance, spotLight.distance)))) {\r\n    float spotEffect = smoothstep(spotLight.coneCos, spotLight.penumbraCos, angleCos);\r\n    directLight.color = spotLight.color;\r\n    directLight.color *= spotEffect * punctualLightIntensityToIrradianceFactor(lightDistance, spotLight.distance, spotLight.decay);\r\n    directLight.visible = true;\r\n  } else {\r\n    directLight.color = vec3(0.0);\r\n    directLight.visible = false;\r\n  }\r\n}\r\n\r\nstruct AreaLight {\r\n  vec3 position;\r\n  vec3 color;\r\n  float distance;\r\n  float decay;\r\n  float radius;\r\n};\r\n\r\nstruct TubeLight {\r\n  vec3 start;\r\n  vec3 end;\r\n  vec3 color;\r\n  float distance;\r\n  float decay;\r\n  float radius;\r\n};\r\n\r\nstruct RectLight {\r\n  vec3 positions[4];\r\n  vec3 color;\r\n  float width;\r\n  float height;\r\n  float distance;\r\n  float decay;\r\n};";
+	var lightsFragPars = "bool testLightInRange(const in float lightDistance, const in float cutoffDistance) {\r\n  return any(bvec2(cutoffDistance == 0.0, lightDistance < cutoffDistance));\r\n}\r\n\r\nfloat punctualLightIntensityToIrradianceFactor(const in float lightDistance, const in float cutoffDistance, const in float decayExponent) {\r\n  \r\n  if (decayExponent > 0.0) {\r\n  \r\n// #if defined(PHYSICALLY_CORRECT_LIGHTS)\r\n  // based upon Frostbite 3 Moving to Physically-based Rendering\r\n  // page 32, equation 26: E[window1]\r\n  // http://www.frostbite.com/wp-content/uploads/2014/11/course_notes_moving_frostbite_to_pbr_v2.pdf\r\n  // this is intended to be used to spot and point lights who are represented as mulinouse intensity\r\n  // but who must be converted to luminous irradiance for surface lighting calculation\r\n  \r\n  // float distanceFalloff = 1.0 / max(pow(lightDistance, decayExponent), 0.01);\r\n  // float maxDistanceCutoffFactor = pow2(saturate(1.0 - pow4(lightDistance / cutoffDistance)));\r\n  // return distanceFalloff * maxDistanceCutoffFactor;\r\n// #else\r\n    return pow(saturate(-lightDistance / cutoffDistance + 1.0), decayExponent);\r\n// #endif\r\n  }\r\n\r\n  return 1.0;\r\n}\r\n\r\nstruct DirectLight {\r\n  vec3 direction;\r\n  vec3 color;\r\n};\r\n\r\nvoid getDirectLightIrradiance(const in DirectLight directionalLight, const in GeometricContext geometry, out IncidentLight directLight) {\r\n  directLight.color = directionalLight.color;\r\n  directLight.direction = directionalLight.direction;\r\n  directLight.visible = true;\r\n}\r\n\r\nstruct PointLight {\r\n  vec3 position;\r\n  vec3 color;\r\n  float distance;\r\n  float decay;\r\n};\r\n\r\nvoid getPointDirectLightIrradiance(const in PointLight pointLight, const in GeometricContext geometry, out IncidentLight directLight) {\r\n  vec3 L = pointLight.position - geometry.position;\r\n  directLight.direction = normalize(L);\r\n\r\n  float lightDistance = length(L);\r\n\r\n  if (testLightInRange(lightDistance, pointLight.distance)) {\r\n    directLight.color = pointLight.color;\r\n    directLight.color *= punctualLightIntensityToIrradianceFactor(lightDistance, pointLight.distance, pointLight.decay);\r\n    directLight.visible = true;\r\n  } else {\r\n    directLight.color = vec3(0.0);\r\n    directLight.visible = false;\r\n  }\r\n}\r\n\r\nstruct SpotLight {\r\n  vec3 position;\r\n  vec3 direction;\r\n  vec3 color;\r\n  float distance;\r\n  float decay;\r\n  float coneCos;\r\n  float penumbraCos;\r\n};\r\n\r\nvoid getSpotDirectLightIrradiance(const in SpotLight spotLight, const in GeometricContext geometry, out IncidentLight directLight) {\r\n  vec3 L = spotLight.position - geometry.position;\r\n  directLight.direction = normalize(L);\r\n\r\n  float lightDistance = length(L);\r\n  float angleCos = dot(directLight.direction, spotLight.direction);\r\n\r\n  if (all(bvec2(angleCos > spotLight.coneCos, testLightInRange(lightDistance, spotLight.distance)))) {\r\n    float spotEffect = smoothstep(spotLight.coneCos, spotLight.penumbraCos, angleCos);\r\n    directLight.color = spotLight.color;\r\n    directLight.color *= spotEffect * punctualLightIntensityToIrradianceFactor(lightDistance, spotLight.distance, spotLight.decay);\r\n    directLight.visible = true;\r\n  } else {\r\n    directLight.color = vec3(0.0);\r\n    directLight.visible = false;\r\n  }\r\n}\r\n\r\nstruct AreaLight {\r\n  vec3 position;\r\n  vec3 color;\r\n  float distance;\r\n  float decay;\r\n  float radius;\r\n};\r\n\r\nstruct TubeLight {\r\n  vec3 start;\r\n  vec3 end;\r\n  vec3 color;\r\n  float distance;\r\n  float decay;\r\n  float radius;\r\n};\r\n\r\nstruct RectLight {\r\n  vec3 positions[4];\r\n  vec3 normal;\r\n  vec3 tangent;\r\n  vec3 color;\r\n  float intensity;\r\n  float width;\r\n  float height;\r\n  float distance;\r\n  float decay;\r\n  int numPositions;\r\n};";
 
 	var lightsPars = "// taken from here: http://casual-effects.blogspot.ca/2011/08/plausible-environment-lighting-in-two.html\r\nfloat getSpecularMipLevel(const in float blinnShininessExponent, const in int maxMipLevel) {\r\n  float maxMipLevelScalar = float(maxMipLevel);\r\n  float desiredMipLevel = maxMipLevelScalar - 0.79248 - 0.5 * log2(pow2(blinnShininessExponent)+1.0);\r\n  \r\n  // clamp to allowable LOD ranges\r\n  return clamp(desiredMipLevel, 0.0, maxMipLevelScalar);\r\n}\r\n\r\nvec3 getLightProbeIndirectIrradiance(const in vec3 N, const in float blinnShininessExponent, const in int maxMipLevel) {\r\n  vec3 worldNormal = inverseTransformDirection(N, viewMatrix);\r\n  vec3 queryVec = vec3(-worldNormal.x, worldNormal.yz); // flip\r\n  return GammaToLinear(textureCubeLodEXT(tEnvMap, queryVec, float(maxMipLevel)), 2.2).rgb * reflectionStrength;\r\n}\r\n\r\nvec3 getLightProbeIndirectRadiance(const in vec3 V, const in vec3 N, const in float blinnShininessExponent, const in int maxMipLevel) {\r\n  vec3 reflectVec = reflect(-V, N);\r\n  reflectVec = inverseTransformDirection(reflectVec, viewMatrix);\r\n  vec3 queryVec = vec3(-reflectVec.x, reflectVec.yz); // flip\r\n  float specMipLevel = getSpecularMipLevel(blinnShininessExponent, maxMipLevel);\r\n  return GammaToLinear(textureCubeLodEXT(tEnvMap, queryVec, specMipLevel), 2.2).rgb * reflectionStrength;\r\n}";
 
@@ -478,14 +478,13 @@
 	    ]}
 	};
 
+	var lightsRectLightFrag = "for (int i=0; i<PIXY_RECT_LIGHTS_NUM; ++i) {\r\n  computeRectLight(rectLights[i], geometry, material, reflectedLight);\r\n}";
+
+	var lightsRectLightFragUnroll = "  computeRectLight(rectLights[0], geometry, material, reflectedLight);";
+
 	var lightsRectLightUniforms = {
 	  rectLights: { value: [
-	    {
-	      positions: [],
-	      color: new THREE.Color(0xffffff),
-	      distance: 50.0,
-	      decay: 2.0
-	    }
+	    // PIXY.RectLight
 	  ]}
 	};
 
@@ -764,6 +763,8 @@
 
 	var standardOrenNayarFrag = "vec3 N = geometry.normal;\r\nvec3 L = directLight.direction;\r\nvec3 V = geometry.viewDir;\r\n\r\nfloat NoL = saturate(dot(N, L));\r\nfloat NoV = saturate(dot(N, V));\r\nvec3 H = normalize(L+V);\r\nfloat NoH = saturate(dot(N, H));\r\nfloat VoH = saturate(dot(V, H));\r\nfloat LoV = saturate(dot(L, V));\r\n        \r\nfloat a = pow2(material.specularRoughness);\r\n\r\nvec3 cdiff = DiffuseOrenNayar(material.diffuseColor, NoV, NoL, LoV, material.specularRoughness);\r\nvec3 cspec = PBR_Specular_CookTorrance(material.specularColor, H, V, L, a, NoL, NoV, NoH, VoH, LoV);\r\n\r\nvec3 irradiance = directLight.color * NoL;\r\nirradiance *= PI; // punctual light\r\n\r\nreflectedLight.directDiffuse += cdiff * directLight.color * PI;\r\nreflectedLight.directSpecular += cspec * irradiance;";
 
+	var standardRectLightFrag = "//------------------------------------------------------------\r\n// Real-time Collision Detection\r\nvec3 closestPointPToRay(in vec3 p, in vec3 start, in vec3 dir) {\r\n  float t = max(dot(p-start, dir) / dot(dir,dir), 0.0);\r\n  return start + dir*t;\r\n}\r\nvec3 closestPointPToSegment(in vec3 p, in vec3 a, in vec3 b) {\r\n  vec3 ab = b-a;\r\n  float t = dot(p-a,ab);\r\n  if (t <= 0.0) {\r\n    return a;\r\n  }\r\n  else {\r\n    float denom = dot(ab,ab);\r\n    if (t >= denom) {\r\n      return b;\r\n    }\r\n    \r\n    return a + ab*(t/denom);\r\n  }\r\n  // vec3 ab = b-a;\r\n  // float t = clamp(dot(p-a, ab) / dot(ab,ab), 0.0, 1.0);\r\n  // return a + ab*t;\r\n}\r\n\r\nvec3 closestPointPToTriangle(in vec3 p, in vec3 a, in vec3 b, in vec3 c) {\r\n  // Check if P in vertex region outside A\r\n  vec3 ap = p-a;\r\n  vec3 ab = b-a;\r\n  vec3 ac = c-a;\r\n  float d1 = dot(ab,ap);\r\n  float d2 = dot(ac,ap);\r\n  if (d1 <= 0.0 && d2 <= 0.0) {\r\n    return a; // voronoi=0. barycentric coordinates (1,0,0)\r\n  }\r\n  \r\n  vec3 bp = p-b;\r\n  \r\n  // Check if P in vertex region outside B\r\n  float d3 = dot(ab,bp);\r\n  float d4 = dot(ac,bp);\r\n  if (d3 >= 0.0 && d4 <= d3) {\r\n    return b; // voronoi=1. barycentric coordinates (0,1,0)\r\n  }\r\n  \r\n  // Check if P in edge region of AB,k if so return projection of P onto AB\r\n  float vc = d1*d4 - d3*d2;\r\n  if (vc <= 0.0 && d1 >= 0.0 && d3 <= 0.0) {\r\n    // float v = d1/(d1-d3)\r\n    return a + ab * (d1/(d1-d3)); // voronoi=2. barycentric coordinates (1-v,v,0)\r\n  }\r\n  \r\n  // Check if P in vertex region outside C\r\n  vec3 cp = p-c;\r\n  float d5 = dot(ab, cp);\r\n  float d6 = dot(ac, cp);\r\n  if (d6 >= 0.0 && d5 <= d6) {\r\n    return c; // voronoi=3. barycentric coordinates (0,0,1)\r\n  }\r\n  \r\n  // Check if P in edge region of AC, if so return projection of P onto AC\r\n  float vb = d5*d2 - d1*d6;\r\n  if (vb <= 0.0 && d2 >= 0.0 && d6 <= 0.0) {\r\n    // float w = d2/(d2-d6)\r\n    return a + ac * (d2/(d2-d6)); // voronoi=4. barycentric cooridnates (1-w,w,0)\r\n  }\r\n  \r\n  // Check if P in edge region of BC, if so return projection of P onto BC\r\n  float va = d3*d6 - d5*d4;\r\n  if (va <= 0.0 && (d4-d3) >= 0.0 && (d5-d6) >= 0.0) {\r\n    // float w = (d4-d3)/(d4-d3+d5-d6)\r\n    return b + (c-b) * ((d4-d3)/(d4-d3+d5-d6)); // voronoi=5. barycentric coordinates (0,1-w,w)\r\n  }\r\n  \r\n  // P inside face region. Compute Q through its barycentric coordinates (u,v,w)\r\n  float denom = 1.0 / (va+vb+vc);\r\n  float v = vb * denom;\r\n  float w = vc * denom;\r\n  return a + ab*v + ac*w; // voronoi=6\r\n}\r\n\r\nint pointInTriangle(in vec3 p, in vec3 a, in vec3 b, in vec3 c) {\r\n  a -= p;\r\n  b -= p;\r\n  c -= p;\r\n  float ab = dot(a,b);\r\n  float ac = dot(a,c);\r\n  float bc = dot(b,c);\r\n  float cc = dot(c,c);\r\n  if (bc*ac - cc*ab < 0.0) return 0;\r\n  float bb = dot(b,b);\r\n  if (ab*bc - ac*bb < 0.0) return 0;\r\n  return 1;\r\n}\r\n//--------------------------------------------------\r\nvec3 Specular_AreaLight(vec3 specularColor, vec3 N, float roughnessFactor, vec3 L, vec3 Lc, vec3 V) {\r\n  // Compute some useful values\r\n  float NoL = saturate(dot(N, L));\r\n  float NoV = saturate(dot(N, V));\r\n  vec3 H = normalize(L+V);\r\n  float NoH = saturate(dot(N, H));\r\n  float VoH = saturate(dot(V, H));\r\n  float LoV = saturate(dot(L, V));\r\n  \r\n  float a = pow2(roughnessFactor);\r\n  \r\n  vec3 cspec = PBR_Specular_CookTorrance(specularColor, H, V, L, a, NoL, NoV, NoH, VoH, LoV);\r\n  return Lc * NoL * cspec;\r\n}\r\n//--------------------------------------------------\r\nvoid computeRectLight_Triangle(const in RectLight rectLight, const in GeometricContext geometry, const in Material material, inout ReflectedLight reflectedLight) {\r\n  \r\n  vec4 lpos[3];\r\n  vec3 lvec[3];\r\n  \r\n  // direction vectors from point to area light corners\r\n  for (int i=0; i<3; ++i) {\r\n    // lpos[i] = lightMatrixWorld * vec4(rectLight.positions[i], 1.0); // in world space\r\n    lpos[i] = vec4(rectLight.positions[i], 1.0); // in camera space\r\n    lvec[i] = normalize(lpos[i].xyz - geometry.position); // dir from vertex to area light\r\n  }\r\n  \r\n  // bail if the point is on the wrong side of the light... there must be a better way...\r\n  float tmp = dot(lvec[0], cross((lpos[2]-lpos[0]).xyz, (lpos[1]-lpos[0]).xyz));\r\n  if (tmp > 0.0) return;\r\n  \r\n  // vector irradiance at point\r\n  vec3 lightVec = vec3(0.0);\r\n  for (int i=0; i<3; ++i) {\r\n    vec3 v0 = lvec[i];\r\n    vec3 v1 = lvec[int(mod(float(i+1), float(3)))];\r\n    // if (tmp > 0.0) { // double side\r\n    //   lightVec += acos(dot(v0,v1)) * normalize(cross(v1,v0));\r\n    // }\r\n    // else {\r\n      lightVec += acos(dot(v0,v1)) * normalize(cross(v0,v1));\r\n    // }\r\n  }\r\n  \r\n  vec3 N = geometry.normal;\r\n  vec3 V = geometry.viewDir;\r\n  \r\n  // irradiance factor at point\r\n  float factor = max(dot(lightVec, N), 0.0) / (2.0 * PI);\r\n  \r\n  vec3 irradiance = rectLight.color * rectLight.intensity * factor;\r\n  irradiance *= PI; // punctual light\r\n  \r\n  \r\n  vec3 planePosition = (lpos[0].xyz + lpos[1].xyz + lpos[2].xyz) / 3.0;\r\n  vec3 planeNormal = rectLight.normal;\r\n  planeNormal = normalize(planeNormal - planePosition);\r\n  \r\n  // project onto plane and calculate direction from center to the projection\r\n  // vec3 projection = projectOnPlane(P, planePosition, planeNormal);\r\n  \r\n  // calculate distance from area\r\n  // vec3 nearestPointInside = closestPointPToTriangle(projection, lpos[0].xyz, lpos[1].xyz, lpos[2].xyz);\r\n  // float Ld = distance(P, nearestPointInside);\r\n  // if (cutoffDistance == 0.0 || Ld < cutoffDistance) {\r\n  //   float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), 2.0);\r\n    // float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), decayExponent);\r\n    float NoL = saturate(dot(N, lightVec));\r\n    reflectedLight.directDiffuse += irradiance * NoL * DiffuseLambert(material.diffuseColor);\r\n  // }\r\n  \r\n  /// SPECULAR\r\n  \r\n  // shoot a ray to calculate specular\r\n  vec3 R = reflect(-V, N);\r\n  vec3 E = linePlaneIntersect(geometry.position, -R, planePosition, planeNormal);\r\n  float specAngle = dot(-R, planeNormal);\r\n  if (specAngle > 0.0) {\r\n    \r\n    if (pointInTriangle(E, lpos[0].xyz, lpos[1].xyz, lpos[2].xyz) == 1) {\r\n      reflectedLight.directSpecular += Specular_AreaLight(material.specularColor, N, material.specularRoughness, R, irradiance * specAngle, V);\r\n    }\r\n    else {\r\n      vec3 nearestPointInside = closestPointPToTriangle(E, lpos[0].xyz, lpos[1].xyz, lpos[2].xyz);\r\n      float Ld = length(nearestPointInside-E);\r\n      \r\n      if (rectLight.distance == 0.0 || Ld < rectLight.distance) {\r\n        float Lc = pow(saturate(-Ld / rectLight.distance + 1.0), rectLight.decay);\r\n        reflectedLight.directSpecular += Specular_AreaLight(material.specularColor, N, material.specularRoughness, R, irradiance * Lc * specAngle, V);\r\n      }\r\n    }\r\n  }\r\n}\r\n//--------------------------------------------------\r\nvoid computeRectLight_Rectangle(const in RectLight rectLight, const in GeometricContext geometry, const in Material material, inout ReflectedLight reflectedLight) {\r\n  \r\n  vec4 lpos[4];\r\n  vec3 lvec[4];\r\n  \r\n  // direction vectors from point to area light corners\r\n  for (int i=0; i<4; ++i) {\r\n    // lpos[i] = lightMatrixWorld * vec4(lightverts[i], 1.0); // in world space\r\n    lpos[i] = vec4(rectLight.positions[i], 1.0); // in camera space\r\n    lvec[i] = normalize(lpos[i].xyz - geometry.position); // dir from vertex to area light\r\n  }\r\n  \r\n  // bail if the point is on the wrong side of the light... there must be a better way...\r\n  float tmp = dot(lvec[0], cross((lpos[2]-lpos[0]).xyz, (lpos[1]-lpos[0]).xyz));\r\n  if (tmp > 0.0) return;\r\n  \r\n  // vector irradiance at point\r\n  vec3 lightVec = vec3(0.0);\r\n  for (int i=0; i<4; ++i) {\r\n    vec3 v0 = lvec[i];\r\n    vec3 v1 = lvec[int(mod(float(i+1), 4.0))];\r\n    // if (tmp > 0.0) { // double side\r\n    //   lightVec += acos(dot(v0,v1)) * normalize(cross(v1,v0));\r\n    // }\r\n    // else {\r\n      lightVec += acos(dot(v0,v1)) * normalize(cross(v0,v1));\r\n    // }\r\n  }\r\n  \r\n  vec3 N = geometry.normal;\r\n  vec3 V = geometry.viewDir;\r\n  \r\n  // irradiance factor at point\r\n  float factor = max(dot(lightVec, N), 0.0) / (2.0 * PI);\r\n  \r\n  vec3 irradiance = rectLight.color * rectLight.intensity * factor;\r\n  irradiance *= PI; // punctual light\r\n  \r\n  vec3 planePosition = (lpos[0].xyz + lpos[1].xyz + lpos[2].xyz + lpos[3].xyz) / 4.0;\r\n  vec3 planeNormal = rectLight.normal;\r\n  vec3 right = rectLight.tangent;\r\n  planeNormal = normalize(planeNormal - planePosition);\r\n  right = normalize(right - planePosition);\r\n  vec3 up = normalize(cross(right, planeNormal));\r\n  \r\n  // project onto plane and calculate direction from center to the projection\r\n  // vec3 projection = projectOnPlane(P, planePosition, planeNormal);\r\n  // vec3 dir = projection - planePosition;\r\n  \r\n  // calculate distance from area\r\n  // vec2 diagonal = vec2(dot(dir,right), dot(dir,up));\r\n  // vec2 nearest2D = vec2(clamp(diagonal.x, -width, width), clamp(diagonal.y, -height, height));\r\n  // vec3 nearestPointInside = planePosition + (right*nearest2D.x + up*nearest2D.y);\r\n  \r\n  // float Ld = distance(P, nearestPointInside); // real distance to area rectangle\r\n  // if (cutoffDistance == 0.0 || Ld < cutoffDistance) {\r\n  //   float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), 2.0);\r\n    float NoL = saturate(dot(N, lightVec));\r\n    reflectedLight.directDiffuse += irradiance * NoL * DiffuseLambert(material.diffuseColor);\r\n  // }\r\n  \r\n  // shoot a ray to calculate specular\r\n  vec3 R = reflect(-V, N);\r\n  vec3 E = linePlaneIntersect(geometry.position, -R, planePosition, planeNormal);\r\n  float specAngle = dot(-R, planeNormal);\r\n  if (specAngle > 0.0) {\r\n    vec3 dirSpec = E - planePosition;\r\n    vec2 dirSpec2D = vec2(dot(dirSpec,right), dot(dirSpec,up));\r\n    vec2 nearestSpec2D = vec2(clamp(dirSpec2D.x,-rectLight.width,rectLight.width), clamp(dirSpec2D.y,-rectLight.height,rectLight.height));\r\n    \r\n    float Ld = length(nearestSpec2D-dirSpec2D);\r\n    if (rectLight.distance == 0.0 || Ld < rectLight.distance) {\r\n      float Lc = pow(saturate(-Ld / rectLight.distance + 1.0), rectLight.decay);\r\n      reflectedLight.directSpecular += Specular_AreaLight(material.specularColor, N, material.specularRoughness, R, irradiance * Lc * specAngle, V);\r\n    }\r\n  }\r\n}\r\n//------------------------------------------------------------\r\nvoid computeRectLight(const in RectLight rectLight, const in GeometricContext geometry, const in Material material, inout ReflectedLight reflectedLight) {\r\n  \r\n  if (rectLight.numPositions <= 3) {\r\n    computeRectLight_Triangle(rectLight, geometry, material, reflectedLight);\r\n  }\r\n  else {\r\n    computeRectLight_Rectangle(rectLight, geometry, material, reflectedLight);\r\n  }\r\n}";
+
 	var standardTubeLightFrag = "void computeTubeLight(const in TubeLight tubeLight, const in GeometricContext geometry, const in Material material, inout ReflectedLight reflectedLight) {\r\n  \r\n  vec3 N = geometry.normal;\r\n  vec3 V = geometry.viewDir;\r\n  \r\n  vec3 r = reflect(-V, N);\r\n  vec3 L0 = tubeLight.start - geometry.position;\r\n  vec3 L1 = tubeLight.end - geometry.position;\r\n  float Ld0 = length(L0);\r\n  float Ld1 = length(L1);\r\n  float NoL0 = dot(L0, N) / (2.0 * Ld0);\r\n  float NoL1 = dot(L1, N) / (2.0 * Ld1);\r\n  float NoL = (2.0 * clamp(NoL0 + NoL1, 0.0, 1.0)) / (Ld0 * Ld1 + dot(L0,L1) + 2.0);\r\n  vec3 Lv = L1-L0;\r\n  float RoL0 = dot(r, L0);\r\n  float RoLv = dot(r, Lv);\r\n  float LoLv = dot(L0, Lv);\r\n  float Ld = length(Lv);\r\n  float t = (RoL0 * RoLv - LoLv) / (Ld*Ld - RoLv*RoLv);\r\n  \r\n  vec3 closestPoint = L0 + Lv * clamp(t, 0.0, 1.0);\r\n  vec3 centerToRay = dot(closestPoint, r) * r - closestPoint;\r\n  closestPoint = closestPoint + centerToRay * clamp(tubeLight.radius / length(centerToRay), 0.0, 1.0);\r\n  vec3 Ln = normalize(closestPoint);\r\n  \r\n  // float NoL = saturate(dot(N, Ln));\r\n  float NoV = saturate(dot(N, V));\r\n  vec3 H = normalize(Ln+V);\r\n  float NoH = saturate(dot(N, H));\r\n  float VoH = saturate(dot(V, H));\r\n  float LoV = saturate(dot(Ln, V));\r\n  float a = pow2(material.specularRoughness);\r\n  \r\n  Ld = length(closestPoint);\r\n  float Lc = pow(saturate(-Ld / tubeLight.distance + 1.0), tubeLight.decay);\r\n  float alphaPrime = clamp(tubeLight.radius / (Ld*2.0) + a, 0.0, 1.0);\r\n  float D = D_GGX_AreaLight(a, alphaPrime, NoH);\r\n  float G = PBR_Specular_G(material.specularRoughness, NoV, NoL, NoH, VoH, LoV);\r\n  vec3 F = PBR_Specular_F(material.specularColor, V, H) / (4.0 * NoL * NoV + 1e-5);\r\n  \r\n  vec3 cdiff = DiffuseLambert(material.diffuseColor);\r\n  vec3 cspec = F*(G*D);\r\n  \r\n  // vec3 irradiance = areaLight.color * NoL * Lc;\r\n  vec3 irradiance = tubeLight.color * Lc;\r\n  irradiance *= PI; // punctual light\r\n  \r\n  reflectedLight.directDiffuse += irradiance * cdiff;\r\n  reflectedLight.directSpecular += irradiance * cspec;\r\n}";
 
 	var standardUniforms = {
@@ -1012,6 +1013,8 @@
 		lightsPointFrag: lightsPointFrag,
 		lightsPointFragUnroll: lightsPointFragUnroll,
 		lightsPointUniforms: lightsPointUniforms,
+		lightsRectLightFrag: lightsRectLightFrag,
+		lightsRectLightFragUnroll: lightsRectLightFragUnroll,
 		lightsRectLightUniforms: lightsRectLightUniforms,
 		lightsSpotFrag: lightsSpotFrag,
 		lightsSpotFragUnroll: lightsSpotFragUnroll,
@@ -1098,6 +1101,7 @@
 		standardFrag: standardFrag,
 		standardFragPars: standardFragPars,
 		standardOrenNayarFrag: standardOrenNayarFrag,
+		standardRectLightFrag: standardRectLightFrag,
 		standardTubeLightFrag: standardTubeLightFrag,
 		standardUniforms: standardUniforms,
 		tangentFragPars: tangentFragPars,
@@ -1789,6 +1793,24 @@
 	      end.applyMatrix4(camera.matrixWorldInverse);
 	      this.setTubeLightParameter(index, start, end, light.color, light.distance, light.decay, light.radius);
 	    }
+	    else if (light instanceof PIXY.RectLight) {
+	      
+	      var matrix = new THREE.Matrix4();
+	      matrix.copy(camera.matrixWorldInverse);
+	      matrix.multiply(light.matrix);
+	      
+	      var positions = [];
+	      for (var i=0; i<light.positions.length; ++i) {
+	        var p = new THREE.Vector3().copy(light.positions[i]);
+	        p.applyMatrix4(matrix);
+	        positions.push(p);
+	      }
+	      
+	      var normal = new THREE.Vector3(0,0,1).applyMatrix4(matrix);
+	      var tangent = new THREE.Vector3(1,0,0).applyMatrix4(matrix);
+	      
+	      this.setRectLightParameter(index, positions, normal, tangent, light.width, light.height, light.color, light.intensity, light.distance, light.decay);
+	    }
 	  },
 	  
 	  setDirectLightParameter: function(index, direction, color) {
@@ -1828,6 +1850,21 @@
 	    this.setArrayParameter("tubeLights", index, "distance", distance);
 	    this.setArrayParameter("tubeLights", index, "decay", decay);
 	    this.setArrayParameter("tubeLights", index, "radius", radius);
+	  },
+	  
+	  setRectLightParameter: function(index, positions, normal, tangent, width, height, color, intensity, distance, decay) {
+	    this.setArrayParameter("rectLights", index, "numPositions", positions.length);
+	    for (var i=0; i<positions.length; ++i) {
+	      this.uniforms.rectLights.value[index].positions[i].copy(positions[i]);
+	    }
+	    this.setArrayParameter("rectLights", index, "normal", normal);
+	    this.setArrayParameter("rectLights", index, "tangent", tangent);
+	    this.setArrayParameter("rectLights", index, "width", width);
+	    this.setArrayParameter("rectLights", index, "height", height);
+	    this.setArrayParameter("rectLights", index, "color", color);
+	    this.setArrayParameter("rectLights", index, "intensity", intensity);
+	    this.setArrayParameter("rectLights", index, "distance", distance);
+	    this.setArrayParameter("rectLights", index, "decay", decay);
 	  },
 	  
 	  ////////////////////////////////////////////////////////////////////////////
@@ -2208,6 +2245,9 @@
 	    if (numTubeLight > 0) {
 	      this._addCode(codes, [], "standardTubeLightFrag");
 	    }
+	    if (numRectLight > 0) {
+	      this._addCode(codes, [], "standardRectLightFrag");
+	    }
 	    
 	    if (numDirectLight > 0 || numPointLight > 0 || numSpotLight > 0) {
 	    
@@ -2412,10 +2452,10 @@
 	    
 	    if (numRect == 1) {
 	      // THREE.WebGLProgram: gl.getProgramInfoLog() C:\fakepath(496,3-100): warning X3557: loop only executes for 1 iteration(s), forcing loop to unroll
-	      code.push(ShaderChunk["lightsRectFragUnroll"]);
+	      code.push(ShaderChunk["lightsRectLightFragUnroll"]);
 	    }
 	    else if (numRect > 0) {
-	      code.push(ShaderChunk["lightsRectFrag"]);
+	      code.push(ShaderChunk["lightsRectLightFrag"]);
 	    }
 	    
 	    return code.join("\n");
@@ -4805,6 +4845,27 @@
 	  
 	});
 
+	var RectLight = function() {
+	  
+	  this.positions = [];
+	  this.normal = new THREE.Vector3(0,0,1);
+	  this.tangent = new THREE.Vector3(1,0,0);
+	  this.color = new THREE.Color(0xffffff);
+	  this.intensity = 1.0;
+	  this.width = 1.0;
+	  this.height = 1.0;
+	  this.distance = 50.0;
+	  this.decay = 1.0;
+	  this.matrix = new THREE.Matrix4();
+	  this.numPositions = 4;
+	};
+
+	Object.assign(RectLight.prototype, {
+	  
+	  constructor: RectLight
+	  
+	});
+
 	var ViewRGB = 0;
 	var ViewAlpha = 1;
 	var ViewR = 2;
@@ -4841,6 +4902,7 @@
 	exports.UnrealBloomPass = UnrealBloomPass;
 	exports.AreaLight = AreaLight;
 	exports.TubeLight = TubeLight;
+	exports.RectLight = RectLight;
 	exports.any = any;
 	exports.all = all;
 	exports.radians = radians;
