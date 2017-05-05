@@ -150,6 +150,14 @@
 	  cloudsBrightness: { value: 0.5 }
 	};
 
+	var colorMap2Frag = "  vec4 color2RGBA = texture2D(tDiffuse2, uv);\r\n  material.diffuseColor.rgb = (1.0 - color2RGBA.a) * material.diffuseColor.rgb + color2RGBA.rgb * color2RGBA.a;";
+
+	var colorMap2FragPars = "uniform sampler2D tDiffuse2;";
+
+	var colorMap2Uniforms = {
+	  tDiffuse2: { value: null }
+	};
+
 	var colorMapAlphaFrag = "  material.opacity *= colorRGBA.a;";
 
 	var colorMapFrag = "  vec4 colorRGBA = texture2D(tDiffuse, uv);\r\n  material.diffuseColor.rgb *= colorRGBA.rgb;";
@@ -206,7 +214,7 @@
 
 	var depthFragPars = "#include <packing>";
 
-	var depthShadowFrag = "  gl_FragColor.xyz = vec3(unpackRGBAToDepth(texture2D(tShadow, vUv)));\r\n// gl_FragColor.xyz = vec3(DecodeFloatRGBA(texture2D(tShadow, vUv)));\r\n// gl_FragColor.xyz = texture2D(tShadow, vUv).aaa;\r\n  // gl_FragColor.xyz = texture2D(tShadow, vUv).xyz;\r\n  gl_FragColor.a = 1.0;";
+	var depthShadowFrag = "  gl_FragColor.xyz = vec3(unpackRGBAToDepth(texture2D(tShadow, vUv)));\r\n// gl_FragColor.xyz = vec3(DecodeFloatRGBA(texture2D(tShadow, vUv)));\r\n// gl_FragColor.xyz = texture2D(tShadow, vUv).aaa;\r\n  gl_FragColor.a = 1.0;";
 
 	var depthShadowFragPars = "uniform sampler2D tShadow;";
 
@@ -239,7 +247,7 @@
 
 	var displacementMapVertPars = "uniform sampler2D tDisplacement;\r\nuniform float displacementScale;\r\nuniform float displacementBias;";
 
-	var distortionFrag = "  vec4 distortionNormal = texture2D(tDistortion, vUv);\r\n  vec3 distortion = (distortionNormal.rgb - vec3(0.5)) * distortionStrength;\r\n// float distortionInfluence = 1.0;\r\n// material.diffuseColor.rgb *= texture2D(tDiffuse, vUv + distortion.xy * distortionInfluence).rgb;\r\n  material.diffuseColor.rgb *= texture2D(tDiffuse, vUv2 + distortion.xy).rgb;";
+	var distortionFrag = "  vec4 distortionNormal = texture2D(tDistortion, vUv2);\r\n  vec3 distortion = (distortionNormal.rgb - vec3(0.5)) * distortionStrength;\r\n  uv += distortion.xy;\r\n// float distortionInfluence = 1.0;\r\n// material.diffuseColor.rgb *= texture2D(tDiffuse, vUv + distortion.xy * distortionInfluence).rgb;\r\n// material.diffuseColor.rgb *= texture2D(tDiffuse, vUv2 + distortion.xy).rgb;\r\n  // material.diffuseColor.rgb *= texture2D(tDiffuse, uv + distortion.xy).rgb;";
 
 	var distortionFragPars = "varying vec2 vUv2;\r\nuniform sampler2D tDistortion;\r\nuniform float distortionStrength;";
 
@@ -252,7 +260,7 @@
 
 	var distortionVertPars = "varying vec2 vUv2;";
 
-	var ditherFrag = "// float threshold = bayer(5, vScreenPos.xy * (100.0 + mod(time, 0.5)));\r\n  float threshold = bayer(5, vScreenPos.xy * 100.0);\r\n  material.opacity = step(threshold, material.opacity);\r\n// material.opacity = threshold;";
+	var ditherFrag = "  // float threshold = bayer(1, vScreenPos.xy * 10.0);\r\n  // material.opacity = step(threshold, material.opacity);\r\n  mat4 StippleThresholdMatrix = mat4(\r\n    1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,\r\n    13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,\r\n    4.0 / 17.0, 12.0 / 17.0, 2.0 / 17.0, 10.0 / 17.0,\r\n    16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0);\r\n  \r\n  vec4 thresholdVec = StippleThresholdMatrix[3];\r\n  float scrX = abs(mod(gl_FragCoord.x, 4.0));\r\n  if (scrX <= 1.0) {\r\n    thresholdVec = StippleThresholdMatrix[0];\r\n  }\r\n  else if (scrX <= 2.0) {\r\n    thresholdVec = StippleThresholdMatrix[1];\r\n  }\r\n  else if (scrX <= 3.0) {\r\n    thresholdVec = StippleThresholdMatrix[2];\r\n  }\r\n  \r\n  float threshold = thresholdVec.w;\r\n  float scrY = abs(mod(gl_FragCoord.y, 4.0));\r\n  if (scrY <= 1.0) {\r\n    threshold = thresholdVec.x;\r\n  }\r\n  else if (scrY <= 2.0) {\r\n    threshold = thresholdVec.y;\r\n  }\r\n  else if (scrX <= 3.0) {\r\n    threshold = thresholdVec.z;\r\n  }\r\n  if (material.opacity < threshold) {\r\n    discard;\r\n  }";
 
 	var ditherFragPars = "varying vec4 vScreenPos;\r\n// http://fe0km.blog.fc2.com/blog-entry-122.html?sp\r\n// http://glslsandbox.com/e#30514.1\r\nfloat bayer(int iter, vec2 rc) {\r\n  float sum = 0.0;\r\n  for (int i=0; i<4; ++i) {\r\n    if (i >= iter) break;\r\n    vec2 bsize = vec2(pow(2.0, float(i+1)));\r\n    vec2 t = mod(rc, bsize) / bsize;\r\n    int idx = int(dot(floor(t*2.0), vec2(2.0, 1.0)));\r\n    float b = 0.0;\r\n    if (idx == 0) { b = 0.0; } else if (idx == 1) { b = 2.0; } else if (idx == 2) { b = 3.0; } else { b = 1.0; }\r\n    sum += b * pow(4.0, float(iter-i-1));\r\n  }\r\n  float phi = pow(4.0, float(iter)) + 1.0;\r\n  return (sum + 1.0) / phi;\r\n}";
 
@@ -405,7 +413,7 @@
 
 	var idVert = "void main() {\r\n  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n}";
 
-	var innerGlowFrag = "  float glow = 1.0 - max(0.0, dot(geometry.normal, geometry.viewDir));\r\n  float glowPow = max(glow / (innerGlowBase * (1.0 - glow) + glow), 0.0) * innerGlowSub;\r\n  glowPow = max(0.0, glowPow - innerGlowRange) * (1.0 / (1.0 - innerGlowRange));\r\n  reflectedLight.indirectSpecular += innerGlowColor * glowPow;";
+	var innerGlowFrag = "  float glow = 1.0 - max(0.0, dot(geometry.normal, geometry.viewDir));\r\n  float glowPow = max(glow / (innerGlowBase * (1.0 - glow) + glow), 0.0) * innerGlowSub;\r\n  glowPow = max(0.0, glowPow - innerGlowRange) * (1.0 / max(1.0 - innerGlowRange, 0.00001));\r\n  glowPow = min(glowPow, 1.0);\r\n  // glowPow = min(1.0, glowPow*step(innerGlowRange, glowPow));\r\n  reflectedLight.indirectSpecular += innerGlowColor * glowPow;\r\n  // reflectedLight.indirectSpecular += vec3(glowPow);\r\n  // reflectedLight.indirectSpecular += vec3(glow);";
 
 	var innerGlowFragPars = "uniform vec3 innerGlowColor;\r\nuniform float innerGlowBase;\r\nuniform float innerGlowSub;\r\nuniform float innerGlowRange;";
 
@@ -612,7 +620,9 @@
 
 	var packing = "vec3 packNormalToRGB(const in vec3 normal) {\r\n  return normalize(normal) * 0.5 + 0.5;\r\n}\r\nvec3 unpackRGBToNormal(const in vec3 rgb) {\r\n  return 1.0 - 2.0 * rgb.xyz;\r\n}\r\n\r\nconst vec3 PackFactors = vec3(255.0, 65025.0, 16581375.0);\r\nconst vec4 UnpackFactors = vec4(1.0, 1.0 / PackFactors);\r\nconst float ShiftRight8 = 1.0 / 255.0;\r\n// const float PackUpscale = 256.0 / 255.0; // fraction -> 0..1 (including 1)\r\n// const float UnpackDownscale = 255.0 / 256.0; // 0..1 -> fraction (excluding 1)\r\n// const vec3 PackFactors = vec3(256.0, 65535.0, 16777216.0);\r\n// const vec4 UnpackFactors = UnpackDownscale / vec4(1.0, PackFactors);\r\n// const float ShiftRight8 = 1.0 / 256.0;\r\nvec4 packDepthToRGBA(float v) {\r\n  vec4 r = vec4(v, fract(PackFactors * v));\r\n  r.xyz -= r.yzw * ShiftRight8;\r\n//   return r * PackUpscale;\r\n  return r;\r\n}\r\n\r\nfloat unpackRGBAToDepth(vec4 rgba) {\r\n  return dot(rgba, UnpackFactors);\r\n}\r\n\r\n\r\n// NOTE: viewZ/eyeZ is < 0 when in front of the camera per OpenGL conventions\r\n\r\nfloat viewZToOrthographicDepth(const in float viewZ, const in float near, const in float far) {\r\n  return (viewZ + near) / (near - far);\r\n}\r\n\r\nfloat orthographicDepthToViewZ(const in float linearClipZ, const in float near, const in float far) {\r\n  return linearClipZ * (near - far) - near;\r\n}\r\n\r\nfloat viewZToPerspectiveDepth(const in float viewZ, const in float near, const in float far) {\r\n  return ((near + viewZ) * far) / ((far - near) * viewZ);\r\n}\r\n\r\nfloat perspectiveDepthToViewZ(const in float invClipZ, const in float near, const in float far) {\r\n  return (near * far) / ((far - near) * invClipZ - far);\r\n}";
 
-	var parallaxMapFrag = "  vec3 vv = vViewPosition * mat3(vTangent, vBinormal, -vNormal);\r\n  uv += (texture2D(tNormal, vUv).r * parallaxHeight * parallaxScale) * vv.xy;\r\n// uv += (texture2D(tNormal, vUv).a * parallaxHeight + parallaxScale) * vv.xy;";
+	var parallaxFrag = "  vec3 T = normalize(vTangent);\r\n  vec3 B = normalize(vBinormal);\r\n  vec3 vv = -geometry.viewDir * mat3(T, B, -geometry.normal);\r\n  uv += parallaxHeight * vv.xy;";
+
+	var parallaxMapFrag = "  vec3 vv = -geometry.viewDir * mat3(vTangent, vBinormal, -vNormal);\r\n  uv += (texture2D(tNormal, vUv).a * parallaxHeight + parallaxScale) * vv.xy;";
 
 	var parallaxMapFragPars = "uniform float parallaxHeight;\r\nuniform float parallaxScale;";
 
@@ -736,7 +746,39 @@
 	  specularStrength: { value: 1.0 }
 	};
 
-	var ssaoFrag = "uniform float cameraNear;\r\nuniform float cameraFar;\r\nuniform bool onlyAO; // use only ambient occulusion pass?\r\nuniform vec2 size; // texture width, height\r\nuniform float aoClamp; // depth clamp - reduces haloing at screen edges\r\nuniform float lumInfluence;  // how much luminance affects occulusion\r\nuniform sampler2D tDiffuse;\r\nuniform sampler2D tDepth;\r\nvarying vec2 vUv;\r\n\r\n// #define PI 3.14159265\r\n#define DL 2.399963229728653 // PI * (3.0 - sqrt(5.0))\r\n#define EULER 2.718281828459045\r\n\r\n// user variables\r\nconst int samples = 8; // ao sample count\r\nconst float radius = 5.0; // ao radius\r\nconst bool useNoise = false; // use noise instead of pattern for sample dithering\r\nconst float noiseAmount = 0.0003; // dithering amount\r\nconst float diffArea = 0.4; // self-shadowing reduction\r\nconst float gDisplace = 0.4; // gause bell center\r\n\r\n// RGBA depth\r\n#include <packing>\r\n\r\n// generating noise / pattern texture for dithering\r\nvec2 rand(const vec2 coord) {\r\n  vec2 noise;\r\n  if (useNoise) {\r\n    float nx = dot(coord, vec2(12.9898, 78.233));\r\n    float ny = dot(coord, vec2(12.9898, 78.233) * 2.0);\r\n    noise = clamp(fract(43758.5453 * sin(vec2(nx, ny))), 0.0, 1.0);\r\n  } else {\r\n    float ff = fract(1.0 - coord.s * (size.x / 2.0));\r\n    float gg = fract(coord.t * (size.y / 2.0));\r\n    noise = vec2(0.25, 0.75) * vec2(ff) + vec2(0.75, 0.25) * gg;\r\n  }\r\n\r\n  return (noise * 2.0 - 1.0) * noiseAmount;\r\n}\r\n\r\nfloat readDepth(const in vec2 coord) {\r\n  float zfarPlusNear = cameraFar + cameraNear;\r\n  float zfarMinusNear = cameraFar - cameraNear;\r\n  float zcoef = 2.0 * cameraNear;\r\n\r\n//   return (2.0 * cameraNear) / (cameraFar + cameraNear - unpackDepth(texture2D(tDepth, coord)) * (cameraFar - cameraNear));\r\n  return zcoef / (zfarPlusNear - unpackRGBAToDepth(texture2D(tDepth, coord)) * zfarMinusNear);\r\n}\r\n\r\nfloat compareDepths(const in float depth1, const in float depth2, inout int far) {\r\n  float garea = 2.0; // gauss ball width\r\n  float diff = (depth1 - depth2) * 100.0; // depth difference (0-100)\r\n\r\n// reduce left bell width to avoid self-shadowing\r\n\r\n  if (diff < gDisplace) {\r\n    garea = diffArea;\r\n  } else {\r\n    far = 1;\r\n  }\r\n\r\n  float dd = diff - gDisplace;\r\n  float gauss = pow(EULER, -2.0 * dd * dd / (garea * garea));\r\n  return gauss;\r\n}\r\n\r\nfloat calcAO(float depth, float dw, float dh) {\r\n  float dd = radius - depth * radius;\r\n  vec2 vv = vec2(dw, dh);\r\n\r\n  vec2 coord1 = vUv + dd * vv;\r\n  vec2 coord2 = vUv - dd * vv;\r\n\r\n  float temp1 = 0.0;\r\n  float temp2 = 0.0;\r\n\r\n  int far = 0;\r\n  temp1 = compareDepths(depth, readDepth(coord1), far);\r\n\r\n// DEPTH EXTRAPOLATION\r\n\r\n  if (far > 0) {\r\n    temp2 = compareDepths(readDepth(coord2), depth, far);\r\n    temp1 += (1.0 - temp1) * temp2;\r\n  }\r\n\r\n  return temp1;\r\n}\r\n\r\nvoid main() {\r\n  vec2 noise = rand(vUv);\r\n  float depth = readDepth(vUv);\r\n  float tt = clamp(depth, aoClamp, 1.0);\r\n  float w = (1.0 / size.x) / tt + (noise.x * (1.0 - noise.x));\r\n  float h = (1.0 / size.y) / tt + (noise.y * (1.0 - noise.y));\r\n\r\n  float ao = 0.0;\r\n\r\n  float dz = 1.0 / float(samples);\r\n  float z = 1.0 - dz / 2.0;\r\n  float l = 0.0;\r\n\r\n  for (int i=0; i<=samples; i++) {\r\n    float r = sqrt(1.0 - z);\r\n    float pw = cos(l) * r;\r\n    float ph = sin(l) * r;\r\n    ao += calcAO(depth, pw * w, ph * h);\r\n    z = z - dz;\r\n    l = l + DL;\r\n  }\r\n\r\n  ao /= float(samples);\r\n  ao = 1.0 - ao;\r\n\r\n  vec3 color = texture2D(tDiffuse, vUv).rgb;\r\n\r\n  vec3 lumcoeff = vec3(0.299, 0.587, 0.114);\r\n  float lum = dot(color.rgb, lumcoeff);\r\n  vec3 luminance = vec3(lum);\r\n\r\n  vec3 final = vec3(color * mix(vec3(ao), vec3(1.0), luminance * lumInfluence)); // mix(color * ao, white, luminance)\r\n  if (onlyAO) {\r\n    final = vec3(mix(vec3(ao), vec3(1.0), luminance * lumInfluence));\r\n  }\r\n\r\n  gl_FragColor = vec4(final, 1.0);\r\n}";
+	var ssao2BlurFrag = "#define KERNEL_RADIUS 4\r\nuniform sampler2D tAO;\r\nuniform vec4 blurParams;\r\nvarying vec2 vUv;\r\n\r\nfloat CrossBilateralWeight(float r, float ddiff, inout float w_total) {\r\n  float w = exp(-r*r*blurParams.z) * (ddiff < blurParams.w ? 1.0 : 0.0);\r\n  w_total += w;\r\n  return w;\r\n}\r\n\r\n// Performs a gaussian blur in one direction\r\nvec2 Blur(vec2 texScale) {\r\n  vec2 centerCoord = vUv;\r\n  float w_total = 1.0;\r\n  vec2 aoDepth = texture2D(tAO, centerCoord).xy;\r\n  float totalAo = aoDepth.x;\r\n  float centerZ = aoDepth.y;\r\n  // [unroll]\r\n  for (int i=-KERNEL_RADIUS; i<KERNEL_RADIUS; i++) {\r\n    vec2 texCoord = centerCoord + (float(i)*texScale);\r\n    vec2 sampleAoZ = texture2D(tAO, texCoord).xy;\r\n    float diff = abs(sampleAoZ.y - centerZ);\r\n    float weight = CrossBilateralWeight(float(i), diff, w_total);\r\n    totalAo += sampleAoZ.x * weight;\r\n  }\r\n  \r\n  return vec2(totalAo / w_total, centerZ);\r\n}\r\n\r\nvoid main() {\r\n  gl_FragColor = vec4(Blur(vec2(blurParams.x, blurParams.y)), 0.0, 1.0);\r\n}";
+
+	var ssao2BlurUniforms = {
+	  tAO: { value: null },
+	  blurParams: { value: new THREE.Vector4() }
+	};
+
+	var ssao2CompositeFrag = "uniform sampler2D tDiffuse;\r\nuniform sampler2D tAO;\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n  vec4 colorRGBA = texture2D(tDiffuse, vUv);\r\n  vec4 aoRGBA = texture2D(tAO, vUv);\r\n  colorRGBA.rgb *= pow(aoRGBA.r, 2.0);\r\n  gl_FragColor = vec4(colorRGBA.rgb, 1.0);\r\n  // gl_FragColor = vec4(vec3(aoRGBA.r), 1.0);\r\n}";
+
+	var ssao2CompositeUniforms = {
+	  tDiffuse: { value: null },
+	  tAO: { value: null }
+	};
+
+	var ssao2Frag = "#define PI 3.14159265359\r\n#define SAMPLE_FIRST_STEP 1\r\n#define NUM_STEPS 4\r\n#define MAX_STEPS 16\r\n#define NUM_DIRECTIONS 8\r\nuniform sampler2D tDiffuse;\r\nuniform sampler2D tDepth;\r\nuniform vec4 radiusParams;\r\nuniform vec4 biasParams;\r\nuniform vec4 screenParams;\r\nuniform vec4 uvToViewParams;\r\nuniform vec4 focalParams;\r\nuniform vec2 cameraParams;\r\nvarying vec2 vUv;\r\n\r\n// expects values in the range of [0,1]x[0,1], returns values in the [0,1] range.\r\n// do not collapse into a single function per: http://byteblacksmith.com/improvements-to-the-canonical-one-liner-glsl-rand-for-opengl-es-2-0/\r\n// highp float rand(const in vec2 uv) {\r\n//   const highp float a = 12.9898, b = 78.233, c = 43758.5453;\r\n//   highp float dt = dot(uv.xy, vec2(a,b)), sn = mod(dt, PI);\r\n//   return fract(sin(sn) * c);\r\n// }\r\n// Value Noise by Inigo Quilez - iq/2013\r\n// https://www.shadertoy.com/view/lsf3WH\r\nvec2 rand(vec2 p) {\r\n  p = vec2(dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3)));\r\n  return -1.0 + 2.0 * fract(sin(p)*43758.5453123);\r\n}\r\n\r\nvec2 round(vec2 a) {\r\n  return floor(a + 0.5);\r\n}\r\n\r\nfloat rsqrt(float a) {\r\n  return inversesqrt(a);\r\n}\r\n\r\nconst vec3 PackFactors = vec3(255.0, 65025.0, 16581375.0);\r\nconst vec4 UnpackFactors = vec4(1.0, 1.0 / PackFactors);\r\nconst float ShiftRight8 = 1.0 / 255.0;\r\nfloat unpackRGBAToDepth(vec4 rgba) {\r\n  return dot(rgba, UnpackFactors);\r\n}\r\n\r\nfloat viewZToOrthographicDepth(const in float viewZ, const in float near, const in float far) {\r\n  return (viewZ + near) / (near - far);\r\n}\r\n\r\nfloat perspectiveDepthToViewZ(const in float invClipZ, const in float near, const in float far) {\r\n  return (near * far) / ((far - near) * invClipZ - far);\r\n}\r\n\r\nvec3 uvToView(vec2 uv, float eye_z) {\r\n  uv = uvToViewParams.xy * uv + uvToViewParams.zw;\r\n  return vec3(uv * eye_z, eye_z);\r\n}\r\n\r\nvec3 viewPos(vec2 uv) {\r\n  float depth = texture2D(tDepth, uv).x;\r\n  float viewZ = -perspectiveDepthToViewZ(depth, cameraParams.x, cameraParams.y);\r\n  return uvToView(uv, viewZ);\r\n}\r\n\r\nfloat getLengthSqr(vec3 v) {\r\n  return dot(v,v);\r\n}\r\n\r\nvec3 minOfDiff(vec3 P, vec3 Pr, vec3 Pl) {\r\n  vec3 v1 = Pr - P;\r\n  vec3 v2 = P - Pl;\r\n  return (getLengthSqr(v1) < getLengthSqr(v2)) ? v1 : v2;\r\n}\r\n\r\nfloat falloffFactor(float d2) {\r\n  return d2 * radiusParams.z + 1.0;\r\n}\r\n\r\nvec2 snapUVOffset(vec2 uv) {\r\n  return round(uv * screenParams.xy) * screenParams.zw;\r\n}\r\n\r\nfloat TanToSin(float x) {\r\n  return x * rsqrt(x*x + 1.0);\r\n}\r\n\r\nfloat getTangent(vec3 T) {\r\n  return -T.z * rsqrt(dot(T.xy,T.xy));\r\n}\r\n\r\nfloat integerateOcclusion(\r\n  vec2 uv0,\r\n  vec2 snapped_duv,\r\n  vec3 P,\r\n  vec3 dPdu,\r\n  vec3 dPdv,\r\n  inout float tanH)\r\n{\r\n  float ao = 0.0;\r\n  \r\n  // Compute a tangent vector for snapped_duv\r\n  vec3 tangVec = snapped_duv.x * dPdu + snapped_duv.y * dPdv;\r\n  float invTanLen = rsqrt(dot(tangVec.xy,tangVec.xy));\r\n  float tanT = -tangVec.z * invTanLen;\r\n  tanT += biasParams.y;\r\n  \r\n  float sinT = TanToSin(tanT);\r\n  vec3 S = viewPos(uv0 + snapped_duv);\r\n  vec3 diff = S - P;\r\n  float tanS = getTangent(diff);\r\n  float sinS = TanToSin(tanS);\r\n  float d2 = getLengthSqr(diff);\r\n  \r\n  if ((d2 < radiusParams.y) && (tanS > tanT)) {\r\n    // Compute AO between the tangent plane and the sample\r\n    ao = falloffFactor(d2) * saturate(sinS - sinT);\r\n    \r\n    // Update the horizon angle\r\n    tanH = max(tanH, tanS);\r\n  }\r\n  \r\n  return ao;\r\n}\r\n\r\nfloat calculateHorizonOcclusion(\r\n  vec2 dUv, vec2 texelDeltaUV, vec2 uv0, vec3 P, float numSteps,\r\n  float randstep, vec3 dPdu, vec3 dPdv)\r\n{\r\n  float ao = 0.0;\r\n  \r\n  vec2 uv = uv0 + snapUVOffset(randstep * dUv);\r\n  vec2 deltaUV = snapUVOffset(dUv);\r\n  vec3 T = deltaUV.x * dPdu + deltaUV.y * dPdv;\r\n  \r\n  float invTanLen = rsqrt(dot(T.xy,T.xy));\r\n  float tanH = -T.z * invTanLen;\r\n  tanH += biasParams.y;\r\n  \r\n#if SAMPLE_FIRST_STEP\r\n// Take a first sample between uv0 and uv0 + deltaUV\r\nvec2 snapped_duv = snapUVOffset(randstep * deltaUV + texelDeltaUV);\r\nao = integerateOcclusion(uv0, snapped_duv, P, dPdu, dPdv, tanH);\r\n--numSteps;\r\n#endif\r\n\r\n  float sinH = TanToSin(tanH);\r\n  for (int j=1; j<MAX_STEPS; ++j) {\r\n    if (float(j) >= numSteps) {\r\n      break;\r\n    }\r\n    uv += deltaUV;\r\n    vec3 S = viewPos(uv);\r\n    vec3 diff = S - P;\r\n    float tanS = getTangent(diff);\r\n    float d2 = getLengthSqr(diff);\r\n    \r\n    // Use a merged dynamic branch\r\n    //[branch]\r\n    if ((d2 < radiusParams.y) && (tanS > tanH)) {\r\n      // Accumulate AO betrween the horizon and the sample\r\n      float sinS = TanToSin(tanS);\r\n      ao += falloffFactor(d2) * saturate(sinS - sinH);\r\n      \r\n      // Update the current horizon angle\r\n      tanH = tanS;\r\n      sinH = sinS;\r\n    }\r\n  }\r\n  \r\n  return ao;\r\n}\r\n\r\nvec2 rotateDirections(vec2 Dir, vec2 CosSin) {\r\n  return vec2(Dir.x*CosSin.x - Dir.y*CosSin.y, Dir.x*CosSin.y+Dir.y*CosSin.x);\r\n}\r\n\r\nvec3 randCosSinJitter(vec2 uv) {\r\n  vec2 r = rand(uv);\r\n\tfloat angle = 2.0 * PI * r.x / float(NUM_DIRECTIONS);\r\n  return vec3(cos(angle), sin(angle), r.y);\r\n}\r\n\r\nvoid calculateNumSteps(inout vec2 stepSizeInUV, inout float numSteps, float radiusInPixels, float rand) {\r\n  // Avoid oversampling if NUM_STEPS is greater than the kerenl radius in pixels\r\n  numSteps = min(float(NUM_STEPS), radiusInPixels);\r\n  \r\n  // Divide by Ns+1 so taht the farthest samples are not fully attenuated\r\n  float stepSizeInPixels = radiusInPixels / (numSteps+1.0);\r\n  \r\n  // Clamp numSteps if it is greater than the max kernel footprint\r\n  float maxNumSteps = radiusParams.w / stepSizeInPixels;\r\n  if (maxNumSteps < numSteps) {\r\n    // Use dithering to avoid AO discontinuities\r\n    numSteps = floor(maxNumSteps + rand);\r\n    numSteps = max(numSteps, 1.0);\r\n    stepSizeInPixels = radiusParams.w / numSteps;\r\n  }\r\n  \r\n  // Step size in uv space\r\n  stepSizeInUV = stepSizeInPixels * screenParams.zw;\r\n}\r\n\r\nvoid main() {\r\n  \r\n  vec2 uv = vUv;\r\n  // vec2 uv = vec2(0.5,0.5);\r\n  vec2 scr = vUv*screenParams.xy;\r\n  \r\n  vec3 posCenter = viewPos(uv);\r\n  \r\n  // (cos(alpha), sin(alpha), jitter)\r\n  vec3 rand = randCosSinJitter(uv);\r\n  // vec3 rand = randCosSinJitter(vUv*2.0-1.0);\r\n  // vec3 rand = randomTexture.Sample(PointWrapSampler, IN.position.xy / RANDOM_TEXTURE_WIDTH);\r\n  \r\n  // Compute projection of disk of radius g_R into uv space\r\n  // Multiply by 0.5 to scale from [-1,1]^2 to [0,1]^2\r\n  vec2 diskRadiusInUV = 0.5 * radiusParams.x * focalParams.xy / posCenter.z;\r\n  float radiusInPixels = diskRadiusInUV.x * screenParams.x;\r\n  if (radiusInPixels < 1.0) {\r\n    gl_FragColor = vec4(vec3(1.0), 1.0);\r\n    return;\r\n  }\r\n  \r\n  // vec3 rand = randomTexture.Load(int3(IN.position.xy,0) & 63);\r\n  //calculateNumSteps(stepSize, numSteps, radiusInPixels, rand.z);\r\n  \r\n  // Nearest neighbor pixels on the tangent plane\r\n  vec3 posRight  = viewPos(uv + vec2(screenParams.z, 0));\r\n  vec3 posLeft   = viewPos(uv + vec2(-screenParams.z, 0));\r\n  vec3 posTop    = viewPos(uv + vec2(0, screenParams.w));\r\n  vec3 posBottom = viewPos(uv + vec2(0,-screenParams.w));\r\n  \r\n  // Screen-aligned basis for the tangent plane\r\n  vec3 dPdu = minOfDiff(posCenter, posRight, posLeft);\r\n  vec3 dPdv = minOfDiff(posCenter, posTop, posBottom) * (screenParams.y * screenParams.z);\r\n  \r\n  float ao = 0.0;\r\n  float alpha = 2.0 * PI / float(NUM_DIRECTIONS);\r\n  //vec3 rand;\r\n  float numSteps;\r\n  vec2 stepSize;\r\n  for (int d=0; d<NUM_DIRECTIONS; ++d) {\r\n    //rand = randomTexture.Sample(PointWrapSampler, IN.uv * 100);\r\n    //rand = randomTexture.Load(int3(IN.position.xy + int2(d*5, d*17),0) & 31);\r\n    float angle = alpha * float(d);\r\n    \r\n    calculateNumSteps(stepSize, numSteps, radiusInPixels, rand.z);\r\n    vec2 dir = rotateDirections(vec2(cos(angle), sin(angle)), rand.xy);\r\n    vec2 deltaUV = dir * stepSize.xy;\r\n    vec2 texelDeltaUV = dir * screenParams.zw;\r\n    ao += calculateHorizonOcclusion(deltaUV, texelDeltaUV, uv, posCenter, numSteps, rand.z, dPdu, dPdv);\r\n    \r\n    // vec2 snapped_duv = snapUVOffset(deltaUV);\r\n    // vec2 snapped_uv = snapUVOffset(rand.z * snapped_duv + texelDeltaUV);\r\n    // vec2 snapped_scr = (uv + snapped_uv) * screenParams.xy;\r\n    // vec2 snapped_scr = (uv + snapped_uv) * screenParams.xy;\r\n    // vec2 snapped_scr = uv * screenParams.xy;\r\n    // if (snapped_scr.x >= scr.x && snapped_scr.x <= scr.x+1.0 && snapped_scr.y >= scr.y && snapped_scr.y <= scr.y+1.0) {\r\n    //   gl_FragColor = vec4(1.0,0.0,0.0,1.0);\r\n    //   return;\r\n    // }\r\n  }\r\n  \r\n  ao = 1.0 - ao / float(NUM_DIRECTIONS) * biasParams.z;\r\n  gl_FragColor = vec4(saturate(ao), posCenter.z, 0.0, 1.0);\r\n  // gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\r\n  // gl_FragColor = vec4(normalize(posCenter)*0.5+0.5, 1.0);\r\n  // gl_FragColor = vec4(vec3(saturate(ao)), 1.0);\r\n}\r\n  ";
+
+	var ssao2Uniforms = {
+	  tDiffuse: { value: null },
+	  tDepth: { value: null },
+	  angleBias: { value: 40.0 },
+	  radius: { value: 4.5 },
+	  maxRadius: { value: 0.5 },
+	  strength: { value: 10.0 },
+	  
+	  radiusParams: { value: new THREE.Vector4() },
+	  biasParams: { value: new THREE.Vector4() },
+	  screenParams: { value: new THREE.Vector4() },
+	  uvToViewParams: { value: new THREE.Vector4() },
+	  focalParams: { value: new THREE.Vector4() },
+	  cameraParams: { value: new THREE.Vector2() },
+	};
+
+	var ssaoFrag = "uniform float cameraNear;\r\nuniform float cameraFar;\r\nuniform bool onlyAO; // use only ambient occulusion pass?\r\nuniform vec2 size; // texture width, height\r\nuniform float aoClamp; // depth clamp - reduces haloing at screen edges\r\nuniform float lumInfluence;  // how much luminance affects occulusion\r\nuniform float radius; // ao radius\r\nuniform float diffArea; // self-shadowing reduction\r\nuniform float gDisplace; // gause bell center\r\nuniform sampler2D tDiffuse;\r\nuniform sampler2D tDepth;\r\nvarying vec2 vUv;\r\n\r\n// #define PI 3.14159265\r\n#define DL 2.399963229728653 // PI * (3.0 - sqrt(5.0))\r\n#define EULER 2.718281828459045\r\n\r\n// user variables\r\nconst int samples = 8; // ao sample count\r\n// const float radius = 5.0; // ao radius\r\nconst bool useNoise = false; // use noise instead of pattern for sample dithering\r\nconst float noiseAmount = 0.0003; // dithering amount\r\n// const float diffArea = 0.4; // self-shadowing reduction\r\n// const float gDisplace = 0.4; // gause bell center\r\n\r\n// generating noise / pattern texture for dithering\r\nvec2 rand(const vec2 coord) {\r\n  vec2 noise;\r\n  if (useNoise) {\r\n    float nx = dot(coord, vec2(12.9898, 78.233));\r\n    float ny = dot(coord, vec2(12.9898, 78.233) * 2.0);\r\n    noise = clamp(fract(43758.5453 * sin(vec2(nx, ny))), 0.0, 1.0);\r\n  } else {\r\n    float ff = fract(1.0 - coord.s * (size.x / 2.0));\r\n    float gg = fract(coord.t * (size.y / 2.0));\r\n    noise = vec2(0.25, 0.75) * vec2(ff) + vec2(0.75, 0.25) * gg;\r\n  }\r\n\r\n  return (noise * 2.0 - 1.0) * noiseAmount;\r\n}\r\n\r\nfloat readDepth(const in vec2 coord) {\r\n  float zfarPlusNear = cameraFar + cameraNear;\r\n  float zfarMinusNear = cameraFar - cameraNear;\r\n  float zcoef = 2.0 * cameraNear;\r\n\r\n//   return (2.0 * cameraNear) / (cameraFar + cameraNear - unpackDepth(texture2D(tDepth, coord)) * (cameraFar - cameraNear));\r\n  // return zcoef / (zfarPlusNear - unpackRGBAToDepth(texture2D(tDepth, coord)) * zfarMinusNear);\r\n  return zcoef / (zfarPlusNear - texture2D(tDepth, coord).r * zfarMinusNear);\r\n}\r\n\r\nfloat compareDepths(const in float depth1, const in float depth2, inout int far) {\r\n  float garea = 2.0; // gauss ball width\r\n  float diff = (depth1 - depth2) * 100.0; // depth difference (0-100)\r\n\r\n// reduce left bell width to avoid self-shadowing\r\n\r\n  if (diff < gDisplace) {\r\n    garea = diffArea;\r\n  } else {\r\n    far = 1;\r\n  }\r\n\r\n  float dd = diff - gDisplace;\r\n  float gauss = pow(EULER, -2.0 * dd * dd / (garea * garea));\r\n  return gauss;\r\n}\r\n\r\nfloat calcAO(float depth, float dw, float dh) {\r\n  float dd = radius - depth * radius;\r\n  vec2 vv = vec2(dw, dh);\r\n\r\n  vec2 coord1 = vUv + dd * vv;\r\n  vec2 coord2 = vUv - dd * vv;\r\n\r\n  float temp1 = 0.0;\r\n  float temp2 = 0.0;\r\n\r\n  int far = 0;\r\n  temp1 = compareDepths(depth, readDepth(coord1), far);\r\n\r\n// DEPTH EXTRAPOLATION\r\n\r\n  if (far > 0) {\r\n    temp2 = compareDepths(readDepth(coord2), depth, far);\r\n    temp1 += (1.0 - temp1) * temp2;\r\n  }\r\n\r\n  return temp1;\r\n}\r\n\r\nvoid main() {\r\n  vec2 noise = rand(vUv);\r\n  float depth = readDepth(vUv);\r\n  float tt = clamp(depth, aoClamp, 1.0);\r\n  float w = (1.0 / size.x) / tt + (noise.x * (1.0 - noise.x));\r\n  float h = (1.0 / size.y) / tt + (noise.y * (1.0 - noise.y));\r\n\r\n  float ao = 0.0;\r\n\r\n  float dz = 1.0 / float(samples);\r\n  float z = 1.0 - dz / 2.0;\r\n  float l = 0.0;\r\n\r\n  for (int i=0; i<=samples; i++) {\r\n    float r = sqrt(1.0 - z);\r\n    float pw = cos(l) * r;\r\n    float ph = sin(l) * r;\r\n    ao += calcAO(depth, pw * w, ph * h);\r\n    z = z - dz;\r\n    l = l + DL;\r\n  }\r\n\r\n  ao /= float(samples);\r\n  ao = 1.0 - ao;\r\n\r\n  vec3 color = texture2D(tDiffuse, vUv).rgb;\r\n\r\n  vec3 lumcoeff = vec3(0.299, 0.587, 0.114);\r\n  float lum = dot(color.rgb, lumcoeff);\r\n  vec3 luminance = vec3(lum);\r\n\r\n  vec3 final = vec3(color * mix(vec3(ao), vec3(1.0), luminance * lumInfluence)); // mix(color * ao, white, luminance)\r\n  if (onlyAO) {\r\n    final = vec3(mix(vec3(ao), vec3(1.0), luminance * lumInfluence));\r\n  }\r\n\r\n  gl_FragColor = vec4(final, 1.0);\r\n}";
 
 	var ssaoUniforms = {
 	  tDiffuse:     { value: null },
@@ -746,7 +788,10 @@
 	  cameraFar:   { value: 100 },
 	  onlyAO:      { value: 0 },
 	  aoClamp:     { value: 0.5 },
-	  lumInfluence: { value: 0.5 }
+	  lumInfluence: { value: 0.5 },
+	  radius:       { value: 5.0 },
+	  diffArea:     { value: 0.4 },
+	  gDisplace:    { value: 0.4 }
 	};
 
 	var ssaoVert = "varying vec2 vUv;\r\nvoid main() {\r\n  vUv = uv;\r\n  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n}";
@@ -824,6 +869,8 @@
 	var uvScaleUniforms = {
 	  uvScale: { value: 1.0 }
 	};
+
+	var uvScroll2Vert = "  vUv2 += fract(vec2(uvScrollSpeedU, uvScrollSpeedV) * uvScrollTime);";
 
 	var uvScrollUniforms = {
 	  uvScrollTime: { value: 0.0 },
@@ -909,6 +956,9 @@
 		cloudsFrag: cloudsFrag,
 		cloudsFragPars: cloudsFragPars,
 		cloudsUniforms: cloudsUniforms,
+		colorMap2Frag: colorMap2Frag,
+		colorMap2FragPars: colorMap2FragPars,
+		colorMap2Uniforms: colorMap2Uniforms,
 		colorMapAlphaFrag: colorMapAlphaFrag,
 		colorMapFrag: colorMapFrag,
 		colorMapFragPars: colorMapFragPars,
@@ -1051,6 +1101,7 @@
 		overlayNormalUniforms: overlayNormalUniforms,
 		overlayUniforms: overlayUniforms,
 		packing: packing,
+		parallaxFrag: parallaxFrag,
 		parallaxMapFrag: parallaxMapFrag,
 		parallaxMapFragPars: parallaxMapFragPars,
 		parallaxMapUniforms: parallaxMapUniforms,
@@ -1092,6 +1143,12 @@
 		specularMapFragPars: specularMapFragPars,
 		specularMapUniforms: specularMapUniforms,
 		specularUniforms: specularUniforms,
+		ssao2BlurFrag: ssao2BlurFrag,
+		ssao2BlurUniforms: ssao2BlurUniforms,
+		ssao2CompositeFrag: ssao2CompositeFrag,
+		ssao2CompositeUniforms: ssao2CompositeUniforms,
+		ssao2Frag: ssao2Frag,
+		ssao2Uniforms: ssao2Uniforms,
 		ssaoFrag: ssaoFrag,
 		ssaoUniforms: ssaoUniforms,
 		ssaoVert: ssaoVert,
@@ -1124,6 +1181,7 @@
 		uvScaleFrag: uvScaleFrag,
 		uvScaleFragPars: uvScaleFragPars,
 		uvScaleUniforms: uvScaleUniforms,
+		uvScroll2Vert: uvScroll2Vert,
 		uvScrollUniforms: uvScrollUniforms,
 		uvScrollVert: uvScrollVert,
 		uvScrollVertPars: uvScrollVertPars,
@@ -1277,6 +1335,12 @@
 	        h.add(parameters, "parallaxHeight", -1.0, 1.0, 0.025).onChange(function(value) { updateCallback("parallaxHeight", value); });
 	        h.add(parameters, "parallaxScale", -1.0, 1.0, 0.025).onChange(function(value) { updateCallback("parallaxScale", value); });
 	      }
+	    }
+	    
+	    if (shader.isEnable(['BUMPOFFSET'])) {
+	      h = gui.addFolder("Parallax");
+	      parameters.parallaxHeight = shader.uniforms.parallaxHeight.value;
+	      h.add(parameters, "parallaxHeight", 0.0, 0.5, 0.001).onChange(function(value) { updateCallback("parallaxHeight", value); });
 	    }
 	    
 	    if (shader.isEnable("AOMAP")) {
@@ -1960,11 +2024,12 @@
 	    this._addUniform(result, ["LINEGLOW"], "lineGlowUniforms");
 	    this._addUniform(result, ["RIMLIGHT"], "rimLightUniforms");
 	    this._addUniform(result, ["COLORMAP"], "colorMapUniforms");
+	    this._addUniform(result, ["COLORMAP2"], "colorMap2Uniforms");
 	    this._addUniform(result, ["NORMALMAP"], "normalMapUniforms");
 	    this._addUniform(result, ["BUMPMAP"], "bumpMapUniforms");
-	    this._addUniform(result, ["PARALLAXMAP"], "parallaxMapUniforms");
+	    this._addUniform(result, ["+BUMPOFFSET","+PARALLAXMAP"], "parallaxMapUniforms");
 	    this._addUniform(result, ["DISTORTION"], "distortionUniforms");
-	    this._addUniform(result, ["UVSCROLL"], "uvScrollUniforms");
+	    this._addUniform(result, ["+UVSCROLL","+UVSCROLL2"], "uvScrollUniforms");
 	    this._addUniform(result, ["UVSCALE"], "uvScaleUniforms");
 	    this._addUniform(result, ["GLASS"], "glassUniforms");
 	    this._addUniform(result, ["ANISOTROPY"], "anisotropyUniforms");
@@ -2034,8 +2099,8 @@
 	    codes.push("");
 	    
 	    this._addCode(codes, ["+COLORMAP","+NORMALMAP","+BUMPMAP","+PROJECTIONMAP","+OVERLAY","+DEPTHSHADOW","+CLOUDS", "+VIEW"], "uvVertFragPars");
-	    this._addCode(codes, ["+NORMALMAP","+ANISOTROPY","+OVERLAYNORMAL"], "tangentVertPars");
-	    this._addCode(codes, ["UVSCROLL"], "uvScrollVertPars");
+	    this._addCode(codes, ["+NORMALMAP","+BUMPOFFSET","+ANISOTROPY","+OVERLAYNORMAL"], "tangentVertPars");
+	    this._addCode(codes, ["+UVSCROLL","+UVSCROLL2"], "uvScrollVertPars");
 	    this._addCode(codes, ["+GLASS","+DITHER"], "screenVertPars");
 	    this._addCode(codes, ["DISTORTION"], "distortionVertPars");
 	    this._addCode(codes, ["ANISOTROPY"], "anisotropyVertPars");
@@ -2087,9 +2152,10 @@
 	      this._addCode(codes, ["UVPROJECTION"], "uvProjectionVert", "uvVert");
 	      this._addCode(codes, ["UVSCROLL"], "uvScrollVert");
 	      this._addCode(codes, ["DISTORTION"], "distortionVert");
+	      this._addCode(codes, ["UVSCROLL2"], "uvScroll2Vert");
 	    }
 	    
-	    this._addCode(codes, ["+NORMALMAP","+ANISOTROPY","+OVERLAYNORMAL"], "tangentVert");
+	    this._addCode(codes, ["+NORMALMAP","+BUMPOFFSET","+ANISOTROPY","+OVERLAYNORMAL"], "tangentVert");
 	    this._addCode(codes, ["+GLASS","+DITHER"], "screenVert");
 	    this._addCode(codes, ["GLASS"], "glassVert");
 	    this._addCode(codes, ["ANISOTRPY"], "anisotropyVert");
@@ -2211,9 +2277,10 @@
 	    this._addCode(codes, ["+COLORMAP","+NORMALMAP","+PROJECTIONMAP","+OVERLAY","+CLOUDS"], "uvVertFragPars");
 	    this._addCode(codes, ["UVSCALE"], "uvScaleFragPars");
 	    this._addCode(codes, ["COLORMAP"], "colorMapFragPars");
-	    this._addCode(codes, ["+NORMALMAP","+ANISOTROPY","+OVERLAYNORMAL"], "tangentFragPars");
+	    this._addCode(codes, ["COLORMAP2"], "colorMap2FragPars");
+	    this._addCode(codes, ["+NORMALMAP","+BUMPOFFSET","+ANISOTROPY","+OVERLAYNORMAL"], "tangentFragPars");
 	    this._addCode(codes, ["NORMALMAP"], "normalMapFragPars");
-	    this._addCode(codes, ["PARALLAXMAP"], "parallaxMapFragPars");
+	    this._addCode(codes, ["+BUMPOFFSET", "+PARALLAXMAP"], "parallaxMapFragPars");
 	    this._addCode(codes, ["BUMPMAP"], "bumpMapFragPars");
 	    this._addCode(codes, ["PROJECTIONMAP"], "projectionMapFragPars");
 	    this._addCode(codes, ["DISTORTION"], "distortionFragPars");
@@ -2287,9 +2354,11 @@
 	      this._addCode(codes, ["UVHEMISPHERICAL"], "uvHemiSphericalFrag");
 	      this._addCode(codes, ["UVSCALE"], "uvScaleFrag");
 	      this._addCode(codes, ["PARALLAXMAP"], "parallaxMapFrag");
-	      this._addCode(codes, ["COLORMAP", "DISTORTION"], "distortionFrag");
-	      this._addCode(codes, ["COLORMAP", "-DISTORTION"], "colorMapFrag");
-	      this._addCode(codes, ["COLORMAP", "-DISTORTION", "COLORMAPALPHA"], "colorMapAlphaFrag");
+	      this._addCode(codes, ["BUMPOFFSET"], "parallaxFrag");
+	      this._addCode(codes, ["DISTORTION"], "distortionFrag");
+	      this._addCode(codes, ["COLORMAP"], "colorMapFrag");
+	      this._addCode(codes, ["COLORMAP", "COLORMAPALPHA"], "colorMapAlphaFrag");
+	      this._addCode(codes, ["COLORMAP2"], "colorMap2Frag");
 	      this._addCode(codes, ["OPACITY"], "opacityFrag");
 	      this._addCode(codes, ["DITHER"], "ditherFrag");
 	      this._addCode(codes, ["DISCARD"], "discardFrag");
@@ -2568,8 +2637,55 @@
 	    ]),
 	    vertexShader: ShaderChunk.toneMapVert,
 	    fragmentShader: ShaderChunk.toneMapFrag
+	  },
+	  
+	  ssao: {
+	    uniforms: THREE.UniformsUtils.merge([
+	      ShaderChunk.ssaoUniforms
+	    ]),
+	    vertexShader: ShaderChunk.ssaoVert,
+	    fragmentShader: ShaderChunk.ssaoFrag
+	  },
+	  
+	  ssao2: {
+	    uniforms: THREE.UniformsUtils.merge([
+	      ShaderChunk.ssao2Uniforms
+	    ]),
+	    vertexShader: ShaderChunk.ssaoVert,
+	    fragmentShader: ShaderChunk.ssao2Frag
+	  },
+	  
+	  ssao2Blur: {
+	    uniforms: THREE.UniformsUtils.merge([
+	      ShaderChunk.ssao2BlurUniforms
+	    ]),
+	    vertexShader: ShaderChunk.copyVert,
+	    fragmentShader: ShaderChunk.ssao2BlurFrag
+	  },
+	  
+	  ssao2Composite: {
+	    uniforms: THREE.UniformsUtils.merge([
+	      ShaderChunk.ssao2CompositeUniforms
+	    ]),
+	    vertexShader: ShaderChunk.copyVert,
+	    fragmentShader: ShaderChunk.ssao2CompositeFrag
+	  },
+	  
+	  fxaa: {
+	    uniforms: THREE.UniformsUtils.merge([
+	      ShaderChunk.antiAliasUniforms
+	    ]),
+	    vertexShader: ShaderChunk.antiAliasVert,
+	    fragmentShader: ShaderChunk.antiAliasFrag
+	  },
+	  
+	  view: {
+	    uniforms: THREE.UniformsUtils.merge([
+	      ShaderChunk.viewUniforms
+	    ]),
+	    vertexShader: ShaderChunk.copyVert,
+	    fragmentShader: ShaderChunk.viewFrag
 	  }
-	    
 	};
 
 	//-------------------------------------------------------------------------
@@ -2738,7 +2854,7 @@
 	//-------------------------------------------------------------------------
 	function dumpMatrix4(matrix) {
 		var s = "";
-		for (i=0; i<4; ++i) {
+		for (var i=0; i<4; ++i) {
 			// s += ("        " + matrix.elements[i*4+0]).substr(-8) + ", ";
 			// s += ("        " + matrix.elements[i*4+1]).substr(-8) + ", ";
 			// s += ("        " + matrix.elements[i*4+2]).substr(-8) + ", ";
@@ -4812,6 +4928,157 @@
 	UnrealBloomPass.BlurDirectionX = new THREE.Vector2(1.0, 0.0);
 	UnrealBloomPass.BlurDirectionY = new THREE.Vector2(0.0, 1.0);
 
+	var SSAOPass = function(parameters) {
+	  
+	  ScreenPass.call(this);
+	  
+	  this.angleBias = parameters.angleBias || 40.0;
+	  this.radius = parameters.radius || 4.5;
+	  this.maxRadius = parameters.maxRadius || 0.5;
+	  this.strength = parameters.strength || 10.0;
+	  this.resolution = parameters.resolution || new THREE.Vector2(512,512);
+	  this.depthTexture = parameters.depthTexture || null;
+	  this.sceneCamera = parameters.camera || null;
+	  this.downsampling = parameters.downsampling || 2;
+	  this.ssaoOnly = false;
+	  
+	  var pars = {
+	    minFilter: THREE.LinearFilter,
+	    magFilter: THREE.LinearFilter,
+	    format: THREE.RGBFormat,
+	    generateMipmaps: false,
+	    stencilBuffer: false
+	  };
+	  
+	  this.rtBlur1 = new THREE.WebGLRenderTarget(this.resolution.x/this.downsampling, this.resolution.y/this.downsampling, pars);
+	  this.rtBlur2 = new THREE.WebGLRenderTarget(this.resolution.x/this.downsampling, this.resolution.y/this.downsampling, pars);
+	  
+	  this.makeUniforms = THREE.UniformsUtils.clone(ShaderLib.ssao2.uniforms);
+	  this.makeMaterial = new THREE.ShaderMaterial({
+	    uniforms: this.makeUniforms,
+	    vertexShader: ShaderLib.ssao2.vertexShader,
+	    fragmentShader: ShaderLib.ssao2.fragmentShader,
+	    depthTest: false,
+	    depthWrite: false
+	  });
+	  
+	  this.blurXUniforms = THREE.UniformsUtils.clone(ShaderLib.ssao2Blur.uniforms);
+	  this.blurXMaterial = new THREE.ShaderMaterial({
+	    uniforms: this.blurXUniforms,
+	    vertexShader: ShaderLib.ssao2Blur.vertexShader,
+	    fragmentShader: ShaderLib.ssao2Blur.fragmentShader,
+	    depthTest: false,
+	    depthWrite: false
+	  });
+	  
+	  this.blurYUniforms = THREE.UniformsUtils.clone(ShaderLib.ssao2Blur.uniforms);
+	  this.blurYMaterial = new THREE.ShaderMaterial({
+	    uniforms: this.blurYUniforms,
+	    vertexShader: ShaderLib.ssao2Blur.vertexShader,
+	    fragmentShader: ShaderLib.ssao2Blur.fragmentShader,
+	    depthTest: false,
+	    depthWrite: false
+	  });
+	  
+	  var INV_LN2 = 1.44269504;
+	  var SQRT_LN2 = 0.832554611;
+	  var blurSigma = (4.0 + 1.0) * 0.5;
+	  var blurFalloff = INV_LN2 / (2.0 * blurSigma * blurSigma);
+	  var blurDepthThreshold = 2.0 * SQRT_LN2 * 0.2;
+	  var texSizeInvWidth = 1.0 / this.resolution.x;
+	  var texSizeInvHeight = 1.0 / this.resolution.y;
+	  this.blurXUniforms.tAO.value = this.rtBlur1.texture;
+	  this.blurXUniforms.blurParams.value.set(texSizeInvWidth, 0.0, blurFalloff, 1.0);
+	  this.blurYUniforms.tAO.value = this.rtBlur2.texture;
+	  this.blurYUniforms.blurParams.value.set(0.0, texSizeInvWidth, blurFalloff, 1.0);
+	  
+	  this.compositeUniforms = THREE.UniformsUtils.clone(ShaderLib.ssao2Composite.uniforms);
+	  this.compositeMaterial = new THREE.ShaderMaterial({
+	    uniforms: this.compositeUniforms,
+	    vertexShader: ShaderLib.ssao2Composite.vertexShader,
+	    fragmentShader: ShaderLib.ssao2Composite.fragmentShader,
+	    depthTest: false, depthWrite: false
+	  });
+	  
+	  this.viewUniforms = THREE.UniformsUtils.clone(ShaderLib.view.uniforms);
+	  this.viewMaterial = new THREE.ShaderMaterial({
+	    uniforms: this.viewUniforms,
+	    vertexShader: ShaderLib.view.vertexShader,
+	    fragmentShader: ShaderLib.view.fragmentShader,
+	    depthTest: false, depthWrite: false
+	  });
+	  this.viewUniforms.type.value = PIXY.ViewR;
+	  // this.viewUniforms.type.value = PIXY.ViewRGB;
+	};
+
+	SSAOPass.prototype = Object.assign(Object.create(ScreenPass.prototype), {
+	  
+	  constructor: SSAOPass,
+	  
+	  render: function(renderer, writeBuffer, readBuffer, delta, maskActive) {
+	    
+	    if (maskActive) {
+	      renderer.context.disable(renderer.context.STENCIL_TEST);
+	    }
+	    
+	    var rad = this.radius;
+	    var rad2 = rad*rad;
+	    var negInvRad2 = -1.0 / rad2;
+	    
+	    var angleBias = radians(this.angleBias);
+	    var tanAngleBias = Math.tan(angleBias);
+	    
+	    var cot = 1.0 / Math.tan(radians(this.sceneCamera.fov*0.5));
+	    var resX = this.resolution.x;
+	    var resY = this.resolution.y;
+	    var maxRadius = this.maxRadius * Math.min(this.resolution.x, this.resolution.y);
+	    var invAoResX = 1.0 / this.resolution.x;
+	    var invAoResY = 1.0 / this.resolution.y;
+	    var focal1 = cot * (this.resolution.y / this.resolution.x);
+	    var focal2 = cot;
+	    var invFocal1 = 1.0 / focal1;
+	    var invFocal2 = 1.0 / focal2;
+	    var uvToVA0 = 2.0 * invFocal1;
+	    var uvToVA1 = -2.0 * invFocal2;
+	    var uvToVB0 = -1.0 * invFocal1;
+	    var uvToVB1 = 1.0 * invFocal2;
+	    
+	    this.makeUniforms.radiusParams.value.set(rad, rad2, negInvRad2, maxRadius);
+	    this.makeUniforms.biasParams.value.set(angleBias, tanAngleBias, this.strength, 1.0);
+	    this.makeUniforms.screenParams.value.set(resX, resY, invAoResX, invAoResY);
+	    this.makeUniforms.uvToViewParams.value.set(uvToVA0, uvToVA1, uvToVB0, uvToVB1);
+	    this.makeUniforms.focalParams.value.set(focal1, focal2, invFocal1, invFocal2);
+	    this.makeUniforms.cameraParams.value.set(this.sceneCamera.near, this.sceneCamera.far);
+	    this.makeUniforms.tDepth.value = this.depthTexture;
+	    
+	    // MAKE SSAO
+	    this.quad.material = this.makeMaterial;
+	    renderer.render(this.scene, this.camera, this.rtBlur1, false);
+	    
+	    for (var i=0; i<2; ++i) {
+	      this.quad.material = this.blurXMaterial;
+	      renderer.render(this.scene, this.camera, this.rtBlur2, false);
+	      
+	      this.quad.material = this.blurYMaterial;
+	      renderer.render(this.scene, this.camera, this.rtBlur1, false);
+	    }
+	    
+	    var target = this.rtBlur1;
+	    
+	    if (this.ssaoOnly) {
+	      this.quad.material = this.viewMaterial;
+	      this.viewUniforms.tDiffuse.value = target.texture;
+	    }
+	    else {
+	      this.quad.material = this.compositeMaterial;
+	      this.compositeUniforms.tDiffuse.value = readBuffer.texture;
+	      this.compositeUniforms.tAO.value = target.texture;
+	    }
+	    
+	    renderer.render(this.scene, this.camera, writeBuffer, false);
+	  }
+	});
+
 	var AreaLight = function() {
 	  
 	  this.position = new THREE.Vector3();
@@ -4900,6 +5167,7 @@
 	exports.SSAARenderPass = SSAARenderPass;
 	exports.TAARenderPass = TAARenderPass;
 	exports.UnrealBloomPass = UnrealBloomPass;
+	exports.SSAOPass = SSAOPass;
 	exports.AreaLight = AreaLight;
 	exports.TubeLight = TubeLight;
 	exports.RectLight = RectLight;
