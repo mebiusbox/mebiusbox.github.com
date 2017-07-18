@@ -208,12 +208,12 @@
           1, 15, true, true, true, true, true);
         teapot = new THREE.Mesh(teapotGeometry, material);
         teapot.position.set(-4,2,0);
-        // scene.add(teapot);
+        scene.add(teapot);
         
         var torusGeometry = new THREE.TorusKnotGeometry(0.8,0.3,100,20);
         var torus = new THREE.Mesh(torusGeometry, material);
         torus.position.set(4,2,0);
-        // scene.add(torus);
+        scene.add(torus);
         
         var groundGeometry = new THREE.PlaneGeometry(20, 20);
         var ground = new THREE.Mesh(groundGeometry, material);
