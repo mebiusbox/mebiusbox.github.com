@@ -381,7 +381,10 @@
         effectController = {
           saveImage: function() {
             render();
-            window.open(canvas.toDataURL());
+            //window.open(canvas.toDataURL());
+            var dataUrl = canvas.toDataURL();
+            var w = window.open('about:blank');
+            w.document.write("<img src='" + dataUrl + "'/>");
           },
           
           saveSpriteSheet: function() {
@@ -421,7 +424,10 @@
             renderer.render(spriteSheet.scene, spriteSheet.camera);
             
             effectController.time = time;
-            window.open(canvas.toDataURL());
+            // window.open(canvas.toDataURL());
+            var dataUrl = canvas.toDataURL();
+            var w = window.open('about:blank');
+            w.document.write("<img src='" + dataUrl + "'/>");
           },
           
           resetColorBalance: function() {
