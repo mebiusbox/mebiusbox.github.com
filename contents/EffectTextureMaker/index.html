@@ -434,6 +434,7 @@
             effectController.cColorBalanceHighlightsR = 0.0;
             effectController.cColorBalanceHighlightsG = 0.0;
             effectController.cColorBalanceHighlightsB = 0.0;
+            effectController.cColorBalanceMaskThreshold = 0.0001;
             for (var i in guiCB.__controllers) {
               guiCB.__controllers[i].updateDisplay();
             }
@@ -561,7 +562,9 @@
           cColorBalanceHighlightsR: 0.0001,
           cColorBalanceHighlightsG: 0.0001,
           cColorBalanceHighlightsB: 0.0001,
-          cColorBlanacePreserveLuminosity: false,
+          cColorBalancePreserveLuminosity: false,
+          cColorBalanceMaskEnable: true,
+          cColorBalanceMaskThreshold: 0.0001,
           
           type: "Wood",
           // type: "Test",
@@ -628,8 +631,10 @@
         h.add(effectController, "cColorBalanceHighlightsR", -1.0, 1.0, 0.025).name("Highlights-R");
         h.add(effectController, "cColorBalanceHighlightsG", -1.0, 1.0, 0.025).name("Highlights-G");
         h.add(effectController, "cColorBalanceHighlightsB", -1.0, 1.0, 0.025).name("Highlights-B");
+        h.add(effectController, "cColorBalanceMaskEnable").name("Mask");
+        h.add(effectController, "cColorBalanceMaskThreshold", 0.0, 1.0, 0.001).name("Threshold");
         h.add(effectController, 'resetColorBalance');
-        // h.add(effectController, "colorBlanacePreserveLuminosity");
+        // h.add(effectController, "colorBalancePreserveLuminosity");
         guiCB = h;
         
         gui.add(effectController, 'saveImage');

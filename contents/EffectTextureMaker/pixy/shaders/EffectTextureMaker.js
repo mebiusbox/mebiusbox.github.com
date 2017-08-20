@@ -880,7 +880,7 @@ PixSpriteStudioShaderChunks = {
       "vec2 n = normalize(cDirection);",
       "vec2 pos = pin.position - (-cDirection);",
       "float t = (dot(pos, n) * 0.5 + cOffset) / len;",
-      "float r = prand(vec2(pin.uv.x, 0.0)) + 1e-6;",
+      "float r = rand2(vec2(pin.uv.x, 0.0)) + 1e-6;",
       "float a = 1.0 / (1.0 - r);",
       "t = a*t - a*r;",
       "t = pow(t, cPowerExponent);",
@@ -1393,14 +1393,18 @@ PixSpriteStudioShaderChunks = {
     "cColorBalanceShadows": { value: new THREE.Vector3(0.0, 0.0, 0.0) },
     "cColorBalanceMidtones": { value: new THREE.Vector3(0.0, 0.0, 0.0) },
     "cColorBalanceHighlights": { value: new THREE.Vector3(0.0, 0.0, 0.0) },
-    "cColorBalancePreserveLuminosity": { value: false }
+    "cColorBalancePreserveLuminosity": { value: false },
+    "cColorBalanceMaskEnable": { value: true },
+    "cColorBalanceMaskThreshold": { value: 0.0001 }
   },
   
   colorBalanceFragPars: [
     "uniform vec3 cColorBalanceShadows;",
     "uniform vec3 cColorBalanceMidtones;",
     "uniform vec3 cColorBalanceHighlights;",
-    "uniform bool cColorBalancePreserveLuminosity;"
+    "uniform bool cColorBalancePreserveLuminosity;",
+    "uniform bool cColorBalanceMaskEnable;",
+    "uniform float cColorBalanceMaskThreshold;"
   ].join("\n"),
   
   // https://gist.github.com/liovch/3168961
@@ -1432,6 +1436,9 @@ PixSpriteStudioShaderChunks = {
     "  pout.color = newColor.xyz;",
     "}",
     "pout.opacity = texel.w;",
+    "if (cColorBalanceMaskEnable) {",
+    "  if (lightness <= cColorBalanceMaskThreshold) pout.color = vec3(0,0,0);",
+    "}",
   ].join("\n"),
   
   
