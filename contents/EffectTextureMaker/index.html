@@ -54,20 +54,15 @@
     <script src="js/libs/dat.gui.min.js"></script>
     <script src="js/libs/stats.min.js"></script>
     <script src="js/shaders/CopyShader.js"></script>
-    <!-- <script src="pixy/shaders/LuminosityShader.js"></script> -->
-    <!-- <script src="pixy/shaders/EdgeShader.js"></script> -->
-    <script src="pixy/shaders/EffectTextureMaker.js"></script>
-    <!-- <script src="pixy/post/Composer.js"></script> -->
-    <!-- <script src="pixy/post/UnrealBloomPass.js"></script> -->
-    <!-- <script src="pixy/post/EdgePass.js"></script> -->
+    <script src="js/pixy.min.js"></script>
     <script>
       if (!Detector.webgl) Detector.addGetWebGLMessage();
       
       var mouse = new THREE.Vector2(0.5, 0.5);
       var canvas;
       var camera, dummyCamera, controls, scene, renderer;
-      var noiseScene, noiseSphere, noiseUniforms, noiseMaterial;
-      var gui, guiCB, guiPars, guiParsItems = [], stats, clock = new THREE.Clock();
+      var noiseScene, noiseSphere, noiseUniforms, noiseMaterial, noiseTexture;
+      var gui, guiTone, guiNormalMap, guiCB, guiPars, guiParsItems = [], stats, clock = new THREE.Clock();
       var effectController;
       var layers = [];
       var spriteSheet = {};
@@ -75,6 +70,23 @@
       
       var noise;
       var defines;
+      
+      // Save Helper
+      
+      var link = document.createElement( 'a' );
+    	link.style.display = 'none';
+    	document.body.appendChild( link ); // Firefox workaround, see #6594
+
+    	function save( blob, filename ) {
+    		link.href = URL.createObjectURL( blob );
+    		link.download = filename || 'data.json';
+    		link.click();
+    		// URL.revokeObjectURL( url ); breaks Firefox...
+    	}
+
+    	function saveString( text, filename ) {
+    		save( new Blob( [ text ], { type: 'text/plain' } ), filename );
+    	}
       
       init();
       // render();
@@ -147,16 +159,16 @@
         scene.add(mesh);
         
         // TEXTUER MAP
-        // var texture = new THREE.TextureLoader().load('assets/textures/UV_Grid_Sm.jpg');
-        // texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        // texture.anisotropy = 16;
-        // var texture = new THREE.TextureLoader().load('assets/textures/SlateTiles/SlateTiles_col.png');
-        // texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        // texture.anisotropy = 16;
+        // Noise Texture (for CLOUDS)
+        // noiseTexture = new THREE.TextureLoader().load('assets/textures/shadertoy/tex16.png');
+        // noiseTexture.wrapS = noiseTexture.wrapT = THREE.RepeatWrapping;
+        // noiseTexture.minFilter = THREE.Linear;
+        // noiseTexture.magFilter = THREE.Linear;
+        // noiseTexture.anisotropy = 16;
         
         geo = new THREE.SphereBufferGeometry(1, 1024, 1024);
         
-        var stdShader = new PixSpriteStudioShader();
+        var stdShader = new PIXY.FxgenShader();
         stdShader.enable("DISPLACEMENT");
         noiseUniforms = stdShader.generateUniforms();
         noiseMaterial = stdShader.createStandardMaterial(noiseUniforms);
@@ -172,10 +184,8 @@
         noise.octave = 8;
         noise.persistence = 0.5;
         
-        var stdShader = new PixSpriteStudioShader();
+        var stdShader = new PIXY.FxgenShader();
         defines = stdShader.generateDefines();
-        
-        // initLayers();
         
         spriteSheet.uniforms = THREE.UniformsUtils.clone(THREE.CopyShader.uniforms);
         spriteSheet.material = new THREE.ShaderMaterial({
@@ -197,32 +207,6 @@
         spriteSheet.scene.add(spriteSheet.quad);
       }
       
-      // function initPost() {
-      //     
-      //     var parameters = {
-      //       minFilter: THREE.LinearFilter,
-      //       magFilter: THREE.LinearFilter,
-      //       format: THREE.RGBFormat,
-      //       stencilBuffer: false
-      //     };
-      //     
-      //     post.rtScene = new THREE.WebGLRenderTarget(canvas.width, canvas.height, parameters);
-      //     
-      //     post.copyPass = new PixShaderPass(THREE.CopyShader);
-      //     post.composer = new PixComposer(renderer);
-      //     post.composer.addPass(new PixEdgePass(
-      //       new THREE.Vector2(canvas.width, canvas.height),
-      //       0.2, 
-      //       new THREE.Color(0x808080),
-      //       false,
-      //       512), null, null);
-      // 
-      //     // post.bloomPass = new PixUnrealBloomPass(new THREE.Vector2(canvas.width, canvas.height), 1.5, 0.4, 0.85);
-      //     // post.bloomPass = new PixUnrealBloomPass(new THREE.Vector2(canvas.width, canvas.height), 1.0, 9.0, 0.5, 512);
-      //     // post.composer.addPass(post.bloomPass, null, null);
-      //     post.composer.addPass(post.copyPass, null, null);
-      // }
-      
       function initLayers() {
         
         layers = [];
@@ -230,32 +214,23 @@
         var layer = {};
         
         layer.name = "Base";
+        // layer.renderTarget = null;
         layer.renderTarget = new THREE.WebGLRenderTarget(canvas.width, canvas.height, {
           minFilter: THREE.LinearFilter,
           magFilter: THREE.LinearFilter,
           format: THREE.RGBFormat,
           stencilBuffer: false });
         
-        var stdShader = new PixSpriteStudioShader();
-        // stdShader.enable("SINE");
-        // stdShader.enable("GRADATION");
-        // stdShader.enable("FLASH");
-        // stdShader.enable("CONE");
-        // stdShader.enable("FLOWER");
-        // stdShader.enable("FLOWER+FUN");
-        // stdShader.enable("WAVERING");
-        // stdShader.enable("MANDELBLOT");
-        // stdShader.enable("JULIA");
-        // stdShader.enable("SEEMLESSNOISE");
-        // stdShader.enable("TEST");
+        var stdShader = new PIXY.FxgenShader();
         var type = effectController.type;
         stdShader.enable(type.toUpperCase());
         stdShader.enable("TOON");
         layer.uniforms = stdShader.generateUniforms();
         layer.material = stdShader.createMaterial(layer.uniforms, { defines: defines });
+        // console.log(stdShader.generateVertexShader());
+        // console.log(stdShader.generateFragmentShader());
         
         resetParameters(layer.uniforms);
-        
         layers.push(layer);
         
         //// POLAR CONVERSION
@@ -304,7 +279,7 @@
           magFilter: THREE.LinearFilter,
           format: THREE.RGBFormat,
           stencilBuffer: false });
-          
+        
         stdShader.clear();
         // stdShader.enable("HEIGHT2NORMAL");
         stdShader.enable("HEIGHT2NORMALSOBEL");
@@ -330,16 +305,6 @@
           magFilter: THREE.LinearFilter,
           format: THREE.RGBFormat,
           stencilBuffer: false });
-        // 
-        // spriteSheet.uniforms = THREE.UniformsUtils.clone(THREE.CopyShader.uniforms);
-        // spriteSheet.material = new THREE.ShaderMaterial({
-        //   uniforms: spriteSheet.uniforms,
-        //   vertexShader: THREE.CopyShader.vertexShader,
-        //   fragmentShader: THREE.CopyShader.fragmentShader,
-        //   depthTest: false,
-        //   depthWrite: false});
-        // spriteSheet.uniforms.tDiffuse.value = spriteSheet.renderTarget.texture;
-        // spriteSheet.uniforms.opacity.value = 1.0;
       }
       
       // EVENT HANDLERS
@@ -378,10 +343,58 @@
       }
       
       function setupGui() {
+        
+        fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.addEventListener('change', function(event) {
+          var reader = new FileReader();
+          reader.addEventListener('load', function(event) {
+            var contents = event.target.result;
+            var json = JSON.parse(contents);
+            
+            canvas.width  = json.resolution;
+            canvas.height = json.resolution;
+            onWindowResize();
+            
+            var stdShader = new PIXY.FxgenShader();
+            stdShader.enable(json.type.toUpperCase());
+            stdShader.enable("TOON");
+            layers[0].uniforms = stdShader.generateUniforms();
+            layers[0].material = stdShader.createMaterial(layers[0].uniforms, { defines: stdShader.generateDefines()});
+            
+            effectController.type = json.type;
+            resetParameters(layers[0].uniforms);
+            
+            for (var i in json) {
+              effectController[i] = json[i];
+            }
+            for (var i in gui.__controllers) {
+              gui.__controllers[i].updateDisplay();
+            }
+            for (var i in guiPars.__controllers) {
+              guiPars.__controllers[i].updateDisplay();
+            }
+            for (var i in guiTone.__controllers) {
+              guiTone.__controllers[i].updateDisplay();
+            }
+            for (var i in guiNormalMap.__controllers) {
+              guiNormalMap.__controllers[i].updateDisplay();
+            }
+            for (var i in guiCB.__controllers) {
+              guiCB.__controllers[i].updateDisplay();
+            }
+            
+          }, false);
+          reader.readAsText(fileInput.files[ 0 ]);
+        });
+        fileInput.addEventListener('click', function(event) {
+          this.value = null;
+        });
+        
         effectController = {
           saveImage: function() {
             render();
-            //window.open(canvas.toDataURL());
+            // window.open(canvas.toDataURL());
             var dataUrl = canvas.toDataURL();
             var w = window.open('about:blank');
             w.document.write("<img src='" + dataUrl + "'/>");
@@ -440,10 +453,24 @@
             effectController.cColorBalanceHighlightsR = 0.0;
             effectController.cColorBalanceHighlightsG = 0.0;
             effectController.cColorBalanceHighlightsB = 0.0;
-            effectController.cColorBalanceMaskThreshold = 0.0001;
             for (var i in guiCB.__controllers) {
               guiCB.__controllers[i].updateDisplay();
             }
+          },
+          
+          load: function() {
+            fileInput.click();
+          },
+          
+          save: function() {
+            var output;
+            try {
+        			output = JSON.stringify( effectController, parseNumber, '\t' );
+        			output = output.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
+        		} catch ( e ) {
+        			output = JSON.stringify( effectController );
+        		}
+            saveString( output, 'EffectTextureMaker_Untitiled.json' );
           },
           
           animate: false,
@@ -568,9 +595,7 @@
           cColorBalanceHighlightsR: 0.0001,
           cColorBalanceHighlightsG: 0.0001,
           cColorBalanceHighlightsB: 0.0001,
-          cColorBalancePreserveLuminosity: false,
-          cColorBalanceMaskEnable: true,
-          cColorBalanceMaskThreshold: 0.0001,
+          cColorBlanacePreserveLuminosity: false,
           
           type: "Wood",
           // type: "Test",
@@ -578,6 +603,8 @@
         
         var h;
         gui = new dat.GUI();
+        gui.add(effectController, 'load');
+        gui.add(effectController, 'save');
         
         // material (attributes)
         
@@ -598,7 +625,7 @@
           "PerlinNoise", "SeemlessNoise", "BooleanNoise", "CellNoise", "TurbulentNoise", "FbmNoise", "RandomNoise", "VoronoiNoise", "SparkNoise",
         ]).onChange(function(value) {
           
-          var stdShader = new PixSpriteStudioShader();
+          var stdShader = new PIXY.FxgenShader();
           stdShader.enable(value.toUpperCase());
           stdShader.enable("TOON");
           layers[0].uniforms = stdShader.generateUniforms();
@@ -620,12 +647,14 @@
         h.add(effectController, "cToonEnable").name("enable");
         h.add(effectController, "cToonDark", 0.0, 1.0).name("dark");
         h.add(effectController, "cToonLight", 0.0, 1.0).name("light");
+        guiTone = h;
         
         gui.add(effectController, "polarConversion");
         
         h = gui.addFolder("NormalMap");
         h.add(effectController, "normalMap").name("Generate");
         h.add(effectController, "cHeightScale", 0.0, 10.0);
+        guiNormalMap = h;
         
         h = gui.addFolder("ColorBalance");
         h.add(effectController, "cColorBalanceShadowsR", -1.0, 1.0, 0.025).name("Shadows-R");
@@ -637,10 +666,8 @@
         h.add(effectController, "cColorBalanceHighlightsR", -1.0, 1.0, 0.025).name("Highlights-R");
         h.add(effectController, "cColorBalanceHighlightsG", -1.0, 1.0, 0.025).name("Highlights-G");
         h.add(effectController, "cColorBalanceHighlightsB", -1.0, 1.0, 0.025).name("Highlights-B");
-        h.add(effectController, "cColorBalanceMaskEnable").name("Mask");
-        h.add(effectController, "cColorBalanceMaskThreshold", 0.0, 1.0, 0.001).name("Threshold");
         h.add(effectController, 'resetColorBalance');
-        // h.add(effectController, "colorBalancePreserveLuminosity");
+        // h.add(effectController, "colorBlanacePreserveLuminosity");
         guiCB = h;
         
         gui.add(effectController, 'saveImage');
@@ -838,100 +865,6 @@
             }
           }
         }
-          
-        // h.add(effectController, "powerExponent", 1.0, 50.0);
-        // h.add(effectController, "frequency", 0.0, 50.0);
-        // h.add(effectController, "amplitude", 0.0, 0.2);
-        // h.add(effectController, "intensity", 0.0, 1.0);
-        // h.add(effectController, "directionX", -1.0, 1.0);
-        // h.add(effectController, "directionY", -1.0, 1.0);
-        // h.add(effectController, "powerExponent", 1.0, 50.0);
-        // h.add(effectController, "circleRadius", 0.0, 2.5);
-        // h.add(effectController, "ringRadius", 0.0, 1.0);
-        // h.add(effectController, "ringWidth", 0.0, 1.0);
-        // h.add(effectController, "gradationOffset", 0.0, 1.0);
-        // h.add(effectController, "flowerPetals", 1.0, 20.0);
-        // h.add(effectController, "flowerRadius", 0.0, 1.0);
-        // h.add(effectController, "flowerOffset", 0.0, 1.0);
-        // h.add(effectController, "smokeVolume", 1, 10);
-        // h.add(effectController, "smokeBeta", 1, 10);
-        // h.add(effectController, "smokeDelta", 0.01, 0.2);
-        // h.add(effectController, "flameWidth", 0.1, 2.0);
-        // h.add(effectController, "flameScale", 0.1, 1.0);
-        // h.add(effectController, "cellSize", 0.1, 5.0);
-        // h.add(effectController, "lightningFreq", 0.0, 2.0);
-        // h.add(effectController, "lightningWidth", 1.0, 10.0);
-        // h.add(effectController, "coronaRadius", 0.0, 1.0);
-        // h.add(effectController, "coronaSize", 0.0, 2.0);
-        // h.add(effectController, "radius", 0.0, 1.0);
-        // h.add(effectController, "color", 0.0, 1.0);
-        // 
-        // h = gui.addFolder("LensFlare Parameters");
-        // h.add(effectController, "lensFlareRadius", 0.0, 1.0);
-        // h.add(effectController, "lensFlareLength", 0.0, 1.0);
-        // h.add(effectController, "lensFlareColor", 0.0, 1.0);
-        // 
-        // h = gui.addFolder("Sun Parameters");
-        // h.add(effectController, "sunRadius", 0.1, 1.0);
-        // h.add(effectController, "sunColor", 0.0, 1.0);
-        // 
-        // h = gui.addFolder("Laser Parameters");
-        // h.add(effectController, "laserWidth", 0.01, 1.0);
-        // h.add(effectController, "laserInnerWidth", 0.1, 1.0);
-        // h.add(effectController, "laserColor", 0.0, 1.0);
-        // 
-        // h = gui.addFolder("Fire Parameters");
-        // h.add(effectController, "fireStrength", 0.0, 5.0);
-        // h.add(effectController, "firePower", 0.0, 1.0);
-        // h.add(effectController, "fireRange", 0.0, 5.0);
-        // h.add(effectController, "fireWidth", 0.1, 1.0);
-        // h.add(effectController, "fireColor", 0.0, 1.0);
-        // 
-        // h = gui.addFolder("Explosion Parameters");
-        // h.add(effectController, "explosionCameraTilt", 0.0, 1.0).name("CameraTilt");
-        // h.add(effectController, "explosionCameraPan", 0.0, 1.0).name("CameraPan");
-        // h.add(effectController, "explosionRadius", 1.0, 2.0).name("Radius");
-        // h.add(effectController, "explosionDownScale", 1.0, 2.0).name("DownScale");
-        // h.add(effectController, "explosionGrain", 1.0, 5.0).name("Grain");
-        // h.add(effectController, "explosionSpeed", 0.1, 2.0).name("Speed");
-        // h.add(effectController, "explosionBallness", 2.0, 50.0).name("Ballness");
-        // h.add(effectController, "explosionGrowth", 0.1, 3.0).name("Growth");
-        // h.add(effectController, "explosionFade", 1.0, 5.0).name("Fade");
-        // h.add(effectController, "explosionDensity", 0.1, 4.0).name("Density");
-        // h.add(effectController, "explosionContrast", 0.1, 2.0).name("Contrast");
-        // h.add(effectController, "explosionRollingInitDamp", 0.1, 2.0).name("RollingInitDamp");
-        // h.add(effectController, "explosionRollingSpeed", 0.0, 4.0).name("RollingSpeed");
-        // h.add(effectController, "explosionDelayRange", 0.1, 2.0).name("DelayRange");
-        // h.add(effectController, "explosionBallSpread", 0.1, 5.0).name("BallSpread");
-        // 
-        // h = gui.addFolder("Explosion2 Parameters");
-        // // h.add(effectController, "explosionCameraTilt", 0.0, 1.0).name("CameraTilt");
-        // h.add(effectController, "explosionCameraPan", 0.0, 1.0).name("CameraPan");
-        // // h.add(effectController, "explosionRadius", 1.0, 2.0).name("Radius");
-        // // h.add(effectController, "explosionDownScale", 1.0, 2.0).name("DownScale");
-        // // h.add(effectController, "explosionGrain", 1.0, 5.0).name("Grain");
-        // h.add(effectController, "explosionSpeed", 0.1, 2.0).name("Speed");
-        // // h.add(effectController, "explosionBallness", 2.0, 50.0).name("Ballness");
-        // // h.add(effectController, "explosionGrowth", 0.1, 3.0).name("Growth");
-        // // h.add(effectController, "explosionFade", 1.0, 5.0).name("Fade");
-        // h.add(effectController, "explosionDensity", 0.1, 4.0).name("Density");
-        // // h.add(effectController, "explosionContrast", 0.1, 2.0).name("Contrast");
-        // // h.add(effectController, "explosionRollingInitDamp", 0.1, 2.0).name("RollingInitDamp");
-        // // h.add(effectController, "explosionRollingSpeed", 0.0, 4.0).name("RollingSpeed");
-        // // h.add(effectController, "explosionDelayRange", 0.1, 2.0).name("DelayRange");
-        // // h.add(effectController, "explosionBallSpread", 0.1, 5.0).name("BallSpread");
-        // h.add(effectController, "explosionEmission", 0.0, 1.0).name("Emission");
-        // h.add(effectController, "explosionBloom", 0.0, 1.0).name("Bloom");
-        // h.add(effectController, "explosionColor", 0.0, 1.0).name("Color");
-        // 
-        // h = gui.addFolder("Noise");
-        // h.add(effectController, "noiseOctave", 1, 8).name("octave");
-        // h.add(effectController, "noiseFrequency", 0.0, 1.0).name("frequency");
-        // h.add(effectController, "noisePersistence", 0.0, 1.0).name("persistence");
-        // h.add(effectController, "noiseAmplitude", 0.0, 1.0).name("amplitude");
-        // h.add(effectController, "noiseScale", 0.0, 1.0).name("scale");
-        // h.add(effectController, "noiseSphere").name("sphere");
-        // h.add(effectController, "noiseGraphEnable").name("graph");
       }
       
       function animate() {
@@ -952,18 +885,6 @@
       function render() {
         
         stats.update();
-        
-        // var delta = clock.getDelta();
-        
-        // if (effectController.freeCamera) {
-        //   // controls.update(delta);
-        // }
-        // else {
-        //   camera.position.set(mouse.x - 0.5, mouse.y * 4, time * 0.001);
-        //   camera.lookAt(new THREE.Vector3(0.0, -0.3, 1.0).add(camera.position));
-        // }
-        // 
-        // if (camera.position.y < 0) camera.position.y = 0;
         
         for (var i=0; i<layers.length; i++) {
           
@@ -987,47 +908,34 @@
           
           for (key in effectController) {
             if (key === "resolution") continue;
-            PixSetShaderParameter(layer.uniforms, key, effectController[key]);
+            PIXY.FxgenShaderUtils.SetShaderParameter(layer.uniforms, key, effectController[key]);
           }
           
-          // PixSetShaderParameter(layer.uniforms, "heightScale", effectController.heightScale);
-          PixSetShaderParameter(layer.uniforms, "cColorBalanceShadows", 
+          // PIXY.FxgenShaderUtils.SetShaderParameter(layer.uniforms, "heightScale", effectController.heightScale);
+          PIXY.FxgenShaderUtils.SetShaderParameter(layer.uniforms, "cColorBalanceShadows", 
             new THREE.Vector3(
               effectController.cColorBalanceShadowsR,
               effectController.cColorBalanceShadowsG,
               effectController.cColorBalanceShadowsB));
-          PixSetShaderParameter(layer.uniforms, "cColorBalanceMidtones", 
+          PIXY.FxgenShaderUtils.SetShaderParameter(layer.uniforms, "cColorBalanceMidtones", 
             new THREE.Vector3(
               effectController.cColorBalanceMidtonesR,
               effectController.cColorBalanceMidtonesG,
               effectController.cColorBalanceMidtonesB));
-          PixSetShaderParameter(layer.uniforms, "cColorBalanceHighlights", 
+          PIXY.FxgenShaderUtils.SetShaderParameter(layer.uniforms, "cColorBalanceHighlights", 
             new THREE.Vector3(
               effectController.cColorBalanceHighlightsR,
               effectController.cColorBalanceHighlightsG,
               effectController.cColorBalanceHighlightsB));
-          PixSetShaderParameter(layer.uniforms, "cDirection",
+          PIXY.FxgenShaderUtils.SetShaderParameter(layer.uniforms, "cDirection",
             new THREE.Vector2(
               effectController.cDirectionX,
               effectController.cDirectionY));
+          // PIXY.FxgenShaderUtils.SetShaderParameter(layer.uniforms, "tNoise", noiseTexture);
         
           scene.overrideMaterial = layer.material;
           renderer.render(scene, dummyCamera, target);
           scene.overrideMaterial = null;
-          
-          // if (layer.name === "Base") {
-          //   
-            // post.composer.passes[0].pass.source = target.texture;
-            // post.composer.passes[0].readBuffer = target;
-            // post.composer.passes[0].writeBuffer = post.rtScene;
-            // post.composer.passes[1].readBuffer = post.rtScene;
-            // post.composer.passes[1].writeBuffer = target;
-            // post.composer.render();
-            
-            // post.composer.passes[0].readBuffer = target;
-            // post.composer.passes[0].writeBuffer = target;
-            // post.composer.render();
-          // }
         }
         
         if (effectController.cNoiseSphereEnable) {
