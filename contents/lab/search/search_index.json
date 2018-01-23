@@ -72,7 +72,7 @@
         }, 
         {
             "location": "/link/", 
-            "text": "Links\n\n\n(under construction)\n\n\nRendering\n\n\n\n\nThe Research and Development Department in tri-Ace\n\n\nLIBRARY | \u30c6\u30af\u30ce\u30ed\u30b8\u30fc\u63a8\u9032\u90e8 ADVANCED TECHNOLOGY DIVISION | SQUARE ENIX\n\n\n\u8b1b\u6f14\u8cc7\u6599 | \u30b7\u30ea\u30b3\u30f3\u30b9\u30bf\u30b8\u30aa\n\n\nCEDiL\n\n\n\n\nBook\n\n\n\n\n\u30d5\u30a9\u30c8\u30f3\u30de\u30c3\u30d4\u30f3\u30b0\n\n\n\u306a\u308b\u307b\u3069\u5fae\u7a4d\u5206\n\n\n\u30bc\u30ed\u304b\u3089\u5b66\u3076\u7dda\u5f62\u4ee3\u6570\n\n\n\u30bc\u30ed\u304b\u3089\u5b66\u3076\u5fae\u5206\u7a4d\u5206\n\n\n\u5bcc\u7530\u306e\u82f1\u6587\u8aad\u89e3\uff11\uff10\uff10\u306e\u539f\u5247 \u4e0a\n\n\n\u5bcc\u7530\u306e\u82f1\u6587\u8aad\u89e3\uff11\uff10\uff10\u306e\u539f\u5247 \u4e0b", 
+            "text": "Links\n\n\n(under construction)\n\n\nRendering\n\n\n\n\nThe Research and Development Department in tri-Ace\n\n\nLIBRARY | \u30c6\u30af\u30ce\u30ed\u30b8\u30fc\u63a8\u9032\u90e8 ADVANCED TECHNOLOGY DIVISION | SQUARE ENIX\n\n\n\u8b1b\u6f14\u8cc7\u6599 | \u30b7\u30ea\u30b3\u30f3\u30b9\u30bf\u30b8\u30aa\n\n\nCEDiL\n\n\n\n\nTexture\n\n\n\n\nCompressonator\n : Tool suite for Texture and 3D Model Compression, Optimization and Analysis using CPUs, GPUs and APUs \n\n\nDirectXTex\n : DirectXTex texture processing library\n\n\ndds_thumbnail\n : DirectX 11\u306e\u30c6\u30af\u30b9\u30c1\u30e3\u5727\u7e2e\u30d5\u30a9\u30fc\u30de\u30c3\u30c8BC1\uff5eBC7\u3092\u30b5\u30e0\u30cd\u30a4\u30eb\u8868\u793a\n\n\nDDS \u30d5\u30a1\u30a4\u30eb\u30d5\u30a9\u30fc\u30de\u30c3\u30c8\u306e\u8a73\u7d30\u89e3\u8aac\n\n\nDDS\u30d5\u30a1\u30a4\u30eb\u3092\u81ea\u529b\u3067\u8aad\u3093\u3067\u307f\u3088\u3046\n\n\nDirectX 11\u306e\u5727\u7e2e\u30d5\u30a9\u30fc\u30de\u30c3\u30c8BC1\uff5eBC7\u306b\u3064\u3044\u3066\uff08\u524d\u7de8\uff09\n\n\nDirectX 11\u306e\u5727\u7e2e\u30d5\u30a9\u30fc\u30de\u30c3\u30c8BC1\uff5eBC7\u306b\u3064\u3044\u3066\uff08\u5f8c\u7de8\uff09\n\n\nDDS Susie Plugin\n : BC[1,7]\u5bfe\u5fdc\n\n\n\n\nBook\n\n\n\n\n\u30d5\u30a9\u30c8\u30f3\u30de\u30c3\u30d4\u30f3\u30b0\n\n\n\u306a\u308b\u307b\u3069\u5fae\u7a4d\u5206\n\n\n\u30bc\u30ed\u304b\u3089\u5b66\u3076\u7dda\u5f62\u4ee3\u6570\n\n\n\u30bc\u30ed\u304b\u3089\u5b66\u3076\u5fae\u5206\u7a4d\u5206\n\n\n\u5bcc\u7530\u306e\u82f1\u6587\u8aad\u89e3\uff11\uff10\uff10\u306e\u539f\u5247 \u4e0a\n\n\n\u5bcc\u7530\u306e\u82f1\u6587\u8aad\u89e3\uff11\uff10\uff10\u306e\u539f\u5247 \u4e0b", 
             "title": "Link"
         }, 
         {
@@ -84,6 +84,11 @@
             "location": "/link/#rendering", 
             "text": "The Research and Development Department in tri-Ace  LIBRARY | \u30c6\u30af\u30ce\u30ed\u30b8\u30fc\u63a8\u9032\u90e8 ADVANCED TECHNOLOGY DIVISION | SQUARE ENIX  \u8b1b\u6f14\u8cc7\u6599 | \u30b7\u30ea\u30b3\u30f3\u30b9\u30bf\u30b8\u30aa  CEDiL", 
             "title": "Rendering"
+        }, 
+        {
+            "location": "/link/#texture", 
+            "text": "Compressonator  : Tool suite for Texture and 3D Model Compression, Optimization and Analysis using CPUs, GPUs and APUs   DirectXTex  : DirectXTex texture processing library  dds_thumbnail  : DirectX 11\u306e\u30c6\u30af\u30b9\u30c1\u30e3\u5727\u7e2e\u30d5\u30a9\u30fc\u30de\u30c3\u30c8BC1\uff5eBC7\u3092\u30b5\u30e0\u30cd\u30a4\u30eb\u8868\u793a  DDS \u30d5\u30a1\u30a4\u30eb\u30d5\u30a9\u30fc\u30de\u30c3\u30c8\u306e\u8a73\u7d30\u89e3\u8aac  DDS\u30d5\u30a1\u30a4\u30eb\u3092\u81ea\u529b\u3067\u8aad\u3093\u3067\u307f\u3088\u3046  DirectX 11\u306e\u5727\u7e2e\u30d5\u30a9\u30fc\u30de\u30c3\u30c8BC1\uff5eBC7\u306b\u3064\u3044\u3066\uff08\u524d\u7de8\uff09  DirectX 11\u306e\u5727\u7e2e\u30d5\u30a9\u30fc\u30de\u30c3\u30c8BC1\uff5eBC7\u306b\u3064\u3044\u3066\uff08\u5f8c\u7de8\uff09  DDS Susie Plugin  : BC[1,7]\u5bfe\u5fdc", 
+            "title": "Texture"
         }, 
         {
             "location": "/link/#book", 
@@ -162,7 +167,7 @@
         }, 
         {
             "location": "/link/", 
-            "text": "Links\n\n\n(under construction)\n\n\nRendering\n\n\n\n\nThe Research and Development Department in tri-Ace\n\n\nLIBRARY | \u30c6\u30af\u30ce\u30ed\u30b8\u30fc\u63a8\u9032\u90e8 ADVANCED TECHNOLOGY DIVISION | SQUARE ENIX\n\n\n\u8b1b\u6f14\u8cc7\u6599 | \u30b7\u30ea\u30b3\u30f3\u30b9\u30bf\u30b8\u30aa\n\n\nCEDiL\n\n\n\n\nBook\n\n\n\n\n\u30d5\u30a9\u30c8\u30f3\u30de\u30c3\u30d4\u30f3\u30b0\n\n\n\u306a\u308b\u307b\u3069\u5fae\u7a4d\u5206\n\n\n\u30bc\u30ed\u304b\u3089\u5b66\u3076\u7dda\u5f62\u4ee3\u6570\n\n\n\u30bc\u30ed\u304b\u3089\u5b66\u3076\u5fae\u5206\u7a4d\u5206\n\n\n\u5bcc\u7530\u306e\u82f1\u6587\u8aad\u89e3\uff11\uff10\uff10\u306e\u539f\u5247 \u4e0a\n\n\n\u5bcc\u7530\u306e\u82f1\u6587\u8aad\u89e3\uff11\uff10\uff10\u306e\u539f\u5247 \u4e0b", 
+            "text": "Links\n\n\n(under construction)\n\n\nRendering\n\n\n\n\nThe Research and Development Department in tri-Ace\n\n\nLIBRARY | \u30c6\u30af\u30ce\u30ed\u30b8\u30fc\u63a8\u9032\u90e8 ADVANCED TECHNOLOGY DIVISION | SQUARE ENIX\n\n\n\u8b1b\u6f14\u8cc7\u6599 | \u30b7\u30ea\u30b3\u30f3\u30b9\u30bf\u30b8\u30aa\n\n\nCEDiL\n\n\n\n\nTexture\n\n\n\n\nCompressonator\n : Tool suite for Texture and 3D Model Compression, Optimization and Analysis using CPUs, GPUs and APUs \n\n\nDirectXTex\n : DirectXTex texture processing library\n\n\ndds_thumbnail\n : DirectX 11\u306e\u30c6\u30af\u30b9\u30c1\u30e3\u5727\u7e2e\u30d5\u30a9\u30fc\u30de\u30c3\u30c8BC1\uff5eBC7\u3092\u30b5\u30e0\u30cd\u30a4\u30eb\u8868\u793a\n\n\nDDS \u30d5\u30a1\u30a4\u30eb\u30d5\u30a9\u30fc\u30de\u30c3\u30c8\u306e\u8a73\u7d30\u89e3\u8aac\n\n\nDDS\u30d5\u30a1\u30a4\u30eb\u3092\u81ea\u529b\u3067\u8aad\u3093\u3067\u307f\u3088\u3046\n\n\nDirectX 11\u306e\u5727\u7e2e\u30d5\u30a9\u30fc\u30de\u30c3\u30c8BC1\uff5eBC7\u306b\u3064\u3044\u3066\uff08\u524d\u7de8\uff09\n\n\nDirectX 11\u306e\u5727\u7e2e\u30d5\u30a9\u30fc\u30de\u30c3\u30c8BC1\uff5eBC7\u306b\u3064\u3044\u3066\uff08\u5f8c\u7de8\uff09\n\n\nDDS Susie Plugin\n : BC[1,7]\u5bfe\u5fdc\n\n\n\n\nBook\n\n\n\n\n\u30d5\u30a9\u30c8\u30f3\u30de\u30c3\u30d4\u30f3\u30b0\n\n\n\u306a\u308b\u307b\u3069\u5fae\u7a4d\u5206\n\n\n\u30bc\u30ed\u304b\u3089\u5b66\u3076\u7dda\u5f62\u4ee3\u6570\n\n\n\u30bc\u30ed\u304b\u3089\u5b66\u3076\u5fae\u5206\u7a4d\u5206\n\n\n\u5bcc\u7530\u306e\u82f1\u6587\u8aad\u89e3\uff11\uff10\uff10\u306e\u539f\u5247 \u4e0a\n\n\n\u5bcc\u7530\u306e\u82f1\u6587\u8aad\u89e3\uff11\uff10\uff10\u306e\u539f\u5247 \u4e0b", 
             "title": "Link"
         }, 
         {
@@ -174,6 +179,11 @@
             "location": "/link/#rendering", 
             "text": "The Research and Development Department in tri-Ace  LIBRARY | \u30c6\u30af\u30ce\u30ed\u30b8\u30fc\u63a8\u9032\u90e8 ADVANCED TECHNOLOGY DIVISION | SQUARE ENIX  \u8b1b\u6f14\u8cc7\u6599 | \u30b7\u30ea\u30b3\u30f3\u30b9\u30bf\u30b8\u30aa  CEDiL", 
             "title": "Rendering"
+        }, 
+        {
+            "location": "/link/#texture", 
+            "text": "Compressonator  : Tool suite for Texture and 3D Model Compression, Optimization and Analysis using CPUs, GPUs and APUs   DirectXTex  : DirectXTex texture processing library  dds_thumbnail  : DirectX 11\u306e\u30c6\u30af\u30b9\u30c1\u30e3\u5727\u7e2e\u30d5\u30a9\u30fc\u30de\u30c3\u30c8BC1\uff5eBC7\u3092\u30b5\u30e0\u30cd\u30a4\u30eb\u8868\u793a  DDS \u30d5\u30a1\u30a4\u30eb\u30d5\u30a9\u30fc\u30de\u30c3\u30c8\u306e\u8a73\u7d30\u89e3\u8aac  DDS\u30d5\u30a1\u30a4\u30eb\u3092\u81ea\u529b\u3067\u8aad\u3093\u3067\u307f\u3088\u3046  DirectX 11\u306e\u5727\u7e2e\u30d5\u30a9\u30fc\u30de\u30c3\u30c8BC1\uff5eBC7\u306b\u3064\u3044\u3066\uff08\u524d\u7de8\uff09  DirectX 11\u306e\u5727\u7e2e\u30d5\u30a9\u30fc\u30de\u30c3\u30c8BC1\uff5eBC7\u306b\u3064\u3044\u3066\uff08\u5f8c\u7de8\uff09  DDS Susie Plugin  : BC[1,7]\u5bfe\u5fdc", 
+            "title": "Texture"
         }, 
         {
             "location": "/link/#book", 
