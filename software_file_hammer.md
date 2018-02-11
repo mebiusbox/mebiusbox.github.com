@@ -11,12 +11,29 @@ FileHammerはファイル削除ツールです。
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/FileHammerSetup-1.19.0.exe" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileHammerSetup','Title':'FileHammerSetup'});">
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=FileHammerSetup" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileHammerSetup','Title':'FileHammerSetup'});">
 				<img src="/assets/img/download_exe.jpg" />
 			</a>
 		</td>
 		<td>
-			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/FileHammer-1.19.0.zip" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileHammer','Title':'FileHammer'});">
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=FileHammer" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileHammer','Title':'FileHammer'});">
+				<img src="/assets/img/download_zip.jpg" />
+			</a>
+		</td>
+	</tr>
+</table>
+
+## 64bit 版
+
+<table class="dl" cellpadding="0" cellspacing="0" border="0">
+	<tr>
+		<td>
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=FileHammerSetupX64" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileHammerSetup','Title':'FileHammerSetup'});">
+				<img src="/assets/img/download_exe.jpg" />
+			</a>
+		</td>
+		<td>
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=FileHammerX64" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileHammer','Title':'FileHammer'});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>

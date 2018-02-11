@@ -11,7 +11,7 @@ JsonBridge は独自のテキスト文法による Json, XML 生成ツールで�
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/JsonBridge-1.1.0.zip" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/JsonBridge','Title':'JsonBridge'});">
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=JsonBridge" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/JsonBridge','Title':'JsonBridge'});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>

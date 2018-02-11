@@ -15,7 +15,7 @@
 
 	{
 		"name": "FileHammer",
-		"version": "1.19.0",
+		"version": "1.20.0",
 		"url": "/software_file_hammer.html",
 		"description":"ファイル削除ソフト。様々な検索ルールを設定して削除したいファイルを絞り込みます。コピーや移動も可能です。"
 	},

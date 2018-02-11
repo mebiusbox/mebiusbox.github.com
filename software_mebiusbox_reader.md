@@ -11,7 +11,7 @@ OPML 形式でのインポート・エクスポートに対応しています。
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/MebiusboxReader.zip" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/MebiusboxReader','Title':'MebiusboxReader'});">
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=MebiusboxReader" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/MebiusboxReader','Title':'MebiusboxReader'});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>

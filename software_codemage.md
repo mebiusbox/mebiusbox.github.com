@@ -10,12 +10,12 @@ Mac 用テキストエディタ TextMate を参考に作成したテキストエ
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/CodeMageSetup-0.5.5.exe" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/CodeMageSetup','Title':'CodeMageSetup'});">
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=CodeMageSetup" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/CodeMageSetup','Title':'CodeMageSetup'});">
 				<img src="/assets/img/download_exe.jpg" />
 			</a>
 		</td>
 		<td>
-			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/CodeMage-0.5.5.zip" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/CodeMage','Title':'CodeMage'});">
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=CodeMage" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/CodeMage','Title':'CodeMage'});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>

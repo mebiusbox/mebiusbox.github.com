@@ -10,7 +10,7 @@ MebiusScopeは、ファイルに格納されている情報を様々なビュー
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/MebiusScope-0.1.0.zip" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/MebiusScope','Title':'MebiusScope'});">
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=MebiusScope" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/MebiusScope','Title':'MebiusScope'});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>

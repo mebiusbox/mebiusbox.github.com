@@ -18,12 +18,12 @@ Wikiライクな文法でコンテンツを作成でき、また、数式(TeX) �
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/MebiusPressSetup-0.6.0.exe" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/MebiusPressSetup','Title':'MebiusPressSetup'});">
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=MebiusPressSetup" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/MebiusPressSetup','Title':'MebiusPressSetup'});">
 				<img src="/assets/img/download_exe.jpg" />
 			</a>
 		</td>
 		<td>
-			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/MebiusPress-0.6.0.zip" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/MebiusPress','Title':'MebiusPress'});">
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=MebiusPress" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/MebiusPress','Title':'MebiusPress'});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>

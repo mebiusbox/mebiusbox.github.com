@@ -16,12 +16,12 @@ ComicPicker は画像をまとめた書庫ファイル、画像、PDF 文書を�
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/ComicPickerSetup-0.6.5.exe" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/ComicPickerSetup','Title':'ComicPickerSetup'});">
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=ComicPickerSetup" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/ComicPickerSetup','Title':'ComicPickerSetup'});">
 				<img src="/assets/img/download_exe.jpg" />
 			</a>
 		</td>
 		<td>
-			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/ComicPicker-0.6.5.zip" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/ComicPicker','Title':'ComicPicker'});">
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=ComicPicker" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/ComicPicker','Title':'ComicPicker'});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>

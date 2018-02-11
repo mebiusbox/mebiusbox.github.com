@@ -10,12 +10,12 @@ DiskCatalogManagerは、ハードディスクやＣＤ－ＲＯＭ，ＤＶＤ�
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/DiskCatalogManagerSetup-2.7.4.exe" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/DiskCatalogManagerSetup','Title':'DiskCatalogManagerSetup'});">
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=DiskCatalogManagerSetupDev" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/DiskCatalogManagerSetup','Title':'DiskCatalogManagerSetup'});">
 				<img src="/assets/img/download_exe.jpg" />
 			</a>
 		</td>
 		<td>
-			<a href="https://dl.dropboxusercontent.com/u/36645874/mebiusbox/DiskCatalogManager-2.7.4.zip" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/DiskCatalogManager','Title':'DiskCatalogManager'});">
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=DiskCatalogManagerDev" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/DiskCatalogManager','Title':'DiskCatalogManager'});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>
