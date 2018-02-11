@@ -521,6 +521,8 @@
           cThicknessPower: 1.0,
           cCameraTilt: 0.0,
           cCameraPan: 0.0,
+          cSpeed: 1.0,
+          cAngle: 0.0,
           
           // circleRadius: 1.1,
           // ringRadius: 0.5,
@@ -585,6 +587,9 @@
           cNoiseScale: 1.0,
           cNoiseSphereEnable: false,
           cNoiseGraphEnable: false,
+          cNoiseStrength: 1.0,
+          cNoiseDepth: 3,
+          cNoiseSize: 8.0,
           
           cColorBalanceShadowsR: 0.0001,
           cColorBalanceShadowsG: 0.0001,
@@ -613,7 +618,7 @@
         // Parameters
         
         // h.add(effectController, 'freeCamera');
-        h.add(effectController, 'resolution', ['128', '256', '512', '1024']).onChange(function(value) {
+        h.add(effectController, 'resolution', ['8', '16', '32', '64', '128', '256', '512', '1024', '2048']).onChange(function(value) {
           canvas.width = value;
           canvas.height = value;
           onWindowResize();
@@ -623,7 +628,7 @@
           "Wood", "Circle", "Solar", "Corona", "Spark", "Ring", "Gradation", "GradationLine", "Flash", "Cone", "Flower", "FlowerFun", "WaveRing", "Smoke", "Flame", "Fire", "Cell", "Lightning", "Flare", "Flare2", "Flare3", "LensFlare", "Sun", "MagicCircle", "Mandara",
           "Explosion", "Explosion2", "Cross", "Laser", "Laser2", "Light", "Cloud",
           "PerlinNoise", "SeemlessNoise", "BooleanNoise", "CellNoise", "TurbulentNoise", "FbmNoise", "RandomNoise", "VoronoiNoise", "SparkNoise", "MarbleNoise",
-          "Checker"
+          "Checker", "FlameLance"
           
         ]).onChange(function(value) {
           
@@ -731,9 +736,10 @@
           cSmoothnessPower: { minValue: 1.0, maxValue: 5.0, name: "Smoothness Power" },
           cThickness: { minValue: 0.0, maxValue: 1.0, name: "Thickness" },
           cThicknessPower: { minValue: 1.0, maxValue: 5.0, name: "Thickness Power" },
-          
           cCameraTilt: { minValue: 0.0, maxValue: 1.0, name: "CameraTilt" },
           cCameraPan: { minValue: 0.0, maxValue: 1.0, name: "CameraPan" },
+          cSpeed: { minValue: 0.0, maxValue: 10.0, name: "Speed" },
+          cAngle: { minValue: 0.0, maxValue: 360.0, name: "Angle" },
           
           cExplosionRadius: { minValue: 1.0, maxValue: 2.0, name: "Radius" },
           cExplosionDownScale: { minValue: 1.0, maxValue: 2.0, name: "DownScale" },
@@ -756,6 +762,9 @@
           cNoiseScale: { minValue: 0.0, maxValue: 1.0, name: "NoiseScale" },
           cNoiseSphereEnable: { name: "NoiseSphere" },
           cNoiseGraphEnable: { name: "NoiseGraph" },
+          cNoiseSize: { minValue: 0.1, maxValue: 10.0, name: "NoiseSize" },
+          cNoiseStrength: { minValue: 0.1, maxValue: 1.0, name: "NoiseStrength" },
+          cNoiseDepth: { minValue: 1, maxValue: 5, name: "NoiseDepth" }
         };
         
         var overrideItems = {
@@ -788,6 +797,12 @@
           MarbleNoise: {
             cScale: { minValue: 1.0, maxValue: 100.0 },
             cFrequency: { minValue: 1.0, maxValue: 100.0 }
+          },
+          FlameLance: {
+            cSize: { minValue: 1.0, maxValue: 100.0 },
+            cSpeed: { minValue: 0.1, maxValue: 5.0 },
+            cPower: { minValue: 0.1, maxValue: 10.0 },
+            cAngle: { minValue: -1.0, maxValue: 1.0 }
           }
         };
         
@@ -852,6 +867,7 @@
           MarbleNoise: ["cScale", "cFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
           
           Checker: ["cWidth", "cHeight"],
+          FlameLance: ["cSize", "cSpeed", "cPower", "cAngle", "cColor",  "cNoiseSize", "cNoiseStrength", "cNoiseDepth"],
           
           Test: [],
         };
