@@ -17,5 +17,5 @@ https://www.microsoft.com/ja-jp/download/details.aspx?id=48145](https://www.micr
 
 ## ダウンロード
 
-- [インストーラ](http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=FileHammerSetup)
-- [zip](http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=FileHammer)
+- [インストーラ](http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=FileHammerSetupX64)
+- [zip](http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=FileHammerX64)
