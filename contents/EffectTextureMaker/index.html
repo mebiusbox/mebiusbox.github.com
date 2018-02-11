@@ -591,16 +591,15 @@
           cNoiseDepth: 3,
           cNoiseSize: 8.0,
           
-          cColorBalanceShadowsR: 0.0001,
-          cColorBalanceShadowsG: 0.0001,
-          cColorBalanceShadowsB: 0.0001,
-          cColorBalanceMidtonesR: 0.0001,
-          cColorBalanceMidtonesG: 0.0001,
-          cColorBalanceMidtonesB: 0.0001,
-          cColorBalanceHighlightsR: 0.0001,
-          cColorBalanceHighlightsG: 0.0001,
-          cColorBalanceHighlightsB: 0.0001,
-          cColorBlanacePreserveLuminosity: false,
+          cColorBalanceShadowsR: 0,
+          cColorBalanceShadowsG: 0,
+          cColorBalanceShadowsB: 0,
+          cColorBalanceMidtonesR: 0,
+          cColorBalanceMidtonesG: 0,
+          cColorBalanceMidtonesB: 0,
+          cColorBalanceHighlightsR: 0,
+          cColorBalanceHighlightsG: 0,
+          cColorBalanceHighlightsB: 0,
           
           type: "Wood",
           // type: "Test",
@@ -739,7 +738,7 @@
           cCameraTilt: { minValue: 0.0, maxValue: 1.0, name: "CameraTilt" },
           cCameraPan: { minValue: 0.0, maxValue: 1.0, name: "CameraPan" },
           cSpeed: { minValue: 0.0, maxValue: 10.0, name: "Speed" },
-          cAngle: { minValue: 0.0, maxValue: 360.0, name: "Angle" },
+          cAngle: { minValue: 0.0, maxValue: 360.0, name: "Angle", step: 0.01 },
           
           cExplosionRadius: { minValue: 1.0, maxValue: 2.0, name: "Radius" },
           cExplosionDownScale: { minValue: 1.0, maxValue: 2.0, name: "DownScale" },
@@ -888,10 +887,21 @@
             
             if (override) {
               var overrideItem = overrideItems[effectController.type][ pars[i] ];
-              guiParsItems.push(guiPars.add(effectController, pars[i], overrideItem.minValue, overrideItem.maxValue).name(item.name));
+              var guiItem = guiPars.add(effectController, pars[i], overrideItem.minValue, overrideItem.maxValue).name(item.name);
+              if ("step" in item) {
+                guiItem.step(item.step);
+              }
+              if ("step" in overrideItem) {
+                guiItem.step(override.step);
+              }
+              guiParsItems.push(guiItem);
             }
             else {
-              guiParsItems.push(guiPars.add(effectController, pars[i], item.minValue, item.maxValue).name(item.name));
+              var guiItem = guiPars.add(effectController, pars[i], item.minValue, item.maxValue).name(item.name);
+              if ("step" in item) {
+                guiItem.step(item.step);
+              }
+              guiParsItems.push(guiItem);
             }
           }
         }
