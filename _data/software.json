@@ -135,7 +135,7 @@
 	{
 		"name": "TagLibUtil",
 		"version": "1.0.0",
-		"url": "https://dl.dropboxusercontent.com/u/36645874/mebiusbox/TagLibUtil.zip",
+		"url": "http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=TagLibUtil.zip",
 		"description":"tag.dll を扱うためのライブラリ."
 	}
 ]
