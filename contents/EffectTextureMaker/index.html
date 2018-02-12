@@ -523,6 +523,7 @@
           cCameraPan: 0.0,
           cSpeed: 1.0,
           cAngle: 0.0,
+          cDensity: 1.0,
           
           // circleRadius: 1.1,
           // ringRadius: 0.5,
@@ -627,7 +628,7 @@
           "Wood", "Circle", "Solar", "Corona", "Spark", "Ring", "Gradation", "GradationLine", "Flash", "Cone", "Flower", "FlowerFun", "WaveRing", "Smoke", "Flame", "Fire", "Cell", "Lightning", "Flare", "Flare2", "Flare3", "LensFlare", "Sun", "MagicCircle", "Mandara",
           "Explosion", "Explosion2", "Cross", "Laser", "Laser2", "Light", "Cloud",
           "PerlinNoise", "SeemlessNoise", "BooleanNoise", "CellNoise", "TurbulentNoise", "FbmNoise", "RandomNoise", "VoronoiNoise", "SparkNoise", "MarbleNoise",
-          "Checker", "FlameLance"
+          "Checker", "FlameLance", "Bonfire"
           
         ]).onChange(function(value) {
           
@@ -739,6 +740,7 @@
           cCameraPan: { minValue: 0.0, maxValue: 1.0, name: "CameraPan", step: 0.1 },
           cSpeed: { minValue: 0.0, maxValue: 10.0, name: "Speed" },
           cAngle: { minValue: 0.0, maxValue: 360.0, name: "Angle", step: 0.01 },
+          cDensity: { minValue: 0.0, maxValue: 1.0, name: "Density", step: 0.01 },
           
           cExplosionRadius: { minValue: 1.0, maxValue: 2.0, name: "Radius" },
           cExplosionDownScale: { minValue: 1.0, maxValue: 2.0, name: "DownScale" },
@@ -802,6 +804,13 @@
             cSpeed: { minValue: 0.1, maxValue: 5.0 },
             cPower: { minValue: 0.1, maxValue: 10.0 },
             cAngle: { minValue: -1.0, maxValue: 1.0 }
+          },
+          Bonfire: {
+            cSpeed: { minValue: 0.1, maxValue: 1.0 },
+            cIntensity: { minValue: 0.1, maxValue: 5.0 },
+            cStrength: { minValue: 0.1, maxValue: 1.0 },
+            cDensity: { minValue: 0.1, maxValue: 4.0 },
+            cSize: { minValue: 0.0, maxValue: 10.0 }
           }
         };
         
@@ -867,6 +876,7 @@
           
           Checker: ["cWidth", "cHeight"],
           FlameLance: ["cSize", "cSpeed", "cPower", "cAngle", "cColor",  "cNoiseSize", "cNoiseStrength", "cNoiseDepth"],
+          Bonfire: ["cSpeed", "cIntensity", "cStrength", "cDensity", "cSize", "cColor"],
           
           Test: [],
         };
