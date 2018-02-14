@@ -627,7 +627,7 @@
         h.add(effectController, "type", [
           "Wood", "Circle", "Solar", "Corona", "Spark", "Ring", "Gradation", "GradationLine", "Flash", "Cone", "Flower", "FlowerFun", "WaveRing", "Smoke", "Flame", "Fire", "Cell", "Lightning", "Flare", "Flare2", "Flare3", "LensFlare", "Sun", "MagicCircle", "Mandara",
           "Explosion", "Explosion2", "Cross", "Laser", "Laser2", "Light", "Cloud",
-          "PerlinNoise", "SeemlessNoise", "BooleanNoise", "CellNoise", "TurbulentNoise", "FbmNoise", "RandomNoise", "VoronoiNoise", "SparkNoise", "MarbleNoise",
+          "PerlinNoise", "SeemlessNoise", "BooleanNoise", "CellNoise", "TurbulentNoise", "FbmNoise", "FbmNoise2", "RandomNoise", "VoronoiNoise", "SparkNoise", "MarbleNoise", "TessNoise", 
           "Checker", "FlameLance", "Bonfire", "Snow"
           
         ]).onChange(function(value) {
@@ -795,9 +795,17 @@
             cWidth: { minValue: 1.0, maxValue: 100.0 },
             cHeight: { minValue: 1.0, maxValue: 100.0 }
           },
+          FbmNoise2: {
+            cNoiseOctave: { minValue: 1.0, maxValue: 3.0, defaultValue: 3.0 },
+            cNoiseAmplitude: { minValue: 0.0, maxValue: 0.5, defaultValue: 0.25 },
+            cNoiseFreqneucy: { minValue: 0.0, maxValue: 1.0, defaultValue: 1.0 }
+          },
           MarbleNoise: {
             cScale: { minValue: 1.0, maxValue: 100.0 },
             cFrequency: { minValue: 1.0, maxValue: 100.0 }
+          },
+          TessNoise: {
+            cNoiseFrequency: { minValue: 0.0, maxValue: 1.0, defaultValue: 0.1 }
           },
           FlameLance: {
             cSize: { minValue: 1.0, maxValue: 100.0 },
@@ -873,10 +881,12 @@
           CellNoise: ["cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
           RandomNoise: ["cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
           FbmNoise: ["cNoiseOctave", "cNoiseAmplitude", "cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
+          FbmNoise2: ["cNoiseOctave", "cNoiseAmplitude", "cNoiseFrequency", "cScale", "cNoiseSphereEnable", "cNoiseGraphEnable"],
           TurbulentNoise: ["cNoiseOctave", "cNoiseAmplitude", "cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
           SparkNoise: ["cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
           VoronoiNoise: ["cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
           MarbleNoise: ["cScale", "cFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
+          TessNoise: [ "cNoiseFrequency", "cOffset",  "cNoiseSphereEnable", "cNoiseGraphEnable"],
           
           Checker: ["cWidth", "cHeight"],
           FlameLance: ["cSize", "cSpeed", "cPower", "cAngle", "cColor",  "cNoiseSize", "cNoiseStrength", "cNoiseDepth"],
@@ -902,6 +912,9 @@
             
             if (override) {
               var overrideItem = overrideItems[effectController.type][ pars[i] ];
+              if ("defaultValue" in overrideItem) {
+                effectController[ pars[i] ] = overrideItem.defaultValue;
+              }
               var guiItem = guiPars.add(effectController, pars[i], overrideItem.minValue, overrideItem.maxValue).name(item.name);
               if ("step" in item) {
                 guiItem.step(item.step);
