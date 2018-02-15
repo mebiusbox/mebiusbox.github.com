@@ -3,27 +3,10 @@ layout: software
 title: FileHammer
 ---
 
-# FileHammer 1.19.0
+# FileHammer 1.20.2
 FileHammerはファイル削除ツールです。
 複数のルール（条件）を設定し、削除する対象を絞り込める機能が特徴です。
 また、空のフォルダを削除する機能もあります。
-
-<table class="dl" cellpadding="0" cellspacing="0" border="0">
-	<tr>
-		<td>
-			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=FileHammerSetup" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileHammerSetup','Title':'FileHammerSetup'});">
-				<img src="/assets/img/download_exe.jpg" />
-			</a>
-		</td>
-		<td>
-			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=FileHammer" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileHammer','Title':'FileHammer'});">
-				<img src="/assets/img/download_zip.jpg" />
-			</a>
-		</td>
-	</tr>
-</table>
-
-## 64bit 版
 
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
@@ -54,9 +37,9 @@ FileHammerはファイル削除ツールです。
 * ファイル一致
 * 書庫チェック
 * Exif
-* ID3 (TagLibUtil.dll, tag.dll, tag_c.dll が必要)
-* コーデック (sinku.dll が必要)
+* ID3
 * 類似画像
+* 動画
 
 ## スクリーンショット
 <div class="snap">
@@ -67,7 +50,24 @@ FileHammerはファイル削除ツールです。
 </div>
 
 ## 動作環境
-Windows XP, Vista, 7
+Windows 10 (64bit)
+
+## 旧版 (1.19.0)
+
+<table class="dl" cellpadding="0" cellspacing="0" border="0">
+	<tr>
+		<td>
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=FileHammerSetup" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileHammerSetup','Title':'FileHammerSetup'});">
+				<img src="/assets/img/download_exe.jpg" />
+			</a>
+		</td>
+		<td>
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=FileHammer" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileHammer','Title':'FileHammer'});">
+				<img src="/assets/img/download_zip.jpg" />
+			</a>
+		</td>
+	</tr>
+</table>
 
 ## 更新履歴
 
