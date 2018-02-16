@@ -9,6 +9,8 @@ tags: [diary]
 
 - 64bit 版
 - susie プラグインは 64bit 版（sph）ファイルに対応しました．
+- 動画ルールを追加しました
+- 重複ルールに xxHash を追加しました
 - ID3 ルールを使うために dll を用意してもらう必要がなくなりました
 - サポートしている画像形式：jpg, jpeg, jpe, jp2, pbm, ppm, pgm, png, tga, bmp, psd, gif, hdr, pic, pnm, tiff, tif, exr
 - サポートしている動画形式：mp4, avi, wmv, mov
