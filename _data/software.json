@@ -1,12 +1,5 @@
 [
 	{
-		"name": "Mebiusbox2",
-		"version": "2.1.1.a",
-		"url": "/software_mebiusbox2.html",
-		"description":"ファイル管理ソフト"
-	},
-
-	{
 		"name": "Mebiusbox",
 		"version": "1.9.1",
 		"url": "/software_mebiusbox.html",
@@ -18,13 +11,6 @@
 		"version": "1.20.2",
 		"url": "/software_file_hammer.html",
 		"description":"ファイル削除ソフト。様々な検索ルールを設定して削除したいファイルを絞り込みます。コピーや移動も可能です。"
-	},
-
-	{
-		"name": "FolderHammer",
-		"version": "1.2.1",
-		"url": "/software_folder_hammer.html",
-		"description":"フォルダ削除ソフト。空のフォルダを簡単に削除。削除する前に確認ができます。"
 	},
 
 	{
@@ -42,94 +28,10 @@
 	},
 
 	{
-		"name": "MebiusScope",
-		"version": "0.1.0",
-		"url": "/software_mebius_scope.html",
-		"description":"マルチメディアビューア。テキスト、バイナリ、画像、PDF、動画、音楽、HTML, ハッシュ, Exif。"
-	},
-
-	{
-		"name": "Filemater",
-		"version": "0.2.0",
-		"url": "/software_filemater.html",
-		"description":"ファイル整理ツール。ダイアグラムで簡単設定。複雑な条件を設定可能です。"
-	},
-
-	{
-		"name": "CodeMage",
-		"version": "0.5.5",
-		"url": "/software_codemage.html",
-		"description":"スニペット機能のあるテキストエディタ。TextMate のバンドルが利用できます。"
-	},
-
-	{
-		"name": "ExtendQuickBar",
-		"version": "1.5.5",
-		"url": "/software_extend_quick_bar.html",
-		"description":"クイック起動ツールを拡張したようなランチャー。"
-	},
-
-	{
 		"name": "ComicPicker",
 		"version": "0.6.5",
 		"url": "/software_comic_picker.html",
 		"description":"画像をまとめた書庫ファイルや PDF ファイルを整理。削除や移動が簡単に行えます。"
-	},
-
-	{
-		"name": "Bugboard",
-		"version": "1.2.2",
-		"url": "/software_bugboard.html",
-		"description":"バグ管理システム. PHP と DB でバグや要望を管理。"
-	},
-
-	{
-		"name": "Mirage",
-		"version": "0.1.0",
-		"url": "/contents/mirage/",
-		"description":"３Ｄエフェクト作成ツール."
-	},
-
-	{
-		"name": "PortalFolder",
-		"version": "0.1.0",
-		"url": "/software_portal_folder.html",
-		"description":"フォルダへの移動、コピーを支援し、素早いアクセスが可能."
-	},
-
-	{
-		"name": "SmartQuickBar",
-		"version": "1.0.0",
-		"url": "/software_smart_quick_bar.html",
-		"description":"画面上部固定のランチャー."
-	},
-
-	{
-		"name": "MebiusPress",
-		"version": "0.6.0",
-		"url": "/software_mebius_press.html",
-		"description":"HTML作成ツール. Wikiライクな文法。数式(TeX)が作成可能."
-	},
-
-	{
-		"name": "SmartTweetBar",
-		"version": "1.2.4",
-		"url": "/software_smart_tweet_bar.html",
-		"description":"Twitter クライアント. ツイート専用です."
-	},
-
-	{
-		"name": "MebiusboxReader",
-		"version": "1.0.0",
-		"url": "/software_mebiusbox_reader.html",
-		"description":"RSS リーダーです."
-	},
-
-	{
-		"name": "JsonBridge",
-		"version": "1.1.0",
-		"url": "/software_jsonbridge.html",
-		"description":"独自の文法で記述したテキストを JSON, XML に変換するツールです."
 	},
 
 	{
