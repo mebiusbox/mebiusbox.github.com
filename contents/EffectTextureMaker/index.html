@@ -759,9 +759,9 @@
           cExplosionBallSpread: { minValue: 0.1, maxValue: 5.0, name: "BallSpread" },
           
           cNoiseOctave: { minValue: 1, maxValue: 8, name: "NoiseOctave" },
-          cNoiseFrequency: { minValue: 0.0, maxValue: 2.0, name: "NoiseFrequency" },
+          cNoiseFrequency: { minValue: 0.0, maxValue: 2.0, name: "NoiseFrequency", step: 0.01 },
           cNoisePersistence: { minValue: 0.0, maxValue: 1.0, name: "NoisePersistence" },
-          cNoiseAmplitude: { minValue: 0.0, maxValue: 1.0, name: "NoiseAmplitude" },
+          cNoiseAmplitude: { minValue: 0.0, maxValue: 1.0, name: "NoiseAmplitude", step: 0.01 },
           cNoiseScale: { minValue: 0.0, maxValue: 1.0, name: "NoiseScale" },
           cNoiseSphereEnable: { name: "NoiseSphere" },
           cNoiseGraphEnable: { name: "NoiseGraph" },
@@ -804,7 +804,7 @@
           },
           FbmNoise3: {
             cNoiseOctave: { minValue: 1.0, maxValue: 8.0, defaultValue: 5.0 },
-            cNoiseAmplitude: { minValue: 0.1, maxValue: 2.0, defaultValue: 1.0 },
+            cNoiseAmplitude: { minValue: 0.5, maxValue: 1.5, defaultValue: 1.0 },
             cNoiseFrequency: { minValue: 0.0, maxValue: 2.0, defaultValue: 0.5 },
             cNoiseScale: { minValue: 0.01, maxValue: 1.0 }
           },
