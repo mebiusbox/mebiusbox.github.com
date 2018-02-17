@@ -627,7 +627,9 @@
         h.add(effectController, "type", [
           "Wood", "Circle", "Solar", "Corona", "Spark", "Ring", "Gradation", "GradationLine", "Flash", "Cone", "Flower", "FlowerFun", "WaveRing", "Smoke", "Flame", "Fire", "Cell", "Lightning", "Flare", "Flare2", "Flare3", "LensFlare", "Sun", "MagicCircle", "Mandara",
           "Explosion", "Explosion2", "Cross", "Laser", "Laser2", "Light", "Cloud",
-          "PerlinNoise", "SeemlessNoise", "BooleanNoise", "CellNoise", "TurbulentNoise", "FbmNoise", "FbmNoise2", "RandomNoise", "VoronoiNoise", "SparkNoise", "MarbleNoise", "TessNoise", 
+          "PerlinNoise", "SeemlessNoise", "BooleanNoise", "CellNoise", "TurbulentNoise", 
+          "FbmNoise", "FbmNoise2", "FbmNoise3", 
+          "RandomNoise", "VoronoiNoise", "SparkNoise", "MarbleNoise", "TessNoise", "GradientNoise",
           "Checker", "FlameLance", "Bonfire", "Snow"
           
         ]).onChange(function(value) {
@@ -798,7 +800,13 @@
           FbmNoise2: {
             cNoiseOctave: { minValue: 1.0, maxValue: 3.0, defaultValue: 3.0 },
             cNoiseAmplitude: { minValue: 0.0, maxValue: 0.5, defaultValue: 0.25 },
-            cNoiseFreqneucy: { minValue: 0.0, maxValue: 1.0, defaultValue: 1.0 }
+            cNoiseFrequency: { minValue: 0.0, maxValue: 1.0, defaultValue: 1.0 }
+          },
+          FbmNoise3: {
+            cNoiseOctave: { minValue: 1.0, maxValue: 8.0, defaultValue: 5.0 },
+            cNoiseAmplitude: { minValue: 0.1, maxValue: 2.0, defaultValue: 1.0 },
+            cNoiseFrequency: { minValue: 0.0, maxValue: 2.0, defaultValue: 0.5 },
+            cNoiseScale: { minValue: 0.01, maxValue: 1.0 }
           },
           MarbleNoise: {
             cScale: { minValue: 1.0, maxValue: 100.0 },
@@ -882,11 +890,13 @@
           RandomNoise: ["cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
           FbmNoise: ["cNoiseOctave", "cNoiseAmplitude", "cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
           FbmNoise2: ["cNoiseOctave", "cNoiseAmplitude", "cNoiseFrequency", "cScale", "cNoiseSphereEnable", "cNoiseGraphEnable"],
+          FbmNoise3: ["cNoiseOctave", "cNoiseAmplitude", "cNoiseFrequency", "cNoiseScale", "cOffset", "cNoiseSphereEnable", "cNoiseGraphEnable"],
           TurbulentNoise: ["cNoiseOctave", "cNoiseAmplitude", "cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
           SparkNoise: ["cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
           VoronoiNoise: ["cNoiseFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
           MarbleNoise: ["cScale", "cFrequency", "cNoiseSphereEnable", "cNoiseGraphEnable"],
           TessNoise: [ "cNoiseFrequency", "cOffset",  "cNoiseSphereEnable", "cNoiseGraphEnable"],
+          GradientNoise: [ "cNoiseScale", "cColor", "cNoiseSphereEnable", "cNoiseGraphEnable"],
           
           Checker: ["cWidth", "cHeight"],
           FlameLance: ["cSize", "cSpeed", "cPower", "cAngle", "cColor",  "cNoiseSize", "cNoiseStrength", "cNoiseDepth"],
