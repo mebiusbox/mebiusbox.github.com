@@ -42,8 +42,7 @@
     <div id="info">
       EffectTextureMaker - Powered by <a href="http://threejs.org" target="_blank">three.js</a><br />
       <br />
-      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke<br />
-      <a href="./README.html">README</a>
+      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke
       <div id="time" style="font-family: consolas; margin-top: 8px;">
   		</div>
     </div>
@@ -526,6 +525,9 @@
           cAngle: 0.0,
           cDensity: 1.0,
           
+          cDiamondGearTeeth: 18.0,
+          cDiamondGearMid: 0.8,
+          
           // circleRadius: 1.1,
           // ringRadius: 0.5,
           // ringWidth: 0.1,
@@ -631,7 +633,7 @@
           "PerlinNoise", "SeemlessNoise", "BooleanNoise", "CellNoise", "TurbulentNoise", 
           "FbmNoise", "FbmNoise2", "FbmNoise3", 
           "RandomNoise", "VoronoiNoise", "SparkNoise", "MarbleNoise", "TessNoise", "GradientNoise",
-          "Checker", "FlameLance", "Bonfire", "Snow"
+          "Checker", "FlameLance", "Bonfire", "Snow", "DiamondGear"
           
         ]).onChange(function(value) {
           
@@ -641,7 +643,7 @@
           layers[0].uniforms = stdShader.generateUniforms();
           layers[0].material = stdShader.createMaterial(layers[0].uniforms, { defines: stdShader.generateDefines()});
           // console.log(stdShader.generateVertexShader());
-          // console.log(stdShader.generateFragmentShader());
+          console.log(stdShader.generateFragmentShader());
           
           resetParameters(layers[0].uniforms);
         });
@@ -745,6 +747,9 @@
           cAngle: { minValue: 0.0, maxValue: 360.0, name: "Angle", step: 0.01 },
           cDensity: { minValue: 0.0, maxValue: 1.0, name: "Density", step: 0.01 },
           
+          cDiamondGearTeeth: { minValue: 8.0, maxValue: 32.0, name: "Teeth" },
+          cDiamondGearMid: { minValue: 0.0, maxValue: 1.0, name: "Mid", step: 0.01 },
+          
           cExplosionRadius: { minValue: 1.0, maxValue: 2.0, name: "Radius" },
           cExplosionDownScale: { minValue: 1.0, maxValue: 2.0, name: "DownScale" },
           cExplosionGrain: { minValue: 1.0, maxValue: 5.0, name: "Grain" },
@@ -832,6 +837,9 @@
           Snow: {
             cDensity: { minValue: 0.1, maxValue: 6.0 },
             cRange: { minValue: 0.1, maxValue: 1.0 }
+          },
+          DiamondGear: {
+            cWidth: { minValue: 0.1, maxValue: 8.0 }
           }
         };
         
@@ -903,6 +911,7 @@
           FlameLance: ["cSize", "cSpeed", "cPower", "cAngle", "cColor",  "cNoiseSize", "cNoiseStrength", "cNoiseDepth"],
           Bonfire: ["cSpeed", "cIntensity", "cStrength", "cDensity", "cSize", "cColor"],
           Snow: ["cSpeed", "cScale", "cDensity", "cRange"],
+          DiamondGear: ["cScale", "cWidth", "cRadius", "cDiamondGearTeeth", "cDiamondGearMid"],
           
           Test: [],
         };
