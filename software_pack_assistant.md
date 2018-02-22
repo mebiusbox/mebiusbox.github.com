@@ -3,9 +3,25 @@ layout: software
 title: PackAssistant
 ---
 
-# PackAssistant 1.5.2
+# PackAssistant 1.6.0
 PackAssistant は複数のファイルを指定の容量をもつパックに、効率良く収まるように振り分けます。
 
+<table class="dl" cellpadding="0" cellspacing="0" border="0">
+	<tr>
+		<td>
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=PackAssistantSetupX64" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PackAssitantSetupX64','Title':'PackAssistantSetupX64'});">
+				<img src="/assets/img/download_exe.jpg" />
+			</a>
+		</td>
+		<td>
+			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=PackAssistantX64" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PackAssistantX64','Title':'PackAssistantX64'});">
+				<img src="/assets/img/download_zip.jpg" />
+			</a>
+		</td>
+	</tr>
+</table>
+
+## 旧版 (1.5.2 x86版)
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
@@ -46,9 +62,14 @@ PackClassify は PackAssistant と一緒にインストールされます。
 </div>
 
 ## 動作環境
-Windows XP(32), Vista(32)
+Windows 10 (64bit)
 
 ## 更新履歴
+
+### 1.6.0
+* Windows10 (64bit) に対応しました
+* PackClassify を削除しました（連携機能がなくなっています）
+* BD -> Blu-ray と表記を変え，Blu-ray XL (100GB) を追加しました．
 
 ### 1.5.1
 * Visual Studio 2010 でビルド。
