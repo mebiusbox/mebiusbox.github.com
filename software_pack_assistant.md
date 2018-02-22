@@ -43,10 +43,6 @@ PackAssistant は複数のファイルを指定の容量をもつパックに、
 ## ドラッグ＆ドロップ
 ライティングソフトのファイル登録時にＤ＆Ｄを利用することによって、簡単に登録することができます。
 
-## PackClassify
-ツール PackClassify との連携機能により、PackAssistant の結果を元にファイルやフォルダを実際に振り分けます。
-PackClassify は PackAssistant と一緒にインストールされます。
-
 ## スクリーンショット
 <div class="snap">
 	<a class="fancybox" rel="group" href="/assets/img/PackAssistant_snap01.jpg">
@@ -54,9 +50,6 @@ PackClassify は PackAssistant と一緒にインストールされます。
 	</a>
 	<a class="fancybox" rel="group" href="/assets/img/PackAssistant_snap02.jpg">
 		<img src="/assets/img/PackAssistant_snap02.jpg" width="240" height="180" alt="snap02" border="0" />
-	</a>
-	<a class="fancybox" rel="group" href="/assets/img/PackAssistant_snap03.jpg">
-		<img src="/assets/img/PackAssistant_snap03.jpg" width="240" height="180" alt="snap03" border="0" />
 	</a>
 	<br class="clear" />
 </div>
