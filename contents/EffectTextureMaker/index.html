@@ -42,7 +42,7 @@
     <div id="info">
       EffectTextureMaker - Powered by <a href="http://threejs.org" target="_blank">three.js</a><br />
       <br />
-      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke
+      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke, 104
       <div id="time" style="font-family: consolas; margin-top: 8px;">
   		</div>
     </div>
@@ -524,9 +524,15 @@
           cSpeed: 1.0,
           cAngle: 0.0,
           cDensity: 1.0,
+          cAlpha: 1.0,
           
           cDiamondGearTeeth: 18.0,
           cDiamondGearMid: 0.8,
+          
+          cBrushStrokeX1: -0.4,
+          cBrushStrokeY1: 0.0,
+          cBrushStrokeX2: 1.1,
+          cBrushStrokeY2: 0.8,
           
           // circleRadius: 1.1,
           // ringRadius: 0.5,
@@ -633,7 +639,7 @@
           "PerlinNoise", "SeemlessNoise", "BooleanNoise", "CellNoise", "TurbulentNoise", 
           "FbmNoise", "FbmNoise2", "FbmNoise3", 
           "RandomNoise", "VoronoiNoise", "SparkNoise", "MarbleNoise", "TessNoise", "GradientNoise",
-          "Checker", "FlameLance", "Bonfire", "Snow", "DiamondGear"
+          "Checker", "FlameLance", "Bonfire", "Snow", "DiamondGear", "BrushStroke"
           
         ]).onChange(function(value) {
           
@@ -746,9 +752,15 @@
           cSpeed: { minValue: 0.0, maxValue: 10.0, name: "Speed" },
           cAngle: { minValue: 0.0, maxValue: 360.0, name: "Angle", step: 0.01 },
           cDensity: { minValue: 0.0, maxValue: 1.0, name: "Density", step: 0.01 },
+          cAlpha: { minValue: 0.0, maxValue: 1.0, name: "Alpha", step: 0.01 },
           
           cDiamondGearTeeth: { minValue: 8.0, maxValue: 32.0, name: "Teeth", step: 1.0 },
           cDiamondGearMid: { minValue: 0.0, maxValue: 1.0, name: "Mid", step: 0.01 },
+          
+          cBrushStrokeX1: { minValue: -1.0, maxValue: 1.0, name: "X1", step: 0.01 },
+          cBrushStrokeY1: { minValue: -1.0, maxValue: 1.0, name: "Y1", step: 0.01 },
+          cBrushStrokeX2: { minValue: -1.0, maxValue: 1.0, name: "X2", step: 0.01 },
+          cBrushStrokeY2: { minValue: -1.0, maxValue: 1.0, name: "Y2", step: 0.01 },
           
           cExplosionRadius: { minValue: 1.0, maxValue: 2.0, name: "Radius" },
           cExplosionDownScale: { minValue: 1.0, maxValue: 2.0, name: "DownScale" },
@@ -840,6 +852,13 @@
           },
           DiamondGear: {
             cWidth: { minValue: 0.1, maxValue: 8.0 }
+          },
+          BrushStroke: {
+            cWidth: { minValue: 0.0, maxValue: 1.0, defaultValue: 0.3 },
+            cAlpha: { minValue: 0.0, maxValue: 1.0, defaultValue: 0.58 },
+            cStrength: { minValue: 0.1, maxValue: 1.0, defaultValue: 0.6 },
+            cAngle: { minValue: 0.0, maxValue: 1.0 },
+            cAmplitude: { minValue: 0.0, maxValue: 1.0 }
           }
         };
         
@@ -912,6 +931,7 @@
           Bonfire: ["cSpeed", "cIntensity", "cStrength", "cDensity", "cSize", "cColor"],
           Snow: ["cSpeed", "cScale", "cDensity", "cRange"],
           DiamondGear: ["cScale", "cWidth", "cRadius", "cDiamondGearTeeth", "cDiamondGearMid"],
+          BrushStroke: ["cWidth", "cStrength", "cAlpha", "cAngle", "cAmplitude", "cBrushStrokeX1", "cBrushStrokeY1", "cBrushStrokeX2", "cBrushStrokeY2", "cColor"],
           
           Test: [],
         };
