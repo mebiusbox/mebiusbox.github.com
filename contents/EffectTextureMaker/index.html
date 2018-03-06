@@ -331,6 +331,12 @@
           }
         }
         
+        spriteSheet.renderTarget = new THREE.WebGLRenderTarget(canvas.width, canvas.height, {
+          minFilter: THREE.LinearFilter,
+          magFilter: THREE.LinearFilter,
+          format: THREE.RGBFormat,
+          stencilBuffer: false });
+        
         // camera.aspect = window.innerWidth / window.innerHeight;
         // camera.updateProjectionMatrix();
         
