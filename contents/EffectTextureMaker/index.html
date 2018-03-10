@@ -42,7 +42,7 @@
     <div id="info">
       EffectTextureMaker - Powered by <a href="http://threejs.org" target="_blank">three.js</a><br />
       <br />
-      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke, 104, vchizhov
+      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke, 104, vchizhov, smkgames, Stefan Gustavson
       <div id="time" style="font-family: consolas; margin-top: 8px;">
   		</div>
     </div>
@@ -645,7 +645,8 @@
           "PerlinNoise", "SeemlessNoise", "BooleanNoise", "CellNoise", "TurbulentNoise", 
           "FbmNoise", "FbmNoise2", "FbmNoise3", 
           "RandomNoise", "VoronoiNoise", "SparkNoise", "MarbleNoise", "TessNoise", "GradientNoise",
-          "Checker", "FlameLance", "Bonfire", "Snow", "DiamondGear", "BrushStroke"
+          "Checker", "FlameLance", "Bonfire", "Snow", "DiamondGear", "BrushStroke",
+          "Speckle"
           
         ]).onChange(function(value) {
           
@@ -725,7 +726,7 @@
           cIntensity: { minValue: 0.0, maxValue: 1.0, name: "Intensity" },
           cDirectionX: { minValue: -1.0, maxValue: 1.0, name: "Direction X", step: 0.1 },
           cDirectionY: { minValue: -1.0, maxValue: 1.0, name: "Direction Y", step: 0.1 },
-          cRadius: { minValue: 0.0, maxValue: 2.0, name: "Radius" },
+          cRadius: { minValue: 0.0, maxValue: 2.0, name: "Radius", step: 0.01 },
           cInnerRadius: { minValue: 0.0, maxValue: 2.0, name: "InnerRadius" },
           cInnerRadius2: { minValue: 0.0, maxValue: 2.0, name: "InnerRadius2" },
           cWidth: { minValue: 0.0, maxValue: 1.0, name: "Width" },
@@ -865,7 +866,12 @@
             cStrength: { minValue: 0.1, maxValue: 1.0, defaultValue: 0.6 },
             cAngle: { minValue: 0.0, maxValue: 1.0 },
             cAmplitude: { minValue: 0.0, maxValue: 1.0 }
-          }
+          },
+          Speckle: {
+            cRadius: { minValue: 0.01, maxValue: 1.0, defaultValue: 1.0 },
+            cDensity: { minValue: 0.01, maxValue: 1.0, defaultValue: 0.1 },
+            cScale: { minValue: 0.01, maxValue: 1.0, defaultValue: 0.01 }
+          },
         };
         
         // "Wood", "Circle", "Solar", "Corona", "Spark", "Ring", "Gradation", "GradationLine", "Flash", "Cone", "Flower", "FlowerFun", "WaveRing", "Smoke", "Flame", "Fire", "Cell", "Lightning", "Flare", "Flare2", "Flare3", "LensFlare", "Sun", "MagicCircle",
@@ -939,6 +945,7 @@
           Snow: ["cSpeed", "cScale", "cDensity", "cRange"],
           DiamondGear: ["cScale", "cWidth", "cRadius", "cDiamondGearTeeth", "cDiamondGearMid"],
           BrushStroke: ["cWidth", "cStrength", "cAlpha", "cAngle", "cAmplitude", "cBrushStrokeX1", "cBrushStrokeY1", "cBrushStrokeX2", "cBrushStrokeY2", "cColor"],
+          Speckle: ["cRadius", "cScale", "cDensity"],
           
           Test: [],
         };
