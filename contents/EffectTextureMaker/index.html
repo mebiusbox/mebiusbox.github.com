@@ -649,7 +649,7 @@
           "FbmNoise", "FbmNoise2", "FbmNoise3", 
           "RandomNoise", "VoronoiNoise", "SparkNoise", "MarbleNoise", "TessNoise", "GradientNoise",
           "Checker", "FlameLance", "Bonfire", "Snow", "DiamondGear", "BrushStroke",
-          "Speckle", "Bubbles"
+          "Speckle", "Bubbles", "Pentagon"
           
         ]).onChange(function(value) {
           
@@ -733,7 +733,7 @@
           cRadius: { minValue: 0.0, maxValue: 2.0, name: "Radius", step: 0.01 },
           cInnerRadius: { minValue: 0.0, maxValue: 2.0, name: "InnerRadius" },
           cInnerRadius2: { minValue: 0.0, maxValue: 2.0, name: "InnerRadius2" },
-          cWidth: { minValue: 0.0, maxValue: 1.0, name: "Width" },
+          cWidth: { minValue: 0.0, maxValue: 1.0, name: "Width", step: 0.01 },
           cHeight: { minValue: 0.0, maxValue: 1.0, name: "Height" },
           cDepth: { minValue: 0.0, maxValue: 1.0, name: "Depth" },
           cOffset: { minValue: 0.0, maxValue: 1.0, name: "Offset", step: 0.1 },
@@ -879,6 +879,11 @@
             cDensity: { minValue: 0.01, maxValue: 1.0, defaultValue: 0.1 },
             cScale: { minValue: 0.01, maxValue: 1.0, defaultValue: 0.01 }
           },
+          Pentagon: {
+            cWidth: { minValue: 0.01, maxValue: 1.0, defaultValue: 0.02 },
+            cScale: { minValue: 0.01, maxValue: 1.0, defaultValue: 0.5 },
+            cAlpha: { minValue: 0.01, maxValue: 1.0, defaultValue: 0.38 }
+          }
         };
         
         //MARK: parsTable
@@ -952,6 +957,7 @@
           BrushStroke: ["cWidth", "cStrength", "cAlpha", "cAngle", "cAmplitude", "cBrushStrokeX1", "cBrushStrokeY1", "cBrushStrokeX2", "cBrushStrokeY2", "cColor"],
           Speckle: ["cRadius", "cScale", "cDensity"],
           Bubbles: ["cRadius", "cWidth", "cThickness", "cColor", "cBubblesVariation"],
+          Pentagon: ["cScale", "cAlpha", "cWidth"],
           //MARK: add new pars here
           
           Test: [],
