@@ -62,6 +62,7 @@
       var canvas;
       var camera, dummyCamera, controls, scene, renderer;
       var noiseScene, noiseSphere, noiseUniforms, noiseMaterial, noiseTexture;
+      var grungeTexture;
       var gui, guiTone, guiNormalMap, guiCB, guiPars, guiParsItems = [], stats, clock = new THREE.Clock();
       var effectController;
       var layers = [];
@@ -165,6 +166,13 @@
         // noiseTexture.minFilter = THREE.Linear;
         // noiseTexture.magFilter = THREE.Linear;
         // noiseTexture.anisotropy = 16;
+        
+        // Grunge Texture
+        grungeTexture = new THREE.TextureLoader().load('images/grunge.png');
+        grungeTexture.wrapS = grungeTexture.wrapT = THREE.RepeatWrapping;
+        grungeTexture.minFilter = THREE.Linear;
+        grungeTexture.magFilter = THREE.Linear;
+        grungeTexture.anisotropy = 16;
         
         geo = new THREE.SphereBufferGeometry(1, 1024, 1024);
         
@@ -649,7 +657,7 @@
           "FbmNoise", "FbmNoise2", "FbmNoise3", 
           "RandomNoise", "VoronoiNoise", "SparkNoise", "MarbleNoise", "TessNoise", "GradientNoise",
           "Checker", "FlameLance", "Bonfire", "Snow", "DiamondGear", "BrushStroke",
-          "Speckle", "Bubbles", "Pentagon"
+          "Speckle", "Bubbles", "Pentagon", "Grunge"
           
         ]).onChange(function(value) {
           
@@ -883,6 +891,9 @@
             cWidth: { minValue: 0.01, maxValue: 1.0, defaultValue: 0.02 },
             cScale: { minValue: 0.01, maxValue: 1.0, defaultValue: 0.5 },
             cAlpha: { minValue: 0.01, maxValue: 1.0, defaultValue: 0.38 }
+          },
+          Grunge: {
+            cRadius: { minValue: 0.01, maxValue: 1.0 }
           }
         };
         
@@ -958,6 +969,7 @@
           Speckle: ["cRadius", "cScale", "cDensity"],
           Bubbles: ["cRadius", "cWidth", "cThickness", "cColor", "cBubblesVariation"],
           Pentagon: ["cScale", "cAlpha", "cWidth"],
+          Grunge: ["cRadius", "cScale"],
           //MARK: add new pars here
           
           Test: [],
@@ -1067,6 +1079,7 @@
               effectController.cDirectionX,
               effectController.cDirectionY));
           // PIXY.FxgenShaderUtils.SetShaderParameter(layer.uniforms, "tNoise", noiseTexture);
+          PIXY.FxgenShaderUtils.SetShaderParameter(layer.uniforms, "tGrunge", grungeTexture);
         
           scene.overrideMaterial = layer.material;
           renderer.render(scene, dummyCamera, target);
