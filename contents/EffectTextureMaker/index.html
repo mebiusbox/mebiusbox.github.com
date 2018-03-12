@@ -42,7 +42,7 @@
     <div id="info">
       EffectTextureMaker - Powered by <a href="http://threejs.org" target="_blank">three.js</a><br />
       <br />
-      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke, 104, vchizhov, smkgames, Stefan Gustavson, skaplun
+      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke, 104, vchizhov, smkgames, Stefan Gustavson, skaplun, Koltes
       <div id="time" style="font-family: consolas; margin-top: 8px;">
   		</div>
     </div>
@@ -657,7 +657,7 @@
           "FbmNoise", "FbmNoise2", "FbmNoise3", 
           "RandomNoise", "VoronoiNoise", "SparkNoise", "MarbleNoise", "TessNoise", "GradientNoise",
           "Checker", "FlameLance", "Bonfire", "Snow", "DiamondGear", "BrushStroke",
-          "Speckle", "Bubbles", "Pentagon", "Grunge"
+          "Speckle", "Bubbles", "Pentagon", "Grunge", "Energy"
           
         ]).onChange(function(value) {
           
@@ -894,6 +894,10 @@
           },
           Grunge: {
             cRadius: { minValue: 0.01, maxValue: 1.0 }
+          },
+          Energy: {
+            cPower: { minValue: 0.0, maxValue: 1.0 },
+            cFrequency: { minValue: 0.0, maxValue: 1.0 }
           }
         };
         
@@ -970,6 +974,7 @@
           Bubbles: ["cRadius", "cWidth", "cThickness", "cColor", "cBubblesVariation"],
           Pentagon: ["cScale", "cAlpha", "cWidth"],
           Grunge: ["cRadius", "cScale"],
+          Energy: ["cPower", "cDensity", "cThickness", "cScale", "cFrequency", "cColor"],
           //MARK: add new pars here
           
           Test: [],
