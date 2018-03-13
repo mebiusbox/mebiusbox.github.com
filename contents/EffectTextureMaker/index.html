@@ -42,7 +42,7 @@
     <div id="info">
       EffectTextureMaker - Powered by <a href="http://threejs.org" target="_blank">three.js</a><br />
       <br />
-      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke, 104, vchizhov, smkgames, Stefan Gustavson, skaplun, Koltes
+      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke, 104, vchizhov, smkgames, Stefan Gustavson, skaplun, Koltes, arxyz
       <div id="time" style="font-family: consolas; margin-top: 8px;">
   		</div>
     </div>
@@ -550,6 +550,10 @@
           
           cBubblesVariation: 1.0,
           
+          cFlameEyeInnerFade: 1.0,
+          cFlameEyeOuterFade: 1.0,
+          cFlameEyeBorder: 1.0,
+          
           // circleRadius: 1.1,
           // ringRadius: 0.5,
           // ringWidth: 0.1,
@@ -651,7 +655,7 @@
         
         //MARK: type
         h.add(effectController, "type", [
-          "Wood", "Circle", "Solar", "Corona", "Spark", "Ring", "Gradation", "GradationLine", "Flash", "Cone", "Flower", "FlowerFun", "WaveRing", "Smoke", "Flame", "Fire", "Cell", "Lightning", "Flare", "Flare2", "Flare3", "LensFlare", "Sun", "MagicCircle", "Mandara",
+          "Wood", "Circle", "Solar", "Corona", "Spark", "Ring", "Gradation", "GradationLine", "Flash", "Cone", "Flower", "FlowerFun", "WaveRing", "Smoke", "Flame", "FlameEye", "Fire", "Cell", "Lightning", "Flare", "Flare2", "Flare3", "LensFlare", "Sun", "MagicCircle", "Mandara",
           "Explosion", "Explosion2", "Cross", "Laser", "Laser2", "Light", "Cloud", "Cloud2", 
           "PerlinNoise", "SeemlessNoise", "BooleanNoise", "CellNoise", "TurbulentNoise", 
           "FbmNoise", "FbmNoise2", "FbmNoise3", 
@@ -783,6 +787,10 @@
           
           cBubblesVariation: { minValue: 1.0, maxValue: 2.0, name: "Variation", step: 1.0 },
           
+          cFlameEyeInnerFade: { minValue: 0.01, maxValue: 1.0, name: "InnerFade", step: 0.01 },
+          cFlameEyeOuterFade: { minValue: 0.01, maxValue: 1.0, name: "OuterFade", step: 0.01 },
+          cFlameEyeBorder: { minValue: 0.01, maxValue: 1.0, name: "Border", step: 0.01 },
+          
           cExplosionRadius: { minValue: 1.0, maxValue: 2.0, name: "Radius" },
           cExplosionDownScale: { minValue: 1.0, maxValue: 2.0, name: "DownScale" },
           cExplosionGrain: { minValue: 1.0, maxValue: 5.0, name: "Grain" },
@@ -855,6 +863,9 @@
           TessNoise: {
             cNoiseFrequency: { minValue: 0.0, maxValue: 1.0, defaultValue: 0.1 }
           },
+          FlameEye: {
+            cSpeed: { minValue: 0.1, maxValue: 1.0 }
+          },
           FlameLance: {
             cSize: { minValue: 1.0, maxValue: 100.0 },
             cSpeed: { minValue: 0.1, maxValue: 5.0 },
@@ -916,6 +927,7 @@
           FlowerFun: ["cPetals", "cRadius", "cOffset", "cIntensity", "cPowerExponent"],
           WaveRing: ["cRadius", "cWidth", "cFrequency", "cAmplitude", "cPowerExponent"],
           Flame:  ["cIntensity", "cWidth", "cScale" ],
+          FlameEye: ["cSpeed", "cFlameEyeInnerFade", "cFlameEyeOuterFade", "cFlameEyeBorder", "cColor"],
           Cell:   ["cIntensity", "cPowerExponent", "cSize" ],
           Smoke:  ["cVolume", "cBeta", "cDelta"],
           Lightning: ["cIntensity", "cFrequency", "cWidth"],
