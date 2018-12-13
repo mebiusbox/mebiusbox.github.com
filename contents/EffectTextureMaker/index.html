@@ -42,7 +42,7 @@
     <div id="info">
       EffectTextureMaker - Powered by <a href="http://threejs.org" target="_blank">three.js</a><br />
       <br />
-      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke, 104, vchizhov, smkgames, Stefan Gustavson, skaplun, Koltes, arxyz, diviaki
+      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke, 104, vchizhov, smkgames, Stefan Gustavson, skaplun, Koltes, arxyz, diviaki, Sunpy
       <div id="time" style="font-family: consolas; margin-top: 8px;">
   		</div>
     </div>
@@ -556,6 +556,10 @@
           
           cSplatLines: 20,
           cSplatSpotStep: 0.04,
+
+          cLifeTime: 0.9,
+          cGravity: 0.26,          
+          cCount: 300,
           
           // circleRadius: 1.1,
           // ringRadius: 0.5,
@@ -664,7 +668,7 @@
           "FbmNoise", "FbmNoise2", "FbmNoise3", 
           "RandomNoise", "VoronoiNoise", "SparkNoise", "MarbleNoise", "TessNoise", "GradientNoise",
           "Checker", "FlameLance", "Bonfire", "Snow", "DiamondGear", "BrushStroke",
-          "Speckle", "Bubbles", "Pentagon", "Grunge", "Energy", "InkSplat"
+          "Speckle", "Bubbles", "Pentagon", "Grunge", "Energy", "InkSplat", "Particle"
           
         ]).onChange(function(value) {
           
@@ -796,6 +800,10 @@
           
           cSplatLines: { minValue: 1, maxValue: 100, name: "Lines" },
           cSplatSpotStep: { minValue: 0.02, maxValue: 0.1, name: "Spot Step", step: 0.02 },
+
+          cLifeTime: { minValue: 0.0, maxValue: 1.0, name: "Life Time", step: 0.01 },
+          cGravity: { minValue: 0.0, maxValue: 1.0, name: "Gravity", step: 0.01 },
+          cCount: { minValue: 0.0, maxValue: 500.0, name: "Count", step: 1.0 },
           
           cExplosionRadius: { minValue: 1.0, maxValue: 2.0, name: "Radius" },
           cExplosionDownScale: { minValue: 1.0, maxValue: 2.0, name: "DownScale" },
@@ -915,6 +923,9 @@
           Energy: {
             cPower: { minValue: 0.0, maxValue: 1.0 },
             cFrequency: { minValue: 0.0, maxValue: 1.0 }
+          },
+          Particle: {
+            cSize: { minValue: 0.01, maxValue: 0.5 }
           }
         };
         
@@ -994,6 +1005,7 @@
           Grunge: ["cRadius", "cScale"],
           Energy: ["cPower", "cDensity", "cThickness", "cScale", "cFrequency", "cColor"],
           InkSplat: ["cSplatLines", "cSplatSpotStep"],
+          Particle: ["cSize", "cLifeTime", "cGravity", "cCount"],
           //MARK: add new pars here
           
           Test: [],
