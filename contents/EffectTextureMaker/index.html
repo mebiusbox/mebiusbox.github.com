@@ -42,7 +42,7 @@
     <div id="info">
       EffectTextureMaker - Powered by <a href="http://threejs.org" target="_blank">three.js</a><br />
       <br />
-      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke, 104, vchizhov, smkgames, Stefan Gustavson, skaplun, Koltes, arxyz, diviaki, Sunpy
+      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke, 104, vchizhov, smkgames, Stefan Gustavson, skaplun, Koltes, arxyz, diviaki, Sunpy, Hadyn
       <div id="time" style="font-family: consolas; margin-top: 8px;">
   		</div>
     </div>
@@ -668,7 +668,7 @@
           "FbmNoise", "FbmNoise2", "FbmNoise3", 
           "RandomNoise", "VoronoiNoise", "SparkNoise", "MarbleNoise", "TessNoise", "GradientNoise",
           "Checker", "FlameLance", "Bonfire", "Snow", "DiamondGear", "BrushStroke",
-          "Speckle", "Bubbles", "Pentagon", "Grunge", "Energy", "InkSplat", "Particle"
+          "Speckle", "Bubbles", "Pentagon", "Grunge", "Energy", "InkSplat", "Particle", "Electric"
           
         ]).onChange(function(value) {
           
@@ -678,7 +678,7 @@
           layers[0].uniforms = stdShader.generateUniforms();
           layers[0].material = stdShader.createMaterial(layers[0].uniforms, { defines: stdShader.generateDefines()});
           // console.log(stdShader.generateVertexShader());
-          // console.log(stdShader.generateFragmentShader());
+          console.log(stdShader.generateFragmentShader());
           
           resetParameters(layers[0].uniforms);
         });
@@ -926,6 +926,10 @@
           },
           Particle: {
             cSize: { minValue: 0.01, maxValue: 0.5 }
+          },
+          Electric: {
+            cFrequency: { minValue: 10.0, maxValue: 50.0 },
+            cScale: { minValue: 0.01, maxValue: 1.0 }
           }
         };
         
@@ -1006,6 +1010,7 @@
           Energy: ["cPower", "cDensity", "cThickness", "cScale", "cFrequency", "cColor"],
           InkSplat: ["cSplatLines", "cSplatSpotStep"],
           Particle: ["cSize", "cLifeTime", "cGravity", "cCount"],
+          Electric: ["cFrequency", "cScale"],
           //MARK: add new pars here
           
           Test: [],
