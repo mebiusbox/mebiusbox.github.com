@@ -63,7 +63,7 @@
       var camera, dummyCamera, controls, scene, renderer;
       var noiseScene, noiseSphere, noiseUniforms, noiseMaterial, noiseTexture;
       var grungeTexture;
-      var gui, guiTone, guiNormalMap, guiCB, guiPars, guiParsItems = [], stats, clock = new THREE.Clock();
+      var gui, guiTiling, guiTone, guiNormalMap, guiCB, guiPars, guiParsItems = [], stats, clock = new THREE.Clock();
       var effectController;
       var layers = [];
       var spriteSheet = {};
@@ -277,6 +277,26 @@
         // console.log(stdShader.generateFragmentShader());
         layers.push(layer);
         
+        //// TILING
+        
+        layer = {};
+        layer.name = "Tiling";
+        layer.tDiffuse = layers[layers.length-1].renderTarget.texture;
+        layer.tDiffuse.wrapS = layer.tDiffuse.wrapT = THREE.RepeatWrapping;
+        layer.renderTarget = new THREE.WebGLRenderTarget(canvas.width, canvas.height, {
+          minFilter: THREE.NearestFilter,
+          magFilter: THREE.NearestFilter,
+          format: THREE.RGBFormat,
+          stencilBuffer: false });
+        
+        stdShader.clear();
+        stdShader.enable("TILING");
+        layer.uniforms = stdShader.generateUniforms();
+        layer.material = stdShader.createMaterial(layer.uniforms, { defines: defines });
+        // console.log(stdShader.generateVertexShader());
+        // console.log(stdShader.generateFragmentShader());
+        layers.push(layer);
+        
         //// NORMAL MAP
         
         layer = {};
@@ -391,6 +411,9 @@
             for (var i in guiTone.__controllers) {
               guiTone.__controllers[i].updateDisplay();
             }
+            for (var i in guiTiling.__controllers) {
+              guiTiling.__controllers[i].updateDisplay();
+            }
             for (var i in guiNormalMap.__controllers) {
               guiNormalMap.__controllers[i].updateDisplay();
             }
@@ -496,6 +519,8 @@
           
           cHeightScale: 2.0,
           normalMap: false,
+          tiling: false,
+          cRadialMask: 1.0,
           
           //MARK: parameters
           cFrequency: 30.0,
@@ -697,6 +722,11 @@
         guiTone = h;
         
         gui.add(effectController, "polarConversion");
+        
+        h = gui.addFolder("Tiling");
+        h.add(effectController, "tiling").name("enable");
+        h.add(effectController, "cRadialMask", 0.0, 1.0).name("radial mask");
+        guiTiling = h;
         
         h = gui.addFolder("NormalMap");
         h.add(effectController, "normalMap").name("Generate");
@@ -1084,6 +1114,9 @@
             layer = layers[layers.length-1];
           }
           if (layer.name === "PolarConversion" && effectController.polarConversion === false) {
+            layer = layers[layers.length-1];
+          }
+          if (layer.name === "Tiling" && effectController.tiling === false) {
             layer = layers[layers.length-1];
           }
           
