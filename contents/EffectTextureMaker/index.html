@@ -42,7 +42,7 @@
     <div id="info">
       EffectTextureMaker - Powered by <a href="http://threejs.org" target="_blank">three.js</a><br />
       <br />
-      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke, 104, vchizhov, smkgames, Stefan Gustavson, skaplun, Koltes, arxyz, diviaki, Sunpy, Hadyn
+      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke, 104, vchizhov, smkgames, Stefan Gustavson, skaplun, Koltes, arxyz, diviaki, Sunpy, Hadyn, Dave_Hoskins
       <div id="time" style="font-family: consolas; margin-top: 8px;">
   		</div>
     </div>
@@ -693,7 +693,8 @@
           "FbmNoise", "FbmNoise2", "FbmNoise3", 
           "RandomNoise", "VoronoiNoise", "SparkNoise", "MarbleNoise", "TessNoise", "GradientNoise",
           "Checker", "FlameLance", "Bonfire", "Snow", "DiamondGear", "BrushStroke",
-          "Speckle", "Bubbles", "Pentagon", "Grunge", "Energy", "InkSplat", "Particle", "Electric"
+          "Speckle", "Bubbles", "Pentagon", "Grunge", "Energy", "InkSplat", "Particle", "Electric",
+          "Caustics"
           
         ]).onChange(function(value) {
           
@@ -960,6 +961,10 @@
           Electric: {
             cFrequency: { minValue: 10.0, maxValue: 50.0 },
             cScale: { minValue: 0.01, maxValue: 1.0 }
+          },
+          Caustics: {
+            cScale: { minValue: 1.0, maxValue: 10.0 },
+            cSpeed: { minValue: 1.0, maxValue: 4.0 }
           }
         };
         
@@ -1041,6 +1046,7 @@
           InkSplat: ["cSplatLines", "cSplatSpotStep"],
           Particle: ["cSize", "cLifeTime", "cGravity", "cCount"],
           Electric: ["cFrequency", "cScale"],
+          Caustics: ["cScale", "cSpeed", "cColor"],
           //MARK: add new pars here
           
           Test: [],
