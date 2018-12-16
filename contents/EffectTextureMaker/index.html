@@ -42,7 +42,7 @@
     <div id="info">
       EffectTextureMaker - Powered by <a href="http://threejs.org" target="_blank">three.js</a><br />
       <br />
-      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke, 104, vchizhov, smkgames, Stefan Gustavson, skaplun, Koltes, arxyz, diviaki, Sunpy, Hadyn, Dave_Hoskins
+      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke, 104, vchizhov, smkgames, Stefan Gustavson, skaplun, Koltes, arxyz, diviaki, Sunpy, Hadyn, Dave_Hoskins, maysssam
       <div id="time" style="font-family: consolas; margin-top: 8px;">
   		</div>
     </div>
@@ -694,7 +694,7 @@
           "RandomNoise", "VoronoiNoise", "SparkNoise", "MarbleNoise", "TessNoise", "GradientNoise",
           "Checker", "FlameLance", "Bonfire", "Snow", "DiamondGear", "BrushStroke",
           "Speckle", "Bubbles", "Pentagon", "Grunge", "Energy", "InkSplat", "Particle", "Electric",
-          "Caustics"
+          "Caustics", "Squiggles"
           
         ]).onChange(function(value) {
           
@@ -704,7 +704,7 @@
           layers[0].uniforms = stdShader.generateUniforms();
           layers[0].material = stdShader.createMaterial(layers[0].uniforms, { defines: stdShader.generateDefines()});
           // console.log(stdShader.generateVertexShader());
-          console.log(stdShader.generateFragmentShader());
+          // console.log(stdShader.generateFragmentShader());
           
           resetParameters(layers[0].uniforms);
         });
@@ -965,6 +965,11 @@
           Caustics: {
             cScale: { minValue: 1.0, maxValue: 10.0 },
             cSpeed: { minValue: 1.0, maxValue: 4.0 }
+          },
+          Squiggles: {
+            cSize: { minValue: 1.0, maxValue: 8.0 },
+            cScale: { minValue: 0.01, maxValue: 1.0, defaultValue: 0.5 },
+            cDensity: { minValue: 1.0, maxValue: 16.0 }
           }
         };
         
@@ -1047,6 +1052,7 @@
           Particle: ["cSize", "cLifeTime", "cGravity", "cCount"],
           Electric: ["cFrequency", "cScale"],
           Caustics: ["cScale", "cSpeed", "cColor"],
+          Squiggles: ["cSize", "cScale", "cDensity"],
           //MARK: add new pars here
           
           Test: [],
