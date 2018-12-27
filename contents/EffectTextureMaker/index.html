@@ -42,7 +42,7 @@
     <div id="info">
       EffectTextureMaker - Powered by <a href="http://threejs.org" target="_blank">three.js</a><br />
       <br />
-      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke, 104, vchizhov, smkgames, Stefan Gustavson, skaplun, Koltes, arxyz, diviaki, Sunpy, Hadyn, Dave_Hoskins, maysssam
+      Special thanks to doxas, liovch, iq, KeyMaster-, knighty, XT95, Brandon Fogerty, FabriceNeyret2, TambakoJaguar, mu6k, anisoptera, namortrailblazer, vamoss, xbe, Iulian Marinescu Ghetau, Duke, hclarke, 104, vchizhov, smkgames, Stefan Gustavson, skaplun, Koltes, arxyz, diviaki, Sunpy, Hadyn, Dave_Hoskins, maysssam, joltz0r
       <div id="time" style="font-family: consolas; margin-top: 8px;">
   		</div>
     </div>
@@ -694,7 +694,7 @@
           "RandomNoise", "VoronoiNoise", "SparkNoise", "MarbleNoise", "TessNoise", "GradientNoise",
           "Checker", "FlameLance", "Bonfire", "Snow", "DiamondGear", "BrushStroke",
           "Speckle", "Bubbles", "Pentagon", "Grunge", "Energy", "InkSplat", "Particle", "Electric",
-          "Caustics", "Squiggles"
+          "Caustics", "Squiggles", "WaterTurbulence"
           
         ]).onChange(function(value) {
           
@@ -970,6 +970,10 @@
             cSize: { minValue: 1.0, maxValue: 8.0 },
             cScale: { minValue: 0.01, maxValue: 1.0, defaultValue: 0.5 },
             cDensity: { minValue: 1.0, maxValue: 16.0 }
+          },
+          WaterTurbulence: {
+            cSize: { minValue: 0.01, maxValue: 1.0, defaultValue: 0.4 },
+            cIntensity: { minValue: 0.01, maxValue: 1.0, defaultValue: 0.15 }
           }
         };
         
@@ -1053,6 +1057,7 @@
           Electric: ["cFrequency", "cScale"],
           Caustics: ["cScale", "cSpeed", "cColor"],
           Squiggles: ["cSize", "cScale", "cDensity"],
+          WaterTurbulence: ["cScale", "cIntensity"],
           //MARK: add new pars here
           
           Test: [],
