@@ -779,7 +779,7 @@
           cFrequency: { minValue: 0.0, maxValue: 50.0, name: "Frequency" },
           cPowerExponent: { minValue: 0.0, maxValue:5.0, name: "PowerExponent" },
           cAmplitude: { minValue: 0.0, maxValue: 0.2, name: "Amplitude" },
-          cIntensity: { minValue: 0.0, maxValue: 1.0, name: "Intensity" },
+          cIntensity: { minValue: 0.0, maxValue: 1.0, name: "Intensity", step: 0.01 },
           cDirectionX: { minValue: -1.0, maxValue: 1.0, name: "Direction X", step: 0.1 },
           cDirectionY: { minValue: -1.0, maxValue: 1.0, name: "Direction Y", step: 0.1 },
           cRadius: { minValue: 0.0, maxValue: 2.0, name: "Radius", step: 0.01 },
@@ -1072,7 +1072,7 @@
           Caustics: ["cScale", "cSpeed", "cColor"],
           Squiggles: ["cSize", "cScale", "cDensity"],
           WaterTurbulence: ["cScale", "cIntensity"],
-          Trabeculum: ["cDensity", "cScale", "cTrabeculumVariation", "cCameraTilt", "cCameraPan", "cColor"],
+          Trabeculum: ["cDensity", "cScale", "cIntensity", "cTrabeculumVariation", "cCameraTilt", "cCameraPan", "cColor"],
           //MARK: add new pars here
           
           Test: [],
