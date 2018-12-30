@@ -582,6 +582,8 @@
           cSplatLines: 20,
           cSplatSpotStep: 0.04,
 
+          cTrabeculumVariation: 2.0,
+
           cLifeTime: 0.9,
           cGravity: 0.26,          
           cCount: 300,
@@ -694,7 +696,7 @@
           "RandomNoise", "VoronoiNoise", "SparkNoise", "MarbleNoise", "TessNoise", "GradientNoise",
           "Checker", "FlameLance", "Bonfire", "Snow", "DiamondGear", "BrushStroke",
           "Speckle", "Bubbles", "Pentagon", "Grunge", "Energy", "InkSplat", "Particle", "Electric",
-          "Caustics", "Squiggles", "WaterTurbulence"
+          "Caustics", "Squiggles", "WaterTurbulence", "Trabeculum"
           
         ]).onChange(function(value) {
           
@@ -808,8 +810,8 @@
           cSmoothnessPower: { minValue: 1.0, maxValue: 5.0, name: "Smoothness Power" },
           cThickness: { minValue: 0.0, maxValue: 1.0, name: "Thickness" },
           cThicknessPower: { minValue: 1.0, maxValue: 5.0, name: "Thickness Power" },
-          cCameraTilt: { minValue: 0.0, maxValue: 1.0, name: "CameraTilt", step: 0.1 },
-          cCameraPan: { minValue: 0.0, maxValue: 1.0, name: "CameraPan", step: 0.1 },
+          cCameraTilt: { minValue: 0.0, maxValue: 1.0, name: "CameraTilt", step: 0.01 },
+          cCameraPan: { minValue: 0.0, maxValue: 1.0, name: "CameraPan", step: 0.01 },
           cSpeed: { minValue: 0.0, maxValue: 10.0, name: "Speed" },
           cAngle: { minValue: 0.0, maxValue: 360.0, name: "Angle", step: 0.01 },
           cDensity: { minValue: 0.0, maxValue: 1.0, name: "Density", step: 0.01 },
@@ -831,6 +833,8 @@
           
           cSplatLines: { minValue: 1, maxValue: 100, name: "Lines" },
           cSplatSpotStep: { minValue: 0.02, maxValue: 0.1, name: "Spot Step", step: 0.02 },
+
+          cTrabeculumVariation: { minValue: 0, maxValue: 2, name: "Variation", step: 1 },
 
           cLifeTime: { minValue: 0.0, maxValue: 1.0, name: "Life Time", step: 0.01 },
           cGravity: { minValue: 0.0, maxValue: 1.0, name: "Gravity", step: 0.01 },
@@ -885,6 +889,10 @@
           Lightning: {
             cFrequency: { minValue: 0.0, maxValue: 2.0 },
             cWidth: { minValue: 1.0, maxValue: 10.0 }
+          },
+          Cloud: {
+            cCameraPan: { minValue: 0.0, maxValue: 1.0, defaultValue: 0.0 },
+            cCameraTilt: { minValue: 0.0, maxValue: 1.0, defaultValue: 0.0 }
           },
           Checker: {
             cWidth: { minValue: 1.0, maxValue: 100.0 },
@@ -974,6 +982,12 @@
           WaterTurbulence: {
             cSize: { minValue: 0.01, maxValue: 1.0, defaultValue: 0.4 },
             cIntensity: { minValue: 0.01, maxValue: 1.0, defaultValue: 0.15 }
+          },
+          Trabeculum: {
+            cDensity: { minValue: 0.0, maxValue: 1.0, defaultValue: 1.0 },
+            cScale: { minValue: 0.01, maxValue: 1.0, defaultValue: 1.0 },
+            cCameraPan: { minValue: 0.0, maxValue: 1.0, defaultValue: 0.5 },
+            cCameraTilt: { minValue: 0.0, maxValue: 1.0, defaultValue: 0.5 }
           }
         };
         
@@ -1058,6 +1072,7 @@
           Caustics: ["cScale", "cSpeed", "cColor"],
           Squiggles: ["cSize", "cScale", "cDensity"],
           WaterTurbulence: ["cScale", "cIntensity"],
+          Trabeculum: ["cDensity", "cScale", "cTrabeculumVariation", "cCameraTilt", "cCameraPan", "cColor"],
           //MARK: add new pars here
           
           Test: [],
