@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>three.js</title>
+    <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+      body {
+        color: #fff;
+        font-family: Monospace;
+        font-size: 13px;
+        text-align: center;
+        font-weight: bold;
+        
+        background-color: #000;
+        margin: 0px;
+        overflow: hidden;
+      }
+      
+      #info {
+        position: absolute;
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+        color: #fff;
+      }
+      
+      a { color: orange; }
+    </style>
+  </head>
+  <body>
+    <div id="info">
+      <a href="http://threejs.org" target="_blank">three.js</a> - PBR
+    </div>
+    
+    <script src="js/three.min.js"></script>
+    <script src="js/WebGL.js"></script>
+    <script src="js/controls/OrbitControls.js"></script>
+    <script src="js/loaders/OBJLoader.js"></script>
+    <script src="js/utils/BufferGeometryUtils.js"></script>
+    <script src="js/libs/dat.gui.min.js"></script>
+    <script src="js/libs/stats.min.js"></script>
+    <script src="loadFiles.js"></script>
+    <script>
+      if (WEBGL.isWebGLAvailable() === false) {
+        document.body.appendChild(WEBGL.getWebGLErrorMessage());
+      }
+      
+      var camera, lights, controls, scene, renderer, object;
+      var effectController;
+      var uniforms, material, standardMaterial;
+      var stats;
+      var clock = new THREE.Clock();
+      var time = 0.0;
+      
+      init();
+      // render();
+      // animate();
+      
+      function init() {
+        
+        loadFiles([
+          'shaders/pbr_vert.glsl',
+          'shaders/pbr_frag.glsl'
+        ], function(shaders) {
+          
+          initGraphics();
+          initScene(shaders);
+        
+          // EVENTS
+          window.addEventListener('resize', onWindowResize, false);
+          
+          animate();
+        }, function(url) {
+          alert('Failed to download "' + url + '"');
+        });
+      }
+      
+      function initGraphics() {
+        container = document.createElement('div');
+        document.body.appendChild(container);
+        
+        // RENDERER
+        
+        renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer.setClearColor(0x004080);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        // renderer.gammaInput = true;
+        // renderer.gammaOutput = true;
+        renderer.autoClear = true;
+        container.appendChild(renderer.domElement);
+        
+        // STATS
+        
+        stats = new Stats();
+				container.appendChild(stats.dom);
+      }
+      
+      function initScene(shaders) {
+        
+        scene = new THREE.Scene();
+        
+        // CAMERA
+        
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 100);
+        camera.position.set(0, 10, 10);
+
+        // CONTROLS
+        
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.target.set(0,0,0);
+        controls.addEventListener('change', render);
+        
+        // LIGHTS
+        
+        lights = {};
+        lights.directional = new THREE.DirectionalLight(0xffffff, 1.0);
+        lights.directional.position.set(-5,5,5);
+        lights.directionalHelper = new THREE.DirectionalLightHelper(lights.directional, 1.0);
+        
+        scene.add(lights.directional);
+        scene.add(lights.directionalHelper);
+        
+        // MATERIALS
+        
+        uniforms = {
+          metallic: {value: 0.5},
+          roughness: {value: 0.5},
+          albedo: {value: new THREE.Color(1,1,1)},
+          energyCompensation: {value: 0.0},
+          dirLightDir: {value: new THREE.Vector3(0,0,1)},
+          dirLightColor: {value: new THREE.Color(1,1,1)},
+          clearCoat: { value: 0.0 },
+          clearCoatRoughness: { value: 0.0 },
+          dfgMap: {value: null},
+          radianceMap: {value: null},
+          irradianceMap: {value: null},
+          indirectLightIntensity: { value: 1.0 },
+          indirectDiffuseIntensity: { value: 1.0 },
+          indirectSpecularIntensity: { value: 0.2 }
+        };
+        
+        material = new THREE.ShaderMaterial({
+          uniforms: uniforms,
+          vertexShader: shaders['pbr_vert'],
+          fragmentShader: shaders['pbr_frag']});
+        material.extensions.shaderTextureLOD = true;
+        
+        // MODELS
+       
+        var groundGeometry = new THREE.PlaneGeometry(20,20);
+        var ground = new THREE.Mesh(groundGeometry, material);
+        ground.rotation.x = -0.5 * Math.PI;
+        ground.position.y = -3;
+        scene.add(ground);
+
+        function loadModel() {
+          object.traverse(function(child) {
+            if (child.isMesh) {
+              child.material = material;
+              THREE.BufferGeometryUtils.computeTangents(child.geometry);
+            }
+          });
+          scene.add(object);
+        }
+        var manager = new THREE.LoadingManager(loadModel);
+        manager.onProgress = function(item, loaded, total) {
+          console.log(item, loaded, total);
+        };
+
+        var loader = new THREE.OBJLoader(manager);
+        loader.load("models/material_sphere.obj", function(obj) {
+          object = obj;
+          object.scale.set(5,5,5);
+        });
+
+        var texture = new THREE.TextureLoader().load("textures/dfg.png");
+        texture.minFilter = texture.magFilter = THREE.LinearFilter;
+				// texture.minFilter = texture.magFilter = THREE.NearestFilter;
+        uniforms.dfgMap.value = texture;
+        uniforms.radianceMap.value = createCubeMap('', true);
+        uniforms.irradianceMap.value = createCubeMap('irradiance_', false);
+        scene.background = uniforms.radianceMap.value;
+        
+        // axis, and grid
+        // var grid = new THREE.GridHelper(100, 20, 0x000000, 0x808080);
+        // scene.add(grid);
+        // var axes = new THREE.AxisHelper(20);
+        // axes.material.depthWrite = false;
+        // axes.material.depthTest = false;
+        // axes.renderOrder = -1;
+        // grid.renderOrder = -2;
+        // scene.add(axes);
+        
+        // GUI
+        setupGui();
+      }
+      
+      // EVENT HANDLERS
+      
+      function onWindowResize() {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        
+        render();
+      }
+      
+      function setupGui() {
+        
+        effectController = {
+          metallic: uniforms.metallic.value,
+          roughness: uniforms.roughness.value,
+          albedo: 0xffffff,
+          clearCoat: uniforms.clearCoat.value,
+          clearCoatRoughness: uniforms.clearCoatRoughness.value,
+          energyCompensation: true,
+          drawLight: false,
+          directLightIntensity: 1.0,
+          indirectDiffuseIntensity: uniforms.indirectDiffuseIntensity.value,
+          indirectSpecularIntensity: uniforms.indirectSpecularIntensity.value
+        };
+        
+        var h;
+        var gui = new dat.GUI();
+        h = gui.addFolder("Material");
+        h.add(effectController, "metallic", 0.0, 1.0, 0.01);
+        h.add(effectController, "roughness", 0.0, 1.0, 0.01);
+        h.add(effectController, "clearCoat", 0.0, 1.0, 0.01);
+        h.add(effectController, "clearCoatRoughness", 0.0, 1.0, 0.01);
+        h.add(effectController, "directLightIntensity", 0.0, 1.0, 0.01);
+        h.add(effectController, "indirectDiffuseIntensity", 0.0, 1.0, 0.01);
+        h.add(effectController, "indirectSpecularIntensity", 0.0, 1.0, 0.01);
+        h.add(effectController, "energyCompensation");
+        h.add(effectController, "drawLight");
+        h.addColor(effectController, "albedo");
+      }
+      
+      function animate() {
+        var delta = clock.getDelta();
+        time += delta;
+        controls.update(delta);
+				requestAnimationFrame(animate, renderer.domElement);
+				render();
+			}
+      
+      function render() {
+        stats.update();
+
+        camera.updateMatrixWorld();
+        camera.matrixWorldInverse.getInverse(camera.matrixWorld);
+        var viewMatrix = camera.matrixWorldInverse;
+        uniforms.metallic.value = effectController.metallic;
+        uniforms.roughness.value = effectController.roughness;
+        uniforms.albedo.value.setHex(effectController.albedo);
+        uniforms.clearCoat.value = effectController.clearCoat;
+        uniforms.clearCoatRoughness.value = effectController.clearCoatRoughness;
+        uniforms.dirLightDir.value.copy(lights.directional.position).normalize().transformDirection(viewMatrix);
+        uniforms.dirLightColor.value.copy(lights.directional.color).multiplyScalar(effectController.directLightIntensity);
+        uniforms.indirectDiffuseIntensity.value = effectController.indirectDiffuseIntensity;
+        uniforms.indirectSpecularIntensity.value = effectController.indirectSpecularIntensity;
+        lights.directionalHelper.visible = effectController.drawLight;
+        uniforms.energyCompensation.value = effectController.energyCompensation ? 1.0 : 0.0;
+        
+        renderer.render(scene, camera);
+        scene.overrideMaterial = null;
+      }
+      
+      function createCubeMap(name, genMipmap) {
+      	var path = "textures/skybox/" + name;
+      	var format = '.jpg';
+      	var urls = [
+      		path + "px" + format, path + 'nx' + format,
+      		path + "py" + format, path + 'ny' + format,
+      		path + "pz" + format, path + 'nz' + format
+      	];
+
+      	var textureCube = new THREE.CubeTextureLoader().load(urls, function(loadedCubeMap) {
+          if (genMipmap) {
+            loadedCubeMap.generateMipmaps = true;
+            loadedCubeMap.needsUpdate = true;
+          }
+        });
+      	return textureCube;
+      }
+    </script>
+  </body>
+</html>
