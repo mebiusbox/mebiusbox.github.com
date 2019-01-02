@@ -358,13 +358,25 @@ vec3 getLightProbeIndirectRadiance(const in vec3 V, const in vec3 N, const in fl
   return GammaToLinear(textureCubeLodEXT(radianceMap, queryVec, specMipLevel), float(GAMMA_FACTOR)).rgb;
 }
 
-void RE_IndirectDiffuse(const in vec3 irradiance, const in GeometricContext geometry, const in Material material, inout ReflectedLight reflectedLight) {
-  reflectedLight.indirectDiffuse += irradiance * DiffuseBRDF(material.diffuseColor) * indirectDiffuseIntensity;
-}
+void RE_Indirect(const in vec3 irradiance, const in vec3 radiance, 
+  const in GeometricContext geometry, const in Material material, inout ReflectedLight reflectedLight) {
 
-void RE_IndirectSpecular(const in vec3 radiance, const in GeometricContext geometry, const in Material material, inout ReflectedLight reflectedLight) {
-  float dotNV = saturate(dot(geometry.normal, geometry.viewDir));
-  reflectedLight.indirectSpecular += radiance * EnvBRDFApprox(material.specularColor, material.specularRoughness, dotNV) * indirectSpecularIntensity;
+  vec3 Fd = irradiance * DiffuseBRDF(material.diffuseColor) * indirectDiffuseIntensity;
+  vec3 Fr = radiance * EnvBRDFApprox(material.specularColor, material.specularRoughness, material.dotNV);
+
+  // The clear coat layer assumes an IOR of 1.5 (4% reflectance)
+  float Fc = F_SchlickF(0.04, 1.0, material.dotNV) * clearCoat;
+  float attenuation = 1.0 - Fc;
+  float attenuation2 = attenuation*attenuation;
+  Fr *= attenuation2;
+  Fr += radiance * EnvBRDFApprox(material.specularColor, material.clearCoatRoughness, material.dotNV) * Fc;
+  Fd *= attenuation;
+
+  Fd *= indirectDiffuseIntensity;
+  Fr *= indirectSpecularIntensity;
+
+  reflectedLight.indirectDiffuse  += Fd;
+  reflectedLight.indirectSpecular += Fr;
 }
 
 //-------------------------------------------------------------------------
@@ -376,7 +388,6 @@ void PrepareMaterial(in GeometricContext geometry, inout Material material) {
   material.specularRoughness = max(material.specularRoughness, material.clearCoatRoughness);
   material.linearRoughness = material.specularRoughness * material.specularRoughness;
   
-
   material.specularColor = mix(material.specularColor,
     f0ClearCoatToSurface(material.specularColor), clearCoat);
 
@@ -426,11 +437,9 @@ void main() {
   float blinnExponent = GGXRoughnessToBlinnExponent(material.specularRoughness);
   vec3 irradiance = getLightProbeIndirectIrradiance(geometry.normal, blinnExponent, 8);
   // irradiance = getLightProbeIndirectIrradianceSH(geometry.normal);
-  RE_IndirectDiffuse(irradiance, geometry, material, reflectedLight);
-  
   vec3 radiance = getLightProbeIndirectRadiance(geometry.viewDir, geometry.normal, blinnExponent, 8);
-  RE_IndirectSpecular(radiance, geometry, material, reflectedLight);
-  
+  RE_Indirect(irradiance, radiance, geometry, material, reflectedLight);
+
   vec3 outgoingLight = emissive + reflectedLight.directDiffuse + reflectedLight.directSpecular + reflectedLight.indirectDiffuse + reflectedLight.indirectSpecular;
 
   // outgoingLight = vec3(clearCoat);
