@@ -50,7 +50,7 @@
       
       var camera, lights, controls, scene, renderer, object;
       var effectController;
-      var uniforms, material, standardMaterial;
+      var uniforms, material;
       var stats;
       var clock = new THREE.Clock();
       var time = 0.0;
@@ -149,10 +149,12 @@
           vertexShader: shaders['pbr_vert'],
           fragmentShader: shaders['pbr_frag']});
         material.extensions.shaderTextureLOD = true;
-        
+        material.extensions.derivatives = true;
+
         // MODELS
        
-        var groundGeometry = new THREE.PlaneGeometry(20,20);
+        var groundGeometry = new THREE.PlaneBufferGeometry(20,20);
+        THREE.BufferGeometryUtils.computeTangents(groundGeometry);
         var ground = new THREE.Mesh(groundGeometry, material);
         ground.rotation.x = -0.5 * Math.PI;
         ground.position.y = -3;

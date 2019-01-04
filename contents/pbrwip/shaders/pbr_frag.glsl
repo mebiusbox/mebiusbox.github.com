@@ -2,6 +2,7 @@ varying vec3 vViewPosition;
 varying vec3 vNormal;
 varying vec3 vTangent;
 varying vec3 vBinormal;
+// varying vec2 vUv;
 
 //-------------------------------------------------------------------------
 // uniforms
@@ -484,16 +485,32 @@ void PrepareMaterial(in GeometricContext geometry, inout Material material) {
   material.energyCompensation = mix(vec3(1.0), material.energyCompensation, energyCompensation);
   // material.energyCompensation = vec3(1.0);
 
+  // vec2 uv = vec2(vUv.x, vUv.y);
+  // vec3 q0 = dFdx(vViewPosition);
+  // vec3 q1 = dFdy(vViewPosition);
+  // vec2 st0 = dFdx(uv);
+  // vec2 st1 = dFdy(uv);
+  // vec3 S = normalize(q0*st1.y - q1*st0.y);
+  // vec3 T = normalize(-q0*st1.x + q1*st0.x);
+  // vec3 N = geometry.normal;
+  // vec3 st = cross(S,T);
+  // if (dot(st,N) < 0.0) {
+  //   T = -T;
+  //   S = -S;
+  // }
+  // material.tangentToWorld = mat3(S, T, N);
+
   // Re-normalize post-interpolation values
   // material.tangentToWorld = mat3(
   //   normalize(vTangent), normalize(vBinormal), geometry.normal);
-  
+
   // vec3 anisotropicDirection = vec3(1.0,0.0,0.0);
   // material.anisotropicT = normalize(material.tangentToWorld * anisotropicDirection);
   // material.anisotropicB = normalize(cross(material.tangentToWorld[2], material.anisotropicT));
   material.anisotropicT = normalize(vTangent);
   material.anisotropicB = normalize(vBinormal);
   material.anisotropy = anisotropy;
+
 }
 
 vec3 getSpecularDominantDirection(const vec3 n, const vec3 r, float linearRoughness) {
@@ -504,7 +521,6 @@ vec3 getSpecularDominantDirection(const vec3 n, const vec3 r, float linearRoughn
 
 vec3 getReflectedVector(const in GeometricContext geometry, const in Material material) {
   vec3 r;
-  // if (abs(material.anisotropy) >= 1e5) {
   if (abs(material.anisotropy) != 0.0) {
     vec3 anisotropyDirection = material.anisotropy >= 0.0 ? material.anisotropicB : material.anisotropicT;
     vec3 anisotropicT = cross(anisotropyDirection, geometry.viewDir);
@@ -575,6 +591,7 @@ void main() {
   // outgoingLight = reflectedLight.indirectDiffuse;
   // outgoingLight = reflectedLight.indirectSpecular;
   // outgoingLight = emissive;
+  // outgoingLight = vec3(vUv, 0.0);
 
   outgoingLight = Tonemap_ACES(outgoingLight);
   outgoingLight = LinearToGamma(vec4(outgoingLight,1.0), float(GAMMA_FACTOR)).xyz;
