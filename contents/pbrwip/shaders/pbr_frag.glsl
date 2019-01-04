@@ -1,5 +1,7 @@
 varying vec3 vViewPosition;
 varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
 
 //-------------------------------------------------------------------------
 // uniforms
@@ -10,6 +12,7 @@ uniform vec3 dirLightDir;
 uniform vec3 dirLightColor;
 uniform sampler2D dfgMap;
 uniform float energyCompensation;
+uniform float anisotropy;
 
 //-------------------------------------------------------------------------
 // defines
@@ -163,6 +166,10 @@ struct Material {
   float dotNV;
   vec2 dfg;
   vec3 energyCompensation;
+  vec3 anisotropicT;
+  vec3 anisotropicB;
+  float anisotropy;
+  mat3 tangentToWorld;
 };
 
 //-------------------------------------------------------------------------
@@ -235,7 +242,7 @@ float D_GGX(float a, float dotNH) {
 
 // Heitz 2014, "Understanding the Masking-Shadowing Function in Microfacet-Based BRDFs"
 // Moving Frostbite to Physically Based Rendering 3.0
-float G_SmithGGXCorrelated(float a, float dotNV, float dotNL) {
+float V_SmithGGXCorrelated(float a, float dotNV, float dotNL) {
   float a2 = a*a;
   // dotNL and dotNV are explicitly swapped. This is not a mistake
   float gv = dotNL * sqrt((dotNV - a2 * dotNV)*dotNV + a2);
@@ -246,23 +253,98 @@ float G_SmithGGXCorrelated(float a, float dotNV, float dotNL) {
 }
 
 // Hammon 2017, "PBR Diffuse Lighting for GGX+Smith Microsurfaces"
-float G_SmithGGXCorrelated_Fast(float a, float dotNV, float dotNL) {
+float V_SmithGGXCorrelated_Fast(float a, float dotNV, float dotNL) {
   float v = 0.5 / mix(2.0*dotNL*dotNV, dotNL+dotNV, a);
   return saturate(v);
+}
+
+// Burley 2012, "Physically-Based Shading at Disney"
+float D_GGX_Anisotropic(float at, float ab, float dotTH, float dotBH, float dotNH) {
+  // The values at end ab are roughness^2. a2 is therefore roughness^4
+  // The dot product below computes roughness^8. We cannot fit in fp16 without clamping
+  // the roughness to too high values so we perform the dot product and the divison fp32
+  float a2 = at*ab;
+  vec3 d = vec3(ab*dotTH, at*dotBH, a2*dotNH);
+  float d2 = dot(d,d);
+  float b2 = a2/d2;
+  return a2*b2*b2*(1.0/PI);
+}
+
+// Heitz 2014, "Understanding the Masking-Shadowing Function in Microfacet-Based BRDFs"
+float V_SmithGGXCorrelated_Anisotropic(float at, float ab,
+  float dotTV, float dotBV, float dotTL, float dotBL, float dotNV, float dotNL) {
+  // TODO: lambdaV can be pre-computed for all the lights, it should be moved out of this function
+  float lambdaV = dotNL * length(vec3(at*dotTV,ab*dotBV, dotNV));
+  float lambdaL = dotNV * length(vec3(at*dotTL,ab*dotBL, dotNL));
+  float v = 0.5 / (lambdaV + lambdaL);
+  return saturate(v);
+}
+
+vec3 SpecularBRDF_Anisotropic(const in IncidentLight directLight, 
+  const in GeometricContext geometry, const in Material material,
+  float dotNL, float dotNH, float dotVH) {
+  
+  vec3 l = directLight.direction;
+  vec3 t = material.anisotropicT;
+  vec3 b = material.anisotropicB;
+  vec3 v = geometry.viewDir;
+  vec3 h = normalize(l+v);
+
+  float dotTV = dot(t,v);
+  float dotBV = dot(b,v);
+  float dotTL = dot(t,l);
+  float dotBL = dot(b,l);
+  float dotTH = dot(t,h);
+  float dotBH = dot(b,h);
+  float dotLH = dot(l,h);
+  float dotNV = material.dotNV;
+
+  // Anisotropic parameters: at end ab are the roughness along the tangent and bitangent
+  // to simplify materials, we derive them from a single roughness parameter
+  // Kulla 2017, "Revisiting Physically Based Shading at Imageworks"
+  float at = max(material.linearRoughness * (1.0 + material.anisotropy), MIN_LINEAR_ROUGHNESS);
+  float ab = max(material.linearRoughness * (1.0 - material.anisotropy), MIN_LINEAR_ROUGHNESS);
+
+  float D = D_GGX_Anisotropic(at, ab, dotTH, dotBH, dotNH);
+  float V = V_SmithGGXCorrelated_Anisotropic(at, ab, dotTV, dotBV, dotTL, dotBL, dotNV, dotNL);
+  vec3 F = F_Schlick(material.specularColor, dotLH);
+  return F*(V*D);
+}
+
+// Ashikhmin 2007, "Distribution-based BRDFs"
+float D_Ashikhmin(float linearRoughness, float dotNH) {
+  float a2 = linearRoughness * linearRoughness;
+  float cos2h = dotNH*dotNH;
+  float sin2h = max(1.0-cos2h, 0.0078125); // 2^(-14/2), so sin2h^2 > 0 in fp16
+  float sin4h = sin2h*sin2h;
+  float cot2 = -cos2h / (a2*sin2h);
+  return 1.0 / (PI * (4.0*a2+1.0)*sin4h) * (4.0*exp(cot2)+sin4h);
+}
+
+// Estevez and Kulla 2017, "Production Friendly Microfacet Sheen BRDF"
+float D_Charlie(float linearRoughness, float dotNH) {
+  float invAlpha = 1.0 / linearRoughness;
+  float cos2h = dotNH * dotNH;
+  float sin2h = max(1.0 - cos2h, 0.0078125); // 2^(-14/2), so sin2h^2 > 0 in fp16
+  return (2.0 + invAlpha) * pow(sin2h, invAlpha*0.5) / (2.0*PI);
 }
 
 // Cook-Torrance
 vec3 SpecularBRDF(const in IncidentLight directLight, 
   const in GeometricContext geometry, const in Material material,
   float dotNL, float dotNH, float dotVH) {
+
+  if (material.anisotropy != 0.0) {
+    return SpecularBRDF_Anisotropic(directLight, geometry, material, dotNL, dotNH, dotVH);
+  }
   
   float D = D_GGX(material.linearRoughness, dotNH);
-  // float G = G_SmithGGXCorrelated(material.linearRoughness,
+  // float V = V_SmithGGXCorrelated(material.linearRoughness,
   //   material.dotNV, dotNL);
-  float G = G_SmithGGXCorrelated_Fast(material.linearRoughness,
+  float V = V_SmithGGXCorrelated_Fast(material.linearRoughness,
     material.dotNV, dotNL);
   vec3 F = F_Schlick(material.specularColor, dotVH);
-  return (F*(G*D));
+  return F*(V*D);
 }
 
 float SpecularBRDF_ClearCoat(const in IncidentLight directLight, 
@@ -280,7 +362,7 @@ float SpecularBRDF_ClearCoat(const in IncidentLight directLight,
 // RenderEquations(RE)
 void RE_Direct(const in IncidentLight directLight, const in GeometricContext geometry, const in Material material, inout ReflectedLight reflectedLight) {
   
-  float dotNL = saturate(dot(geometry.normal, directLight.direction));
+  float dotNL = saturate(dot(geometry.normal,directLight.direction));
   vec3 irradiance = dotNL * directLight.color;
 
   vec3 H = normalize(directLight.direction + geometry.viewDir);
@@ -351,8 +433,8 @@ vec3 getLightProbeIndirectIrradiance(const in vec3 N, const in float blinnShinin
   return PI * GammaToLinear(textureCube(irradianceMap, queryVec), float(GAMMA_FACTOR)).rgb;
 }
 
-vec3 getLightProbeIndirectRadiance(const in vec3 V, const in vec3 N, const in float blinnShininessExponent, const in int maxMipLevel) {
-  vec3 reflectVec = inverseTransformDirection(reflect(-V, N), viewMatrix);
+vec3 getLightProbeIndirectRadiance(const in vec3 r, const in float blinnShininessExponent, const in int maxMipLevel) {
+  vec3 reflectVec = inverseTransformDirection(r, viewMatrix);
   float specMipLevel = getSpecularMipLevel(blinnShininessExponent, maxMipLevel);
   vec3 queryVec = vec3(-reflectVec.x, reflectVec.yz); //flip
   return GammaToLinear(textureCubeLodEXT(radianceMap, queryVec, specMipLevel), float(GAMMA_FACTOR)).rgb;
@@ -401,6 +483,40 @@ void PrepareMaterial(in GeometricContext geometry, inout Material material) {
   material.energyCompensation = 1.0 + material.specularColor * (1.0 / material.dfg.y - 1.0);
   material.energyCompensation = mix(vec3(1.0), material.energyCompensation, energyCompensation);
   // material.energyCompensation = vec3(1.0);
+
+  // Re-normalize post-interpolation values
+  // material.tangentToWorld = mat3(
+  //   normalize(vTangent), normalize(vBinormal), geometry.normal);
+  
+  // vec3 anisotropicDirection = vec3(1.0,0.0,0.0);
+  // material.anisotropicT = normalize(material.tangentToWorld * anisotropicDirection);
+  // material.anisotropicB = normalize(cross(material.tangentToWorld[2], material.anisotropicT));
+  material.anisotropicT = normalize(vTangent);
+  material.anisotropicB = normalize(vBinormal);
+  material.anisotropy = anisotropy;
+}
+
+vec3 getSpecularDominantDirection(const vec3 n, const vec3 r, float linearRoughness) {
+  float s = 1.0 - linearRoughness;
+  return mix(n, r, s*(sqrt(s) + linearRoughness));
+  // return r;
+}
+
+vec3 getReflectedVector(const in GeometricContext geometry, const in Material material) {
+  vec3 r;
+  // if (abs(material.anisotropy) >= 1e5) {
+  if (abs(material.anisotropy) != 0.0) {
+    vec3 anisotropyDirection = material.anisotropy >= 0.0 ? material.anisotropicB : material.anisotropicT;
+    vec3 anisotropicT = cross(anisotropyDirection, geometry.viewDir);
+    vec3 anisotropicN = cross(anisotropicT, anisotropyDirection);
+    float bendFactor = abs(material.anisotropy) * saturate(5.0 * material.specularRoughness);
+    vec3 bentNormal = normalize(mix(geometry.normal, anisotropicN, bendFactor));
+    r = reflect(-geometry.viewDir, bentNormal);
+  }
+  else {
+    r = reflect(-geometry.viewDir, geometry.normal);
+  }
+  return getSpecularDominantDirection(geometry.normal, r, material.linearRoughness);
 }
 
 void main() {
@@ -437,7 +553,9 @@ void main() {
   float blinnExponent = GGXRoughnessToBlinnExponent(material.specularRoughness);
   vec3 irradiance = getLightProbeIndirectIrradiance(geometry.normal, blinnExponent, 8);
   // irradiance = getLightProbeIndirectIrradianceSH(geometry.normal);
-  vec3 radiance = getLightProbeIndirectRadiance(geometry.viewDir, geometry.normal, blinnExponent, 8);
+
+  vec3 r = getReflectedVector(geometry, material);
+  vec3 radiance = getLightProbeIndirectRadiance(r, blinnExponent, 8);
   RE_Indirect(irradiance, radiance, geometry, material, reflectedLight);
 
   vec3 outgoingLight = emissive + reflectedLight.directDiffuse + reflectedLight.directSpecular + reflectedLight.indirectDiffuse + reflectedLight.indirectSpecular;
