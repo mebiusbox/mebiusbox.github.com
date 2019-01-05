@@ -11,6 +11,8 @@ uniform float roughness;
 uniform vec3 albedo;
 uniform vec3 dirLightDir;
 uniform vec3 dirLightColor;
+uniform float dirLightIntensity;
+uniform float iblIntensity;
 uniform sampler2D dfgMap;
 uniform float energyCompensation;
 uniform float anisotropy;
@@ -381,6 +383,10 @@ void RE_Direct(const in IncidentLight directLight, const in GeometricContext geo
   float Fcc;
   vec3 Fc = irradiance * SpecularBRDF_ClearCoat(directLight, geometry, material, dotNH, dotVH, dotLH, Fcc);
 
+  Fd *= dirLightIntensity;
+  Fr *= dirLightIntensity;
+  Fc *= dirLightIntensity;
+  
   float attenuation = 1.0 - Fcc;
   float attenuation2 = attenuation * attenuation;
   reflectedLight.directDiffuse += Fd * attenuation;
@@ -455,6 +461,9 @@ void RE_Indirect(const in vec3 irradiance, const in vec3 radiance,
   Fr += radiance * EnvBRDFApprox(material.specularColor, material.clearCoatRoughness, material.dotNV) * Fc;
   Fd *= attenuation;
 
+  Fd *= iblIntensity;
+  Fr *= iblIntensity;
+  
   Fd *= indirectDiffuseIntensity;
   Fr *= indirectSpecularIntensity;
 

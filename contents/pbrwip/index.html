@@ -58,6 +58,98 @@
       init();
       // render();
       // animate();
+
+      // lumination functions
+      // Returns the exposrue value (EV at ISO 100) of the specified exposure parameters.
+      // With N = aperture, t = shutter speed and S = sensitivity,
+      // we can compute EV100 knowing that:
+      // 
+      // EVs = log2(N^2/t) and EVs = EV100 + log2(S/100)
+      //
+      // we can therefore find:
+      //
+      // EV100 = EVs - log2(S/100)
+      // EV100 = log2(N^2/t) - log2(S/100)
+      // EV100 = log2((N^2/t)*(100/S))
+      // 
+      // https://en.wikipedia.org/wiki/Exposure_value
+      function getEV100(aperture, shutterSpeed, sensitivity) {
+          return Math.log2((aperture*aperture) / shutterSpeed * 100.0 / sensitivity);
+      }
+
+      // With L the average scene luminance, S the sensivitiy and K the 
+      // reflected-light meter calibration constant:
+      // 
+      // EV = log2(L*S/K)
+      //
+      // With the usual value K = 12.5 (to match standard camera manufactors settings), computing the EV100 becomes:
+      // 
+      // EV100 = log2(L*100/12.5)
+      //
+      // https://en.wikipedia.org/wiki/Exposure_value
+      function getEV100FromLuminance(luminance) {
+        return Math.log2(luminance*(100.0/12.5));
+      }
+
+      // With E the illuminance, S the sensitivity and C the incident-light meter
+      // calibration constant, the exposure value can be computed as such:
+      //
+      // EV = log2(E*S/C) or EV100 = log2(E*100/C)
+      //
+      // Using C = 250 (a typical value for a flat sensor), the relationship between
+      // EV100 and illuminance is:
+      //
+      // EV100 = log2(E*100/250)
+      //
+      // https://en.wikipedia.org/wiki/Exposure_value
+      function getEV100FromIluminance(iluminance) {
+        return Math.log2(illuminance*(100.0/250.0));
+      }
+
+      // The photometric exposure H is defined by:
+      //
+      // H = (q*t/(N^2))*L
+      //
+      // Where t is the shutter speed, N the aperture, L the incident luminance
+      // and q the lens and vignetting attenuation. A typical value of q is 0.65
+      // (see reference link below).
+      //
+      // The value of H as recorded by a sensor depends on the sensitivity of the 
+      // sensor. An easy way to find that value is to use the saturation-based
+      // sensitivity method:
+      //
+      // S_sat = 78 / H_sat
+      //
+      // This method defines the maximum possible exposure that does not lead to 
+      // clipping or blooming
+      //
+      // The factor 78 is chosen so that expsure settings based on a standard
+      // light meter and an 18% reflective surface will result in an image with 
+      // a gray level of 18% * sqrt(2) = 12.7% of saturation. The sqrt(2) factor
+      // is used to accout for an extra half a stop of headroom to deal with
+      // specular reflections.
+      // 
+      // Using th definitions of H and S_sat, we can derive the formula to 
+      // compute the maximum luminance to saturate the sensor:
+      //
+      // H_sat = 78 / S_stat
+      // (q*t/(N^2))*Lmax=78/S
+      // Lmax = (78/S)*(N^2/(q*t))
+      // Lmax = (78/(S*q))*(N^2/t)
+      //
+      // With q = 0.65, S=100, and EVs = log2(N^2/t) (in this case EVs = EV100)
+      //
+      // Lmax = (78/(100*0.65))*2^EV100
+      // Lmax = 1.2 * 2^EV100
+      //
+      // The value of a pixel in the fragment shader can be computed by
+      // normalizing the incident luminance L at the pixel's position
+      // with the maximum luminance Lmax
+      //
+      // https://en.wikipedia.org/wiki/Exposure_value
+      function getExposure(ev100) {
+        return (1.0 / (1.2 * Math.pow(2.0, ev100)));
+      }
       
       function init() {
         
@@ -133,6 +225,8 @@
           energyCompensation: {value: 0.0},
           dirLightDir: {value: new THREE.Vector3(0,0,1)},
           dirLightColor: {value: new THREE.Color(1,1,1)},
+          dirLightIntensity: { value: 1.0 },
+          iblIntensity: { value: 1.0 },
           clearCoat: { value: 0.0 },
           clearCoatRoughness: { value: 0.0 },
           anisotropy: { value: 0.0 },
@@ -228,7 +322,11 @@
           anisotropy: uniforms.anisotropy.value,
           energyCompensation: true,
           drawLight: false,
-          directLightIntensity: 1.0,
+          lux: 120000.0,
+          ibl: 30000.0,
+          aperture: 16.0,
+          shutterSpeed: 125.0,
+          sensitivity: 100.0,
           indirectDiffuseIntensity: uniforms.indirectDiffuseIntensity.value,
           indirectSpecularIntensity: uniforms.indirectSpecularIntensity.value
         };
@@ -241,12 +339,23 @@
         h.add(effectController, "clearCoat", 0.0, 1.0, 0.01);
         h.add(effectController, "clearCoatRoughness", 0.0, 1.0, 0.01);
         h.add(effectController, "anisotropy", -1.0, 1.0, 0.01);
-        h.add(effectController, "directLightIntensity", 0.0, 1.0, 0.01);
+        h.addColor(effectController, "albedo");
+        h = gui.addFolder("Light");
+        h.add(effectController, "lux", 0.0, 150000.0, 0.01);
+        h.add(effectController, "ibl", 0.0, 50000.0, 0.01);
+        h = gui.addFolder("Camera");
+        h.add(effectController, "aperture", 1, 32, 0.01);
+        h.add(effectController, "shutterSpeed", 4, 4000, 1);
+        h.add(effectController, "sensitivity", 1, 3200, 1);
+        // h.add(effectController, "aperture", [1.4,2,2.8,4,5.6,8,11,16,22,32]);
+        // h.add(effectController, "shutterSpeed", [4,8,15,30,60,125,250,500,1000,2000,4000]);
+        // h.add(effectController, "sensitivity", [100,200,400,800,1600,3200]);
+        h = gui.addFolder("Debug");
         h.add(effectController, "indirectDiffuseIntensity", 0.0, 1.0, 0.01);
         h.add(effectController, "indirectSpecularIntensity", 0.0, 1.0, 0.01);
         h.add(effectController, "energyCompensation");
         h.add(effectController, "drawLight");
-        h.addColor(effectController, "albedo");
+        
       }
       
       function animate() {
@@ -270,11 +379,18 @@
         uniforms.clearCoatRoughness.value = effectController.clearCoatRoughness;
         uniforms.anisotropy.value = effectController.anisotropy;
         uniforms.dirLightDir.value.copy(lights.directional.position).normalize().transformDirection(viewMatrix);
-        uniforms.dirLightColor.value.copy(lights.directional.color).multiplyScalar(effectController.directLightIntensity);
+        uniforms.dirLightColor.value.copy(lights.directional.color);
         uniforms.indirectDiffuseIntensity.value = effectController.indirectDiffuseIntensity;
         uniforms.indirectSpecularIntensity.value = effectController.indirectSpecularIntensity;
         lights.directionalHelper.visible = effectController.drawLight;
         uniforms.energyCompensation.value = effectController.energyCompensation ? 1.0 : 0.0;
+
+        var ev100 = getEV100(effectController.aperture, 1.0 / effectController.shutterSpeed, effectController.sensitivity);
+        var exposure = getExposure(ev100);
+        uniforms.dirLightIntensity.value = effectController.lux * exposure;
+        uniforms.iblIntensity.value = effectController.ibl * exposure;
+        // console.log('dirLightInensity: ' + uniforms.dirLightIntensity.value);
+        // console.log('iblIntensity: ' + uniforms.iblIntensity.value);
         
         renderer.render(scene, camera);
         scene.overrideMaterial = null;
