@@ -12,6 +12,20 @@ uniform vec3 albedo;
 uniform vec3 dirLightDir;
 uniform vec3 dirLightColor;
 uniform float dirLightIntensity;
+uniform float dirLightTemperature;
+uniform vec3 pointLightColor;
+uniform vec3 pointLightPosition;
+uniform float pointLightDecay;
+uniform float pointLightDistance;
+uniform float pointLightIntensity;
+uniform vec3 spotLightPosition;
+uniform vec3 spotLightDirection;
+uniform vec3 spotLightColor;
+uniform float spotLightDecay;
+uniform float spotLightDistance;
+uniform float spotLightInnerAngleCos;
+uniform float spotLightOuterAngleCos;
+uniform float spotLightIntensity;
 uniform float iblIntensity;
 uniform sampler2D dfgMap;
 uniform float energyCompensation;
@@ -40,6 +54,45 @@ vec3 inverseTransformDirection(in vec3 dir, in mat4 matrix) {
 
 float luminance(const vec3 linear) {
     return dot(linear, vec3(0.2126, 0.7152, 0.0722));
+}
+
+vec3 XYZ_to_sRGB(const vec3 v) {
+  return vec3(v.x / v.y, v.z, (1.0 - v.x - v.y) / v.y);
+}
+
+vec3 xyY_to_XYZ(const vec3 v) {
+  return vec3(
+    3.2404542 * v.x  -1.5371385 * v.y  -0.4985314 * v.z,
+    -0.9692660 * v.x + 1.8760108 * v.y + 0.0415560 * v.z,
+    0.0556434 * v.x  -0.2040259 * v.y + 1.0572252 * v.z
+  );
+}
+
+vec3 cct(float K) {
+  // temperrature to CIE 1960
+  float K2 = K*K;
+  float u = (0.860117757 + 1.54118254e-4 * K + 1.28641212e-7 * K2) /
+    (1.0 + 8.42420235e-4 * K + 7.08145163e-7 * K2);
+  float v = (0.317398726 + 4.22806245e-5 * K + 4.20481691e-8 * K2) /
+    (1.0 - 2.89741816e-5 * K + 1.61456053e-7 * K2);
+  float d = 1.0 / (2.0 * u - 8.0 * v + 4.0);
+  vec3 linear = XYZ_to_sRGB(xyY_to_XYZ(vec3(3.0*u*d, 2.0*v*d, 1.0)));
+  return saturate(linear / max(1e-5, max(linear.x,max(linear.y,linear.z))));
+}
+
+vec3 illuminantD(float K) {
+  // temperature to xyY
+  float iK = 1.0 / K;
+  float iK2 = iK*iK;
+  float x;
+  if (K <= 7000.0) {
+    x = 0.244063 + 0.09911e3 * iK + 2.9678e6 * iK2 - 4.6070e9 * iK2 * iK;
+  } else {
+    x = 0.237040 + 0.24748e3 * iK + 1.9018e6 * iK2 - 2.0064e9 * iK2 * iK;
+  }
+  float y = -3.0 * x * x + 2.87 * x - 0.275;
+  vec3 linear = XYZ_to_sRGB(xyY_to_XYZ(vec3(x, y, 1.0)));
+  return saturate(linear / max(1e-5, max(linear.x,max(linear.y,linear.z))));
 }
 
 vec3 heatmap(float v) {
@@ -143,6 +196,7 @@ struct IncidentLight {
   vec3 color;
   vec3 direction;
   bool visible;
+  float intensity;
 };
 
 struct ReflectedLight {
@@ -174,6 +228,20 @@ struct Material {
   float anisotropy;
   mat3 tangentToWorld;
 };
+
+//-------------------------------------------------------------------------
+
+bool testLightInRange(const in float lightDistance, const in float cutoffDistance) {
+  return any(bvec2(cutoffDistance == 0.0, lightDistance < cutoffDistance));
+}
+
+float punctualLightIntensityToIrradianceFactor(const in float lightDistance,
+  const in float cutoffDistance, const in float decay) {
+    if (decay > 0.0) {
+      return pow(saturate(-lightDistance / (cutoffDistance+1e-4) + 1.0), decay);
+    }
+    return 1.0;
+}
 
 //-------------------------------------------------------------------------
 // BRDFs
@@ -373,9 +441,6 @@ void RE_Direct(const in IncidentLight directLight, const in GeometricContext geo
   float dotVH = saturate(dot(geometry.viewDir,H));
   float dotLH = saturate(dot(directLight.direction,H));
   
-  // punctual light
-  irradiance *= PI;
-  
   vec3 Fd = irradiance * DiffuseBRDF(material.diffuseColor);
   vec3 Fr = irradiance * SpecularBRDF(directLight, geometry, material, dotNL, dotNH, dotVH);
 
@@ -383,9 +448,9 @@ void RE_Direct(const in IncidentLight directLight, const in GeometricContext geo
   float Fcc;
   vec3 Fc = irradiance * SpecularBRDF_ClearCoat(directLight, geometry, material, dotNH, dotVH, dotLH, Fcc);
 
-  Fd *= dirLightIntensity;
-  Fr *= dirLightIntensity;
-  Fc *= dirLightIntensity;
+  Fd *= directLight.intensity;
+  Fr *= directLight.intensity;
+  Fc *= directLight.intensity;
   
   float attenuation = 1.0 - Fcc;
   float attenuation2 = attenuation * attenuation;
@@ -544,6 +609,23 @@ vec3 getReflectedVector(const in GeometricContext geometry, const in Material ma
   return getSpecularDominantDirection(geometry.normal, r, material.linearRoughness);
 }
 
+float getSquareFalloffAttenuation(float lightDistance, float lightRadius) {
+  float sqDistance = lightDistance * lightDistance;
+  float invRadius = 1.0 / lightRadius;
+  float factor = sqDistance * invRadius * invRadius;
+  float smoothFactor = max(1.0 - factor*factor, 0.0);
+  // return (smoothFactor * smoothFactor) / max(sqDistance, 1e-4);
+  return (smoothFactor * smoothFactor) / (sqDistance + 1.0); // UE4
+}
+
+float getSpotAngleAttenuation(float angleCos, float innerAngleCos, float outerAngleCos) {
+  // the scale and offset computations can be done CPU-side
+  float spotScale = 1.0 / max(innerAngleCos - outerAngleCos, 1e-4);
+  float spotOffset = -outerAngleCos * spotScale;
+  float attenuation = saturate(angleCos * spotScale + spotOffset);
+  return attenuation * attenuation;
+}
+
 void main() {
   GeometricContext geometry;
   geometry.position = -vViewPosition;
@@ -572,7 +654,36 @@ void main() {
   directLight.direction = dirLightDir;
   directLight.color = dirLightColor;
   directLight.visible = true;
+  directLight.intensity = dirLightIntensity;
   RE_Direct(directLight, geometry, material, reflectedLight);
+
+  /// Point Light
+  vec3 l = pointLightPosition - geometry.position;
+  directLight.direction = normalize(l);
+  float lightDistance = length(l);
+  if (testLightInRange(lightDistance, pointLightDistance)) {
+    directLight.color = pointLightColor;
+    directLight.intensity = punctualLightIntensityToIrradianceFactor(lightDistance, pointLightDistance, pointLightDecay);
+    // directLight.intensity = getSquareFalloffAttenuation(lightDistance, pointLightDistance);
+    directLight.intensity *= pointLightIntensity;
+    directLight.visible = true;
+    RE_Direct(directLight, geometry, material, reflectedLight);
+  }
+
+  /// Spot Light
+  l = spotLightPosition - geometry.position;
+  directLight.direction = normalize(l);
+  lightDistance = length(l);
+  float angleCos = dot(directLight.direction, spotLightDirection);
+  if (all(bvec2(angleCos > spotLightOuterAngleCos, testLightInRange(lightDistance, spotLightDistance)))) {
+    directLight.color = spotLightColor;
+    directLight.intensity = punctualLightIntensityToIrradianceFactor(lightDistance, spotLightDistance, spotLightDecay);
+    // directLight.intensity = getSquareFalloffAttenuation(lightDistance, spotLightDistance);
+    directLight.intensity *= getSpotAngleAttenuation(angleCos, spotLightInnerAngleCos, spotLightOuterAngleCos);
+    directLight.intensity *= spotLightIntensity;
+    directLight.visible = true;
+    RE_Direct(directLight, geometry, material, reflectedLight);
+  }
 
   // Indirect lighting
   float blinnExponent = GGXRoughnessToBlinnExponent(material.specularRoughness);
@@ -601,7 +712,10 @@ void main() {
   // outgoingLight = reflectedLight.indirectSpecular;
   // outgoingLight = emissive;
   // outgoingLight = vec3(vUv, 0.0);
-
+  // outgoingLight = dirLightColor;
+  // outgoingLight = cct(dirLightTemperature);
+  // outgoingLight = illuminantD(dirLightTemperature);
+  
   outgoingLight = Tonemap_ACES(outgoingLight);
   outgoingLight = LinearToGamma(vec4(outgoingLight,1.0), float(GAMMA_FACTOR)).xyz;
   
