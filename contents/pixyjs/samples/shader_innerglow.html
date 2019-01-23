@@ -89,7 +89,7 @@
           var objLoader = new THREE.OBJLoader();
           // objLoader.setMaterials(materials);
           objLoader.setPath('assets/models/shaderball/');
-          objLoader.load('shaderball.obj', function(object) {
+          objLoader.load('shaderBall.obj', function(object) {
             object.traverse(function(child) {
               if (child instanceof THREE.Mesh) {
                 // child.geometry.translate(0, 0, 0);
