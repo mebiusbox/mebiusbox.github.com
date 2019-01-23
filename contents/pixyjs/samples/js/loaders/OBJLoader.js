@@ -286,19 +286,17 @@ THREE.OBJLoader = ( function () {
 
 				this.addVertex( ia, ib, ic );
 
-				if ( ua !== undefined ) {
+				if ( ua !== undefined && ua !== '' ) {
 
 					var uvLen = this.uvs.length;
-
 					ia = this.parseUVIndex( ua, uvLen );
 					ib = this.parseUVIndex( ub, uvLen );
 					ic = this.parseUVIndex( uc, uvLen );
-
 					this.addUV( ia, ib, ic );
 
 				}
 
-				if ( na !== undefined ) {
+				if ( na !== undefined && na !== '' ) {
 
 					// Normals are many times the same. If so, skip function call and parseInt.
 					var nLen = this.normals.length;
@@ -393,6 +391,8 @@ THREE.OBJLoader = ( function () {
 		setPath: function ( value ) {
 
 			this.path = value;
+
+			return this;
 
 		},
 
@@ -688,14 +688,18 @@ THREE.OBJLoader = ( function () {
 						if ( isLine && material && ! ( material instanceof THREE.LineBasicMaterial ) ) {
 
 							var materialLine = new THREE.LineBasicMaterial();
-							materialLine.copy( material );
-							materialLine.lights = false; // TOFIX
+							THREE.Material.prototype.copy.call( materialLine, material );
+							materialLine.color.copy( material.color );
+							materialLine.lights = false;
 							material = materialLine;
 
 						} else if ( isPoints && material && ! ( material instanceof THREE.PointsMaterial ) ) {
 
 							var materialPoints = new THREE.PointsMaterial( { size: 10, sizeAttenuation: false } );
-							materialLine.copy( material );
+							THREE.Material.prototype.copy.call( materialPoints, material );
+							materialPoints.color.copy( material.color );
+							materialPoints.map = material.map;
+							materialPoints.lights = false;
 							material = materialPoints;
 
 						}

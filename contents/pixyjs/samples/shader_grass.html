@@ -67,16 +67,16 @@
     </center>
     
     <script src="js/three.min.js"></script>
+    <script src="js/WebGL.js"></script>
     <script src="js/controls/OrbitControls.js"></script>
-    <script src="js/Detector.js"></script>
     <script src="js/libs/dat.gui.min.js"></script>
     <script src="js/libs/stats.min.js"></script>
-    <script src="js/geometries/TeapotBufferGeometry.js"></script>
     <script src="js/loaders/TGALoader.js"></script>
-    <script src="js/BufferGeometryUtils.js"></script>
     <script src="../build/pixy.js"></script>
     <script>
-      if (!Detector.webgl) Detector.addGetWebGLMessage();
+      if (WEBGL.isWebGLAvailable() === false) {
+        document.body.appendChild(WEBGL.getWebGLErrorMessage());
+      }
       
       var SHADOWBUFSIZE = 1024;
       var camera, controls, scene, renderer;
@@ -252,7 +252,7 @@
         instanceGeometry.maxInstancedCount = instances;
         instanceGeometry.copy(new THREE.PlaneBufferGeometry(1,1,8,8));
         
-        var offsets = new THREE.InstancedBufferAttribute(new Float32Array(instances*3), 3, 1);
+        var offsets = new THREE.InstancedBufferAttribute(new Float32Array(instances*3), 3, true);
         for (var i=0, ul = offsets.count; i<ul; i++) {
           var xyz = new THREE.Vector3(Math.random() - 0.5, 0.0, Math.random() - 0.5);
           xyz.multiplyScalar(5.0);
@@ -260,7 +260,7 @@
         }
         instanceGeometry.addAttribute('offsets', offsets);
         
-        var colors = new THREE.InstancedBufferAttribute(new Float32Array(instances*4), 4, 1);
+        var colors = new THREE.InstancedBufferAttribute(new Float32Array(instances*4), 4, true);
         for (var i=0, ul = offsets.count; i<ul; i++) {
           colors.setXYZW(i, Math.random(), Math.random(), Math.random(), Math.random());
         }

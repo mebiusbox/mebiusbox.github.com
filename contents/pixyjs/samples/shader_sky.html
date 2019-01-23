@@ -36,14 +36,17 @@
 		</div>
     
     <script src="js/three.min.js"></script>
+    <script src="js/WebGL.js"></script>
     <script src="js/controls/OrbitControls.js"></script>
-    <script src="js/Detector.js"></script>
+    <script src="js/objects/Lensflare.js"></script>
     <script src="js/libs/dat.gui.min.js"></script>
     <script src="js/libs/stats.min.js"></script>
-    <script src="js/BufferGeometryUtils.js"></script>
+    <script src="js/utils/BufferGeometryUtils.js"></script>
     <script src="../build/pixy.js"></script>
     <script>
-      if (!Detector.webgl) Detector.addGetWebGLMessage();
+      if (WEBGL.isWebGLAvailable() === false) {
+        document.body.appendChild(WEBGL.getWebGLErrorMessage());
+      }
       
       var camera, controls, scene, renderer;
       var stats, clock = new THREE.Clock();
@@ -205,14 +208,14 @@
         
         var flareColor = new THREE.Color(0xffffff);
         flareColor.setHSL(0.55, 0.9, 0.5 + 0.5);
-        lensFlare = new THREE.LensFlare(textureFlare0, 700, 0.0, THREE.AdditiveBlending, flareColor);
-        lensFlare.add(textureFlare2, 512, 0.0, THREE.AdditiveBlending);
-        lensFlare.add(textureFlare2, 512, 0.0, THREE.AdditiveBlending);
-        lensFlare.add(textureFlare2, 512, 0.0, THREE.AdditiveBlending);
-        lensFlare.add(textureFlare3, 60, 0.1, THREE.AdditiveBlending);
-        lensFlare.add(textureFlare3, 70, 0.2, THREE.AdditiveBlending);
-        lensFlare.add(textureFlare3, 120, 0.3, THREE.AdditiveBlending);
-        lensFlare.add(textureFlare3, 70, 0.4, THREE.AdditiveBlending);
+        lensFlare = new THREE.Lensflare(textureFlare0, 700, 0.0, THREE.AdditiveBlending, flareColor);
+        lensFlare.addElement(new THREE.LensflareElement(textureFlare2, 512, 0.0, THREE.AdditiveBlending));
+        lensFlare.addElement(new THREE.LensflareElement(textureFlare2, 512, 0.0, THREE.AdditiveBlending));
+        lensFlare.addElement(new THREE.LensflareElement(textureFlare2, 512, 0.0, THREE.AdditiveBlending));
+        lensFlare.addElement(new THREE.LensflareElement(textureFlare3, 60, 0.1, THREE.AdditiveBlending));
+        lensFlare.addElement(new THREE.LensflareElement(textureFlare3, 70, 0.2, THREE.AdditiveBlending));
+        lensFlare.addElement(new THREE.LensflareElement(textureFlare3, 120, 0.3, THREE.AdditiveBlending));
+        lensFlare.addElement(new THREE.LensflareElement(textureFlare3, 70, 0.4, THREE.AdditiveBlending));
         // lensFlare.add(textureFlare3, 60, 0.6, THREE.AdditiveBlending);
         // lensFlare.add(textureFlare3, 70, 0.7, THREE.AdditiveBlending);
         // lensFlare.add(textureFlare3, 120, 0.9, THREE.AdditiveBlending);

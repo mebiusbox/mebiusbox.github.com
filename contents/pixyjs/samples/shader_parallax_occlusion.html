@@ -34,20 +34,20 @@
     </div>
     
     <script src="js/three.min.js"></script>
+    <script src="js/WebGL.js"></script>
     <script src="js/controls/OrbitControls.js"></script>
-    <script src="js/Detector.js"></script>
     <script src="js/libs/dat.gui.min.js"></script>
     <script src="js/libs/stats.min.js"></script>
-    <script src="js/loaders/TGALoader.js"></script>
-    <script src="js/BufferGeometryUtils.js"></script>
     <script src="../build/pixy.js"></script>
     <script>
-      if (!Detector.webgl) Detector.addGetWebGLMessage();
-      
+      if (WEBGL.isWebGLAvailable() === false) {
+        document.body.appendChild(WEBGL.getWebGLErrorMessage());
+      }
+     
       var camera, controls, scene, renderer;
       var stats, clock = new THREE.Clock();
       var lights = {};
-      var shader;
+      var shader, shader2;
       var gui, parameters;
       var ready = false;
       
@@ -128,20 +128,19 @@
         // console.log(shader.uniforms);
         // console.log(shader._generateVertexShader());
         // console.log(shader._generateFragmentShader());
-        
+
         // MARK: TEXTURES
         
-        var loadTexture = function(loader, path) {
-          return loader.load(path, function(texture) {
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-          });
-        };
         var textureLoader = new THREE.TextureLoader();
-        var tgaLoader = new THREE.TGALoader();
-        shader.uniforms.tDiffuse.value = loadTexture(tgaLoader, 'assets/textures/ue4/T_CobbleStone_Pebble_D_512.tga');
-        // shader.uniforms.tDiffuse.value = loadTexture(tgaLoader, 'assets/textures/ue4/stamp.TGA');
-        
+        shader.uniforms.tDiffuse.value = textureLoader.load('assets/textures/ue4/T_CobbleStone_Pebble_D.png');
+        shader.uniforms.tDiffuse.value.wrapS = shader.uniforms.tDiffuse.value.wrapT = THREE.RepeatWrapping;
+        shader.uniforms.tDiffuse.value.minFilter = shader.uniforms.tDiffuse.value.magFilter = THREE.LinearFilter;
+
+        shader.uniforms.tHeightMap.value = textureLoader.load('assets/textures/ue4/T_CobbleStone_Pebble_H.png')
+        shader.uniforms.tHeightMap.value.wrapS = shader.uniforms.tHeightMap.value.wrapT = THREE.RepeatWrapping;
+        shader.uniforms.tHeightMap.value.minFilter = shader.uniforms.tHeightMap.value.magFilter = THREE.LinearFilter;
+
+      
         // MARK: MODELS
         var slice = 10;
         var planeGeometry = new THREE.PlaneBufferGeometry(5,5,slice,slice);
@@ -157,8 +156,7 @@
           }
         }
 			  planeGeometry.addAttribute("tangent", new THREE.BufferAttribute(tangents, 4));
-				var plane = new THREE.Mesh(planeGeometry, shader.material);
-        // THREE.BufferGeometryUtils.computeTangents(planeGeometry.geometry);
+        var plane = new THREE.Mesh(planeGeometry, shader.material);
         plane.rotation.x = -Math.PI * 0.4;
         scene.add(plane);
         
