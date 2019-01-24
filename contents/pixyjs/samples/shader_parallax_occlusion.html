@@ -30,7 +30,7 @@
   </head>
   <body>
     <div id="info">
-      <a href="https://github.com/mebiusbox/pixy.js">pixy.js</a> + <a href="http://threejs.org" target="_blank">three.js</a> - parallax occlusion map
+      <a href="https://github.com/mebiusbox/pixy.js">pixy.js</a> + <a href="http://threejs.org" target="_blank">three.js</a> - parallax occlusion mapping, relief mapping
     </div>
     
     <script src="js/three.min.js"></script>
@@ -47,7 +47,7 @@
       var camera, controls, scene, renderer;
       var stats, clock = new THREE.Clock();
       var lights = {};
-      var shader, shader2;
+      var shader, reliefShader;
       var gui, parameters;
       var ready = false;
       
@@ -119,15 +119,17 @@
         shader = new PIXY.Shader();
         shader.enable("NOLIT");
         shader.enable("COLORMAP");
-        // shader.enable("COLORMAPALPHA");
-        // shader.enable("DISCARD");
         shader.enable("PARALLAXOCCLUSIONMAP");
-        // shader.enable("DEBUG");
-        // shader.build({transparent: true, blending: THREE.NormalBlending, side: THREE.DoubleSide});
         shader.build();
         // console.log(shader.uniforms);
         // console.log(shader._generateVertexShader());
         // console.log(shader._generateFragmentShader());
+
+        reliefShader = new PIXY.Shader();
+        reliefShader.enable("NOLIT");
+        reliefShader.enable("COLORMAP");
+        reliefShader.enable("RELIEFMAP");
+        reliefShader.build();
 
         // MARK: TEXTURES
         
@@ -140,6 +142,8 @@
         shader.uniforms.tHeightMap.value.wrapS = shader.uniforms.tHeightMap.value.wrapT = THREE.RepeatWrapping;
         shader.uniforms.tHeightMap.value.minFilter = shader.uniforms.tHeightMap.value.magFilter = THREE.LinearFilter;
 
+        reliefShader.uniforms.tDiffuse.value = shader.uniforms.tDiffuse.value;
+        reliefShader.uniforms.tHeightMap.value = shader.uniforms.tHeightMap.value;
       
         // MARK: MODELS
         var slice = 10;
@@ -174,6 +178,11 @@
         results = PIXY.ShaderUtils.GenerateShaderParametersGUI(shader);
         gui = results.gui;
         parameters = results.parameters;
+
+        parameters.reliefMap = false;
+        gui.add(parameters, "reliefMap").name("Use Relief Mapping").onChange(function(value) {
+          currentShader = value ? reliefShader : shader;
+        });
       }
       
       function initPost() {
@@ -211,7 +220,15 @@
         // lights.directHelper.update();
 
         PIXY.ShaderUtils.UpdateShaderParameters(shader, parameters, camera);
-        renderer.render(scene, camera);
+        if (parameters.reliefMap) {
+          reliefShader.uniforms.parallaxScale.value = shader.uniforms.parallaxScale.value;
+          scene.overrideMaterial = reliefShader.material;
+          renderer.render(scene, camera);
+          scene.overrideMaterial = null;
+        }
+        else {
+          renderer.render(scene, camera);
+        }
       }
 
     </script>
