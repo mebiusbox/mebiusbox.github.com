@@ -30,6 +30,15 @@ uniform float iblIntensity;
 uniform sampler2D dfgMap;
 uniform float energyCompensation;
 uniform float anisotropy;
+uniform vec3 translucentColor;
+uniform float translucentStrength;
+uniform float translucentPower;
+uniform float translucentScale;
+uniform float translucentDistortion;
+uniform float translucentAmbient;
+uniform float translucentDistance;
+uniform float translucentCutoff;
+uniform float translucency;
 
 //-------------------------------------------------------------------------
 // defines
@@ -197,6 +206,7 @@ struct IncidentLight {
   vec3 direction;
   bool visible;
   float intensity;
+  float distance;
 };
 
 struct ReflectedLight {
@@ -241,6 +251,45 @@ float punctualLightIntensityToIrradianceFactor(const in float lightDistance,
       return pow(saturate(-lightDistance / (cutoffDistance+1e-4) + 1.0), decay);
     }
     return 1.0;
+}
+
+vec3 getSpecularDominantDirection(const vec3 n, const vec3 r, float linearRoughness) {
+  float s = 1.0 - linearRoughness;
+  return mix(n, r, s*(sqrt(s) + linearRoughness));
+  // return r;
+}
+
+vec3 getReflectedVector(const in GeometricContext geometry, const in Material material) {
+  vec3 r;
+  if (abs(material.anisotropy) != 0.0) {
+    vec3 anisotropyDirection = material.anisotropy >= 0.0 ? material.anisotropicB : material.anisotropicT;
+    vec3 anisotropicT = cross(anisotropyDirection, geometry.viewDir);
+    vec3 anisotropicN = cross(anisotropicT, anisotropyDirection);
+    float bendFactor = abs(material.anisotropy) * saturate(5.0 * material.specularRoughness);
+    vec3 bentNormal = normalize(mix(geometry.normal, anisotropicN, bendFactor));
+    r = reflect(-geometry.viewDir, bentNormal);
+  }
+  else {
+    r = reflect(-geometry.viewDir, geometry.normal);
+  }
+  return getSpecularDominantDirection(geometry.normal, r, material.linearRoughness);
+}
+
+float getSquareFalloffAttenuation(float lightDistance, float lightRadius) {
+  float sqDistance = lightDistance * lightDistance;
+  float invRadius = 1.0 / lightRadius;
+  float factor = sqDistance * invRadius * invRadius;
+  float smoothFactor = max(1.0 - factor*factor, 0.0);
+  // return (smoothFactor * smoothFactor) / max(sqDistance, 1e-4);
+  return (smoothFactor * smoothFactor) / (sqDistance + 1.0); // UE4
+}
+
+float getSpotAngleAttenuation(float angleCos, float innerAngleCos, float outerAngleCos) {
+  // the scale and offset computations can be done CPU-side
+  float spotScale = 1.0 / max(innerAngleCos - outerAngleCos, 1e-4);
+  float spotOffset = -outerAngleCos * spotScale;
+  float attenuation = saturate(angleCos * spotScale + spotOffset);
+  return attenuation * attenuation;
 }
 
 //-------------------------------------------------------------------------
@@ -451,6 +500,19 @@ void RE_Direct(const in IncidentLight directLight, const in GeometricContext geo
   Fd *= directLight.intensity;
   Fr *= directLight.intensity;
   Fc *= directLight.intensity;
+
+  // translucency
+  float ssIntensity = directLight.intensity;
+  if (directLight.distance < 0.0) {
+    vec3 lightPosition = (directLight.direction * translucentDistance);
+    float distance = length(lightPosition - geometry.position);
+    ssIntensity = getSquareFalloffAttenuation(distance, translucentCutoff);
+  }
+  vec3 ssColor = translucentColor * translucentStrength;
+  vec3 ssLight = normalize(directLight.direction + (geometry.normal * translucentDistortion));
+  float dotLT = pow(saturate(dot(geometry.viewDir, -ssLight)), translucentPower) * translucentScale;
+  vec3 Ft = (dotLT + translucentAmbient) * ssColor * ssIntensity;
+  Fd = mix(Fd, Ft, translucency);
   
   float attenuation = 1.0 - Fcc;
   float attenuation2 = attenuation * attenuation;
@@ -587,45 +649,6 @@ void PrepareMaterial(in GeometricContext geometry, inout Material material) {
 
 }
 
-vec3 getSpecularDominantDirection(const vec3 n, const vec3 r, float linearRoughness) {
-  float s = 1.0 - linearRoughness;
-  return mix(n, r, s*(sqrt(s) + linearRoughness));
-  // return r;
-}
-
-vec3 getReflectedVector(const in GeometricContext geometry, const in Material material) {
-  vec3 r;
-  if (abs(material.anisotropy) != 0.0) {
-    vec3 anisotropyDirection = material.anisotropy >= 0.0 ? material.anisotropicB : material.anisotropicT;
-    vec3 anisotropicT = cross(anisotropyDirection, geometry.viewDir);
-    vec3 anisotropicN = cross(anisotropicT, anisotropyDirection);
-    float bendFactor = abs(material.anisotropy) * saturate(5.0 * material.specularRoughness);
-    vec3 bentNormal = normalize(mix(geometry.normal, anisotropicN, bendFactor));
-    r = reflect(-geometry.viewDir, bentNormal);
-  }
-  else {
-    r = reflect(-geometry.viewDir, geometry.normal);
-  }
-  return getSpecularDominantDirection(geometry.normal, r, material.linearRoughness);
-}
-
-float getSquareFalloffAttenuation(float lightDistance, float lightRadius) {
-  float sqDistance = lightDistance * lightDistance;
-  float invRadius = 1.0 / lightRadius;
-  float factor = sqDistance * invRadius * invRadius;
-  float smoothFactor = max(1.0 - factor*factor, 0.0);
-  // return (smoothFactor * smoothFactor) / max(sqDistance, 1e-4);
-  return (smoothFactor * smoothFactor) / (sqDistance + 1.0); // UE4
-}
-
-float getSpotAngleAttenuation(float angleCos, float innerAngleCos, float outerAngleCos) {
-  // the scale and offset computations can be done CPU-side
-  float spotScale = 1.0 / max(innerAngleCos - outerAngleCos, 1e-4);
-  float spotOffset = -outerAngleCos * spotScale;
-  float attenuation = saturate(angleCos * spotScale + spotOffset);
-  return attenuation * attenuation;
-}
-
 void main() {
   GeometricContext geometry;
   geometry.position = -vViewPosition;
@@ -655,16 +678,17 @@ void main() {
   directLight.color = dirLightColor;
   directLight.visible = true;
   directLight.intensity = dirLightIntensity;
+  directLight.distance = -1.0;
   RE_Direct(directLight, geometry, material, reflectedLight);
 
   /// Point Light
   vec3 l = pointLightPosition - geometry.position;
   directLight.direction = normalize(l);
-  float lightDistance = length(l);
-  if (testLightInRange(lightDistance, pointLightDistance)) {
+  directLight.distance = length(l);
+  if (testLightInRange(directLight.distance, pointLightDistance)) {
     directLight.color = pointLightColor;
     // directLight.intensity = punctualLightIntensityToIrradianceFactor(lightDistance, pointLightDistance, pointLightDecay);
-    directLight.intensity = getSquareFalloffAttenuation(lightDistance, pointLightDistance);
+    directLight.intensity = getSquareFalloffAttenuation(directLight.distance, pointLightDistance);
     directLight.intensity *= pointLightIntensity;
     directLight.visible = true;
     RE_Direct(directLight, geometry, material, reflectedLight);
@@ -673,11 +697,11 @@ void main() {
   /// Spot Light
   l = spotLightPosition - geometry.position;
   directLight.direction = normalize(l);
-  lightDistance = length(l);
+  directLight.distance = length(l);
   float angleCos = dot(directLight.direction, spotLightDirection);
-  if (all(bvec2(angleCos > spotLightOuterAngleCos, testLightInRange(lightDistance, spotLightDistance)))) {
+  if (all(bvec2(angleCos > spotLightOuterAngleCos, testLightInRange(directLight.distance, spotLightDistance)))) {
     directLight.color = spotLightColor;
-    directLight.intensity = punctualLightIntensityToIrradianceFactor(lightDistance, spotLightDistance, spotLightDecay);
+    directLight.intensity = punctualLightIntensityToIrradianceFactor(directLight.distance, spotLightDistance, spotLightDecay);
     // directLight.intensity = getSquareFalloffAttenuation(lightDistance, spotLightDistance);
     directLight.intensity *= getSpotAngleAttenuation(angleCos, spotLightInnerAngleCos, spotLightOuterAngleCos);
     directLight.intensity *= spotLightIntensity;

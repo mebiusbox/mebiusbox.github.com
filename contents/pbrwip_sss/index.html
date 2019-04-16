@@ -30,7 +30,7 @@
   </head>
   <body>
     <div id="info">
-      <a href="http://threejs.org" target="_blank">three.js</a> - PBR
+      <a href="http://threejs.org" target="_blank">three.js</a> - PBR (Multi-scattering + Anisotropy + Clearcoat + Subsurface)
     </div>
     
     <script src="js/three.min.js"></script>
@@ -234,7 +234,7 @@
         // MATERIALS
         
         uniforms = {
-          metallic: {value: 0.7},
+          metallic: {value: 0.2},
           roughness: {value: 0.3},
           albedo: {value: new THREE.Color(1,1,1)},
           energyCompensation: {value: 0.0},
@@ -256,10 +256,19 @@
           spotLightOuterAngleCos: { value: Math.PI*0.5 },
           spotLightIntensity: { value: 1.0 },
           iblIntensity: { value: 1.0 },
-          clearCoat: { value: 0.0 },
-          clearCoatRoughness: { value: 0.0 },
-          anisotropy: { value: 0.0 },
+          clearCoat: { value: 1.0 },
+          clearCoatRoughness: { value: 0.4 },
+          anisotropy: { value: 0.6 },
           dfgMap: {value: null},
+          translucency: { value: 0.5 },
+          translucentColor: { value: new THREE.Color(0.5,0.3,0.0) },
+          translucentStrength: { value: 1.0 },
+          translucentPower: { value: 2.0 },
+          translucentDistortion: { value: 0.1 },
+          translucentAmbient: { value: 0.4 },
+          translucentScale: { value: 16.0 },
+          translucentDistance: { value: 5.0 },
+          translucentCutoff: { value: 10.0 },
           radianceMap: {value: null},
           irradianceMap: {value: null},
           indirectLightIntensity: { value: 1.0 },
@@ -351,22 +360,32 @@
           anisotropy: uniforms.anisotropy.value,
           energyCompensation: true,
           drawLight: false,
-          lux: 100000.0,
-          ibl: 30000.0,
+          lux: 1000.0,
+          ibl: 3000.0,
           temperature: 5500,
-          pointLuminance: 6000,
+          pointLuminance: 10000,
           pointDecay: 2.0,
           pointDistance: 5.0,
-          spotLuminance: 3000,
+          spotLuminance: 10000,
           spotDecay: 2.0,
           spotDistance: 3.0,
           spotInnerAngle: 10.0,
           spotOuterAngle: 30.0,
-          aperture: 16.0,
+          aperture: 11.0,
           shutterSpeed: 125.0,
           sensitivity: 100.0,
           indirectDiffuseIntensity: uniforms.indirectDiffuseIntensity.value,
-          indirectSpecularIntensity: uniforms.indirectSpecularIntensity.value
+          indirectSpecularIntensity: uniforms.indirectSpecularIntensity.value,
+          translucency: uniforms.translucency.value,
+          // translucentColor: 0x804e00,
+          translucentColor: 0x573e16,
+          translucentStrength: uniforms.translucentStrength.value,
+          translucentPower: uniforms.translucentPower.value,
+          translucentDistortion: uniforms.translucentDistortion.value,
+          translucentAmbient: uniforms.translucentAmbient.value,
+          translucentScale: uniforms.translucentScale.value,
+          translucentDistance: uniforms.translucentDistance.value,
+          translucentCutoff: uniforms.translucentCutoff.value
         };
 
         var h;
@@ -378,6 +397,16 @@
         h.add(effectController, "clearCoatRoughness", 0.0, 1.0, 0.01);
         h.add(effectController, "anisotropy", -1.0, 1.0, 0.01);
         h.addColor(effectController, "albedo");
+        h = h.addFolder("Translucency");
+        h.add(effectController, "translucency", 0.0, 1.0, 0.01);
+        h.addColor(effectController, "translucentColor");
+        h.add(effectController, "translucentStrength", 0.0, 1.0, 0.01);
+        h.add(effectController, "translucentPower", 0.1, 16.0, 0.01);
+        h.add(effectController, "translucentDistortion", 0.0, 1.0, 0.01);
+        h.add(effectController, "translucentAmbient", 0.0, 1.0, 0.01);
+        h.add(effectController, "translucentScale", 0.0, 50.0, 0.01);
+        h.add(effectController, "translucentDistance", 1.0, 10.0, 0.01);
+        h.add(effectController, "translucentCutoff", 1.0, 10.0, 0.01);
         h = gui.addFolder("Light");
         h.add(effectController, "lux", 0.0, 150000.0, 1);
         h.add(effectController, "ibl", 0.0, 50000.0, 1);
@@ -491,6 +520,16 @@
         // console.log('iblIntensity: ' + uniforms.iblIntensity.value);
         // console.log('pointLightIntensity:' + uniforms.pointLightIntensity.value);
         // console.log('spotLightIntenstiy:' + uniforms.spotLightIntensity.value);
+
+        uniforms.translucency.value = effectController.translucency;
+        uniforms.translucentColor.value.setHex(effectController.translucentColor);
+        uniforms.translucentStrength.value = effectController.translucentStrength;
+        uniforms.translucentPower.value = effectController.translucentPower;
+        uniforms.translucentDistortion.value = effectController.translucentDistortion;
+        uniforms.translucentAmbient.value = effectController.translucentAmbient;
+        uniforms.translucentScale.value = effectController.translucentScale;
+        uniforms.translucentDistance.value= effectController.translucentDistance;
+        uniforms.translucentCutoff.value = effectController.translucentCutoff;
         
         renderer.render(scene, camera);
         scene.overrideMaterial = null;
