@@ -12,8 +12,8 @@ newmtl sp_00_luk_mali
 	Kd 0.745098 0.709804 0.674510
 	Ks 0.000000 0.000000 0.000000
 	Ke 0.000000 0.000000 0.000000
-	map_Ka SP_LUK.JPG
-	map_Kd SP_LUK.JPG
+	map_Ka sp_luk.JPG
+	map_Kd sp_luk.JPG
 	map_bump sp_luk-bump.JPG
 	bump sp_luk-bump.JPG
 
@@ -198,8 +198,8 @@ newmtl sp_01_luk_a
 	Kd 0.745098 0.709804 0.674510
 	Ks 0.000000 0.000000 0.000000
 	Ke 0.000000 0.000000 0.000000
-	map_Ka SP_LUK.JPG
-	map_Kd SP_LUK.JPG
+	map_Ka sp_luk.JPG
+	map_Kd sp_luk.JPG
 	map_bump sp_luk-bump.JPG
 	bump sp_luk-bump.JPG
 
