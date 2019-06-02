@@ -429,11 +429,11 @@
         // SCREEN
 
         var copyMaterial = createMaterial({
-          // ColorSampler: {value: colorTarget.texture},
+          ColorSampler: {value: colorTarget.texture},
           // ColorSampler: {value: normalTarget.texture},
           // ColorSampler: {value: ssaoTarget.texture},
           // ColorSampler: { value: blurTarget.texture },
-          ColorSampler: { value: compositeTarget.texture },
+          // ColorSampler: { value: compositeTarget.texture },
           Opacity: {value:1.0}},
           app.shaders["copy_vert"],
           app.shaders["copy_frag"],
