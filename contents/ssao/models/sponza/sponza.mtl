@@ -28,10 +28,10 @@ newmtl sp_svod_kapitel
 	Kd 0.713726 0.705882 0.658824
 	Ks 0.000000 0.000000 0.000000
 	Ke 0.000000 0.000000 0.000000
-	map_Ka 00_SKAP.JPG
-	map_Kd 00_SKAP.JPG
-	map_bump 00_SKAP.JPG
-	bump 00_SKAP.JPG
+	map_Ka 00_skap.JPG
+	map_Kd 00_skap.JPG
+	map_bump 00_skap.JPG
+	bump 00_skap.JPG
 
 newmtl sp_01_stub_baza_
 	Ns 19.999998
@@ -150,10 +150,10 @@ newmtl sp_vijenac
 	Kd 0.713726 0.705882 0.658824
 	Ks 0.000000 0.000000 0.000000
 	Ke 0.000000 0.000000 0.000000
-	map_Ka 00_SKAP.JPG
-	map_Kd 00_SKAP.JPG
-	map_bump 00_SKAP.JPG
-	bump 00_SKAP.JPG
+	map_Ka 00_skap.JPG
+	map_Kd 00_skap.JPG
+	map_bump 00_skap.JPG
+	bump 00_skap.JPG
 
 newmtl sp_00_svod
 	Ns 1.000000
