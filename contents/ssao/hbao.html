@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>three.js</title>
+    <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+      body {
+        color: #fff;
+        font-family: Monospace;
+        font-size: 13px;
+        text-align: center;
+        font-weight: bold;
+        
+        background-color: #000;
+        margin: 0px;
+        overflow: hidden;
+      }
+      
+      #info {
+        position: absolute;
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+        color: #fff;
+      }
+      
+      a { color: orange; }
+    </style>
+  </head>
+  <body>
+    <div id="info">
+      <a href="http://threejs.org" target="_blank">three.js</a> - HBAO
+    </div>
+    
+    <script src="js/three.min.js"></script>
+    <script src="js/WebGL.js"></script>
+    <script src="js/controls/OrbitControls.js"></script>
+    <script src="js/loaders/LoaderSupport.js"></script>
+    <script src="js/loaders/OBJLoader2.js"></script>
+    <script src="js/loaders/MTLLoader.js"></script>
+    <script src="js/loaders/GLTFLoader.js"></script>
+    <script src="js/utils/BufferGeometryUtils.js"></script>
+    <script src="js/libs/dat.gui.min.js"></script>
+    <script src="js/libs/stats.min.js"></script>
+    <script src="js/SimplexNoise.js"></script>
+    <script src="loadFiles.js"></script>
+    <script src="ssao.js"></script>
+    <script src="threejs_utils.js"></script>
+    <script>
+      if (WEBGL.isWebGLAvailable() === false) {
+        document.body.appendChild(WEBGL.getWebGLErrorMessage());
+      }
+
+      var app = {};
+      
+      init();
+      // render();
+      // animate();
+
+      function clamp(x, min, max) {
+        if (x < min) return min;
+        if (x > max) return max;
+        return x;
+      }
+      
+      function init() {
+
+        app.clock = new THREE.Clock();
+        app.time = 0.0;
+      
+        loadFiles([
+          'shaders/copy_vert.glsl',
+          'shaders/copy_frag.glsl',
+          'shaders/depth_frag.glsl',
+          'shaders/hbao_frag.glsl',
+          'shaders/hbaoblur_frag.glsl',
+          'shaders/ssaocomposite_frag.glsl',
+        ], function(shaders) {
+          
+          app.shaders = shaders;
+          initGraphics();
+          initScene();
+          initPost();
+          initGui();
+
+          updateSSAO();
+          console.log(app.ssaoMaterial.uniforms.RadiusParams.value);
+          console.log(app.ssaoMaterial.uniforms.BiasParams.value);
+          console.log(app.ssaoMaterial.uniforms.ScreenParams.value);
+          console.log(app.ssaoMaterial.uniforms.UvToViewParams.value);
+          console.log(app.ssaoMaterial.uniforms.FocalParams.value);
+          console.log(app.ssaoMaterial.uniforms.CameraParams.value);
+        
+          // EVENTS
+          window.addEventListener('resize', onWindowResize, false);
+          
+          animate();
+        }, function(url) {
+          alert('Failed to download "' + url + '"');
+        });
+      }
+      
+      function initGraphics() {
+        
+        // RENDERER
+
+        app.renderer = new THREE.WebGLRenderer({antialias: true});
+        app.renderer.setClearColor(0x004080);
+        app.renderer.setPixelRatio(window.devicePixelRatio);
+        app.renderer.setSize(window.innerWidth, window.innerHeight);
+        // renderer.gammaInput = true;
+        // renderer.gammaOutput = true;
+        // app.renderer.autoClear = true;
+        app.renderer.shadowMap.enabled = true;
+        app.renderer.shadowMap.type = THREE.BasicShadowMap;
+
+        app.container = document.createElement('div');
+        document.body.appendChild(app.container);
+
+        app.canvas = app.renderer.domElement;
+        app.container.appendChild(app.canvas);
+        
+        // STATS
+        
+        app.stats = new Stats();
+				app.container.appendChild(app.stats.dom);
+      }
+      
+      function initScene(shaders) {
+        
+        app.scene = new THREE.Scene();
+        
+        // CAMERA
+        
+        app.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
+        app.camera.position.z = 600;
+        app.camera.position.set(164.62, 24.43, 1.65);
+        // app.updateMatrixWorld();
+        // app.updateProjectionMatrix();
+
+        // CONTROLS
+        
+        app.controls = new THREE.OrbitControls(app.camera, app.renderer.domElement);
+        app.controls.target.set(0,0,0);
+        app.controls.update();
+        // app.controls.addEventListener('change', cameraChanged);
+        
+        // LIGHTS
+        
+        app.lights = {};
+        app.lights.ambient = new THREE.AmbientLight( 0x808080 ); // soft white light
+        app.scene.add(app.lights.ambient);
+
+        app.lights.point = new THREE.PointLight(0xffffff, 1, 800.0);
+        app.lights.point.position.set(0,200,0);
+        app.lights.point.decay = 1;
+        app.lights.point.castShadow = true;
+        app.lights.point.shadow.camera.near = 1;
+        app.lights.point.shadow.camera.far  = 1000;
+        app.lights.point.shadow.bias = -0.005; // reduces self-shadowing on double-sided objects
+        // app.lights.point.position.copy(pointLightPosition);
+        // app.lights.point.decay = effectController.pointDecay;
+        // app.lights.point.distance = effectController.pointDistance;
+        app.scene.add(app.lights.point);
+
+        // app.lights.pointHelper = new THREE.PointLightHelper(app.lights.point, app.lights.point.distance);
+        // app.lights.pointHelper.update();
+        // app.scene.add(app.lights.pointHelper);
+        
+        // MATERIALS
+
+        var whiteMaterial = new THREE.MeshLambertMaterial({color:0xffffff});
+        var redMaterial = new THREE.MeshLambertMaterial({color:0xff0000});
+        var greenMaterial = new THREE.MeshLambertMaterial({color:0x00ff00});
+        var blueMaterial = new THREE.MeshLambertMaterial({color:0x0000ff});
+        
+        uniforms = {
+          metallic: {value: 0.7},
+          roughness: {value: 0.3},
+          albedo: {value: new THREE.Color(1,1,1)},
+        };
+        
+        // MODELS
+
+        // setupCornelBox();
+        // setupF16();
+        setupSponza();
+      }
+
+      function setupCornelBox() {
+
+        var sphereGeometry = new THREE.SphereBufferGeometry(100,32,32);
+        var planeGeometry = new THREE.PlaneBufferGeometry(600,600);
+        var boxGeometry = new THREE.BoxBufferGeometry(150,300,150);
+
+        // bottom, top, back, left, right
+        var plane = new THREE.Mesh(planeGeometry, blueMaterial);
+        plane.rotation.x = -0.5*Math.PI;
+        plane.position.set(0, -300, -300);
+        plane.receiveShadow = true;
+        app.scene.add(plane);
+
+        var plane = new THREE.Mesh(planeGeometry, whiteMaterial);
+        plane.rotation.x = 0.5*Math.PI;
+        plane.position.set(0, 300, -300);
+        plane.receiveShadow = true;
+        app.scene.add(plane);
+        
+        var plane = new THREE.Mesh(planeGeometry, whiteMaterial);
+        plane.position.set(0, 0, -600);
+        plane.receiveShadow = true;
+        app.scene.add(plane);
+
+        var plane = new THREE.Mesh(planeGeometry, redMaterial);
+        plane.rotation.y = 0.5*Math.PI;
+        plane.position.set(-300, 0, -300);
+        plane.receiveShadow = true;
+        app.scene.add(plane);
+
+        var plane = new THREE.Mesh(planeGeometry, greenMaterial);
+        plane.rotation.y = -0.5*Math.PI;
+        plane.position.set(300, 0, -300);
+        plane.receiveShadow = true;
+        app.scene.add(plane);
+
+        var box = new THREE.Mesh(boxGeometry, whiteMaterial);
+        box.rotation.y = THREE.Math.degToRad(30.0);
+        box.position.set(-150, -150, -200);
+        box.castShadow = true;
+        app.scene.add(box);
+
+        var sphere = new THREE.Mesh(sphereGeometry, whiteMaterial);
+        sphere.position.set(150, -200, -200);
+        sphere.castShadow = true;
+        app.scene.add(sphere);
+      }
+
+      function setupF16() {
+
+        var planeGeometry = new THREE.PlaneGeometry(2000,2000);
+        var meshMaterial = new THREE.MeshPhongMaterial({color: 0x999999});
+        var mesh = new THREE.Mesh(planeGeometry, meshMaterial);
+        mesh.rotation.x = -Math.PI / 2;
+        app.scene.add(mesh);
+
+        var grid = new THREE.GridHelper(2000, 20, 0x000000, 0x000000);
+        grid.material.opacity = 0.2;
+        grid.material.transparent = true;
+        app.scene.add(grid);
+        
+        var loader = new THREE.GLTFLoader();
+        loader.load('./models/F16/scene.gltf', function(gltf) {
+          // gltf.scene.scale.set(10,10,10);
+          app.scene.add(gltf.scene);
+        });
+
+      }
+
+      function setupSponza() {
+        var objLoader = new THREE.OBJLoader2();
+        objLoader.loadMtl('./models/sponza/sponza.mtl', null, (materials) => {
+          objLoader.setMaterials(materials);
+          objLoader.load('./models/sponza/sponza.obj', (event) => {
+            var root = event.detail.loaderRootNode;
+            root.scale.set(10,10,10);
+            app.scene.add(root);
+          })
+        })
+      }
+
+      function initPost() {
+
+        // COLOR
+
+        var colorTarget = createRenderTarget(THREE.RGBFormat);
+        colorTarget.depthBuffer = true;
+        colorTarget.depthTexture = new THREE.DepthTexture();
+        // colorTarget.depthTexture.type = THREE.UnsignedShortType;
+        colorTarget.depthTexture.type = THREE.UnsignedIntType;
+        app.passes = [];
+        app.passes.push({
+          enable: true,
+          scene: app.scene,
+          camera: app.camera,
+          colorTarget: colorTarget,
+          // colorTarget: null,
+          clear: true,
+          clearColor: 0x004080,
+          clearAlpha: 0.0,
+          clearDepth: true,
+          overrideMaterial: null
+        });
+
+        // NORMAL
+
+        // var normalTarget = createRenderTarget(THREE.RGBFormat);
+        // app.passes.push({
+        //   enable: true,
+        //   scene: app.scene,
+        //   camera: app.camera,
+        //   colorTarget: normalTarget,
+        //   clear: true,
+        //   clearColor: 0x808080,
+        //   clearAlpha: 1.0,
+        //   clearDepth: true,
+        //   overrideMaterial: new THREE.MeshNormalMaterial()
+        // });
+
+        // SSAO
+
+        var ssaoTarget = createRenderTarget(THREE.RGBAFormat);
+        ssaoTarget.texture.type = THREE.FloatType;
+        // ssaoTarget.texture.minFilter = THREE.LinearFilter;
+        // ssaoTarget.texture.magFilter = THREE.LinearFilter;
+        ssaoTarget.depthBuffer = false;
+        ssaoMaterial = createMaterial({
+          ColorSampler: { value: colorTarget.texture },
+          DepthSampler: { value: colorTarget.depthTexture },
+          RadiusParams: { value: new THREE.Vector4() },
+          BiasParams: { value: new THREE.Vector4() },
+          ScreenParams: { value: new THREE.Vector4() },
+          UvToViewParams: { value: new THREE.Vector4() },
+          FocalParams: { value: new THREE.Vector4() },
+          CameraParams:  { value: new THREE.Vector4() },
+          CameraProjectionMatrix: { value: new THREE.Matrix4() },
+          CameraInverseProjectionMatrix: { value: new THREE.Matrix4() }},
+          app.shaders["copy_vert"],
+          app.shaders["hbao_frag"],
+          { depthTest: false, depthWrite: false});
+        ssaoMaterial.uniforms.CameraProjectionMatrix.value.copy(app.camera.projectionMatrix);
+        ssaoMaterial.uniforms.CameraInverseProjectionMatrix.value.getInverse(app.camera.projectionMatrix);
+        var ssaoPass = {
+          enable: true,
+          scene: new THREE.Scene(),
+          camera: new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
+          colorTarget: ssaoTarget,
+          clear: false,
+          clearColor: 0x000000,
+          clearAlpha: 0.0,
+          clearDepth: false,
+          overrideMaterial: null
+        };
+        ssaoPass.scene.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2,2), ssaoMaterial));
+        app.passes.push(ssaoPass);
+        app.ssaoPass = ssaoPass;
+        app.ssaoMaterial = ssaoMaterial;
+
+        // SSAO BLUR
+
+        var blurTarget = createRenderTarget(THREE.RGBAFormat);
+        blurTarget.texture.type = THREE.FloatType;
+        // blurTarget.texture.minFilter = THREE.LinearFilter;
+        // blurTarget.texture.magFilter = THREE.LinearFilter;
+        blurTarget.depthBuffer = false;
+        blurHMaterial = createMaterial({
+          OcclusionSampler: { value: ssaoTarget.texture },
+          BlurParams: { value: new THREE.Vector4() }},
+          app.shaders["copy_vert"],
+          app.shaders["hbaoblur_frag"],
+          { depthTest: false, depthWrite: false});
+        var blurHPass = {
+          enable: true,
+          scene: new THREE.Scene(),
+          camera: new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
+          colorTarget: blurTarget,
+          clear: false,
+          clearColor: 0x000000,
+          clearAlpha: 0.0,
+          clearDepth: false,
+          overrideMaterial: null
+        };
+        blurHPass.scene.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2,2), blurHMaterial));
+        app.blurHMaterial = blurHMaterial;
+
+        blurVMaterial = createMaterial({
+          OcclusionSampler: { value: blurTarget.texture },
+          BlurParams: { value: new THREE.Vector4() }},
+          app.shaders["copy_vert"],
+          app.shaders["hbaoblur_frag"],
+          { depthTest: false, depthWrite: false});
+        var blurVPass = {
+          enable: true,
+          scene: new THREE.Scene(),
+          camera: new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
+          colorTarget: ssaoTarget,
+          clear: false,
+          clearColor: 0x000000,
+          clearAlpha: 0.0,
+          clearDepth: false,
+          overrideMaterial: null
+        };
+        blurVPass.scene.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2,2), blurVMaterial));
+        app.blurVMaterial = blurVMaterial;
+
+        for (var i=0; i<2; i++) 
+        {
+          app.passes.push(blurHPass);
+          app.passes.push(blurVPass);
+        }
+
+        // SSAO COMPOSITE
+
+        var compositeTarget = createRenderTarget(THREE.RGBFormat);
+        compositeTarget.depthBuffer = false;
+        compositeMaterial = createMaterial({
+          ColorSampler: { value: colorTarget.texture },
+          OcclusionSampler: { value: ssaoTarget.texture },
+          OcclusionPower: { value: 5.0 },
+          OcclusionColor: { value: new THREE.Color(1.0,1.0,1.0) }},
+          app.shaders["copy_vert"],
+          app.shaders["ssaocomposite_frag"],
+          { depthTest: false, depthWrite: false});
+        var compositePass = {
+          enable: true,
+          scene: new THREE.Scene(),
+          camera: new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
+          colorTarget: compositeTarget,
+          clear: false,
+          clearColor: 0x000000,
+          clearAlpha: 0.0,
+          clearDepth: false,
+          overrideMaterial: null
+        };
+        compositePass.scene.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2,2), compositeMaterial));
+        app.passes.push(compositePass);
+        app.compositeMaterial = compositeMaterial;
+
+        // SCREEN
+
+        var copyMaterial = createMaterial({
+          // ColorSampler: {value: colorTarget.texture},
+          // ColorSampler: {value: normalTarget.texture},
+          // ColorSampler: {value: ssaoTarget.texture},
+          // ColorSampler: { value: blurTarget.texture },
+          ColorSampler: { value: compositeTarget.texture },
+          Opacity: {value:1.0}},
+          app.shaders["copy_vert"],
+          app.shaders["copy_frag"],
+          { depthTest: false, depthWrite: false});
+        var copyPass = {
+          enable: true,
+          scene: new THREE.Scene(),
+          camera: new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
+          colorTarget: null,
+          clear: false,
+          clearColor: 0x000000,
+          clearAlpha: 0.0,
+          clearDepth: false,
+          overrideMaterial: null
+        };
+        copyPass.scene.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2,2), copyMaterial));
+        app.passes.push(copyPass);
+
+        // DEBUG: NOISE
+
+        // var kernel = generateSampleKernel(32);
+        // var noiseTexture = generateRandomKernelRotations();
+        // var copyMaterial = createMaterial({
+        //   ColorSampler: {value: noiseTexture},
+        //   Opacity: {value:1.0}},
+        //   app.shaders["copy_vert"],
+        //   app.shaders["copy_frag"],
+        //   { depthTest: false, depthWrite: false});
+        // var copyPass = {
+        //   enable: true,
+        //   scene: new THREE.Scene(),
+        //   camera: new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
+        //   colorTarget: null,
+        //   clear: false,
+        //   clearColor: 0x000000,
+        //   clearAlpha: 0,
+        //   clearDepth: false,
+        //   overrideMaterial: null
+        // };
+        // copyPass.scene.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2,2), copyMaterial));
+        // app.passes.push(copyPass);
+
+        // DEBUG: DEPTH
+
+        // var depthMaterial = createMaterial({
+        //   DepthSampler: {value: colorTarget.depthTexture},
+        //   CameraNear: {value: app.camera.near},
+        //   CameraFar: {value: app.camera.far}},
+        //   app.shaders["copy_vert"],
+        //   app.shaders["depth_frag"],
+        //   { depthTest: false, depthWrite: false});
+        // var depthPass = {
+        //   enable: true,
+        //   scene: new THREE.Scene(),
+        //   camera: new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
+        //   colorTarget: null,
+        //   clear: false,
+        //   clearColor: 0x000000,
+        //   clearAlpha: 0,
+        //   clearDepth: false,
+        //   overrideMaterial: null
+        // };
+        // depthPass.scene.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2,2), depthMaterial));
+        // app.passes.push(depthPass);
+      }
+      
+      function initGui() {
+        
+        var ssaoUniforms = app.ssaoMaterial.uniforms;
+        var compositeUniforms = app.compositeMaterial.uniforms;
+        app.config = {
+          radius: 10.0,
+          angleBias: 40.0,
+          strength: 10.0,
+          maxRadius: 0.005,
+          downsampling: 2,
+          threshold: 5.0,
+          power: compositeUniforms.OcclusionPower.value,
+          color: 0x000000
+        };
+
+        var h;
+        var gui = new dat.GUI();
+        h = gui.addFolder("HBAO");
+        h.add(app.config, "radius", 1.0, 500.0, 0.1);
+        h.add(app.config, "maxRadius", 0.0, 0.1, 0.001);
+        h.add(app.config, "angleBias", 0.1, 90.0, 0.01);
+        h.add(app.config, "strength", 0.1, 10.0, 0.10);
+        h.add(app.config, "threshold", 1.0, 10.0, 0.01);
+        // h.add(app.config, "downsampling", 1, 2, 1);
+        h.add(app.config, "power", 1.0, 10.0, 0.1);
+        h.addColor(app.config, "color");
+      }
+
+      function updateSSAO() {
+        var radius = app.config.radius;
+        var radius2 = radius*radius;
+        var negInvRadius2 = -1.0/radius2;
+
+        var angleBias = THREE.Math.degToRad(app.config.angleBias);
+        var tanAngleBias = Math.tan(angleBias);
+
+        var resX = app.canvas.width;
+        var resY = app.canvas.height;
+        // resX /= app.config.downsampling;
+        // resY /= app.config.downsampling;
+
+        var maxRadius = app.config.maxRadius * Math.min(resX, resY);
+        var invResX = 1.0 / resX;
+        var invResY = 1.0 / resY;
+        var focal1 = 1.0 / Math.tan(THREE.Math.degToRad(app.camera.fov * 0.5)) * (resY / resX);
+        var focal2 = 1.0 / Math.tan(THREE.Math.degToRad(app.camera.fov * 0.5));
+        var invFocal1 = 1.0 / focal1;
+        var invFocal2 = 1.0 / focal2;
+        var uvToVA0 = 2.0 * invFocal1;
+        var uvToVA1 = 2.0 * invFocal2;
+        var uvToVB0 = -1.0 * invFocal1;
+        var uvToVB1 = -1.0 * invFocal2;
+
+        app.ssaoMaterial.uniforms.RadiusParams.value.set(radius, radius2, negInvRadius2, maxRadius);
+        app.ssaoMaterial.uniforms.BiasParams.value.set(angleBias, tanAngleBias, app.config.strength, 1.0);
+        app.ssaoMaterial.uniforms.ScreenParams.value.set(resX, resY, invResX, invResY);
+        app.ssaoMaterial.uniforms.UvToViewParams.value.set(uvToVA0, uvToVA1, uvToVB0, uvToVB1);
+        app.ssaoMaterial.uniforms.FocalParams.value.set(focal1, focal2, invFocal1, invFocal2);
+        app.ssaoMaterial.uniforms.CameraParams.value.set(app.camera.near, app.camera.far, 0.0, 0.0);
+
+        var INV_LN2 = 1.44269504;
+        var SQRT_LN2 = 0.832554611;
+        var blurSigma = (15.0 + 1.0) * 0.5;
+        var blurFalloff = INV_LN2 / (2.0 * blurSigma * blurSigma);
+        var texSizeInvWidth = 1.0 / app.canvas.width;
+        var texSizeInvHeight = 1.0 / app.canvas.height;
+        app.blurHMaterial.uniforms.BlurParams.value.set(texSizeInvWidth, 0.0, blurFalloff, app.config.threshold);
+        app.blurVMaterial.uniforms.BlurParams.value.set(0.0, texSizeInvHeight, blurFalloff, app.config.threshold);
+
+        app.compositeMaterial.uniforms.OcclusionPower.value = app.config.power;
+        app.compositeMaterial.uniforms.OcclusionColor.value.setHex(app.config.color);
+      }
+
+      // EVENT HANDLERS
+
+      function onWindowResize() {
+        app.renderer.setSize(window.innerWidth, window.innerHeight);
+        app.camera.aspect = window.innerWidth / window.innerHeight;
+        app.camera.updateProjectionMatrix();
+        render();
+      }
+
+      function cameraChanged() {
+        console.log('camera.pos:' + app.camera.position.x + ',' + app.camera.position.y + ',' + app.camera.position.z);
+        console.log('camera.tgt:' + app.controls.target.x + ',' + app.controls.target.y + ',' + app.controls.target.z);
+        // render();
+      }
+
+      function animate() {
+        app.time += app.clock.getDelta();
+  			requestAnimationFrame(animate, app.renderer.domElement);
+				render();
+			}
+
+      function render() {
+        app.stats.update();
+
+        updateSSAO();
+
+        var i, il = app.passes.length;
+        for (i=0; i<il; i++) {
+          renderPass(app.passes[i]);
+        }
+      }
+
+      function renderPass(pass) {
+        if (!pass.enable) return;
+        app.renderer.autoClear = pass.clear;
+        app.renderer.autoClearDepth = pass.clearDepth;
+        app.renderer.setClearColor(pass.clearColor, pass.clearAlpha);
+        pass.scene.overrideMaterial = pass.overrideMaterial;
+        app.renderer.render(pass.scene, pass.camera, pass.colorTarget);
+        pass.scene.overrideMaterial = null;
+      }
+
+    </script>
+  </body>
+</html>
