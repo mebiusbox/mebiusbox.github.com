@@ -548,10 +548,10 @@
         var focal2 = 1.0 / Math.tan(THREE.Math.degToRad(app.camera.fov * 0.5));
         var invFocal1 = 1.0 / focal1;
         var invFocal2 = 1.0 / focal2;
-        var uvToVA0 = 2.0 * invFocal1;
-        var uvToVA1 = 2.0 * invFocal2;
-        var uvToVB0 = -1.0 * invFocal1;
-        var uvToVB1 = -1.0 * invFocal2;
+        var uvToVA0 = -2.0 * invFocal1;
+        var uvToVA1 = -2.0 * invFocal2;
+        var uvToVB0 = 1.0 * invFocal1;
+        var uvToVB1 = 1.0 * invFocal2;
 
         app.ssaoMaterial.uniforms.RadiusParams.value.set(radius, radius2, negInvRadius2, maxRadius);
         app.ssaoMaterial.uniforms.BiasParams.value.set(angleBias, tanAngleBias, app.config.strength, 1.0);
