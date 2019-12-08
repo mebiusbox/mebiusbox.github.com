@@ -5,7 +5,9 @@
 }
 
 .book.font-family-1,
-.book-summary {
+.book-summary,
+.gb-markdown,
+.panel a.list-group-item {
   font-family: "Noto Sans JP", "メイリオ", sans-serif;
 }
 
@@ -13,22 +15,31 @@
 .markdown-section h2, 
 .markdown-section h3, 
 .markdown-section h4, 
-.markdown-section h5 {
+.markdown-section h5,
+.gb-markdown h1,
+.gb-markdown h2,
+.gb-markdown h3,
+.gb-markdown h4,
+.gb-markdown h5 {
   font-family: "Roboto Slab", "Noto Sans JP", sans-serif;
   font-weight: bold;
   color: rgb(0,113,188);
 }
 
-.markdown-section h1 { 
+.markdown-section h1,
+.gb-markdown h1 { 
   border-bottom: 1px solid #000; 
 }
 
-.markdown-section h2 {
+.markdown-section h2,
+.gb-markdown h2 {
   border-bottom: 1px dotted #888;
 }
 
 .markdown-section pre,
-.markdown-section code {
+.markdown-section code,
+.gb-markdown pre,
+.gb-markdown code {
   font-family: "Roboto Mono", Consolas, "Courier New", courier, monospace;
 }
 
