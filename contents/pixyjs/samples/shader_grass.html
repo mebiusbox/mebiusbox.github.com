@@ -74,8 +74,8 @@
     <script src="js/loaders/TGALoader.js"></script>
     <script src="../build/pixy.js"></script>
     <script>
-      if (WEBGL.isWebGLAvailable() === false) {
-        document.body.appendChild(WEBGL.getWebGLErrorMessage());
+      if (THREE.WEBGL.isWebGLAvailable() === false) {
+        document.body.appendChild(THREE.WEBGL.getWebGLErrorMessage());
       }
       
       var SHADOWBUFSIZE = 1024;
@@ -395,8 +395,8 @@
         
         renderer.setClearColor(0xaaaaaa);
         renderer.clear();
-        renderer.setClearColor(0xffffff);
-        renderer.clearTarget(shadow.rtDepth, true, true, false);
+        // renderer.setClearColor(0xffffff);
+        // renderer.clearTarget(shadow.rtDepth, true, true, false);
         
         shadow.camera.position.copy(lights.direct.position);
         shadow.camera.lookAt(new THREE.Vector3(0,0,0));
@@ -447,7 +447,11 @@
         // shadow.cameraHelper.visible = false;
         objects.instanceMesh.material = shadow.instanceShader.material;
         objects.ground.material = shadow.shader.material;
-        renderer.render(scene, shadow.camera, shadow.rtDepth);
+        renderer.setRenderTarget(shadow.rtDepth);
+        renderer.setClearColor(0xffffff);
+        renderer.clear(true, true, false);
+        renderer.render(scene, shadow.camera);
+        renderer.setRenderTarget(null);
         
         // SCENE PASS
         

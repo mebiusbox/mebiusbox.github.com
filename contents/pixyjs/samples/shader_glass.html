@@ -41,8 +41,8 @@
     <script src="js/utils/BufferGeometryUtils.js"></script>
     <script src="../build/pixy.js"></script>
     <script>
-      if (WEBGL.isWebGLAvailable() === false) {
-        document.body.appendChild(WEBGL.getWebGLErrorMessage());
+      if (THREE.WEBGL.isWebGLAvailable() === false) {
+        document.body.appendChild(THREE.WEBGL.getWebGLErrorMessage());
       }
       
       var camera, controls, scene, renderer, post = {};
@@ -273,9 +273,11 @@
         PIXY.ShaderUtils.UpdateShaderParameters(glassShader, parameters, camera);
         
         post.scene.background = shader.uniforms.tEnvMap.value;
-        renderer.render(post.scene, camera, post.rtColor);
+        renderer.setRenderTarget(post.rtColor);
+        renderer.render(post.scene, camera);
         
         glassShader.uniforms.tBackBuffer.value = post.rtColor.texture;
+        renderer.setRenderTarget(null);
         renderer.render(scene, camera);
       }
 

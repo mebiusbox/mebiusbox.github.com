@@ -73,8 +73,8 @@
     <script src="js/libs/stats.min.js"></script>
     <script src="../build/pixy.js"></script>
     <script>
-      if (WEBGL.isWebGLAvailable() === false) {
-        document.body.appendChild(WEBGL.getWebGLErrorMessage());
+      if (THREE.WEBGL.isWebGLAvailable() === false) {
+        document.body.appendChild(THREE.WEBGL.getWebGLErrorMessage());
       }
       
       var camera, controls, scene, renderer;
@@ -284,9 +284,11 @@
         particles.material.uniforms.cameraNearFar.value.set(camera.near, camera.far);
         
         renderer.autoClear = false;
+        renderer.setRenderTarget(renderTarget);
         renderer.clear();
-        renderer.clearTarget(renderTarget);
-        renderer.render(scene, camera, renderTarget);
+        renderer.render(scene, camera);
+        renderer.setRenderTarget(null);
+        renderer.clear();
         renderer.render(scene, camera);
         renderer.render(effectScene, camera);
         renderer.autoClear = true;

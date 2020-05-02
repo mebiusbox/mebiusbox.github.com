@@ -74,8 +74,8 @@
     <script src="js/utils/BufferGeometryUtils.js"></script>
     <script src="../build/pixy.js"></script>
     <script>
-      if (WEBGL.isWebGLAvailable() === false) {
-        document.body.appendChild(WEBGL.getWebGLErrorMessage());
+      if (THREE.WEBGL.isWebGLAvailable() === false) {
+        document.body.appendChild(THREE.WEBGL.getWebGLErrorMessage());
       }
       
       var NUM_LIGHTS = 1;

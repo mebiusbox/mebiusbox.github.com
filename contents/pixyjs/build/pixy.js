@@ -54,6 +54,8 @@
 
 	var beginFrag = "  GeometricContext geometry;\r\n  geometry.position = -vViewPosition;\r\n  geometry.normal = normalize(vNormal);\r\n  geometry.viewDir = normalize(vViewPosition);\r\n\r\n  Material material;\r\n  material.diffuseColor = diffuseColor;\r\n  material.opacity = opacity;\r\n\r\n  ReflectedLight reflectedLight = ReflectedLight(vec3(0.0), vec3(0.0), vec3(0.0), vec3(0.0));\r\n  vec3 emissive = vec3(0.0);";
 
+	var beginFragDebug = "vec3 debugColor = vec3(1.0, 0.0, 0.0);";
+
 	var billboardDefaultVert = "  mat3 invMatrix = mat3(ViewInverse[0].xyz, ViewInverse[1].xyz, ViewInverse[2].xyz);";
 
 	var billboardRotZVertEnd = "  vec3 rotX = vec3(0.0);\r\n  vec3 rotY = vec3(0.0);\r\n  vec3 rotZ = vec3(0.0);\r\n  if (wscale.x > 0.0) rotX = row0 / wscale.x;\r\n  if (wscale.y > 0.0) rotY = row1 / wscale.y;\r\n  if (wscale.z > 0.0) rotZ = row2 / wscale.z;\r\n  vec3 pos = invMatrix * mat3(rotX, rotY, rotZ) * position;\r\n  vec3 wpos = pos * wscale + wtrans;\r\n  vec4 hpos = projectionMatrix * viewMatrix * vec4(wpos, 1.0);";
@@ -326,6 +328,8 @@
 	};
 
 	var endFrag = "  gl_FragColor.xyz = outgoingLight;\r\n  gl_FragColor.a = material.opacity;";
+
+	var endFragDebug = "gl_FragColor.rgb = debugColor;";
 
 	var fakeSunFrag = "uniform vec2 sunPos; // screen space\r\nuniform float aspect;\r\nuniform vec3 sunColor;\r\nuniform vec3 bgColor;\r\nvarying vec2 vUv;\r\nvoid main() {\r\n  vec2 diff = vUv - sunPos;\r\n  \r\n  // Correct for aspect ratio\r\n  diff.x *= aspect;\r\n  \r\n  float prop = clamp(length(diff) / 0.5, 0.0, 1.0);\r\n  prop = 0.35 * pow(1.0 - prop, 3.0);\r\n  gl_FragColor.xyz = mix(sunColor, bgColor, 1.0 - prop);\r\n  gl_FragColor.a = 1.0;\r\n}";
 
@@ -653,6 +657,15 @@
 	  parallaxScale: { value: -0.03 }
 	};
 
+	var parallaxOcclusionMapFrag = "  vec3 vv = -geometry.viewDir * mat3(vTangent, vBinormal, vNormal);\r\n  // vec3 vv = perturbUv(-vViewPosition, normalize(vNormal), normalize(vViewPosition));\r\n  float parallaxLimit = -length(vv.xy) / vv.z;\r\n  parallaxLimit *= parallaxScale;\r\n\r\n  vec2 vOffsetDir = normalize(vv.xy);\r\n  vec2 vMaxOffset = vOffsetDir * parallaxLimit;\r\n\r\n  float nNumSamples = mix(20.0, 10.0, dot(geometry.viewDir,vNormal));\r\n  float fStepSize = 1.0 / nNumSamples;\r\n\r\n  // debugColor = vec3(vv.xy * 0.5 + vec2(0.5), 0.0);\r\n\r\n  // vec2 dPdx = dFdx(uv);\r\n  // vec2 dPdy = dFdy(uv);\r\n\r\n  float fCurrRayHeight = 1.0;\r\n  vec2 vCurrOffset = vec2(0,0);\r\n  vec2 vLastOffset = vec2(0.0);\r\n  float fLastSampledHeight = 1.;\r\n  float fCurrSampledHeight = 1.;\r\n  for (int nCurrSample = 0; nCurrSample < 50; nCurrSample++) {\r\n    if (float(nCurrSample) > nNumSamples) break;\r\n    // fCurrSampledHeight = textureGrad(tDiffuse, uv + vCurrOffset, dPdx, dPdy).a;\r\n    // fCurrSampledHeight = texture2DGradEXT(tDiffuse, uv + vCurrOffset, dPdx, dPdy).a;\r\n    // fCurrSampledHeight = texture2D(tDiffuse, uv + vCurrOffset).a;\r\n    fCurrSampledHeight = texture2D(tHeightMap, uv + vCurrOffset).r;\r\n    if (fCurrSampledHeight > fCurrRayHeight) {\r\n      float delta1 = fCurrSampledHeight - fCurrRayHeight;\r\n      float delta2 = (fCurrRayHeight + fStepSize) - fLastSampledHeight;\r\n      float ratio = delta1 / (delta1 + delta2);\r\n      vCurrOffset = ratio * vLastOffset + (1.0-ratio) * vCurrOffset;\r\n      break;\r\n    } else {\r\n      fCurrRayHeight -= fStepSize;\r\n      vLastOffset = vCurrOffset;\r\n      vCurrOffset += fStepSize * vMaxOffset;\r\n      fLastSampledHeight = fCurrSampledHeight;\r\n    }\r\n  }\r\n\r\n  uv += vCurrOffset;";
+
+	var parallaxOcclusionMapFragPars = "uniform float parallaxScale;\r\nuniform sampler2D tHeightMap;\r\n\r\n// vec3 perturbUv( vec3 surfPosition, vec3 surfNormal, vec3 viewPosition ) {\r\n\r\n//     vec2 texDx = dFdx( vUv );\r\n//     vec2 texDy = dFdy( vUv );\r\n\r\n//     vec3 vSigmaX = dFdx( surfPosition );\r\n//     vec3 vSigmaY = dFdy( surfPosition );\r\n//     vec3 vR1 = cross( vSigmaY, surfNormal );\r\n//     vec3 vR2 = cross( surfNormal, vSigmaX );\r\n//     float fDet = dot( vSigmaX, vR1 );\r\n\r\n//     vec2 vProjVscr = ( 1.0 / fDet ) * vec2( dot( vR1, viewPosition ), dot( vR2, viewPosition ) );\r\n//     vec3 vProjVtex;\r\n//     vProjVtex.xy = texDx * vProjVscr.x + texDy * vProjVscr.y;\r\n//     vProjVtex.z = dot( surfNormal, viewPosition );\r\n//     return vProjVtex;\r\n// }";
+
+	var parallaxOcclusionMapUniforms = {
+	  parallaxScale: { value: 0.03 },
+	  tHeightMap: { value: null }
+	};
+
 	var phongFrag = "  float NoL = max(dot(directLight.direction, geometry.normal), 0.0);\r\n  reflectedLight.directDiffuse += material.diffuseColor * directLight.color * NoL;\r\n\r\n  vec3 H = normalize(geometry.viewDir + directLight.direction);\r\n  float HoN = dot(H, geometry.normal);\r\n  float pw = max(HoN / (shininess * (1.0 - HoN) + HoN), 0.0);\r\n  float specPow = step(0.0, NoL) * pw;\r\n  reflectedLight.directSpecular += specPow * material.specularRoughness * directLight.color * NoL;";
 
 	var phongFragPars = "uniform float shininess;";
@@ -701,6 +714,15 @@
 	var reflectionUniforms = {
 	  reflectionStrength: { value: 1.0 },
 	  tEnvMap: { value: null }
+	};
+
+	var reliefMapFrag = "  vec3 vv = -geometry.viewDir * mat3(vTangent, vBinormal, vNormal);\r\n  float parallaxLimit = -length(vv.xy) / vv.z;\r\n  parallaxLimit *= parallaxScale;\r\n\r\n  vec2 vOffsetDir = normalize(vv.xy);\r\n  vec2 vMaxOffset = vOffsetDir * parallaxLimit;\r\n\r\n  float nNumSamples = mix(20.0, 10.0, dot(geometry.viewDir,vNormal));\r\n  float fStepSize = 1.0 / nNumSamples;\r\n\r\n  float fCurrRayHeight = 1.0;\r\n  vec2 vCurrOffset = vec2(0,0);\r\n  float fCurrSampledHeight = 1.;\r\n  for (int nCurrSample = 0; nCurrSample < 50; nCurrSample++) {\r\n    if (float(nCurrSample) > nNumSamples) break;\r\n    fCurrSampledHeight = texture2D(tHeightMap, uv + vCurrOffset).r;\r\n    if (fCurrSampledHeight > fCurrRayHeight) {\r\n\r\n      vec2 deltaOffset = vMaxOffset * fStepSize * 0.5;\r\n      float deltaHeight = fStepSize * 0.5;\r\n\r\n      vCurrOffset -= deltaOffset;\r\n      fCurrRayHeight += deltaHeight;\r\n\r\n      const int numSearches = 5;\r\n      for (int i=0; i<numSearches; i+=1) {\r\n        deltaOffset *= 0.5;\r\n        deltaHeight *= 0.5;\r\n        float fCurrSampledHeight = texture2D(tHeightMap, uv + vCurrOffset).r;\r\n        if (fCurrSampledHeight > fCurrRayHeight) {\r\n          // below the surface\r\n          vCurrOffset -= deltaOffset;\r\n          fCurrRayHeight += deltaHeight;\r\n        } else {\r\n          // above the surface\r\n          vCurrOffset += deltaOffset;\r\n          fCurrRayHeight -= deltaHeight;\r\n        }\r\n      }\r\n      break;\r\n    } else {\r\n      fCurrRayHeight -= fStepSize;\r\n      vCurrOffset += fStepSize * vMaxOffset;\r\n    }\r\n  }\r\n\r\n  uv += vCurrOffset;";
+
+	var reliefMapFragPars = "uniform float parallaxScale;\r\nuniform sampler2D tHeightMap;";
+
+	var reliefMapUniforms = {
+	  parallaxScale: { value: 0.03 },
+	  tHeightMap: { value: null }
 	};
 
 	var rimLightFrag = "  float rim = 1.0 - saturate(dot(geometry.normal, geometry.viewDir));\r\n  float LE = pow(max(dot(-geometry.viewDir, directLight.direction), 0.0), 30.0);\r\n  reflectedLight.directSpecular += rimLightColor * rim * LE * rimLightCoef;";
@@ -830,6 +852,8 @@
 
 	var standardOrenNayarFrag = "vec3 N = geometry.normal;\r\nvec3 L = directLight.direction;\r\nvec3 V = geometry.viewDir;\r\n\r\nfloat NoL = saturate(dot(N, L));\r\nfloat NoV = saturate(dot(N, V));\r\nvec3 H = normalize(L+V);\r\nfloat NoH = saturate(dot(N, H));\r\nfloat VoH = saturate(dot(V, H));\r\nfloat LoV = saturate(dot(L, V));\r\n        \r\nfloat a = pow2(material.specularRoughness);\r\n\r\nvec3 cdiff = DiffuseOrenNayar(material.diffuseColor, NoV, NoL, LoV, material.specularRoughness);\r\nvec3 cspec = PBR_Specular_CookTorrance(material.specularColor, H, V, L, a, NoL, NoV, NoH, VoH, LoV);\r\n\r\nvec3 irradiance = directLight.color * NoL;\r\nirradiance *= PI; // punctual light\r\n\r\nreflectedLight.directDiffuse += cdiff * directLight.color * PI;\r\nreflectedLight.directSpecular += cspec * irradiance;";
 
+	var standardRectLightFrag = "//------------------------------------------------------------\r\n// Real-time Collision Detection\r\nvec3 closestPointPToRay(in vec3 p, in vec3 start, in vec3 dir) {\r\n  float t = max(dot(p-start, dir) / dot(dir,dir), 0.0);\r\n  return start + dir*t;\r\n}\r\nvec3 closestPointPToSegment(in vec3 p, in vec3 a, in vec3 b) {\r\n  vec3 ab = b-a;\r\n  float t = dot(p-a,ab);\r\n  if (t <= 0.0) {\r\n    return a;\r\n  }\r\n  else {\r\n    float denom = dot(ab,ab);\r\n    if (t >= denom) {\r\n      return b;\r\n    }\r\n    \r\n    return a + ab*(t/denom);\r\n  }\r\n  // vec3 ab = b-a;\r\n  // float t = clamp(dot(p-a, ab) / dot(ab,ab), 0.0, 1.0);\r\n  // return a + ab*t;\r\n}\r\n\r\nvec3 closestPointPToTriangle(in vec3 p, in vec3 a, in vec3 b, in vec3 c) {\r\n  // Check if P in vertex region outside A\r\n  vec3 ap = p-a;\r\n  vec3 ab = b-a;\r\n  vec3 ac = c-a;\r\n  float d1 = dot(ab,ap);\r\n  float d2 = dot(ac,ap);\r\n  if (d1 <= 0.0 && d2 <= 0.0) {\r\n    return a; // voronoi=0. barycentric coordinates (1,0,0)\r\n  }\r\n  \r\n  vec3 bp = p-b;\r\n  \r\n  // Check if P in vertex region outside B\r\n  float d3 = dot(ab,bp);\r\n  float d4 = dot(ac,bp);\r\n  if (d3 >= 0.0 && d4 <= d3) {\r\n    return b; // voronoi=1. barycentric coordinates (0,1,0)\r\n  }\r\n  \r\n  // Check if P in edge region of AB,k if so return projection of P onto AB\r\n  float vc = d1*d4 - d3*d2;\r\n  if (vc <= 0.0 && d1 >= 0.0 && d3 <= 0.0) {\r\n    // float v = d1/(d1-d3)\r\n    return a + ab * (d1/(d1-d3)); // voronoi=2. barycentric coordinates (1-v,v,0)\r\n  }\r\n  \r\n  // Check if P in vertex region outside C\r\n  vec3 cp = p-c;\r\n  float d5 = dot(ab, cp);\r\n  float d6 = dot(ac, cp);\r\n  if (d6 >= 0.0 && d5 <= d6) {\r\n    return c; // voronoi=3. barycentric coordinates (0,0,1)\r\n  }\r\n  \r\n  // Check if P in edge region of AC, if so return projection of P onto AC\r\n  float vb = d5*d2 - d1*d6;\r\n  if (vb <= 0.0 && d2 >= 0.0 && d6 <= 0.0) {\r\n    // float w = d2/(d2-d6)\r\n    return a + ac * (d2/(d2-d6)); // voronoi=4. barycentric cooridnates (1-w,w,0)\r\n  }\r\n  \r\n  // Check if P in edge region of BC, if so return projection of P onto BC\r\n  float va = d3*d6 - d5*d4;\r\n  if (va <= 0.0 && (d4-d3) >= 0.0 && (d5-d6) >= 0.0) {\r\n    // float w = (d4-d3)/(d4-d3+d5-d6)\r\n    return b + (c-b) * ((d4-d3)/(d4-d3+d5-d6)); // voronoi=5. barycentric coordinates (0,1-w,w)\r\n  }\r\n  \r\n  // P inside face region. Compute Q through its barycentric coordinates (u,v,w)\r\n  float denom = 1.0 / (va+vb+vc);\r\n  float v = vb * denom;\r\n  float w = vc * denom;\r\n  return a + ab*v + ac*w; // voronoi=6\r\n}\r\n\r\nint pointInTriangle(in vec3 p, in vec3 a, in vec3 b, in vec3 c) {\r\n  a -= p;\r\n  b -= p;\r\n  c -= p;\r\n  float ab = dot(a,b);\r\n  float ac = dot(a,c);\r\n  float bc = dot(b,c);\r\n  float cc = dot(c,c);\r\n  if (bc*ac - cc*ab < 0.0) return 0;\r\n  float bb = dot(b,b);\r\n  if (ab*bc - ac*bb < 0.0) return 0;\r\n  return 1;\r\n}\r\n//--------------------------------------------------\r\nvec3 Specular_AreaLight(vec3 specularColor, vec3 N, float roughnessFactor, vec3 L, vec3 Lc, vec3 V) {\r\n  // Compute some useful values\r\n  float NoL = saturate(dot(N, L));\r\n  float NoV = saturate(dot(N, V));\r\n  vec3 H = normalize(L+V);\r\n  float NoH = saturate(dot(N, H));\r\n  float VoH = saturate(dot(V, H));\r\n  float LoV = saturate(dot(L, V));\r\n  \r\n  float a = pow2(roughnessFactor);\r\n  \r\n  vec3 cspec = PBR_Specular_CookTorrance(specularColor, H, V, L, a, NoL, NoV, NoH, VoH, LoV);\r\n  return Lc * NoL * cspec;\r\n}\r\n//--------------------------------------------------\r\nvoid computeRectLight_Triangle(const in RectLight rectLight, const in GeometricContext geometry, const in Material material, inout ReflectedLight reflectedLight) {\r\n  \r\n  vec4 lpos[3];\r\n  vec3 lvec[3];\r\n  \r\n  // direction vectors from point to area light corners\r\n  for (int i=0; i<3; ++i) {\r\n    // lpos[i] = lightMatrixWorld * vec4(rectLight.positions[i], 1.0); // in world space\r\n    lpos[i] = vec4(rectLight.positions[i], 1.0); // in camera space\r\n    lvec[i] = normalize(lpos[i].xyz - geometry.position); // dir from vertex to area light\r\n  }\r\n  \r\n  // bail if the point is on the wrong side of the light... there must be a better way...\r\n  float tmp = dot(lvec[0], cross((lpos[2]-lpos[0]).xyz, (lpos[1]-lpos[0]).xyz));\r\n  if (tmp > 0.0) return;\r\n  \r\n  // vector irradiance at point\r\n  vec3 lightVec = vec3(0.0);\r\n  for (int i=0; i<3; ++i) {\r\n    vec3 v0 = lvec[i];\r\n    vec3 v1 = lvec[int(mod(float(i+1), float(3)))];\r\n    // if (tmp > 0.0) { // double side\r\n    //   lightVec += acos(dot(v0,v1)) * normalize(cross(v1,v0));\r\n    // }\r\n    // else {\r\n      lightVec += acos(dot(v0,v1)) * normalize(cross(v0,v1));\r\n    // }\r\n  }\r\n  \r\n  vec3 N = geometry.normal;\r\n  vec3 V = geometry.viewDir;\r\n  \r\n  // irradiance factor at point\r\n  float factor = max(dot(lightVec, N), 0.0) / (2.0 * PI);\r\n  \r\n  vec3 irradiance = rectLight.color * rectLight.intensity * factor;\r\n  irradiance *= PI; // punctual light\r\n  \r\n  \r\n  vec3 planePosition = (lpos[0].xyz + lpos[1].xyz + lpos[2].xyz) / 3.0;\r\n  vec3 planeNormal = rectLight.normal;\r\n  planeNormal = normalize(planeNormal - planePosition);\r\n  \r\n  // project onto plane and calculate direction from center to the projection\r\n  // vec3 projection = projectOnPlane(P, planePosition, planeNormal);\r\n  \r\n  // calculate distance from area\r\n  // vec3 nearestPointInside = closestPointPToTriangle(projection, lpos[0].xyz, lpos[1].xyz, lpos[2].xyz);\r\n  // float Ld = distance(P, nearestPointInside);\r\n  // if (cutoffDistance == 0.0 || Ld < cutoffDistance) {\r\n  //   float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), 2.0);\r\n    // float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), decayExponent);\r\n    float NoL = saturate(dot(N, lightVec));\r\n    reflectedLight.directDiffuse += irradiance * NoL * DiffuseLambert(material.diffuseColor);\r\n  // }\r\n  \r\n  /// SPECULAR\r\n  \r\n  // shoot a ray to calculate specular\r\n  vec3 R = reflect(-V, N);\r\n  vec3 E = linePlaneIntersect(geometry.position, -R, planePosition, planeNormal);\r\n  float specAngle = dot(-R, planeNormal);\r\n  if (specAngle > 0.0) {\r\n    \r\n    if (pointInTriangle(E, lpos[0].xyz, lpos[1].xyz, lpos[2].xyz) == 1) {\r\n      reflectedLight.directSpecular += Specular_AreaLight(material.specularColor, N, material.specularRoughness, R, irradiance * specAngle, V);\r\n    }\r\n    else {\r\n      vec3 nearestPointInside = closestPointPToTriangle(E, lpos[0].xyz, lpos[1].xyz, lpos[2].xyz);\r\n      float Ld = length(nearestPointInside-E);\r\n      \r\n      if (rectLight.distance == 0.0 || Ld < rectLight.distance) {\r\n        float Lc = pow(saturate(-Ld / rectLight.distance + 1.0), rectLight.decay);\r\n        reflectedLight.directSpecular += Specular_AreaLight(material.specularColor, N, material.specularRoughness, R, irradiance * Lc * specAngle, V);\r\n      }\r\n    }\r\n  }\r\n}\r\n//--------------------------------------------------\r\nvoid computeRectLight_Rectangle(const in RectLight rectLight, const in GeometricContext geometry, const in Material material, inout ReflectedLight reflectedLight) {\r\n  \r\n  vec4 lpos[4];\r\n  vec3 lvec[4];\r\n  \r\n  // direction vectors from point to area light corners\r\n  for (int i=0; i<4; ++i) {\r\n    // lpos[i] = lightMatrixWorld * vec4(lightverts[i], 1.0); // in world space\r\n    lpos[i] = vec4(rectLight.positions[i], 1.0); // in camera space\r\n    lvec[i] = normalize(lpos[i].xyz - geometry.position); // dir from vertex to area light\r\n  }\r\n  \r\n  // bail if the point is on the wrong side of the light... there must be a better way...\r\n  float tmp = dot(lvec[0], cross((lpos[2]-lpos[0]).xyz, (lpos[1]-lpos[0]).xyz));\r\n  if (tmp > 0.0) return;\r\n  \r\n  // vector irradiance at point\r\n  vec3 lightVec = vec3(0.0);\r\n  for (int i=0; i<4; ++i) {\r\n    vec3 v0 = lvec[i];\r\n    vec3 v1 = lvec[int(mod(float(i+1), 4.0))];\r\n    // if (tmp > 0.0) { // double side\r\n    //   lightVec += acos(dot(v0,v1)) * normalize(cross(v1,v0));\r\n    // }\r\n    // else {\r\n      lightVec += acos(dot(v0,v1)) * normalize(cross(v0,v1));\r\n    // }\r\n  }\r\n  \r\n  vec3 N = geometry.normal;\r\n  vec3 V = geometry.viewDir;\r\n  \r\n  // irradiance factor at point\r\n  float factor = max(dot(lightVec, N), 0.0) / (2.0 * PI);\r\n  \r\n  vec3 irradiance = rectLight.color * rectLight.intensity * factor;\r\n  irradiance *= PI; // punctual light\r\n  \r\n  vec3 planePosition = (lpos[0].xyz + lpos[1].xyz + lpos[2].xyz + lpos[3].xyz) / 4.0;\r\n  vec3 planeNormal = rectLight.normal;\r\n  vec3 right = rectLight.tangent;\r\n  planeNormal = normalize(planeNormal - planePosition);\r\n  right = normalize(right - planePosition);\r\n  vec3 up = normalize(cross(right, planeNormal));\r\n  \r\n  // project onto plane and calculate direction from center to the projection\r\n  // vec3 projection = projectOnPlane(P, planePosition, planeNormal);\r\n  // vec3 dir = projection - planePosition;\r\n  \r\n  // calculate distance from area\r\n  // vec2 diagonal = vec2(dot(dir,right), dot(dir,up));\r\n  // vec2 nearest2D = vec2(clamp(diagonal.x, -width, width), clamp(diagonal.y, -height, height));\r\n  // vec3 nearestPointInside = planePosition + (right*nearest2D.x + up*nearest2D.y);\r\n  \r\n  // float Ld = distance(P, nearestPointInside); // real distance to area rectangle\r\n  // if (cutoffDistance == 0.0 || Ld < cutoffDistance) {\r\n  //   float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), 2.0);\r\n    float NoL = saturate(dot(N, lightVec));\r\n    reflectedLight.directDiffuse += irradiance * NoL * DiffuseLambert(material.diffuseColor);\r\n  // }\r\n  \r\n  // shoot a ray to calculate specular\r\n  vec3 R = reflect(-V, N);\r\n  vec3 E = linePlaneIntersect(geometry.position, -R, planePosition, planeNormal);\r\n  float specAngle = dot(-R, planeNormal);\r\n  if (specAngle > 0.0) {\r\n    vec3 dirSpec = E - planePosition;\r\n    vec2 dirSpec2D = vec2(dot(dirSpec,right), dot(dirSpec,up));\r\n    vec2 nearestSpec2D = vec2(clamp(dirSpec2D.x,-rectLight.width,rectLight.width), clamp(dirSpec2D.y,-rectLight.height,rectLight.height));\r\n    \r\n    float Ld = length(nearestSpec2D-dirSpec2D);\r\n    if (rectLight.distance == 0.0 || Ld < rectLight.distance) {\r\n      float Lc = pow(saturate(-Ld / rectLight.distance + 1.0), rectLight.decay);\r\n      reflectedLight.directSpecular += Specular_AreaLight(material.specularColor, N, material.specularRoughness, R, irradiance * Lc * specAngle, V);\r\n    }\r\n  }\r\n}\r\n//------------------------------------------------------------\r\nvoid computeRectLight(const in RectLight rectLight, const in GeometricContext geometry, const in Material material, inout ReflectedLight reflectedLight) {\r\n  \r\n  if (rectLight.numPositions <= 3) {\r\n    computeRectLight_Triangle(rectLight, geometry, material, reflectedLight);\r\n  }\r\n  else {\r\n    computeRectLight_Rectangle(rectLight, geometry, material, reflectedLight);\r\n  }\r\n}";
+
 	var standardTubeLightFrag = "void computeTubeLight(const in TubeLight tubeLight, const in GeometricContext geometry, const in Material material, inout ReflectedLight reflectedLight) {\r\n  \r\n  vec3 N = geometry.normal;\r\n  vec3 V = geometry.viewDir;\r\n  \r\n  vec3 r = reflect(-V, N);\r\n  vec3 L0 = tubeLight.start - geometry.position;\r\n  vec3 L1 = tubeLight.end - geometry.position;\r\n  float Ld0 = length(L0);\r\n  float Ld1 = length(L1);\r\n  float NoL0 = dot(L0, N) / (2.0 * Ld0);\r\n  float NoL1 = dot(L1, N) / (2.0 * Ld1);\r\n  float NoL = (2.0 * clamp(NoL0 + NoL1, 0.0, 1.0)) / (Ld0 * Ld1 + dot(L0,L1) + 2.0);\r\n  vec3 Lv = L1-L0;\r\n  float RoL0 = dot(r, L0);\r\n  float RoLv = dot(r, Lv);\r\n  float LoLv = dot(L0, Lv);\r\n  float Ld = length(Lv);\r\n  float t = (RoL0 * RoLv - LoLv) / (Ld*Ld - RoLv*RoLv);\r\n  \r\n  vec3 closestPoint = L0 + Lv * clamp(t, 0.0, 1.0);\r\n  vec3 centerToRay = dot(closestPoint, r) * r - closestPoint;\r\n  closestPoint = closestPoint + centerToRay * clamp(tubeLight.radius / length(centerToRay), 0.0, 1.0);\r\n  vec3 Ln = normalize(closestPoint);\r\n  \r\n  // float NoL = saturate(dot(N, Ln));\r\n  float NoV = saturate(dot(N, V));\r\n  vec3 H = normalize(Ln+V);\r\n  float NoH = saturate(dot(N, H));\r\n  float VoH = saturate(dot(V, H));\r\n  float LoV = saturate(dot(Ln, V));\r\n  float a = pow2(material.specularRoughness);\r\n  \r\n  Ld = length(closestPoint);\r\n  float Lc = pow(saturate(-Ld / tubeLight.distance + 1.0), tubeLight.decay);\r\n  float alphaPrime = clamp(tubeLight.radius / (Ld*2.0) + a, 0.0, 1.0);\r\n  float D = D_GGX_AreaLight(a, alphaPrime, NoH);\r\n  float G = PBR_Specular_G(material.specularRoughness, NoV, NoL, NoH, VoH, LoV);\r\n  vec3 F = PBR_Specular_F(material.specularColor, V, H) / (4.0 * NoL * NoV + 1e-5);\r\n  \r\n  vec3 cdiff = DiffuseLambert(material.diffuseColor);\r\n  vec3 cspec = F*(G*D);\r\n  \r\n  // vec3 irradiance = areaLight.color * NoL * Lc;\r\n  vec3 irradiance = tubeLight.color * Lc;\r\n  irradiance *= PI; // punctual light\r\n  \r\n  reflectedLight.directDiffuse += irradiance * cdiff;\r\n  reflectedLight.directSpecular += irradiance * cspec;\r\n}";
 
 	var standardUniforms = {
@@ -933,30 +957,6 @@
 
 	var worldPositionVertFragPars = "varying vec3 vWorldPosition;";
 
-	var standardRectLightFrag = "//------------------------------------------------------------\r\n// Real-time Collision Detection\r\nvec3 closestPointPToRay(in vec3 p, in vec3 start, in vec3 dir) {\r\n  float t = max(dot(p-start, dir) / dot(dir,dir), 0.0);\r\n  return start + dir*t;\r\n}\r\nvec3 closestPointPToSegment(in vec3 p, in vec3 a, in vec3 b) {\r\n  vec3 ab = b-a;\r\n  float t = dot(p-a,ab);\r\n  if (t <= 0.0) {\r\n    return a;\r\n  }\r\n  else {\r\n    float denom = dot(ab,ab);\r\n    if (t >= denom) {\r\n      return b;\r\n    }\r\n    \r\n    return a + ab*(t/denom);\r\n  }\r\n  // vec3 ab = b-a;\r\n  // float t = clamp(dot(p-a, ab) / dot(ab,ab), 0.0, 1.0);\r\n  // return a + ab*t;\r\n}\r\n\r\nvec3 closestPointPToTriangle(in vec3 p, in vec3 a, in vec3 b, in vec3 c) {\r\n  // Check if P in vertex region outside A\r\n  vec3 ap = p-a;\r\n  vec3 ab = b-a;\r\n  vec3 ac = c-a;\r\n  float d1 = dot(ab,ap);\r\n  float d2 = dot(ac,ap);\r\n  if (d1 <= 0.0 && d2 <= 0.0) {\r\n    return a; // voronoi=0. barycentric coordinates (1,0,0)\r\n  }\r\n  \r\n  vec3 bp = p-b;\r\n  \r\n  // Check if P in vertex region outside B\r\n  float d3 = dot(ab,bp);\r\n  float d4 = dot(ac,bp);\r\n  if (d3 >= 0.0 && d4 <= d3) {\r\n    return b; // voronoi=1. barycentric coordinates (0,1,0)\r\n  }\r\n  \r\n  // Check if P in edge region of AB,k if so return projection of P onto AB\r\n  float vc = d1*d4 - d3*d2;\r\n  if (vc <= 0.0 && d1 >= 0.0 && d3 <= 0.0) {\r\n    // float v = d1/(d1-d3)\r\n    return a + ab * (d1/(d1-d3)); // voronoi=2. barycentric coordinates (1-v,v,0)\r\n  }\r\n  \r\n  // Check if P in vertex region outside C\r\n  vec3 cp = p-c;\r\n  float d5 = dot(ab, cp);\r\n  float d6 = dot(ac, cp);\r\n  if (d6 >= 0.0 && d5 <= d6) {\r\n    return c; // voronoi=3. barycentric coordinates (0,0,1)\r\n  }\r\n  \r\n  // Check if P in edge region of AC, if so return projection of P onto AC\r\n  float vb = d5*d2 - d1*d6;\r\n  if (vb <= 0.0 && d2 >= 0.0 && d6 <= 0.0) {\r\n    // float w = d2/(d2-d6)\r\n    return a + ac * (d2/(d2-d6)); // voronoi=4. barycentric cooridnates (1-w,w,0)\r\n  }\r\n  \r\n  // Check if P in edge region of BC, if so return projection of P onto BC\r\n  float va = d3*d6 - d5*d4;\r\n  if (va <= 0.0 && (d4-d3) >= 0.0 && (d5-d6) >= 0.0) {\r\n    // float w = (d4-d3)/(d4-d3+d5-d6)\r\n    return b + (c-b) * ((d4-d3)/(d4-d3+d5-d6)); // voronoi=5. barycentric coordinates (0,1-w,w)\r\n  }\r\n  \r\n  // P inside face region. Compute Q through its barycentric coordinates (u,v,w)\r\n  float denom = 1.0 / (va+vb+vc);\r\n  float v = vb * denom;\r\n  float w = vc * denom;\r\n  return a + ab*v + ac*w; // voronoi=6\r\n}\r\n\r\nint pointInTriangle(in vec3 p, in vec3 a, in vec3 b, in vec3 c) {\r\n  a -= p;\r\n  b -= p;\r\n  c -= p;\r\n  float ab = dot(a,b);\r\n  float ac = dot(a,c);\r\n  float bc = dot(b,c);\r\n  float cc = dot(c,c);\r\n  if (bc*ac - cc*ab < 0.0) return 0;\r\n  float bb = dot(b,b);\r\n  if (ab*bc - ac*bb < 0.0) return 0;\r\n  return 1;\r\n}\r\n//--------------------------------------------------\r\nvec3 Specular_AreaLight(vec3 specularColor, vec3 N, float roughnessFactor, vec3 L, vec3 Lc, vec3 V) {\r\n  // Compute some useful values\r\n  float NoL = saturate(dot(N, L));\r\n  float NoV = saturate(dot(N, V));\r\n  vec3 H = normalize(L+V);\r\n  float NoH = saturate(dot(N, H));\r\n  float VoH = saturate(dot(V, H));\r\n  float LoV = saturate(dot(L, V));\r\n  \r\n  float a = pow2(roughnessFactor);\r\n  \r\n  vec3 cspec = PBR_Specular_CookTorrance(specularColor, H, V, L, a, NoL, NoV, NoH, VoH, LoV);\r\n  return Lc * NoL * cspec;\r\n}\r\n//--------------------------------------------------\r\nvoid computeRectLight_Triangle(const in RectLight rectLight, const in GeometricContext geometry, const in Material material, inout ReflectedLight reflectedLight) {\r\n  \r\n  vec4 lpos[3];\r\n  vec3 lvec[3];\r\n  \r\n  // direction vectors from point to area light corners\r\n  for (int i=0; i<3; ++i) {\r\n    // lpos[i] = lightMatrixWorld * vec4(rectLight.positions[i], 1.0); // in world space\r\n    lpos[i] = vec4(rectLight.positions[i], 1.0); // in camera space\r\n    lvec[i] = normalize(lpos[i].xyz - geometry.position); // dir from vertex to area light\r\n  }\r\n  \r\n  // bail if the point is on the wrong side of the light... there must be a better way...\r\n  float tmp = dot(lvec[0], cross((lpos[2]-lpos[0]).xyz, (lpos[1]-lpos[0]).xyz));\r\n  if (tmp > 0.0) return;\r\n  \r\n  // vector irradiance at point\r\n  vec3 lightVec = vec3(0.0);\r\n  for (int i=0; i<3; ++i) {\r\n    vec3 v0 = lvec[i];\r\n    vec3 v1 = lvec[int(mod(float(i+1), float(3)))];\r\n    // if (tmp > 0.0) { // double side\r\n    //   lightVec += acos(dot(v0,v1)) * normalize(cross(v1,v0));\r\n    // }\r\n    // else {\r\n      lightVec += acos(dot(v0,v1)) * normalize(cross(v0,v1));\r\n    // }\r\n  }\r\n  \r\n  vec3 N = geometry.normal;\r\n  vec3 V = geometry.viewDir;\r\n  \r\n  // irradiance factor at point\r\n  float factor = max(dot(lightVec, N), 0.0) / (2.0 * PI);\r\n  \r\n  vec3 irradiance = rectLight.color * rectLight.intensity * factor;\r\n  irradiance *= PI; // punctual light\r\n  \r\n  \r\n  vec3 planePosition = (lpos[0].xyz + lpos[1].xyz + lpos[2].xyz) / 3.0;\r\n  vec3 planeNormal = rectLight.normal;\r\n  planeNormal = normalize(planeNormal - planePosition);\r\n  \r\n  // project onto plane and calculate direction from center to the projection\r\n  // vec3 projection = projectOnPlane(P, planePosition, planeNormal);\r\n  \r\n  // calculate distance from area\r\n  // vec3 nearestPointInside = closestPointPToTriangle(projection, lpos[0].xyz, lpos[1].xyz, lpos[2].xyz);\r\n  // float Ld = distance(P, nearestPointInside);\r\n  // if (cutoffDistance == 0.0 || Ld < cutoffDistance) {\r\n  //   float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), 2.0);\r\n    // float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), decayExponent);\r\n    float NoL = saturate(dot(N, lightVec));\r\n    reflectedLight.directDiffuse += irradiance * NoL * DiffuseLambert(material.diffuseColor);\r\n  // }\r\n  \r\n  /// SPECULAR\r\n  \r\n  // shoot a ray to calculate specular\r\n  vec3 R = reflect(-V, N);\r\n  vec3 E = linePlaneIntersect(geometry.position, -R, planePosition, planeNormal);\r\n  float specAngle = dot(-R, planeNormal);\r\n  if (specAngle > 0.0) {\r\n    \r\n    if (pointInTriangle(E, lpos[0].xyz, lpos[1].xyz, lpos[2].xyz) == 1) {\r\n      reflectedLight.directSpecular += Specular_AreaLight(material.specularColor, N, material.specularRoughness, R, irradiance * specAngle, V);\r\n    }\r\n    else {\r\n      vec3 nearestPointInside = closestPointPToTriangle(E, lpos[0].xyz, lpos[1].xyz, lpos[2].xyz);\r\n      float Ld = length(nearestPointInside-E);\r\n      \r\n      if (rectLight.distance == 0.0 || Ld < rectLight.distance) {\r\n        float Lc = pow(saturate(-Ld / rectLight.distance + 1.0), rectLight.decay);\r\n        reflectedLight.directSpecular += Specular_AreaLight(material.specularColor, N, material.specularRoughness, R, irradiance * Lc * specAngle, V);\r\n      }\r\n    }\r\n  }\r\n}\r\n//--------------------------------------------------\r\nvoid computeRectLight_Rectangle(const in RectLight rectLight, const in GeometricContext geometry, const in Material material, inout ReflectedLight reflectedLight) {\r\n  \r\n  vec4 lpos[4];\r\n  vec3 lvec[4];\r\n  \r\n  // direction vectors from point to area light corners\r\n  for (int i=0; i<4; ++i) {\r\n    // lpos[i] = lightMatrixWorld * vec4(lightverts[i], 1.0); // in world space\r\n    lpos[i] = vec4(rectLight.positions[i], 1.0); // in camera space\r\n    lvec[i] = normalize(lpos[i].xyz - geometry.position); // dir from vertex to area light\r\n  }\r\n  \r\n  // bail if the point is on the wrong side of the light... there must be a better way...\r\n  float tmp = dot(lvec[0], cross((lpos[2]-lpos[0]).xyz, (lpos[1]-lpos[0]).xyz));\r\n  if (tmp > 0.0) return;\r\n  \r\n  // vector irradiance at point\r\n  vec3 lightVec = vec3(0.0);\r\n  for (int i=0; i<4; ++i) {\r\n    vec3 v0 = lvec[i];\r\n    vec3 v1 = lvec[int(mod(float(i+1), 4.0))];\r\n    // if (tmp > 0.0) { // double side\r\n    //   lightVec += acos(dot(v0,v1)) * normalize(cross(v1,v0));\r\n    // }\r\n    // else {\r\n      lightVec += acos(dot(v0,v1)) * normalize(cross(v0,v1));\r\n    // }\r\n  }\r\n  \r\n  vec3 N = geometry.normal;\r\n  vec3 V = geometry.viewDir;\r\n  \r\n  // irradiance factor at point\r\n  float factor = max(dot(lightVec, N), 0.0) / (2.0 * PI);\r\n  \r\n  vec3 irradiance = rectLight.color * rectLight.intensity * factor;\r\n  irradiance *= PI; // punctual light\r\n  \r\n  vec3 planePosition = (lpos[0].xyz + lpos[1].xyz + lpos[2].xyz + lpos[3].xyz) / 4.0;\r\n  vec3 planeNormal = rectLight.normal;\r\n  vec3 right = rectLight.tangent;\r\n  planeNormal = normalize(planeNormal - planePosition);\r\n  right = normalize(right - planePosition);\r\n  vec3 up = normalize(cross(right, planeNormal));\r\n  \r\n  // project onto plane and calculate direction from center to the projection\r\n  // vec3 projection = projectOnPlane(P, planePosition, planeNormal);\r\n  // vec3 dir = projection - planePosition;\r\n  \r\n  // calculate distance from area\r\n  // vec2 diagonal = vec2(dot(dir,right), dot(dir,up));\r\n  // vec2 nearest2D = vec2(clamp(diagonal.x, -width, width), clamp(diagonal.y, -height, height));\r\n  // vec3 nearestPointInside = planePosition + (right*nearest2D.x + up*nearest2D.y);\r\n  \r\n  // float Ld = distance(P, nearestPointInside); // real distance to area rectangle\r\n  // if (cutoffDistance == 0.0 || Ld < cutoffDistance) {\r\n  //   float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), 2.0);\r\n    float NoL = saturate(dot(N, lightVec));\r\n    reflectedLight.directDiffuse += irradiance * NoL * DiffuseLambert(material.diffuseColor);\r\n  // }\r\n  \r\n  // shoot a ray to calculate specular\r\n  vec3 R = reflect(-V, N);\r\n  vec3 E = linePlaneIntersect(geometry.position, -R, planePosition, planeNormal);\r\n  float specAngle = dot(-R, planeNormal);\r\n  if (specAngle > 0.0) {\r\n    vec3 dirSpec = E - planePosition;\r\n    vec2 dirSpec2D = vec2(dot(dirSpec,right), dot(dirSpec,up));\r\n    vec2 nearestSpec2D = vec2(clamp(dirSpec2D.x,-rectLight.width,rectLight.width), clamp(dirSpec2D.y,-rectLight.height,rectLight.height));\r\n    \r\n    float Ld = length(nearestSpec2D-dirSpec2D);\r\n    if (rectLight.distance == 0.0 || Ld < rectLight.distance) {\r\n      float Lc = pow(saturate(-Ld / rectLight.distance + 1.0), rectLight.decay);\r\n      reflectedLight.directSpecular += Specular_AreaLight(material.specularColor, N, material.specularRoughness, R, irradiance * Lc * specAngle, V);\r\n    }\r\n  }\r\n}\r\n//------------------------------------------------------------\r\nvoid computeRectLight(const in RectLight rectLight, const in GeometricContext geometry, const in Material material, inout ReflectedLight reflectedLight) {\r\n  \r\n  if (rectLight.numPositions <= 3) {\r\n    computeRectLight_Triangle(rectLight, geometry, material, reflectedLight);\r\n  }\r\n  else {\r\n    computeRectLight_Rectangle(rectLight, geometry, material, reflectedLight);\r\n  }\r\n}";
-
-	var parallaxOcclusionMapFrag = "  vec3 vv = -geometry.viewDir * mat3(vTangent, vBinormal, vNormal);\r\n  // vec3 vv = perturbUv(-vViewPosition, normalize(vNormal), normalize(vViewPosition));\r\n  float parallaxLimit = -length(vv.xy) / vv.z;\r\n  parallaxLimit *= parallaxScale;\r\n\r\n  vec2 vOffsetDir = normalize(vv.xy);\r\n  vec2 vMaxOffset = vOffsetDir * parallaxLimit;\r\n\r\n  float nNumSamples = mix(20.0, 10.0, dot(geometry.viewDir,vNormal));\r\n  float fStepSize = 1.0 / nNumSamples;\r\n\r\n  // debugColor = vec3(vv.xy * 0.5 + vec2(0.5), 0.0);\r\n\r\n  // vec2 dPdx = dFdx(uv);\r\n  // vec2 dPdy = dFdy(uv);\r\n\r\n  float fCurrRayHeight = 1.0;\r\n  vec2 vCurrOffset = vec2(0,0);\r\n  vec2 vLastOffset = vec2(0.0);\r\n  float fLastSampledHeight = 1.;\r\n  float fCurrSampledHeight = 1.;\r\n  for (int nCurrSample = 0; nCurrSample < 50; nCurrSample++) {\r\n    if (float(nCurrSample) > nNumSamples) break;\r\n    // fCurrSampledHeight = textureGrad(tDiffuse, uv + vCurrOffset, dPdx, dPdy).a;\r\n    // fCurrSampledHeight = texture2DGradEXT(tDiffuse, uv + vCurrOffset, dPdx, dPdy).a;\r\n    // fCurrSampledHeight = texture2D(tDiffuse, uv + vCurrOffset).a;\r\n    fCurrSampledHeight = texture2D(tHeightMap, uv + vCurrOffset).r;\r\n    if (fCurrSampledHeight > fCurrRayHeight) {\r\n      float delta1 = fCurrSampledHeight - fCurrRayHeight;\r\n      float delta2 = (fCurrRayHeight + fStepSize) - fLastSampledHeight;\r\n      float ratio = delta1 / (delta1 + delta2);\r\n      vCurrOffset = ratio * vLastOffset + (1.0-ratio) * vCurrOffset;\r\n      break;\r\n    } else {\r\n      fCurrRayHeight -= fStepSize;\r\n      vLastOffset = vCurrOffset;\r\n      vCurrOffset += fStepSize * vMaxOffset;\r\n      fLastSampledHeight = fCurrSampledHeight;\r\n    }\r\n  }\r\n\r\n  uv += vCurrOffset;";
-
-	var parallaxOcclusionMapFragPars = "uniform float parallaxScale;\r\nuniform sampler2D tHeightMap;\r\n\r\n// vec3 perturbUv( vec3 surfPosition, vec3 surfNormal, vec3 viewPosition ) {\r\n\r\n//     vec2 texDx = dFdx( vUv );\r\n//     vec2 texDy = dFdy( vUv );\r\n\r\n//     vec3 vSigmaX = dFdx( surfPosition );\r\n//     vec3 vSigmaY = dFdy( surfPosition );\r\n//     vec3 vR1 = cross( vSigmaY, surfNormal );\r\n//     vec3 vR2 = cross( surfNormal, vSigmaX );\r\n//     float fDet = dot( vSigmaX, vR1 );\r\n\r\n//     vec2 vProjVscr = ( 1.0 / fDet ) * vec2( dot( vR1, viewPosition ), dot( vR2, viewPosition ) );\r\n//     vec3 vProjVtex;\r\n//     vProjVtex.xy = texDx * vProjVscr.x + texDy * vProjVscr.y;\r\n//     vProjVtex.z = dot( surfNormal, viewPosition );\r\n//     return vProjVtex;\r\n// }";
-
-	var parallaxOcclusionMapUniforms = {
-	  parallaxScale: { value: 0.03 },
-	  tHeightMap: { value: null }
-	};
-
-	var beginFragDebug = "vec3 debugColor = vec3(1.0, 0.0, 0.0);";
-
-	var endFragDebug = "gl_FragColor.rgb = debugColor;";
-
-	var reliefMapFrag = "  vec3 vv = -geometry.viewDir * mat3(vTangent, vBinormal, vNormal);\r\n  float parallaxLimit = -length(vv.xy) / vv.z;\r\n  parallaxLimit *= parallaxScale;\r\n\r\n  vec2 vOffsetDir = normalize(vv.xy);\r\n  vec2 vMaxOffset = vOffsetDir * parallaxLimit;\r\n\r\n  float nNumSamples = mix(20.0, 10.0, dot(geometry.viewDir,vNormal));\r\n  float fStepSize = 1.0 / nNumSamples;\r\n\r\n  float fCurrRayHeight = 1.0;\r\n  vec2 vCurrOffset = vec2(0,0);\r\n  float fCurrSampledHeight = 1.;\r\n  for (int nCurrSample = 0; nCurrSample < 50; nCurrSample++) {\r\n    if (float(nCurrSample) > nNumSamples) break;\r\n    fCurrSampledHeight = texture2D(tHeightMap, uv + vCurrOffset).r;\r\n    if (fCurrSampledHeight > fCurrRayHeight) {\r\n\r\n      vec2 deltaOffset = vMaxOffset * fStepSize * 0.5;\r\n      float deltaHeight = fStepSize * 0.5;\r\n\r\n      vCurrOffset -= deltaOffset;\r\n      fCurrRayHeight += deltaHeight;\r\n\r\n      const int numSearches = 5;\r\n      for (int i=0; i<numSearches; i+=1) {\r\n        deltaOffset *= 0.5;\r\n        deltaHeight *= 0.5;\r\n        float fCurrSampledHeight = texture2D(tHeightMap, uv + vCurrOffset).r;\r\n        if (fCurrSampledHeight > fCurrRayHeight) {\r\n          // below the surface\r\n          vCurrOffset -= deltaOffset;\r\n          fCurrRayHeight += deltaHeight;\r\n        } else {\r\n          // above the surface\r\n          vCurrOffset += deltaOffset;\r\n          fCurrRayHeight -= deltaHeight;\r\n        }\r\n      }\r\n      break;\r\n    } else {\r\n      fCurrRayHeight -= fStepSize;\r\n      vCurrOffset += fStepSize * vMaxOffset;\r\n    }\r\n  }\r\n\r\n  uv += vCurrOffset;";
-
-	var reliefMapFragPars = "uniform float parallaxScale;\r\nuniform sampler2D tHeightMap;";
-
-	var reliefMapUniforms = {
-	  parallaxScale: { value: 0.03 },
-	  tHeightMap: { value: null }
-	};
-
 	var ShaderChunk = {
 		accumulateFrag: accumulateFrag,
 		ambientFrag: ambientFrag,
@@ -975,6 +975,7 @@
 		aoMapFragPars: aoMapFragPars,
 		aoMapUniforms: aoMapUniforms,
 		beginFrag: beginFrag,
+		beginFragDebug: beginFragDebug,
 		billboardDefaultVert: billboardDefaultVert,
 		billboardRotZVertEnd: billboardRotZVertEnd,
 		billboardUniforms: billboardUniforms,
@@ -1058,6 +1059,7 @@
 		emissiveMapUniforms: emissiveMapUniforms,
 		emissiveUniforms: emissiveUniforms,
 		endFrag: endFrag,
+		endFragDebug: endFragDebug,
 		fakeSunFrag: fakeSunFrag,
 		fakeSunUniforms: fakeSunUniforms,
 		fakeSunVert: fakeSunVert,
@@ -1157,6 +1159,9 @@
 		parallaxMapFrag: parallaxMapFrag,
 		parallaxMapFragPars: parallaxMapFragPars,
 		parallaxMapUniforms: parallaxMapUniforms,
+		parallaxOcclusionMapFrag: parallaxOcclusionMapFrag,
+		parallaxOcclusionMapFragPars: parallaxOcclusionMapFragPars,
+		parallaxOcclusionMapUniforms: parallaxOcclusionMapUniforms,
 		phongFrag: phongFrag,
 		phongFragPars: phongFragPars,
 		phongUniforms: phongUniforms,
@@ -1174,6 +1179,9 @@
 		reflectionFragPars: reflectionFragPars,
 		reflectionStandardFrag: reflectionStandardFrag,
 		reflectionUniforms: reflectionUniforms,
+		reliefMapFrag: reliefMapFrag,
+		reliefMapFragPars: reliefMapFragPars,
+		reliefMapUniforms: reliefMapUniforms,
 		rimLightFrag: rimLightFrag,
 		rimLightFragPars: rimLightFragPars,
 		rimLightUniforms: rimLightUniforms,
@@ -1210,6 +1218,7 @@
 		standardFrag: standardFrag,
 		standardFragPars: standardFragPars,
 		standardOrenNayarFrag: standardOrenNayarFrag,
+		standardRectLightFrag: standardRectLightFrag,
 		standardTubeLightFrag: standardTubeLightFrag,
 		standardUniforms: standardUniforms,
 		tangentFragPars: tangentFragPars,
@@ -1246,15 +1255,6 @@
 		viewUniforms: viewUniforms,
 		worldPositionVert: worldPositionVert,
 		worldPositionVertFragPars: worldPositionVertFragPars,
-		standardRectLightFrag: standardRectLightFrag,
-		parallaxOcclusionMapFrag: parallaxOcclusionMapFrag,
-		parallaxOcclusionMapFragPars: parallaxOcclusionMapFragPars,
-		parallaxOcclusionMapUniforms: parallaxOcclusionMapUniforms,
-		beginFragDebug: beginFragDebug,
-		endFragDebug: endFragDebug,
-		reliefMapFrag: reliefMapFrag,
-		reliefMapFragPars: reliefMapFragPars,
-		reliefMapUniforms: reliefMapUniforms,
 	};
 
 	var ShaderUtils = {
@@ -3504,7 +3504,10 @@
 	    // We can't render ourself to ourself
 	    var visible = this.material.visible;
 	    this.material.visible = false;
-	    this.renderer.render(scene, this.mirrorCamera, this.renderTarget, true);
+	    this.renderer.setRenderTarget(this.renderTarget);
+	    this.renderer.clear();
+	    this.renderer.render(scene, this.mirrorCamera);
+	    this.renderer.setRenderTarget(null);
 	    this.material.visible = visible;
 	  }
 	};
@@ -4212,8 +4215,14 @@
 	    
 	    // draw into the stencil buffer
 	    
-	    // renderer.render(this.scene, this.camera, readBuffer, this.clear);
-	    renderer.render(this.scene, this.camera, writeBuffer, this.clear);
+	    var oldRenderTarget = renderer.getRenderTarget();
+	    var oldAutoClear = renderer.autoClear;
+	    renderer.autoClear = false;
+	    renderer.setRenderTarget(writeBuffer);
+	    if (this.clear) renderer.clear();
+	    renderer.render(this.scene, this.camera);
+	    renderer.setRenderTarget(oldRenderTarget);
+	    renderer.autoClear = oldAutoClear;
 	    
 	    // only render where stencil is set to 1
 	    
@@ -4279,7 +4288,11 @@
 	      renderer.getContext().colorMask(this.colorMask[0], this.colorMask[1], this.colorMask[2], this.colorMask[3]);
 	    }
 	    
-	    renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
+	    var oldRenderTarget = renderer.getRenderTarget();
+	    renderer.setRenderTarget(this.renderToScreen ? null : writeBuffer);
+	    if (this.clear) renderer.clear();
+	    renderer.render(this.scene, this.camera);
+	    renderer.setRenderTarget(oldRenderTarget);
 	    
 	    if (this.clearColor) {
 	      renderer.setClearColor(oldClearColor, oldClearAlpha);
@@ -4343,7 +4356,11 @@
 	    if (this.renderToScreen) {
 	      renderer.render(this.scene, this.camera);
 	    } else {
-	      renderer.render(this.scene, this.camera, writeBuffer, this.clear);
+	      var oldRenderTarget = renderer.getRenderTarget();
+	      renderer.setRenderTarget(writeBuffer);
+	      if (this.clear) renderer.clear();
+	      renderer.render(this.scene, this.camera);
+	      renderer.setRenderTarget(oldRenderTarget);
 	    }
 	    
 	    if (this.colorMask) {
@@ -4369,7 +4386,14 @@
 	  constructor: ScreenPass,
 	  
 	  render: function(renderer, writeBuffer, readBuffer, delta, maskActive) {
-	    renderer.render(this.scene, this.camera, writeBuffer, this.clear);
+	    var oldRenderTarget = renderer.getRenderTarget();
+	    var oldAutoClear = renderer.autoClear;
+	    renderer.autoClear = false;
+	    renderer.setRenderTarget(writeBuffer);
+	    if (this.clear) renderer.clear();
+	    renderer.render(this.scene, this.camera);
+	    renderer.setRenderTarget(oldRenderTarget);
+	    renderer.autoClear = oldAutoClear;
 	  }
 	});
 
@@ -4438,18 +4462,24 @@
 	  
 	  render: function(renderer, writeBuffer, readBuffer, delta, maskActive) {
 	    
+	    var oldRenderTarget = renderer.getRenderTarget();
+	    var oldAutoClear = renderer.autoClear;
+	    renderer.autoClear = false;
+
 	    if (this.idedge) {
 	      this.idUniforms.aspect.value = this.aspect;
 	      this.idUniforms.step.value = 1.0;
 	      this.idUniforms.tDiffuse.value = this.source;
 	      this.quad.material = this.idMaterial;
-	      renderer.render(this.scene, this.camera, this.edgeBuffer);
+	      renderer.setRenderTarget(this.edgeBuffer);
+	      renderer.render(this.scene, this.camera);
 	      this.quad.material = null;
 	    } else {
 	      this.edgeUniforms.aspect.value = this.aspect;
 	      this.edgeUniforms.tDiffuse.value = this.source;
 	      this.quad.material = this.edgeMaterial;
-	      renderer.render(this.scene, this.camera, this.edgeBuffer);
+	      renderer.setRenderTarget(this.edgeBuffer);
+	      renderer.render(this.scene, this.camera);
 	      this.quad.material = null;
 	    }
 	    
@@ -4459,7 +4489,8 @@
 	      this.edgeExpandUniforms.strength.value = this.strength;
 	      this.edgeExpandUniforms.tDiffuse.value = this.edgeBuffer.texture;
 	      this.quad.material = this.edgeExpandMaterial;
-	      renderer.render(this.scene, this.camera, this.edgeExpandBuffer);
+	      renderer.setRenderTarget(this.edgeExpandBuffer);
+	      renderer.render(this.scene, this.camera);
 	      this.quad.material = null;
 	      edgeTexture = this.edgeExpandBuffer.texture;
 	    }
@@ -4470,13 +4501,18 @@
 	    this.compositeUniforms.tEdge.value = edgeTexture;
 	    this.compositeUniforms.tDiffuse.value = readBuffer.texture;
 	    this.quad.material = this.compositeMaterial;
-	    renderer.render(this.scene, this.camera, writeBuffer, this.clear);
+	    renderer.setRenderTargeT(writeBuffer);
+	    if (this.clear) renderer.clear();
+	    renderer.render(this.scene, this.camera);
 	    this.quad.material = null;
 	    
 	    // this.quad.material = new THREE.MeshBasicMaterial({map: this.edgeBuffer.texture});
 	    // this.quad.material = new THREE.MeshBasicMaterial({map: this.source});
 	    // renderer.render(this.scene, this.camera, writeBuffer, this.clear);
 	    // this.quad.material = null;
+
+	    renderer.setRenderTarget(oldRenderTarget);
+	    renderer.autoClear = oldAutoClear;
 	  }
 	});
 
@@ -4543,6 +4579,7 @@
 	    var autoClear = renderer.autoClear;
 	    renderer.autoClear = false;
 	    
+	    var oldRenderTarget = renderer.getRenderTarget();
 	    var oldClearColor = renderer.getClearColor().getHex();
 	    var oldClearAlpha = renderer.getClearAlpha();
 	    
@@ -4571,12 +4608,16 @@
 	      
 	      this.copyUniforms["opacity"].value = sampleWeight;
 	      renderer.setClearColor(this.clearColor, this.clearAlpha);
-	      renderer.render(this.scene, this.camera, this.sampleRenderTarget, true);
+	      renderer.setRenderTargeT(this.sampleRenderTarget);
+	      renderer.clear();
+	      renderer.render(this.scene, this.camera);
 
 	      if (i === 0) {
 	        renderer.setClearColor(0x000000, 1.0);
 	      }
-	      renderer.render(this.scene2, this.camera2, writeBuffer, (i === 0));
+	      renderer.setRenderTarget(writeBuffer);
+	      if (i === 0) renderer.clear();
+	      renderer.render(this.scene2, this.camera2);
 	    }
 	    
 	    
@@ -4586,6 +4627,7 @@
 	    
 	    renderer.autoClear = autoClear;
 	    renderer.setClearColor(oldClearColor, oldClearAlpha);
+	    renderer.setRenderTarget(oldRenderTarget);
 	  }
 	});
 
@@ -4674,6 +4716,7 @@
 	      this.accumulateIndex = 0;
 	    }
 	    
+	    var oldRenderTarget = renderer.getRenderTarget();
 	    var autoClear = renderer.autoClear;
 	    renderer.autoClear = false;
 	    
@@ -4693,8 +4736,13 @@
 	            readBuffer.width, readBuffer.height);
 	        }
 	        
-	        renderer.render(this.scene, this.camera, writeBuffer, true);
-	        renderer.render(this.scene2, this.camera2, this.sampleRenderTarget, (this.accumulateIndex === 0));
+	        renderer.setRenderTarget(writeBuffer);
+	        renderer.clear();
+	        renderer.render(this.scene, this.camera);
+
+	        renderer.setRenderTarget(this.sampleRenderTarget);
+	        if (this.accumulateIndex === 0) renderer.clear();
+	        renderer.render(this.scene2, this.camera2);
 	        
 	        this.accumulateIndex++;
 	        if (this.accumulateIndex >= jitterOffsets.length) {
@@ -4711,14 +4759,19 @@
 	    if (accumulationWeight > 0) {
 	      this.copyUniforms["opacity"].value = 1.0;
 	      this.copyUniforms["tDiffuse"].value = this.sampleRenderTarget.texture;
-	      renderer.render(this.scene2, this.camera2, writeBuffer, true);
+	      renderer.setRenderTarget(writeBuffer);
+	      renderer.clear();
+	      renderer.render(this.scene2, this.camera2);
 	    }
 	    if (accumulationWeight < 1.0) {
 	      this.copyUniforms["opacity"].value = 1.0 - accumulationWeight;
 	      this.copyUniforms["tDiffuse"].value = this.holdRenderTarget.texture;
-	      renderer.render(this.scene2, this.camera2, writeBuffer, (accumulationWeight === 0));
+	      renderer.setRenderTarget(writeBuffer);
+	      if (accumulationWeight === 0) renderer.clear();
+	      renderer.render(this.scene2, this.camera2);
 	    }
 	    
+	    renderer.setRenderTarget(oldRenderTarget);
 	    renderer.autoClear = autoClear;
 	  }
 	});
@@ -4863,6 +4916,7 @@
 	    this.oldClearColor.copy(renderer.getClearColor());
 	    this.oldClearAlpha = renderer.getClearAlpha();
 	    
+	    var oldRenderTarget = renderer.getRenderTarget();
 	    var oldAutoClear = renderer.autoClear;
 	    renderer.autoClear = false;
 	    renderer.setClearColor(new THREE.Color(0,0,0), 0);
@@ -4875,7 +4929,9 @@
 	    this.highPassUniforms.tDiffuse.value = readBuffer.texture;
 	    this.highPassUniforms.luminosityThreshold.value = this.threshold;
 	    this.quad.material = this.highPassMaterial;
-	    renderer.render(this.scene, this.camera, this.rtBright, true);
+	    renderer.setRenderTarget(this.rtBright);
+	    renderer.clear();
+	    renderer.render(this.scene, this.camera);
 	    
 	    // 2. Blur All the mips progressively
 	    var inputRenderTarget = this.rtBright;
@@ -4885,11 +4941,15 @@
 	      this.quad.material = this.separableBlurMaterials[i];
 	      this.separableBlurMaterials[i].uniforms.tDiffuse.value = inputRenderTarget.texture;
 	      this.separableBlurMaterials[i].uniforms.direction.value = UnrealBloomPass.BlurDirectionX;
-	      renderer.render(this.scene, this.camera, this.rtHori[i], true);
+	      renderer.setRenderTarget(this.rtHori[i]);
+	      renderer.clear();
+	      renderer.render(this.scene, this.camera);
 	      
 	      this.separableBlurMaterials[i].uniforms.tDiffuse.value = this.rtHori[i].texture;
 	      this.separableBlurMaterials[i].uniforms.direction.value = UnrealBloomPass.BlurDirectionY;
-	      renderer.render(this.scene, this.camera, this.rtVert[i], true);
+	      renderer.setRenderTarget(this.rtVert[i]);
+	      renderer.clear();
+	      renderer.render(this.scene, this.camera);
 	      
 	      inputRenderTarget = this.rtVert[i];
 	    }
@@ -4899,7 +4959,9 @@
 	    this.compositeMaterial.uniforms.bloomStrength.value = this.strength;
 	    this.compositeMaterial.uniforms.bloomRadius.value = this.radius;
 	    this.compositeMaterial.uniforms.bloomTintColors.value = this.bloomTintColors;
-	    renderer.render(this.scene, this.camera, this.rtHori[0], true);
+	    renderer.setRenderTarget(this.rtHori[0]);
+	    renderer.clear();
+	    renderer.render(this.scene, this.camera);
 	    
 	    // Blend it additively over the input texture
 	    this.quad.material = this.copyMaterial;
@@ -4909,9 +4971,11 @@
 	      renderer.context.enable(renderer.context.STENCIL_TEST);
 	    }
 	    
-	    renderer.render(this.scene, this.camera, writeBuffer, false);
+	    renderer.setRenderTarget(writeBuffer);
+	    renderer.render(this.scene, this.camera);
 	    
 	    renderer.setClearColor(this.oldClearColor, this.oldClearAlpha);
+	    renderer.setRenderTarget(oldRenderTarget);
 	    renderer.autoClear = oldAutoClear;
 	  },
 	  
@@ -5158,17 +5222,24 @@
 	    this.makeUniforms.focalParams.value.set(focal1, focal2, invFocal1, invFocal2);
 	    this.makeUniforms.cameraParams.value.set(this.sceneCamera.near, this.sceneCamera.far);
 	    this.makeUniforms.tDepth.value = this.depthTexture;
+
+	    var oldRenderTarget = renderer.getRenderTarget();
+	    var oldAutoClear = renderer.autoClear;
+	    renderer.autoClear = false;
 	    
 	    // MAKE SSAO
 	    this.quad.material = this.makeMaterial;
-	    renderer.render(this.scene, this.camera, this.rtBlur1, false);
+	    renderer.setRenderTarget(this.rtBlur1);
+	    renderer.render(this.scene, this.camera);
 	    
 	    for (var i=0; i<2; ++i) {
 	      this.quad.material = this.blurXMaterial;
-	      renderer.render(this.scene, this.camera, this.rtBlur2, false);
+	      renderer.setRenderTarget(this.rtBlur2);
+	      renderer.render(this.scene, this.camera);
 	      
 	      this.quad.material = this.blurYMaterial;
-	      renderer.render(this.scene, this.camera, this.rtBlur1, false);
+	      renderer.setRenderTarget(this.rtBlur1);
+	      renderer.render(this.scene, this.camera);
 	    }
 	    
 	    var target = this.rtBlur1;
@@ -5183,7 +5254,10 @@
 	      this.compositeUniforms.tAO.value = target.texture;
 	    }
 	    
-	    renderer.render(this.scene, this.camera, writeBuffer, false);
+	    renderer.setRenderTarget(writeBuffer);
+	    renderer.render(this.scene, this.camera);
+	    renderer.setRenderTarget(oldRenderTarget);
+	    renderer.autoClear = oldAutoClear;
 	  }
 	});
 
