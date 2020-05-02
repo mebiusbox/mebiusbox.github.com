@@ -48,15 +48,17 @@
     </div>
     <div id="inspector" style="position:absolute; left: 10px; top: 100px; width: 200px; height: 100px; font-family: consolas;">
 		</div>
-    <script src="js/three.js"></script>
+    <script src="js/three.min.js"></script>
+    <script src="js/WebGL.js"></script>
     <script src="js/controls/OrbitControls.js"></script>
-    <script src="js/Detector.js"></script>
     <script src="js/libs/dat.gui.min.js"></script>
     <script src="js/libs/stats.min.js"></script>
     <script src="js/shaders/CopyShader.js"></script>
     <script src="js/pixy.min.js"></script>
     <script>
-      if (!Detector.webgl) Detector.addGetWebGLMessage();
+      if (THREE.WEBGL.isWebGLAvailable() === false) {
+        document.body.appendChild(THREE.WEBGL.getWebGLErrorMessage());
+      }
       
       var mouse = new THREE.Vector2(0.5, 0.5);
       var canvas;
@@ -119,7 +121,7 @@
         // renderer.gammaOutput = true;
         // renderer.autoClear = false;
         // container.appendChild(renderer.domElement);
-        renderer.context.getExtension('OES_standard_derivatives');
+        renderer.getContext().getExtension('OES_standard_derivatives');
         canvas = renderer.domElement;
         canvas.addEventListener('mousemove', onMouseMove);
         document.body.appendChild(canvas);
@@ -276,7 +278,7 @@
         // console.log(stdShader.generateVertexShader());
         // console.log(stdShader.generateFragmentShader());
         layers.push(layer);
-        
+
         //// TILING
         
         layer = {};
@@ -444,7 +446,9 @@
             var time = spriteSheet.time;
             // var time = 0.0;
             
-            renderer.clearTarget(spriteSheet.renderTarget);
+            renderer.setRenderTarget(spriteSheet.renderTarget);
+            renderer.clear();
+            renderer.setRenderTarget(null);
             
             for (var i=0; i<spriteSheet.dimension; i++) {
               for (var j=0; j<spriteSheet.dimension; j++) {
@@ -463,7 +467,9 @@
                 spriteSheet.quad.position.set(-1 + 2.0 * size * j + size, 1 - 2.0 * size * i - size, 0.0);
                 
                 renderer.autoClear = false;
-                renderer.render(spriteSheet.scene, spriteSheet.camera, spriteSheet.renderTarget);
+                renderer.setRenderTarget(spriteSheet.renderTarget);
+                renderer.render(spriteSheet.scene, spriteSheet.camera);
+                renderer.setRenderTarget(null);
                 renderer.autoClear = true;
               }
             }
@@ -725,7 +731,7 @@
         guiTone = h;
         
         gui.add(effectController, "polarConversion");
-        
+
         h = gui.addFolder("Tiling");
         h.add(effectController, "tiling").name("enable");
         h.add(effectController, "cRadialMask", 0.0, 1.0).name("radial mask");
@@ -1153,8 +1159,8 @@
           }
           
           layer.uniforms.resolution.value = new THREE.Vector2(canvas.width, canvas.height);
-          layer.uniforms.cameraPos.value = camera.getWorldPosition();
-          layer.uniforms.cameraDir.value = camera.getWorldDirection();
+          camera.getWorldPosition(layer.uniforms.cameraPos.value);
+          camera.getWorldDirection(layer.uniforms.cameraDir.value);
           layer.uniforms.mouse.value.copy(mouse);
           // layer.uniforms.time.value = effectController.time;
           layer.uniforms.tDiffuse.value = texture;
@@ -1188,7 +1194,9 @@
           PIXY.FxgenShaderUtils.SetShaderParameter(layer.uniforms, "tGrunge", grungeTexture);
         
           scene.overrideMaterial = layer.material;
-          renderer.render(scene, dummyCamera, target);
+          renderer.setRenderTarget(target);
+          renderer.render(scene, dummyCamera);
+          renderer.setRenderTarget(null);
           scene.overrideMaterial = null;
         }
         
