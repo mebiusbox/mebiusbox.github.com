@@ -5,7 +5,7 @@ EffectTextureMaker はエフェクト用のテクスチャをブラウザで簡�
 また，法線テクスチャやセル調，カラーバランス機能があります．
 エフェクトはほとんどアニメーションしており，スプライトシート作成機能もあります．
 
-EffectTextureMaker is easy create texture for VFX. You can also create normal and cell shading texture. It provide you to create spritesheet.
+EffectTextureMaker is easy to generate texture for VFX. You can also create normal and cell shading texture. It provide you to generate spritesheet.
 
 ## End-User License
 
