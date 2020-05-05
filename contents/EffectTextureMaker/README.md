@@ -12,7 +12,7 @@ EffectTextureMaker is easy create texture for VFX. You can also create normal an
 EffectTextureMaker を使って作成したテクスチャは改変・配布自由です．ご自由にお使いください．
 また，商用に使用してもらっても構いません．
 
-Texture made with EffectTextureMaker is free use for personal and commercial product.
+The texture is made with EffectTextureMaker can be freely used for a personal and commercial product. The texture is licensed under the CC0.
 
 ## お問い合わせ
 
@@ -22,5 +22,5 @@ Please do not hesitate to contact me.
 
 ## Copyright
 
-Copyright (C) 2017-2018 mebiusbox software.
+Copyright (C) 2017-2020 mebiusbox software.
 
