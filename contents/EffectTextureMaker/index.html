@@ -358,6 +358,9 @@
             if (layers[i].tDiffuse) {
               layers[i].tDiffuse = layers[i-1].renderTarget.texture;
             }
+            if (layers[i].name === "Tiling") {
+                layers[i].tDiffuse.wrapS = layers[i].tDiffuse.wrapT = THREE.RepeatWrapping;
+            }
           }
         }
         
