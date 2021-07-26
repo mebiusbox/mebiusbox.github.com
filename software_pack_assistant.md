@@ -9,12 +9,12 @@ PackAssistant は複数のファイルを指定の容量をもつパックに、
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=PackAssistantSetupX64" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PackAssitantSetupX64','Title':'PackAssistantSetupX64'});">
+			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PackAssitantSetupX64','Title':'PackAssistantSetupX64'});">
 				<img src="/assets/img/download_exe.jpg" />
 			</a>
 		</td>
 		<td>
-			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=PackAssistantX64" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PackAssistantX64','Title':'PackAssistantX64'});">
+			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PackAssistantX64','Title':'PackAssistantX64'});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>
@@ -25,12 +25,12 @@ PackAssistant は複数のファイルを指定の容量をもつパックに、
 <table class="dl" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=PackAssistantSetup" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PackAssitantSetup','Title':'PackAssistantSetup'});">
+			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PackAssitantSetup','Title':'PackAssistantSetup'});">
 				<img src="/assets/img/download_exe.jpg" />
 			</a>
 		</td>
 		<td>
-			<a href="http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=PackAssistant" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PackAssistant','Title':'PackAssistant'});">
+			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PackAssistant','Title':'PackAssistant'});">
 				<img src="/assets/img/download_zip.jpg" />
 			</a>
 		</td>

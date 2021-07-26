@@ -37,7 +37,7 @@
 	{
 		"name": "TagLibUtil",
 		"version": "1.0.0",
-		"url": "http://mebiusbox.sakura.ne.jp/bin/dl.php?dl=TagLibUtil",
+		"url": "https://github.com/mebiusbox/apps/releases/tag/first",
 		"description":"tag.dll を扱うためのライブラリ."
 	}
 ]
