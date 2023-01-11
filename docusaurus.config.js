@@ -9,7 +9,6 @@ const katex = require('rehype-katex');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Mebiusbox software',
-  tagline: 'Dinosaurs are cool',
   url: 'https://mebiusbox.github.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
