@@ -1,0 +1,152 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+@import url(https://use.fontawesome.com/releases/v5.6.1/css/all.css);
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+
+
+/* You can override the default Infima variables here. */
+:root {
+  // red
+  // --ifm-color-primary: #d21a4e;
+  // --ifm-color-primary-dark: #bd1746;
+  // --ifm-color-primary-darker: #b31642;
+  // --ifm-color-primary-darkest: #931237;
+  // --ifm-color-primary-light: #e32057;
+  // --ifm-color-primary-lighter: #e52b5f;
+  // --ifm-color-primary-lightest: #e94a77;
+  // cyan
+  --ifm-color-primary: #3578f6;
+  --ifm-color-primary-dark: #1865f5;
+  --ifm-color-primary-darker: #0b5cf3;
+  --ifm-color-primary-darkest: #094bc8;
+  --ifm-color-primary-light: #528bf7;
+  --ifm-color-primary-lighter: #6095f8;
+  --ifm-color-primary-lightest: #8bb1fa;
+  // default
+  // --ifm-color-primary: #2e8555;
+  // --ifm-color-primary-dark: #29784c;
+  // --ifm-color-primary-darker: #277148;
+  // --ifm-color-primary-darkest: #205d3b;
+  // --ifm-color-primary-light: #33925d;
+  // --ifm-color-primary-lighter: #359962;
+  // --ifm-color-primary-lightest: #3cad6e;
+  --ifm-font-size-base: 18px;
+  --ifm-code-font-size: 95%;
+  // --ifm-h1-font-size: 2.5rem; // default: 3rem
+  // --ifm-h2-font-size: 1.6rem; // default: 2rem
+  // --ifm-h3-font-size: 1.4rem; // default: 1.5rem
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+  --ifm-font-family-base-orig: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --ifm-font-family-monospace-orig: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --ifm-font-family-base: "Merriweather", "UD デジタル 教科書体 NK-R", "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo, var(--ifm-font-family-base-orig);
+  --ifm-font-family-monospace: "Iosevka Fixed", "Inconsolata", "Fira Mono", "UD デジタル 教科書体 NK-R", "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo, var(--ifm-font-family-monospace-orig);
+
+  --ifm-card-border-radius: 5px;
+}
+
+
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark']:root {
+  --ifm-background-color: #282c2f;
+  --ifm-background-surface-color: #242424;
+  // red
+  // --ifm-color-primary: #d21a4e;
+  // --ifm-color-primary-dark: #bd1746;
+  // --ifm-color-primary-darker: #b31642;
+  // --ifm-color-primary-darkest: #931237;
+  // --ifm-color-primary-light: #e32057;
+  // --ifm-color-primary-lighter: #e52b5f;
+  // --ifm-color-primary-lightest: #e94a77;
+  // cyan
+  // --ifm-color-primary: #3578f6;
+  // --ifm-color-primary-dark: #1865f5;
+  // --ifm-color-primary-darker: #0b5cf3;
+  // --ifm-color-primary-darkest: #094bc8;
+  // --ifm-color-primary-light: #528bf7;
+  // --ifm-color-primary-lighter: #6095f8;
+  // --ifm-color-primary-lightest: #8bb1fa;
+  // orange
+  --ifm-color-primary: #ffcc00;
+  --ifm-color-primary-dark: #e6b800;
+  --ifm-color-primary-darker: #d9ad00;
+  --ifm-color-primary-darkest: #b38f00;
+  --ifm-color-primary-light: #ffd11a;
+  --ifm-color-primary-lighter: #ffd426;
+  --ifm-color-primary-lightest: #ffdb4d;
+  // default
+  // --ifm-color-primary: #25c2a0;
+  // --ifm-color-primary-dark: #21af90;
+  // --ifm-color-primary-darker: #1fa588;
+  // --ifm-color-primary-darkest: #1a8870;
+  // --ifm-color-primary-light: #29d5b0;
+  // --ifm-color-primary-lighter: #32d8b4;
+  // --ifm-color-primary-lightest: #4fddbf;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+table.mbx-dl tr {
+  border-width: 0px;
+}
+table.mbx-dl tr td {
+	padding:4px;
+  border-width: 0px;
+}
+div.mbx-snap img {
+	float:left;
+	padding:8px;
+}
+.mbx-clear { clear:both; }
+
+.markdown > h1,
+article > h1 {
+  color: var(--ifm-color-primary);
+}
+
+.markdown > h2:before,
+article > h2:before {
+  content: '\f138';
+  font-family: 'Font Awesome 5 Free';
+  margin-right:10px;
+}
+
+.markdown > h2,
+article > h2 {
+  color: var(--ifm-color-primary);
+  border-bottom: 1px dashed var(--ifm-color-primary-lighter);
+	padding: 0px 0px 5px 0px;
+  font-size: 1.8rem;
+}
+
+[data-theme='dark'] .markdown > h2,
+[data-theme='dark'] article > h2 {
+  border-bottom: 1px dashed var(--ifm-color-primary-darkest);
+}
+
+.markdown > h3:before,
+article > h3:before {
+  content: '\f101';
+  font-family: 'Font Awesome 5 Free';
+  margin-right:6px;
+}
+
+.markdown > h3,
+article > h3 {
+  color: #d21a4e;
+	padding: 0px 0px 5px 0px;
+  font-size: 1.4rem;
+}
+[data-theme='dark'] .markdown > h3,
+[data-theme='dark'] article > h3 {
+  color: #0cf;
+}
+
+.CookieConsent {
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.75rem;
+}

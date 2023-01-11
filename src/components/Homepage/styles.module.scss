@@ -1,0 +1,44 @@
+.features {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.head:before {
+  content: '\f138';
+  font-family: 'Font Awesome 5 Free';
+  margin-right:5px;
+}
+
+.head {
+  color: var(--ifm-color-primary);
+  border-bottom: 1px dashed var(--ifm-color-primary-lighter);
+	padding: 0px 0px 5px 0px;
+}
+[data-theme='dark'] .head {
+  border-bottom: 1px dashed var(--ifm-color-primary-darkest);
+}
+
+.sub-head:before {
+  content: '\f101';
+  font-family: 'Font Awesome 5 Free';
+  margin-right:5px;
+}
+
+.sub-head {
+  color: #0cf;
+	padding: 0px 0px 5px 0px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  padding: 1rem 0;
+  width: 100%;
+}
+
+.featureSvg {
+  height: 200px;
+  width: 200px;
+}

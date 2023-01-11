@@ -1,7 +1,0 @@
-# General Jekyll Config
-highlighter: rouge
-url: http://mebiusbox.github.io
-lsi: false
-exclude: [LICENSE, CNAME, README.md, .gitignore, Gemfile, Gemfile.lock]
-paginate: 10
-gems: [jekyll-paginate]
