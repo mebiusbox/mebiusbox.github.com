@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>three.js</title>
+    <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+      body {
+        color: #fff;
+        font-family: Monospace;
+        font-size: 13px;
+        text-align: center;
+        font-weight: bold;
+        
+        background-color: #000;
+        margin: 0px;
+        overflow: hidden;
+      }
+      
+      #info {
+        position: absolute;
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+        color: #fff;
+      }
+      
+      a { color: orange; }
+    </style>
+  </head>
+  <body>
+    <div id="info">
+      <a href="http://threejs.org" target="_blank">three.js</a> - SSR(DDA)
+    </div>
+    
+    <script src="js/three.min.js"></script>
+    <script src="js/WebGL.js"></script>
+    <script src="js/controls/OrbitControls.js"></script>
+    <script src="js/loaders/MTLLoader.js"></script>
+    <script src="js/loaders/LoaderSupport.js"></script>
+    <script src="js/loaders/OBJLoader2.js"></script>
+    <script src="js/utils/BufferGeometryUtils.js"></script>
+    <script src="js/geometries/TeapotBufferGeometry.js"></script>
+    <script src="js/libs/dat.gui.min.js"></script>
+    <script src="js/libs/stats.min.js"></script>
+    <script src="js/SimplexNoise.js"></script>
+    <script src="loadFiles.js"></script>
+    <script src="ssao.js"></script>
+    <script src="threejs_utils.js"></script>
+    <script>
+      if (WEBGL.isWebGLAvailable() === false) {
+        document.body.appendChild(WEBGL.getWebGLErrorMessage());
+      }
+
+      var app = {};
+      
+      init();
+      // render();
+      // animate();
+
+      function clamp(x, min, max) {
+        if (x < min) return min;
+        if (x > max) return max;
+        return x;
+      }
+      
+      function init() {
+
+        app.clock = new THREE.Clock();
+        app.time = 0.0;
+      
+        loadFiles([
+          'shaders/copy_vert.glsl',
+          'shaders/copy_frag.glsl',
+          'shaders/depth_frag.glsl',
+          'shaders/ssr_dda_frag.glsl',
+          'shaders/ssrblur_frag.glsl',
+          'shaders/ssrcomposite_frag.glsl',
+          'shaders/pbr_vert.glsl',
+          'shaders/pbr_frag.glsl'
+        ], function(shaders) {
+          
+          app.shaders = shaders;
+          initGraphics();
+          initScene();
+          initPost();
+          initGui();
+        
+          // EVENTS
+          window.addEventListener('resize', onWindowResize, false);
+          
+          animate();
+        }, function(url) {
+          alert('Failed to download "' + url + '"');
+        });
+      }
+      
+      function initGraphics() {
+        
+        // RENDERER
+
+        app.renderer = new THREE.WebGLRenderer({antialias: true, alpha:true});
+        app.renderer.setClearColor(0x004080);
+        app.renderer.setPixelRatio(window.devicePixelRatio);
+        app.renderer.setSize(window.innerWidth, window.innerHeight);
+        // renderer.gammaInput = true;
+        // renderer.gammaOutput = true;
+        // app.renderer.autoClear = true;
+
+        app.container = document.createElement('div');
+        document.body.appendChild(app.container);
+
+        app.canvas = app.renderer.domElement;
+        app.container.appendChild(app.canvas);
+        
+        // STATS
+        
+        app.stats = new Stats();
+				app.container.appendChild(app.stats.dom);
+      }
+      
+      function initScene(shaders) {
+        
+        app.scene = new THREE.Scene();
+        
+        // CAMERA
+        
+        app.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+        app.camera.position.z = 50;
+        app.camera.position.y = 20;
+        // app.updateMatrixWorld();
+        // app.updateProjectionMatrix();
+
+        // CONTROLS
+        
+        app.controls = new THREE.OrbitControls(app.camera, app.canvas);
+        app.controls.target.set(0,0,0);
+        app.controls.update();
+        // app.controls.addEventListener('change', cameraChanged);
+        
+        // LIGHTS
+        
+        app.lights = {};
+        app.lights.ambient = new THREE.AmbientLight( 0x808080 ); // soft white light
+        app.scene.add(app.lights.ambient);
+
+        app.lights.point = new THREE.PointLight(0xffffff, 1, 800.0);
+        app.lights.point.position.set(0,200,0);
+        app.lights.point.decay = 1;
+        // app.lights.point.position.copy(pointLightPosition);
+        // app.lights.point.decay = effectController.pointDecay;
+        // app.lights.point.distance = effectController.pointDistance;
+        app.scene.add(app.lights.point);
+
+        // app.lights.pointHelper = new THREE.PointLightHelper(app.lights.point, app.lights.point.distance);
+        // app.lights.pointHelper.update();
+        // app.scene.add(app.lights.pointHelper);
+        
+        // MATERIALS
+
+        var textureLoader = new THREE.TextureLoader();
+        var blackTexture = textureLoader.load('assets/textures/black.jpg');
+        var whiteTexture = textureLoader.load('assets/textures/white.jpg');
+        var wallMaterial = new THREE.MeshStandardMaterial();
+        wallMaterial.bumpMap = textureLoader.load('assets/textures/brick_bump.jpg');
+        wallMaterial.map = textureLoader.load('assets/textures/brick_diffuse.jpg');
+        wallMaterial.roughnessMap = textureLoader.load('assets/textures/brick_roughness.jpg');
+        wallMaterial.bumpScale = 0.1;
+
+        var groundMaterial = new THREE.MeshStandardMaterial();
+        groundMaterial.aoMap = textureLoader.load('assets/textures/tidal-pool1-ue/tidal-pool1-ao.jpg');
+        groundMaterial.bumpMap = textureLoader.load('assets/textures/tidal-pool1-ue/tidal-pool1-normal-dx.jpg');
+        groundMaterial.map = textureLoader.load('assets/textures/tidal-pool1-ue/tidal-pool1-albedo.jpg');
+        groundMaterial.roughnessMap = textureLoader.load('assets/textures/tidal-pool1-ue/tidal-pool1-roughness.jpg');
+        groundMaterial.bumpScale = 0.08;
+
+        app.metalRoughScene = new THREE.Scene();
+        var metalRoughMaterial = createMaterial({
+          metalness: { value: 1.0 },
+          roughness: { value: 0.0 },
+          albedo: { value: new THREE.Vector3(1.0,1.0,1.0) },
+          roughnessMap: { value: null }},
+          app.shaders["pbr_vert"],
+          app.shaders["pbr_frag"]);
+        metalRoughMaterial.uniforms.roughnessMap.value = groundMaterial.roughnessMap;
+        var metalRoughZeroMaterial = createMaterial({
+          metalness: { value: 1.0 },
+          roughness: { value: 0.0 },
+          albedo: { value: new THREE.Vector3(1.0,1.0,1.0) },
+          roughnessMap: { value: null }},
+          app.shaders["pbr_vert"],
+          app.shaders["pbr_frag"]);
+        metalRoughZeroMaterial.uniforms.roughnessMap.value = whiteTexture;
+
+        app.groundMaterial = groundMaterial;
+        app.metalRoughMaterial = metalRoughMaterial;
+        app.roughnessMap = groundMaterial.roughnessMap;
+        app.blackTexture = blackTexture;
+        app.whiteTexture = whiteTexture;
+        
+        // MODELS
+
+        geometry = new THREE.PlaneBufferGeometry(40,40);
+        THREE.BufferGeometryUtils.computeTangents(geometry);
+        mesh = new THREE.Mesh(geometry, groundMaterial);
+        mesh.rotation.x = -Math.PI * 0.5;
+        app.scene.add(mesh);
+        
+        mesh = new THREE.Mesh(geometry, wallMaterial);
+        mesh.position.y = 20.0;
+        mesh.position.z = -20.0;
+        app.scene.add(mesh);
+        
+        mesh = new THREE.Mesh(geometry, wallMaterial);
+        mesh.position.y = 20.0;
+        mesh.position.z = 20.0;
+        mesh.rotation.y = Math.PI;
+        app.scene.add(mesh);
+        
+        mesh = new THREE.Mesh(geometry, wallMaterial);
+        mesh.position.x = -20.0;
+        mesh.position.y = 20.0;
+        mesh.rotation.y = Math.PI*0.5;
+        app.scene.add(mesh);
+        
+        mesh = new THREE.Mesh(geometry, wallMaterial);
+        mesh.position.x = 20.0;
+        mesh.position.y = 20.0;
+        mesh.rotation.y = -Math.PI*0.5;
+        app.scene.add(mesh);
+
+        // for GBuffer
+
+        mesh = new THREE.Mesh(geometry, metalRoughMaterial);
+        mesh.rotation.x = -Math.PI * 0.5;
+        app.metalRoughScene.add(mesh);
+        
+        mesh = new THREE.Mesh(geometry, metalRoughZeroMaterial);
+        mesh.position.y = 20.0;
+        mesh.position.z = -20.0;
+        app.metalRoughScene.add(mesh);
+        
+        mesh = new THREE.Mesh(geometry, metalRoughZeroMaterial);
+        mesh.position.y = 20.0;
+        mesh.position.z = 20.0;
+        mesh.rotation.y = Math.PI;
+        app.metalRoughScene.add(mesh);
+        
+        mesh = new THREE.Mesh(geometry, metalRoughZeroMaterial);
+        mesh.position.x = -20.0;
+        mesh.position.y = 20.0;
+        mesh.rotation.y = Math.PI*0.5;
+        app.metalRoughScene.add(mesh);
+        
+        mesh = new THREE.Mesh(geometry, metalRoughZeroMaterial);
+        mesh.position.x = 20.0;
+        mesh.position.y = 20.0;
+        mesh.rotation.y = -Math.PI*0.5;
+        app.metalRoughScene.add(mesh);
+
+        // OBJECTS
+        
+        var teapotMaterial = new THREE.MeshStandardMaterial();
+        teapotMaterial.color = new THREE.Color(0.0,0.5,1.0);
+        teapotMaterial.metallic = 1.0;
+        teapotMaterial.roughness = 0.1;
+        var geo = new THREE.TeapotBufferGeometry(
+          2.0, 15, true, true, true, false, true);
+        var teapot = new THREE.Mesh(geo, teapotMaterial);
+        THREE.BufferGeometryUtils.computeTangents(teapot.geometry);
+        teapot.position.y = 2;
+        app.scene.add(teapot);
+
+        teapot = new THREE.Mesh(geo, metalRoughZeroMaterial);
+        THREE.BufferGeometryUtils.computeTangents(teapot.geometry);
+        teapot.position.y = 2;
+        app.metalRoughScene.add(teapot);
+
+        var sphereMaterial = new THREE.MeshStandardMaterial();
+        sphereMaterial.color = new THREE.Color(1.0,0.0,0.0);
+        sphereMaterial.metallic = 1.0;
+        sphereMaterial.roughness = 0.5;
+        var sphereGeometry = new THREE.SphereBufferGeometry(5,32,32);
+        var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        THREE.BufferGeometryUtils.computeTangents(sphere.geometry);
+        sphere.name = "sphere1";
+        sphere.position.y = 5;
+        sphere.position.x = 10;
+        app.scene.add(sphere);
+
+        sphere = new THREE.Mesh(sphereGeometry, metalRoughZeroMaterial);
+        THREE.BufferGeometryUtils.computeTangents(sphere.geometry);
+        sphere.name = "sphere1";
+        sphere.position.y = 5;
+        sphere.position.x = 10;
+        app.metalRoughScene.add(sphere);
+
+        var boxMaterial = new THREE.MeshStandardMaterial();
+        boxMaterial.color = new THREE.Color(0.0,1.0,0.0);
+        boxMaterial.metallic = 1.0;
+        boxMaterial.roughness = 1.0;
+        var boxGeometry = new THREE.BoxBufferGeometry(5,10,5);
+        var box = new THREE.Mesh(boxGeometry, boxMaterial);
+        THREE.BufferGeometryUtils.computeTangents(box.geometry);
+        box.name = "box1";
+        box.position.y = 5;
+        box.position.x = -10;
+        app.scene.add(box);
+
+        box = new THREE.Mesh(boxGeometry, metalRoughZeroMaterial);
+        THREE.BufferGeometryUtils.computeTangents(box.geometry);
+        box.name = "box1";
+        box.position.y = 5;
+        box.position.x = -10;
+        app.metalRoughScene.add(box);
+
+        // BACKGROUND
+        // app.scene.background = createCubeMap('./assets/textures/skybox/',true);
+        app.scene.background = createCubeMap('./assets/textures/cubemap/fill_',true);
+      }
+
+      function initPost() {
+
+        // COLOR
+
+        var colorTarget = createRenderTarget(THREE.RGBFormat);
+        colorTarget.depthBuffer = true;
+        colorTarget.depthTexture = new THREE.DepthTexture();
+        // colorTarget.depthTexture.type = THREE.UnsignedShortType;
+        colorTarget.depthTexture.type = THREE.UnsignedIntType;
+        app.passes = [];
+        app.passes.push({
+          enable: true,
+          scene: app.scene,
+          camera: app.camera,
+          colorTarget: colorTarget,
+          // colorTarget: null,
+          clear: true,
+          clearColor: 0x004080,
+          clearAlpha: 0.0,
+          clearDepth: true,
+          overrideMaterial: null
+        });
+
+        // NORMAL
+
+        var normalTarget = createRenderTarget(THREE.RGBFormat);
+        app.passes.push({
+          enable: true,
+          scene: app.scene,
+          camera: app.camera,
+          colorTarget: normalTarget,
+          clear: true,
+          clearColor: 0x808080,
+          clearAlpha: 1.0,
+          clearDepth: true,
+          overrideMaterial: new THREE.MeshNormalMaterial()
+        });
+
+        // MetalRoughness
+
+        var metalRoughTarget = createRenderTarget(THREE.RGBFormat);
+        app.passes.push({
+          enable: true,
+          scene: app.metalRoughScene,
+          camera: app.camera,
+          colorTarget: metalRoughTarget,
+          clear: true,
+          clearColor: 0xffffff,
+          clearAlpha: 1.0,
+          clearDepth: true,
+          overrideMaterial: null
+        });
+
+        // SSR
+
+        var ssrTarget = createRenderTarget(THREE.RGBAFormat);
+        ssrTarget.depthBuffer = false;
+        ssrMaterial = createMaterial({
+          ColorSampler: { value: colorTarget.texture },
+          NormalSampler: { value: normalTarget.texture },
+          DepthSampler: { value: colorTarget.depthTexture },
+          BackDepthSampler: { value: colorTarget.depthTexture },
+          MetalRoughSampler: { value: metalRoughTarget.texture },
+          EnvSampler: { value: app.scene.background },
+          Resolution: { value: new THREE.Vector4(app.canvas.width, app.canvas.height, 1.0/app.canvas.width, 1.0/app.canvas.height) },
+          CameraNear: { value: app.camera.near },
+          CameraFar: { value: app.camera.far },
+          CameraProjectionMatrix: { value: new THREE.Matrix4() },
+          CameraInverseProjectionMatrix: { value: new THREE.Matrix4() },
+          ViewInverseMatrix: { value: new THREE.Matrix4() },
+          Iterations: { value: 50 },
+          BinarySearchIterations: { value: 4 },
+          PixelZSize: { value: 1.0 },
+          PixelStride: { value: 8.0 },
+          PixelStrideZCutoff: { value: 50.0 },
+          MaxRayDistance: { value: 20.0 },
+          ScreenEdgeFadeStart: { value: 0.75 },
+          EyeFadeStart: { value: 0.0 },
+          EyeFadeEnd: { value: 1.0 },
+          EdgeDistance: { value: 50.0 },// default 15.0
+          EdgeExponent: { value: 1.0 },// default 0.25
+          FadeDistance: { value: 10.0 },
+          FadeExponent: { value: 1.0 },
+          Jitter: { value: 0.0 }},
+          app.shaders["copy_vert"],
+          app.shaders["ssr_dda_frag"],
+          { depthTest: false, depthWrite: false });
+        ssrMaterial.uniforms.CameraProjectionMatrix.value.copy(app.camera.projectionMatrix);
+        ssrMaterial.uniforms.CameraInverseProjectionMatrix.value.getInverse(app.camera.projectionMatrix);
+        ssrMaterial.uniforms.ViewInverseMatrix.value.getInverse(app.camera.matrixWorldInverse);
+        var ssrPass = {
+          enable: true,
+          scene: new THREE.Scene(),
+          camera: new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
+          colorTarget: ssrTarget,
+          clear: true,
+          clearColor: 0x000000,
+          clearAlpha: 0.0,
+          clearDepth: false,
+          overrideMaterial: null
+        };
+        ssrPass.scene.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2,2), ssrMaterial));
+        app.passes.push(ssrPass);
+        app.ssrPass = ssrPass;
+        app.ssrMaterial = ssrMaterial;
+
+        // SSR BLUR
+        var downsampling = 1;
+        var blurTarget = createRenderTarget(THREE.RGBAFormat);
+        blurTarget.depthBuffer = false;
+        blurMaterial = createMaterial({
+          ColorSampler: { value: ssrTarget.texture },
+          Resolution: { value: new THREE.Vector2(app.canvas.width/downsampling, app.canvas.height/downsampling) }},
+          app.shaders["copy_vert"],
+          app.shaders["ssrblur_frag"],
+          { depthTest: false, depthWrite: false});
+        var blurPass = {
+          enable: true,
+          scene: new THREE.Scene(),
+          camera: new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
+          colorTarget: blurTarget,
+          clear: false,
+          clearColor: 0x000000,
+          clearAlpha: 0.0,
+          clearDepth: false,
+          overrideMaterial: null
+        };
+        blurPass.scene.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2,2), blurMaterial));
+        var blur2Target = createRenderTarget(THREE.RGBAFormat);
+        blur2Target.depthBuffer = false;
+        blur2Material = createMaterial({
+          ColorSampler: { value: blurTarget.texture },
+          Resolution: { value: new THREE.Vector2(app.canvas.width/downsampling, app.canvas.height/downsampling) }},
+          app.shaders["copy_vert"],
+          app.shaders["ssrblur_frag"],
+          { depthTest: false, depthWrite: false});
+        var blur2Pass = {
+          enable: true,
+          scene: new THREE.Scene(),
+          camera: new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
+          colorTarget: blur2Target,
+          clear: false,
+          clearColor: 0x000000,
+          clearAlpha: 0.0,
+          clearDepth: false,
+          overrideMaterial: null
+        };
+        blur2Pass.scene.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2,2), blur2Material));
+        app.passes.push(blurPass);
+        app.passes.push(blur2Pass);
+
+        // SSR COMPOSITE
+
+        var compositeTarget = createRenderTarget(THREE.RGBFormat);
+        compositeTarget.depthBuffer = false;
+        compositeMaterial = createMaterial({
+          ColorSampler: { value: colorTarget.texture },
+          SSRSampler: { value: blur2Target.texture }},
+          app.shaders["copy_vert"],
+          app.shaders["ssrcomposite_frag"],
+          { depthTest: false, depthWrite: false});
+        var compositePass = {
+          enable: true,
+          scene: new THREE.Scene(),
+          camera: new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
+          colorTarget: compositeTarget,
+          clear: false,
+          clearColor: 0x000000,
+          clearAlpha: 0.0,
+          clearDepth: false,
+          overrideMaterial: null
+        };
+        compositePass.scene.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2,2), compositeMaterial));
+        app.passes.push(compositePass);
+        app.compositeMaterial = compositeMaterial;
+
+        // SCREEN
+
+        var copyMaterial = createMaterial({
+          // ColorSampler: { value: colorTarget.texture},
+          // ColorSampler: { value: normalTarget.texture},
+          // ColorSampler: { value: metalRoughTarget.texture },
+          // ColorSampler: { value: ssrTarget.texture},
+          // ColorSampler: { value: blurTarget.texture },
+          // ColorSampler: { value: blur2Target.texture },
+          ColorSampler: { value: compositeTarget.texture },
+          Opacity: {value:1.0}},
+          app.shaders["copy_vert"],
+          app.shaders["copy_frag"],
+          { depthTest: false, depthWrite: false});
+        var copyPass = {
+          enable: true,
+          scene: new THREE.Scene(),
+          camera: new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
+          colorTarget: null,
+          clear: false,
+          clearColor: 0x000000,
+          clearAlpha: 0.0,
+          clearDepth: false,
+          overrideMaterial: null
+        };
+        copyPass.scene.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2,2), copyMaterial));
+        app.passes.push(copyPass);
+
+        // DEBUG: NOISE
+
+        // var kernel = generateSampleKernel(32);
+        // var noiseTexture = generateRandomKernelRotations();
+        // var copyMaterial = createMaterial({
+        //   ColorSampler: {value: noiseTexture},
+        //   Opacity: {value:1.0}},
+        //   app.shaders["copy_vert"],
+        //   app.shaders["copy_frag"],
+        //   { depthTest: false, depthWrite: false});
+        // var copyPass = {
+        //   enable: true,
+        //   scene: new THREE.Scene(),
+        //   camera: new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
+        //   colorTarget: null,
+        //   clear: false,
+        //   clearColor: 0x000000,
+        //   clearAlpha: 0,
+        //   clearDepth: false,
+        //   overrideMaterial: null
+        // };
+        // copyPass.scene.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2,2), copyMaterial));
+        // app.passes.push(copyPass);
+
+        // DEBUG: DEPTH
+
+        // var depthMaterial = createMaterial({
+        //   DepthSampler: {value: colorTarget.depthTexture},
+        //   CameraNear: {value: app.camera.near},
+        //   CameraFar: {value: app.camera.far}},
+        //   app.shaders["copy_vert"],
+        //   app.shaders["depth_frag"],
+        //   { depthTest: false, depthWrite: false});
+        // var depthPass = {
+        //   enable: true,
+        //   scene: new THREE.Scene(),
+        //   camera: new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
+        //   colorTarget: null,
+        //   clear: false,
+        //   clearColor: 0x000000,
+        //   clearAlpha: 0,
+        //   clearDepth: false,
+        //   overrideMaterial: null
+        // };
+        // depthPass.scene.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2,2), depthMaterial));
+        // app.passes.push(depthPass);
+      }
+      
+      function initGui() {
+
+        var ssrUniforms = app.ssrMaterial.uniforms;
+        var compositeUniforms = app.compositeMaterial.uniforms;
+        app.config = {
+          Iterations: ssrUniforms.Iterations.value,
+          BinarySearchIterations: ssrUniforms.BinarySearchIterations.value,
+          PixelZSize: ssrUniforms.PixelZSize.value,
+          PixelStride: ssrUniforms.PixelStride.value,
+          PixelStrideZCutoff: ssrUniforms.PixelStrideZCutoff.value,
+          MaxRayDistance: ssrUniforms.MaxRayDistance.value,
+          ScreenEdgeFadeStart: ssrUniforms.ScreenEdgeFadeStart.value,
+          EyeFadeStart: ssrUniforms.EyeFadeStart.value,
+          EyeFadeEnd: ssrUniforms.EyeFadeEnd.value,
+          EdgeDistance: ssrUniforms.EdgeDistance.value,
+          EdgeExponent: ssrUniforms.EdgeExponent.value,
+          FadeDistance: ssrUniforms.FadeDistance.value,
+          FadeExponent: ssrUniforms.FadeExponent.value,
+          Jitter: ssrUniforms.Jitter.value,
+          Roughness: true
+        };
+
+        var h;
+        var gui = new dat.GUI();
+        h = gui.addFolder("SSR");
+        h.add(app.config, "Iterations", 1.0, 300.0, 1.0);
+        h.add(app.config, "BinarySearchIterations", 0.0, 32.0, 1.0);
+        h.add(app.config, "PixelStride", 0.0, 64.0, 0.01);
+        h.add(app.config, "PixelStrideZCutoff", 0.0, 100.0, 1.0);
+        h.add(app.config, "PixelZSize", 0.0, 1.0, 0.01);
+        h.add(app.config, "MaxRayDistance", 0.0, 100.0, 0.1);
+        // h.add(app.config, "ScreenEdgeFadeStart", 0.0, 1.0, 0.01);
+        // h.add(app.config, "EyeFadeStart", 0.0, 1.0, 0.01);
+        // h.add(app.config, "EyeFadeEnd", 0.0, 1.0, 0.01);
+        h.add(app.config, "EdgeDistance", 0.0, 100.0, 0.01);
+        h.add(app.config, "EdgeExponent", 0.01, 10.0, 0.01);
+        h.add(app.config, "FadeDistance", 0.0, 50.0, 0.01);
+        h.add(app.config, "FadeExponent", 0.01, 10.0, 0.01);
+        h.add(app.config, "Jitter", 0.0, 1.0, 1.0);
+        h.add(app.config, "Roughness");
+      }
+
+      // EVENT HANDLERS
+
+      function onWindowResize() {
+        app.renderer.setSize(window.innerWidth, window.innerHeight);
+        app.camera.aspect = window.innerWidth / window.innerHeight;
+        app.camera.updateProjectionMatrix();
+        render();
+      }
+
+      // function cameraChanged() {
+      //   console.log('camera.pos:' + app.camera.position.x + ',' + app.camera.position.y + ',' + app.camera.position.z);
+      //   render();
+      // }
+
+      function animate() {
+        app.time += app.clock.getDelta();
+  			requestAnimationFrame(animate, app.renderer.domElement);
+				render();
+			}
+
+      function render() {
+        app.stats.update();
+
+        var posY = Math.cos(app.time)*5 + 5;
+        app.scene.getObjectByName('sphere1').position.y = posY;
+        app.metalRoughScene.getObjectByName('sphere1').position.y = posY;
+
+        app.scene.getObjectByName('box1').rotation.y = app.time;
+        app.metalRoughScene.getObjectByName('box1').rotation.y = app.time;
+        
+        app.camera.updateProjectionMatrix();
+        app.ssrMaterial.uniforms.CameraProjectionMatrix.value.copy(app.camera.projectionMatrix);
+        app.ssrMaterial.uniforms.CameraInverseProjectionMatrix.value.getInverse(app.camera.projectionMatrix);
+        app.ssrMaterial.uniforms.ViewInverseMatrix.value.getInverse(app.camera.matrixWorldInverse);
+        // console.log(app.ssrMaterial.uniforms.CameraProjectionMatrix.value);
+        // console.log(app.ssrMaterial.uniforms.CameraInverseProjectionMatrix.value);
+        app.ssrMaterial.uniforms.Iterations.value = app.config.Iterations;
+        app.ssrMaterial.uniforms.BinarySearchIterations.value = app.config.BinarySearchIterations;
+        app.ssrMaterial.uniforms.PixelZSize.value = app.config.PixelZSize;
+        app.ssrMaterial.uniforms.PixelStride.value = app.config.PixelStride;
+        app.ssrMaterial.uniforms.PixelStrideZCutoff.value = app.config.PixelStrideZCutoff;
+        app.ssrMaterial.uniforms.MaxRayDistance.value = app.config.MaxRayDistance;
+        app.ssrMaterial.uniforms.ScreenEdgeFadeStart.value = app.config.ScreenEdgeFadeStart;
+        app.ssrMaterial.uniforms.EyeFadeStart.value = app.config.EyeFadeStart;
+        app.ssrMaterial.uniforms.EyeFadeEnd.value = app.config.EyeFadeEnd;
+        app.ssrMaterial.uniforms.EdgeDistance.value = app.config.EdgeDistance;
+        app.ssrMaterial.uniforms.EdgeExponent.value = app.config.EdgeExponent;
+        app.ssrMaterial.uniforms.FadeDistance.value = app.config.FadeDistance;
+        app.ssrMaterial.uniforms.FadeExponent.value = app.config.FadeExponent;
+        app.ssrMaterial.uniforms.Jitter.value = app.config.Jitter;
+
+        if (app.config.Roughness) {
+          app.groundMaterial.roughnessMap = app.roughnessMap;
+          app.metalRoughMaterial.uniforms.roughnessMap.value = app.roughnessMap;
+        }
+        else {
+          app.groundMaterial.roughnessMap = app.blackTexture;
+          app.metalRoughMaterial.uniforms.roughnessMap.value = app.blackTexture;
+        }
+
+        var i, il = app.passes.length;
+        for (i=0; i<il; i++) {
+          renderPass(app.passes[i]);
+        }
+      }
+
+      function renderPass(pass) {
+        if (!pass.enable) return;
+        app.renderer.autoClear = pass.clear;
+        app.renderer.autoClearDepth = pass.clearDepth;
+        app.renderer.setClearColor(pass.clearColor, pass.clearAlpha);
+        pass.scene.overrideMaterial = pass.overrideMaterial;
+        app.renderer.render(pass.scene, pass.camera, pass.colorTarget);
+        pass.scene.overrideMaterial = null;
+      }
+
+    </script>
+  </body>
+</html>

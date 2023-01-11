@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>three.js</title>
+    <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+      body {
+        color: #fff;
+        font-family: Monospace;
+        font-size: 13px;
+        text-align: center;
+        font-weight: bold;
+        
+        background-color: #000;
+        margin: 0px;
+        overflow: hidden;
+      }
+      
+      #info {
+        position: absolute;
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+        color: #fff;
+      }
+      
+      #progress { 
+        color: red,
+        top: 7em;
+        width: 100px;
+        font-size: 3em;
+        font-variant: samll-caps;
+        font-weight: bold;
+        position: absolute;
+        z-index: 100;
+        text-align: center;
+        text-shadow: #000 0px 0px 10px;
+        display: none;
+      }
+      
+      #progressbar {
+        text-align: center;
+        background: white;
+        width: 250px;
+        height: 10px;
+      }
+      
+      #bar {
+        background: #d00;
+        width: 50px;
+        height: 10px;
+      }
+      
+      a { color: orange; }
+    </style>
+  </head>
+  <body>
+    <div id="info">
+      <a href="https://github.com/mebiusbox/pixy.js">pixy.js</a> + <a href="http://threejs.org" target="_blank">three.js</a> - Overlay
+    </div>
+    <div id="progress">
+      <span id="message">Loading...</span>
+      <center>
+        <div id="progressbar" class="shadow"><div id="bar" class="shadow"></div></div>
+      </center>
+    </center>
+    
+    <script src="js/three.min.js"></script>
+    <script src="js/WebGL.js"></script>
+    <script src="js/controls/OrbitControls.js"></script>
+    <script src="js/libs/dat.gui.min.js"></script>
+    <script src="js/libs/stats.min.js"></script>
+    <script src="js/utils/BufferGeometryUtils.js"></script>
+    <script src="../build/pixy.js"></script>
+    <script>
+      if (THREE.WEBGL.isWebGLAvailable() === false) {
+        document.body.appendChild(THREE.WEBGL.getWebGLErrorMessage());
+      }
+      
+      var camera, controls, scene, renderer;
+      var stats, clock = new THREE.Clock();
+      var lights = {};
+      var textures = {};
+      var shader;
+      var gui, parameters;
+      var ready = false;
+      
+      init();
+      // render();
+      animate();
+      
+      function init() {
+        
+        initGraphics();
+        initScene();
+        initPost();
+        initGui();
+        
+        // EVENTS
+        
+        window.addEventListener('resize', onWindowResize, false);
+        
+        THREE.DefaultLoadingManager.onProgress = function(item, loaded, total) {
+          var bar = 250;
+          bar = Math.floor(bar * loaded / total);
+          document.getElementById("bar").style.width = bar + "px";
+          
+          console.log(item, loaded, total);
+          
+          if (loaded == total) {
+            ready = true;
+            document.getElementById("message").style.display = "none";
+            document.getElementById("progressbar").style.display = "none";
+            document.getElementById("progress").style.display = "none";
+            console.log("ready");
+          }
+        };
+      }
+      
+      function initGraphics() {
+        container = document.createElement('div');
+        document.body.appendChild(container);
+        
+        // RENDERER
+        
+        renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer.setClearColor(0xAAAAAA);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        // renderer.gammaInput = false;
+        // renderer.gammaOutput = false;
+        // renderer.autoClear = false;
+        container.appendChild(renderer.domElement);
+        
+        // STATS
+        
+        stats = new Stats();
+				container.appendChild(stats.dom);
+      }
+      
+      function initScene() {
+        
+        // scene itself
+        scene = new THREE.Scene();
+        
+        // MARK: CAMERA
+        
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 8000);
+        camera.position.set(500, 500, 500);
+        
+        // MARK: CONTROLS
+        
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.target.set(0,0,0);
+        controls.addEventListener('change', render);
+        
+        // MARK: LIGHTS
+        
+        // lights.ambient = new THREE.AmbientLight(0x333333);
+        // scene.add(lights.ambient);
+        
+        lights.direct = new THREE.DirectionalLight(0xFFFFFF, 1.0);
+        scene.add(lights.direct);
+        lights.directHelper = new THREE.DirectionalLightHelper(lights.direct, 0.5);
+        scene.add(lights.directHelper);
+        
+        // MARK: MATERIALS
+        
+        shader = new PIXY.Shader();
+        // shader.enable("NOLIT");
+        shader.enable("DIRECTLIGHT", 1);
+        // shader.enable("POINTLIGHT", 1);
+        // shader.enable("SPOTLIGHT", 1);
+        // shader.enable("PHONG");
+        shader.enable("STANDARD");
+        // shader.enable("ORENNAYER");
+        // shader.enable("ROUGHNESSMAP");
+        // shader.enable("METALNESSMAP");
+        // shader.enable("REFLECTION");
+        // shader.enable("FRESNEL");
+        // shader.enable("VELVET");
+        // shader.enable("AMBIENT");
+        // shader.enable("HEMISPHERE");
+        // shader.enable("INNERGLOW");
+        // shader.enable("INNERGLOWSUBTRACT");
+        // shader.enable("RIMLIGHT");
+        // shader.enable("COLORMAP");
+        // shader.enable("NORMALMAP");
+        // shader.enable("BUMPMAP");
+        // shader.enable("SPECULARMAP");
+        // shader.enable("AOMAP");
+        // shader.enable("PROJECTIONMAP");
+        // shader.enable("DISTORTION");
+        // shader.enable("UVSCROLL");
+        // shader.enable("UVPROJECTION");
+        // shader.enable("GLASS");
+        shader.enable("OVERLAY");
+        shader.enable("OVERLAYNORMAL");
+        shader.build();
+        // console.log(shader.uniforms);
+        // console.log(shader._generateVertexShader());
+        // console.log(shader._generateFragmentShader());
+        
+        // MARK: TEXTURES
+        
+        var loadTexture = function(loader, path) {
+          return loader.load(path, function(texture) {
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+          });
+        };
+        var textureLoader = new THREE.TextureLoader();
+        shader.uniforms.tOverlay1.value = loadTexture(textureLoader, 'assets/textures/Tiles/gravel_DM.png');
+        shader.uniforms.tOverlay2.value = loadTexture(textureLoader, 'assets/textures/Tiles/grass_DM.png');
+        shader.uniforms.tOverlay3.value = loadTexture(textureLoader, 'assets/textures/Tiles/cliff_DM.png');
+        shader.uniforms.tOverlay4.value = loadTexture(textureLoader, 'assets/textures/Tiles/snow_DM.png');
+        shader.uniforms.tOverlay5.value = loadTexture(textureLoader, 'assets/textures/Tiles/grassDark_DM.png');
+        shader.uniforms.tOverlayMask.value = loadTexture(textureLoader, 'assets/textures/Mask.png');
+        shader.uniforms.overlay1Scale.value = 1.0;
+        shader.uniforms.overlay2Scale.value = 1.0;
+        shader.uniforms.overlay3Scale.value = 1.0;
+        shader.uniforms.overlay4Scale.value = 1.0;
+        shader.uniforms.overlay5Scale.value = 1.0;
+        shader.uniforms.tOverlay1Normal.value = loadTexture(textureLoader, 'assets/textures/Tiles/gravel_NM.png');
+        shader.uniforms.tOverlay2Normal.value = loadTexture(textureLoader, 'assets/textures/Tiles/grass_NM.png');
+        shader.uniforms.tOverlay3Normal.value = loadTexture(textureLoader, 'assets/textures/Tiles/cliff_NM.png');
+        shader.uniforms.tOverlay4Normal.value = loadTexture(textureLoader, 'assets/textures/Tiles/Snow_NM.jpg');
+        shader.uniforms.tOverlay5Normal.value = loadTexture(textureLoader, 'assets/textures/Tiles/grass_NM.png');
+        
+        // MARK: ENVIRONMENT MAP
+        
+        // var path = 'assets/textures/cube/skybox/';
+        // var urls = [
+        //   path + 'px.jpg', path + 'nx.jpg',
+        //   path + 'py.jpg', path + 'ny.jpg',
+        //   path + 'pz.jpg', path + 'nz.jpg'
+        // ];
+        // 
+        // shader.uniforms.tEnvMap.value = new THREE.CubeTextureLoader().load(urls, function(texture) {
+        //   texture.generateMipmaps = true;
+        //   texture.needsUpdate = true;
+        //   scene.background = texture; 
+        // });
+        
+        // MARK: MODELS
+        
+        var img = new Image();
+        img.onload = function() {
+          var heightField = new PIXY.HeightField();
+          var geo = heightField.generate(img, 1.0);
+          var plane = new THREE.Mesh(geo, shader.material);
+          THREE.BufferGeometryUtils.computeTangents(plane.geometry);
+          scene.add(plane);
+        };
+        img.src = 'assets/textures/HeightMap512.png';
+        
+        // var sphereGeometry = new THREE.SphereBufferGeometry(2, 64, 64);
+				// var sphere = new THREE.Mesh(sphereGeometry, shader.material);
+        // THREE.BufferGeometryUtils.computeTangents(sphere.geometry);
+        // scene.add(sphere);
+        
+        // scene.add(new THREE.AxisHelper(10));
+        // scene.add(new THREE.GridHelper(20,20));
+      }
+      
+      function initGui() {
+        
+        // shader.uniforms.diffuseColor.value.setHex(0xff0000);
+        shader.uniforms.directLights.value[0].direction.set(-1,1,1).normalize();
+        // shader.uniforms.bumpiness.value = 0.01;
+        // shader.uniforms.roughness.value = 0.0;
+        // shader.uniforms.metalness.value = 0.5;
+        
+        results = PIXY.ShaderUtils.GenerateShaderParametersGUI(shader);
+        gui = results.gui;
+        parameters = results.parameters;
+        
+        var h = gui.addFolder("Overlay");
+        parameters.overlay1Scale = shader.uniforms.overlay1Scale.value;
+        parameters.overlay2Scale = shader.uniforms.overlay2Scale.value;
+        parameters.overlay3Scale = shader.uniforms.overlay3Scale.value;
+        parameters.overlay4Scale = shader.uniforms.overlay4Scale.value;
+        parameters.overlay5Scale = shader.uniforms.overlay5Scale.value;
+        h.add(parameters, "overlay1Scale", 1.0, 10.0).onChange(function(value) {
+          shader.uniforms.overlay1Scale.value = value;
+        });
+        h.add(parameters, "overlay2Scale", 1.0, 10.0).onChange(function(value) {
+          shader.uniforms.overlay2Scale.value = value;
+        });
+        h.add(parameters, "overlay3Scale", 1.0, 10.0).onChange(function(value) {
+          shader.uniforms.overlay3Scale.value = value;
+        });
+        h.add(parameters, "overlay4Scale", 1.0, 10.0).onChange(function(value) {
+          shader.uniforms.overlay4Scale.value = value;
+        });
+        h.add(parameters, "overlay5Scale", 1.0, 10.0).onChange(function(value) {
+          shader.uniforms.overlay5Scale.value = value;
+        });
+      }
+      
+      function initPost() {
+      }
+      
+      // EVENT HANDLERS
+      
+      function onWindowResize() {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        
+        render();
+      }
+      
+      function animate() {
+        // shaderParameters.time += clock.getDelta();
+        requestAnimationFrame(animate, renderer.domElement);
+        render();
+      }
+      
+      function render() {
+        
+        if (!ready) return;
+        
+        stats.update();
+        
+        camera.updateMatrixWorld();
+        
+        lights.direct.position.copy(shader.uniforms.directLights.value[0].direction).normalize();
+        lights.direct.position.transformDirection(camera.matrixWorld);
+        lights.direct.position.multiplyScalar(100.0);
+        lights.direct.target.position.copy(lights.direct.position).multiplyScalar(0.9);
+        lights.direct.target.updateMatrixWorld();
+        lights.direct.color.copy(shader.uniforms.directLights.value[0].color);
+        lights.directHelper.update();
+
+        PIXY.ShaderUtils.UpdateShaderParameters(shader, parameters, camera);
+        renderer.render(scene, camera);
+      }
+
+    </script>
+  </body>
+</html>

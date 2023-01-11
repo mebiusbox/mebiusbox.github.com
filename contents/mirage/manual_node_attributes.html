@@ -1,0 +1,341 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+
+<meta name="Description" content="Information architecture, Web Design, Web Standards." />
+<meta name="Keywords" content="your, keywords" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Distribution" content="Global" />
+<meta name="Author" content="Erwin Aligam - ealigam@gmail.com" />
+<meta name="Robots" content="index,follow" />
+
+<link rel="stylesheet" href="images/Envision.css" type="text/css" />
+<link rel="stylesheet" href="mirage.css" type="text/css" />
+<link href="jquery/jquery.fancybox.css" rel="stylesheet" type="text/css" media="screen" />
+<script type="text/javascript" src="jquery/jquery.js"></script>
+<script type="text/javascript" src="jquery/jquery.fancybox.js"></script>
+<script type="text/javascript" src="mirage.fancybox.js"></script>
+
+<title>Mirage</title>
+	
+</head>
+
+<body>
+<!-- wrap starts here -->
+<div id="wrap">
+		
+		<!--header -->
+		<div id="header">			
+				
+			<h1 id="logo-text"><a href="index.html">Mirage</a></h1>		
+			<p id="slogan" style="margin-top:8px;">エフェクト作成ツール</p>		
+			
+			<div id="header-links">
+			<p>
+				<a href="index.html">Home</a> | 
+				<a href="index.html">Contact</a> | 
+				<a href="index.html">Site Map</a>			
+			</p>		
+		</div>		
+						
+		</div>
+		
+		<!-- menu -->	
+		<div  id="menu">
+			<ul>
+				<li><a href="index.html">Home</a></li>
+				<li><a href="manual.html">Manual</a></li>
+				<li><a href="mirage_samples.html">Samples</a></li>
+				<li class="last"><a href="index.html">About</a></li>		
+			</ul>
+		</div>					
+			
+		<!-- content-wrap starts here -->
+		<div id="content-wrap">
+				
+			<div id="main">
+			<a href="index.html">Home</a>&nbsp;&gt;&nbsp;<a href="manual.html">マニュアル</a>&nbsp;&gt;&nbsp;ノードのアトリビュート<br />
+			
+			<h2>アトリビュート</h2>
+			<p>
+			アトリビュートには以下の種類があります。<br />
+			</p>
+			<ul>
+				<li>Boolean</li>
+				<li>Integer</li>
+				<li>Float</li>
+				<li>String</li>
+				<li>Vector3</li>
+				<li>Color4</li>
+				<li>Matrix</li>
+			</ul>
+			<p>
+			アトリビュートには名前が割り当てられています。この名前を<span>スクリプト名</span>（将来的にスクリプトなどから値を取得・設定するときに利用する目的）と呼びます。<br />
+			</p>
+			
+			<h2>アトリビュート一覧</h2>
+			<table class="mirage_table" border="0" cellpadding="0" cellspacing="0">
+			<tr><th class="first">node</th><td>ノードアトリビュートを持っているかどうか</td><td>bool</td></tr>
+			<tr><th class="first">node.name</th><td>ノード名</td><td>string</td></tr>
+			<tr><th class="first">node.color</th><td>ノードの背景色</td><td>Mirage.Core.Color4</td></tr>
+			<tr><th class="first">node.color.fore</th><td>ノードの前景色</td><td>Mirage.Core.Color4</td></tr>
+			<tr><th class="first">basic</th><td>基本アトリビュートを持っているかどうか</td><td>bool</td></tr>
+			<tr><th class="first">basic.visibility</th><td>表示</td><td>bool</td></tr>
+			<tr><th class="first">basic.influence.translation</th><td>親の位置を継承するかどうか</td><td>bool</td></tr>
+			<tr><th class="first">basic.influence.rotation</th><td>親の回転を継承するかどうか</td><td>bool</td></tr>
+			<tr><th class="first">basic.influence.scale</th><td>親のスケールを継承するかどうか</td><td>bool</td></tr>
+			<tr><th class="first">basic.influence.color</th><td>親のカラーを継承するかどうか</td><td>bool</td></tr>
+			<tr><th class="first">basic.influence.field</th><td>フィールドの影響を受けるかどうか</td><td>bool</td></tr>
+			<tr><th class="first">basic.enable</th><td>有効かどうか</td><td>bool</td></tr>
+			<tr><th class="first">basic.debug</th><td>デバッグを有効にするかどうか</td><td>bool</td></tr>
+			<tr><th class="first">basic.priority.initial</th><td>優先度</td><td>int</td></tr>
+			<tr><th class="first">basic.life_time.initial</th><td>寿命</td><td>int</td></tr>
+			<tr><th class="first">basic.expiration_time.initial</th><td>消滅時間</td><td>int</td></tr>
+			<tr><th class="first">basic.expiration_mode</th><td>消滅モード</td><td><a href="#mirage_attribute_expiration_mode">Mirage.Attribute.ExpirationMode</a></td></tr>
+			<tr><th class="first">basic.sort.initial</th><td>ソートプライオリティ</td><td>int</td></tr>
+			<tr><th class="first">basic.start_time.initial</th><td>活動開始</td><td>int</td></tr>
+			<tr><th class="first">translation</th><td>位置アトリビュートを持っているかどうか</td><td>bool</td></tr>
+			<tr><th class="first">translation.initial</th><td>位置</td><td>Mirage.Core.Vector3</td></tr>
+			<tr><th class="first">translation.link.x</th><td>位置.X のリンク</td><td>bool</td></tr>
+			<tr><th class="first">translation.link.y</th><td>位置.Y のリンク</td><td>bool</td></tr>
+			<tr><th class="first">translation.link.z</th><td>位置.Z のリンク</td><td>bool</td></tr>
+			<tr><th class="first">velocity.initial</th><td>速度</td><td>Mirage.Core.Vector3</td></tr>
+			<tr><th class="first">velocity.link.x</th><td>速度.X のリンク</td><td>bool</td></tr>
+			<tr><th class="first">velocity.link.y</th><td>速度.Y のリンク</td><td>bool</td></tr>
+			<tr><th class="first">velocity.link.z</th><td>速度.Z のリンク</td><td>bool</td></tr>
+			<tr><th class="first">accel.initial</th><td>加速度</td><td>Mirage.Core.Vector3</td></tr>
+			<tr><th class="first">accel.link.x</th><td>加速度.X のリンク</td><td>bool</td></tr>
+			<tr><th class="first">accel.link.y</th><td>加速度.Y のリンク</td><td>bool</td></tr>
+			<tr><th class="first">accel.link.z</th><td>加速度.Z のリンク</td><td>bool</td></tr>
+			<tr><th class="first">rotation</th><td>回転アトリビュートを持っているかどうか</td><td>bool</td></tr>
+			<tr><th class="first">rotation.initial</th><td>回転</td><td>Mirage.Core.Vector3</td></tr>
+			<tr><th class="first">rotation.link.x</th><td>回転.X のリンク</td><td>bool</td></tr>
+			<tr><th class="first">rotation.link.y</th><td>回転.Y のリンク</td><td>bool</td></tr>
+			<tr><th class="first">rotation.link.z</th><td>回転.Z のリンク</td><td>bool</td></tr>
+			<tr><th class="first">angular_velocity.initial</th><td>角速度</td><td>Mirage.Core.Vector3</td></tr>
+			<tr><th class="first">angular_velocity.link.x</th><td>角速度.X のリンク</td><td>bool</td></tr>
+			<tr><th class="first">angular_velocity.link.y</th><td>角速度.Y のリンク</td><td>bool</td></tr>
+			<tr><th class="first">angular_velocity.link.z</th><td>角速度.Z のリンク</td><td>bool</td></tr>
+			<tr><th class="first">angular_accel.initial</th><td>角加速度</td><td>Mirage.Core.Vector3</td></tr>
+			<tr><th class="first">angular_accel.link.x</th><td>角加速度.X のリンク</td><td>bool</td></tr>
+			<tr><th class="first">angular_accel.link.y</th><td>角加速度.Y のリンク</td><td>bool</td></tr>
+			<tr><th class="first">angular_accel.link.z</th><td>角加速度.Z のリンク</td><td>bool</td></tr>
+			<tr><th class="first">scale</th><td>スケールアトリビュートを持っているかどうか</td><td>bool</td></tr>
+			<tr><th class="first">scale.initial</th><td>スケール</td><td>Mirage.Core.Vector3</td></tr>
+			<tr><th class="first">scale.link.x</th><td>スケール.X のリンク</td><td>bool</td></tr>
+			<tr><th class="first">scale.link.y</th><td>スケール.Y のリンク</td><td>bool</td></tr>
+			<tr><th class="first">scale.link.z</th><td>スケール.Z のリンク</td><td>bool</td></tr>
+			<tr><th class="first">scale_speed.initial</th><td>スケール速度</td><td>Mirage.Core.Vector3</td></tr>
+			<tr><th class="first">scale_speed.link.x</th><td>スケール速度.X のリンク</td><td>bool</td></tr>
+			<tr><th class="first">scale_speed.link.y</th><td>スケール速度.Y のリンク</td><td>bool</td></tr>
+			<tr><th class="first">scale_speed.link.z</th><td>スケール速度.Z のリンク</td><td>bool</td></tr>
+			<tr><th class="first">scale_accel.initial</th><td>スケール加速度</td><td>Mirage.Core.Vector3</td></tr>
+			<tr><th class="first">scale_accel.link.x</th><td>スケール加速度.X のリンク</td><td>bool</td></tr>
+			<tr><th class="first">scale_accel.link.y</th><td>スケール加速度.Y のリンク</td><td>bool</td></tr>
+			<tr><th class="first">scale_accel.link.z</th><td>スケール加速度.Z のリンク</td><td>bool</td></tr>
+			<tr><th class="first">size</th><td>サイズアトリビュートを持っているかどうか</td><td>bool</td></tr>
+			<tr><th class="first">size.initial</th><td>サイズ</td><td>Mirage.Core.Vector3</td></tr>
+			<tr><th class="first">size.link.x</th><td>サイズ.X のリンク</td><td>bool</td></tr>
+			<tr><th class="first">size.link.y</th><td>サイズ.Y のリンク</td><td>bool</td></tr>
+			<tr><th class="first">size.link.z</th><td>サイズ.Z のリンク</td><td>bool</td></tr>
+			<tr><th class="first">size_speed.initial</th><td>サイズ速度</td><td>Mirage.Core.Vector3</td></tr>
+			<tr><th class="first">size_speed.link.x</th><td>サイズ速度.X のリンク</td><td>bool</td></tr>
+			<tr><th class="first">size_speed.link.y</th><td>サイズ速度.Y のリンク</td><td>bool</td></tr>
+			<tr><th class="first">size_speed.link.z</th><td>サイズ速度.Z のリンク</td><td>bool</td></tr>
+			<tr><th class="first">size_accel.initial</th><td>サイズ加速度</td><td>Mirage.Core.Vector3</td></tr>
+			<tr><th class="first">size_accel.link.x</th><td>サイズ加速度.X のリンク</td><td>bool</td></tr>
+			<tr><th class="first">size_accel.link.y</th><td>サイズ加速度.Y のリンク</td><td>bool</td></tr>
+			<tr><th class="first">size_accel.link.z</th><td>サイズ加速度.Z のリンク</td><td>bool</td></tr>
+			<tr><th class="first">size2</th><td>サイズ２アトリビュートを持っているかどうか</td><td>bool</td></tr>
+			<tr><th class="first">size2.initial</th><td>サイズ２</td><td>Mirage.Core.Vector3</td></tr>
+			<tr><th class="first">size2.link.x</th><td>サイズ２.X のリンク</td><td>bool</td></tr>
+			<tr><th class="first">size2.link.y</th><td>サイズ２.Y のリンク</td><td>bool</td></tr>
+			<tr><th class="first">size2.link.z</th><td>サイズ２.Z のリンク</td><td>bool</td></tr>
+			<tr><th class="first">size2_speed.initial</th><td>サイズ２速度</td><td>Mirage.Core.Vector3</td></tr>
+			<tr><th class="first">size2_speed.link.x</th><td>サイズ２速度.X のリンク</td><td>bool</td></tr>
+			<tr><th class="first">size2_speed.link.y</th><td>サイズ２速度.Y のリンク</td><td>bool</td></tr>
+			<tr><th class="first">size2_speed.link.z</th><td>サイズ２速度.Z のリンク</td><td>bool</td></tr>
+			<tr><th class="first">size2_accel.initial</th><td>サイズ２加速度</td><td>Mirage.Core.Vector3</td></tr>
+			<tr><th class="first">size2_accel.link.x</th><td>サイズ２加速度.X のリンク</td><td>bool</td></tr>
+			<tr><th class="first">size2_accel.link.y</th><td>サイズ２加速度.Y のリンク</td><td>bool</td></tr>
+			<tr><th class="first">size2_accel.link.z</th><td>サイズ２加速度.Z のリンク</td><td>bool</td></tr>
+			<tr><th class="first">color</th><td>色アトリビュートを持っているかどうか</td><td>bool</td></tr>
+			<tr><th class="first">color.initial</th><td>色</td><td>Mirage.Core.Color4</td></tr>
+			<tr><th class="first">color.link.r</th><td>色.r のリンク</td><td>bool</td></tr>
+			<tr><th class="first">color.link.g</th><td>色.g のリンク</td><td>bool</td></tr>
+			<tr><th class="first">color.link.b</th><td>色.b のリンク</td><td>bool</td></tr>
+			<tr><th class="first">color.link.a</th><td>色.a のリンク</td><td>bool</td></tr>
+			<tr><th class="first">color2</th><td>色２アトリビュートを持っているかどうか</td><td>bool</td></tr>
+			<tr><th class="first">color2.initial</th><td>色２</td><td>Mirage.Core.Color4</td></tr>
+			<tr><th class="first">color2.link.r</th><td>色２.r のリンク</td><td>bool</td></tr>
+			<tr><th class="first">color2.link.g</th><td>色２.g のリンク</td><td>bool</td></tr>
+			<tr><th class="first">color2.link.b</th><td>色２.b のリンク</td><td>bool</td></tr>
+			<tr><th class="first">color2.link.a</th><td>色２.a のリンク</td><td>bool</td></tr>
+			<tr><th class="first">vertex_colors</th><td>頂点カラーを持っているかどうか</td><td>bool</td></tr>
+			<tr><th class="first">vcolor1</th><td>頂点カラー１（左上）</td><td>Mirage.Core.Color4</td></tr>
+			<tr><th class="first">vcolor2</th><td>頂点カラー２（右上）</td><td>Mirage.Core.Color4</td></tr>
+			<tr><th class="first">vcolor3</th><td>頂点カラー３（左下）</td><td>Mirage.Core.Color4</td></tr>
+			<tr><th class="first">vcolor4</th><td>頂点カラー４（右下）</td><td>Mirage.Core.Color4</td></tr>
+			<tr><th class="first">blend</th><td>ブレンドアトリビュートを持っているかどうか</td><td>bool</td></tr>
+			<tr><th class="first">blend.enable</th><td>ブレンドが有効かどうか</td><td>bool</td></tr>
+			<tr><th class="first">blend.func</th><td>ブレンド関数</td><td><a href="#mirage_attribute_blend_func">Mirage.Attribute.BlendFunc</a></td></tr>
+			<tr><th class="first">render_state</th><td>レンダリングアトリビュートを持っているかどうか</td><td>bool</td></tr>
+			<tr><th class="first">render_state.culling</th><td>カリング</td><td>bool</td></tr>
+			<tr><th class="first">render_state.depth_func</th><td>深度テスト</td><td>bool</td></tr>
+			<tr><th class="first">render_state.depth_write</th><td>深度書き込み</td><td>bool</td></tr>
+			<tr><th class="first">render_state.lighting</th><td>ライティング</td><td>bool</td></tr>
+			<tr><th class="first">texture</th><td>テクスチャを持っているかどうか</td><td>bool</td></tr>
+			<tr><th class="first">texture.count</th><td>テクスチャレイヤーの数</td><td>int</td></tr>
+			<tr><th class="first">texture.layer-{n}</th><td>n 番のテクスチャレイヤーアトリビュートを持っているか</td><td>bool</td></tr>
+			<tr><th class="first">texture.layer-{n}.address.u</th><td>アドレスモード(u)</td><td><a href="#mirage_attribute_texture_address">Mirage.Attribute.TextureAddress</a></td></tr>
+			<tr><th class="first">texture.layer-{n}.address.v</th><td>アドレスモード(v)</td><td><a href="#mirage_attribute_texture_address">Mirage.Attribute.TextureAddress</a></td></tr>
+			<tr><th class="first">texture.layer-{n}.address.w</th><td>アドレスモード(w)</td><td><a href="#mirage_attribute_texture_address">Mirage.Attribute.TextureAddress</a></td></tr>
+			<tr><th class="first">texture.layer-{n}.min_filter</th><td>フィルタ(Min)</td><td><a href="#mirage_attribute_texture_filter">Mirage.Attribute.TextureFilter</a></td></tr>
+			<tr><th class="first">texture.layer-{n}.mag_filter</th><td>フィルタ(Mag)</td><td><a href="#mirage_attribute_texture_filter">Mirage.Attribute.TextureFilter</a></td></tr>
+			<tr><th class="first">texture.layer-{n}.mip_filter</th><td>フィルタ(MipMap)</td><td><a href="#mirage_attribute_texture_filter">Mirage.Attribute.TextureFilter</a></td></tr>
+			<tr><th class="first">texture.layer-{n}.filename</th><td>ファイル名</td><td>string</td></tr>
+			<tr><th class="first">texture.layer-{n}.fullpath</th><td>フルパス</td><td>string</td></tr>
+			<tr><th class="first">texture.layer-{n}.uv.u0.initial</th><td>U0</td><td>float</td></tr>
+			<tr><th class="first">texture.layer-{n}.uv.v0.initial</th><td>V0</td><td>float</td></tr>
+			<tr><th class="first">texture.layer-{n}.uv.u1.initial</th><td>U1</td><td>float</td></tr>
+			<tr><th class="first">texture.layer-{n}.uv.v1.initial</th><td>V1</td><td>float</td></tr>
+			<tr><th class="first">texture.layer-{n}.uv.u0.link</th><td>U0 のリンク</td><td>bool</td></tr>
+			<tr><th class="first">texture.layer-{n}.uv.v0.link</th><td>V0 のリンク</td><td>bool</td></tr>
+			<tr><th class="first">texture.layer-{n}.uv.u1.link</th><td>U1 のリンク</td><td>bool</td></tr>
+			<tr><th class="first">texture.layer-{n}.uv.v1.link</th><td>V1 のリンク</td><td>bool</td></tr>
+			<tr><th class="first">generate</th><td>生成アトリビュートを持っているかどうか</td><td>bool</td></tr>
+			<tr><th class="first">generate.count</th><td>生成数</td><td>int</td></tr>
+			<tr><th class="first">generate.time</th><td>生成時間</td><td>int</td></tr>
+			<tr><th class="first">generate.frame</th><td>フレーム</td><td>int</td></tr>
+			<tr><th class="first">generate.interval</th><td>生成間隔</td><td><a href="#mirage_attribute_generate_rate">Mirage.Attribute.GenerateRate</a></td></tr>
+			<tr><th class="first">generate.random_seed</th><td>乱数種</td><td>int</td></tr>
+			<tr><th class="first">generate.shape</th><td>形状</td><td><a href="#mirage_attribute_generate_shape">Mirage.Attribute.GenerateShape</a></td></tr>
+			<tr><th class="first">generate.bounds.initial</th><td>範囲</td><td>Mirage.Core.Vector3</td></tr>
+			<tr><th class="first">generate.bounds.link.x</th><td>範囲.X のリンク</td><td>bool</td></tr>
+			<tr><th class="first">generate.bounds.link.y</th><td>範囲.Y のリンク</td><td>bool</td></tr>
+			<tr><th class="first">generate.bounds.link.z</th><td>範囲.Z のリンク</td><td>bool</td></tr>
+			<tr><th class="first">particle</th><td>パーティクルアトリビュートを持っているかどうか</td><td>bool</td></tr>
+			<tr><th class="first">particle.type</th><td>パーティクルタイプ</td><td><a href="#mirage_attribute_particle_type">Mirage.Attribute.ParticleType</a></td></tr>
+			<tr><th class="first">particle.pivot.type</th><td>スケール、回転のピボット位置</td><td><a href="#mirage_attribute_particle_pivot">Mirage.Attribute.ParticlePivot</a></td></tr>
+			<tr><th class="first">particle.pivot.x</th><td>ピボットポイントの X。左上からのオフセット位置。</td><td>float</td></tr>
+			<tr><th class="first">particle.pivot.y</th><td>ピボットポイントの Y。左上からのオフセット位置。</td><td>float</td></tr>
+			<tr><th class="first">field.gravity</th><td>重力フィールドのアトリビュートを持っているかどうか</td><td>bool</td></tr>
+			<tr><th class="first">field.gravity.initial</th><td>重力加速度</td><td>float</td></tr>
+			<tr><th class="first">field.wind</th><td>風フィールドのアトリビュートを持っているかどうか</td><td>bool</td></tr>
+			<tr><th class="first">field.wind.magnitude.initial</th><td>強さ</td><td>float</td></tr>
+			<tr><th class="first">field.wind.direction.initial</th><td>向き</td><td>Mirage.Core.Vector3</td></tr>
+			<tr><th class="first">field.wind.noize.initial</th><td>ノイズ</td><td>float</td></tr>
+			<tr><th class="first">field.radial</th><td>放射フィールドのアトリビュートを持っているかどうか</td><td>bool</td></tr>
+			<tr><th class="first">field.radial.magnitude.initial</th><td>強さ</td><td>float</td></tr>
+			<tr><th class="first">field.radial.magnitude_damp.initial</th><td>減衰</td><td>float</td></tr>
+			<tr><th class="first">field.radial.position.initial</th><td>中心位置</td><td>Mirage.Core.Vector3</td></tr>
+			<tr><th class="first">field.radial.range_type</th><td>影響範囲タイプ</td><td><a href="#mirage_attribute_radial_field_range_type">Mirage.Attribute.RadialFieldRangeType</a></td></tr>
+			<tr><th class="first">field.radial.range.initial</th><td>影響する長さ</td><td>float</td></tr>
+			</table>
+			
+			<p>
+			<span>xxx.initial</span> のアトリビュートがあれば、<span>xxx.upper</span> を持っている場合があります（必須ではない）。
+			この場合、ランダム値となり <span>xxx.initial</span>が下限、<span>xxx.upper</span>が上限となります。<br />
+			</p>
+			
+			<a name="mirage_attribute_blend_func">&nbsp;</a><h3 class="mirage">Mirage.Attribute.BlendFunc</h3>
+			<table class="mirage_table" border="0" cellpadding="0" cellspacing="0">
+			<tr><th>Add</th><td>0</td></tr>
+			<tr><th>Subtract</th><td>1</td></tr>
+			<tr><th>Modulate</th><td>2</td></tr>
+			<tr><th>Transparent</th><td>3</td></tr>
+			</table>
+
+			<a name="mirage_attribute_generate_rate">&nbsp;</a><h3 class="mirage">Mirage.Attribute.GenerateRate</h3>
+			<table class="mirage_table" border="0" cellpadding="0" cellspacing="0">
+			<tr><th>Per Second</th><td>0</td></tr>
+			<tr><th>Total</th><td>1</td></tr>
+			<tr><th>Per Frame</th><td>2</td></tr>
+			<tr><th>Per Frame Interval</th><td>3</td></tr>
+			</table>
+			
+			<a name="mirage_attribute_generate_shape">&nbsp;</a><h3 class="mirage">Mirage.Attribute.GenerateShape</h3>
+			<table class="mirage_table" border="0" cellpadding="0" cellspacing="0">
+			<tr><th>Point</th><td>0</td></tr>
+			<tr><th>Box</th><td>1</td></tr>
+			<tr><th>Sphere</th><td>2</td></tr>
+			<tr><th>Plane</th><td>3</td></tr>
+			</table>
+			
+			<a name="mirage_attribute_texture_address">&nbsp;</a><h3 class="mirage">Mirage.Attribute.TextureAddress</h3>
+			<table class="mirage_table" border="0" cellpadding="0" cellspacing="0">
+			<tr><th>Wrap</th><td>0</td></tr>
+			<tr><th>Clamp</th><td>1</td></tr>
+			<tr><th>Mirror</th><td>2</td></tr>
+			</table>
+			
+			<a name="mirage_attribute_texture_filter">&nbsp;</a><h3 class="mirage">Mirage.Attribute.TextureFilter</h3>
+			<table class="mirage_table" border="0" cellpadding="0" cellspacing="0">
+			<tr><th>None</th><td>0</td></tr>
+			<tr><th>Point</th><td>1</td></tr>
+			<tr><th>Linear</th><td>2</td></tr>
+			<tr><th>Anisotropic</th><td>3</td></tr>
+			</table>
+			
+			<a name="mirage_attribute_radial_field_range_type">&nbsp;</a><h3 class="mirage">Mirage.Attribute.RadialFieldRangeType</h3>
+			<table class="mirage_table" border="0" cellpadding="0" cellspacing="0">
+			<tr><th>Infinite</th><td>0</td></tr>
+			<tr><th>Range</th><td>1</td></tr>
+			</table>
+			
+			<a name="mirage_attribute_expiration_mode">&nbsp;</a><h3 class="mirage">Mirage.Attribute.ExpirationMode</h3>
+			<table class="mirage_table" border="0" cellpadding="0" cellspacing="0">
+			<tr><th>ExpireAll</th><td>0</td></tr>
+			<tr><th>WaitComplete</th><td>1</td></tr>
+			</table>
+			
+			<a name="mirage_attribute_particle_type">&nbsp;</a><h3 class="mirage">Mirage.Attribute.ParticleType</h3>
+			<table class="mirage_table" border="0" cellpadding="0" cellspacing="0">
+			<tr><th>Billboard</th><td>0</td></tr>
+			<tr><th>BillboardY</th><td>1</td></tr>
+			<tr><th>Polygon</th><td>2</td></tr>
+			</table>
+			
+			<a name="mirage_attribute_particle_pivot">&nbsp;</a><h3 class="mirage">Mirage.Attribute.ParticlePivot</h3>
+			<table class="mirage_table" border="0" cellpadding="0" cellspacing="0">
+			<tr><th>Left Top</th><td>0</td></tr>
+			<tr><th>Top</th><td>1</td></tr>
+			<tr><th>Right Top</th><td>2</td></tr>
+			<tr><th>Left</th><td>3</td></tr>
+			<tr><th>Center</th><td>4</td></tr>
+			<tr><th>Right</th><td>5</td></tr>
+			<tr><th>Left Bottom</th><td>6</td></tr>
+			<tr><th>Bottom</th><td>7</td></tr>
+			<tr><th>Right Bottom</th><td>8</td></tr>
+			<tr><th>Specified</th><td>9</td></tr>
+			</table>
+
+			</div>
+		
+		<!-- content-wrap ends here -->	
+		</div>
+					
+		<!--footer starts here-->
+		<div id="footer">
+			
+			<p>
+			&copy; 2010 <strong>mebiusbox software</strong> | 
+			Design by: <a href="http://www.styleshout.com/">styleshout</a> | 
+			Valid <a href="http://validator.w3.org/check?uri=referer">XHTML</a> | 
+			<a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a>
+			
+   		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			
+			<a href="index.html">Home</a>&nbsp;|&nbsp;
+   		<a href="index.html">Sitemap</a>&nbsp;|&nbsp;
+	   	<a href="index.html">RSS Feed</a>
+   		</p>
+				
+		</div>	
+
+<!-- wrap ends here -->
+</div>
+
+</body>
+</html>
