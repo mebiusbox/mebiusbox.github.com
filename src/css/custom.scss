@@ -39,6 +39,9 @@
   // --ifm-h1-font-size: 2.5rem; // default: 3rem
   // --ifm-h2-font-size: 1.6rem; // default: 2rem
   // --ifm-h3-font-size: 1.4rem; // default: 1.5rem
+  --ifm-code-border-radius: 0.1rem; // default: 0.4rem
+  // --ifm-code-padding-vertical: 0.1rem; // default: 0.1rem
+  --ifm-code-padding-horizontal: 0.4rem; // default: 0.1rem
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 
   --ifm-font-family-base-orig: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
@@ -144,6 +147,11 @@ article > h3 {
 [data-theme='dark'] .markdown > h3,
 [data-theme='dark'] article > h3 {
   color: #0cf;
+}
+
+.markdown :not(pre) > code,
+article :not(pre) > code {
+  font-weight: 600;
 }
 
 .CookieConsent {
