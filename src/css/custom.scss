@@ -124,7 +124,11 @@ article > h2 {
   color: var(--ifm-color-primary);
   border-bottom: 1px dashed var(--ifm-color-primary-lighter);
 	padding: 0px 0px 5px 0px;
-  font-size: 1.8rem;
+  font-size: 1.7rem;
+}
+
+article header h2 {
+  font-size: 2.4rem !important;
 }
 
 [data-theme='dark'] .markdown > h2,
