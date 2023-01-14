@@ -1,3 +1,6 @@
+- name: 2023-01-14-notion-shadertoy-gallery
+  date: 2023-01-14
+  title: NotionでShadertoyやつぶやき系のツイートをギャラリーにまとめる
 - name: 2023-01-11-docusaurus
   date: 2023-01-11
   title: リニューアル：Docusaurusへ移行
@@ -10,6 +13,3 @@
 - name: 2018-02-22-packassistant
   date: 2018-02-22
   title: PackAssistant について
-- name: 2018-02-18-user-forum
-  date: 2018-02-18
-  title: サポートについて（ユーザーフォーラムの設置）

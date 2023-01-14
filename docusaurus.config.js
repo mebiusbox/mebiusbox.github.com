@@ -3,8 +3,8 @@
 
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
-const math = require('remark-math');
-const katex = require('rehype-katex');
+// const math = require('remark-math');
+// const katex = require('rehype-katex');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -24,6 +24,7 @@ const config = {
   plugins: [
     'docusaurus-plugin-sass',
     './plugins/docusaurus-plugin-yml',
+    './plugins/docusaurus-plugin-katex-client',
     require.resolve('docusaurus-plugin-image-zoom'),
     [
       'ideal-image',
@@ -60,8 +61,8 @@ const config = {
           // Remove this to remove the "edit this page" links.
           // editUrl:
           //   'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-          remarkPlugins: [math],
-          rehypePlugins: [katex, {strict: false}],
+          // remarkPlugins: [math],
+          // rehypePlugins: [[katex, {strict: false}]],
         },
         blog: {
           showReadingTime: true,
@@ -83,12 +84,25 @@ const config = {
       }),
     ],
   ],
+  scripts: [
+    {
+      src: "https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js",
+      integrity: "sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4",
+      crossorigin: "anonymous",
+      defer: true,
+    },
+    {
+      src: "https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js",
+      integrity: "sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05",
+      crossorigin: "anonymous",
+      defer: true,
+    }
+  ],
   stylesheets: [
     {
-      href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
+      href: 'https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css',
       type: 'text/css',
-      integrity:
-        'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
+      integrity: 'sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0',
       crossorigin: 'anonymous',
     },
   ],
