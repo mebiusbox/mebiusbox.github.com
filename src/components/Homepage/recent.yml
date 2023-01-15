@@ -1,6 +1,6 @@
 - name: 2023-01-15-docusaurus-katex-client-side-rendering
   date: 2023-01-15
-  title: Docusaurusの数式をクライアントサイドレンダリング(CSR)する
+  title: Docusaurusで数式をクライアントサイドレンダリング(CSR)する
 - name: 2023-01-14-notion-shadertoy-gallery
   date: 2023-01-14
   title: NotionでShadertoyやつぶやき系のツイートをギャラリーにまとめる

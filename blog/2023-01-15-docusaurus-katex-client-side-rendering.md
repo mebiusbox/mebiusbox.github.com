@@ -1,5 +1,5 @@
 ---
-title: Docusaurusの数式をクライアントサイドレンダリング(CSR)する
+title: Docusaurusで数式をクライアントサイドレンダリング(CSR)する
 authors: [mebiusbox]
 tags: [Docusaurus, katex]
 ---
