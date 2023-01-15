@@ -8,7 +8,7 @@
     <subtitle>Mebiusbox software Blog</subtitle>
     <icon>https://mebiusbox.github.io/img/favicon.ico</icon>
     <entry>
-        <title type="html"><![CDATA[Docusaurusの数式をクライアントサイドレンダリング(CSR)する]]></title>
+        <title type="html"><![CDATA[Docusaurusで数式をクライアントサイドレンダリング(CSR)する]]></title>
         <id>/2023/01/15/docusaurus-katex-client-side-rendering</id>
         <link href="https://mebiusbox.github.io/blog/2023/01/15/docusaurus-katex-client-side-rendering"/>
         <updated>2023-01-15T00:00:00.000Z</updated>

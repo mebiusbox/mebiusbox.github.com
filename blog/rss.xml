@@ -9,7 +9,7 @@
         <generator>https://github.com/jpmonette/feed</generator>
         <language>ja</language>
         <item>
-            <title><![CDATA[Docusaurusの数式をクライアントサイドレンダリング(CSR)する]]></title>
+            <title><![CDATA[Docusaurusで数式をクライアントサイドレンダリング(CSR)する]]></title>
             <link>https://mebiusbox.github.io/blog/2023/01/15/docusaurus-katex-client-side-rendering</link>
             <guid>/2023/01/15/docusaurus-katex-client-side-rendering</guid>
             <pubDate>Sun, 15 Jan 2023 00:00:00 GMT</pubDate>
