@@ -1,3 +1,6 @@
+- name: 2023-01-15-docusaurus-katex-client-side-rendering
+  date: 2023-01-15
+  title: Docusaurusの数式をクライアントサイドレンダリング(CSR)する
 - name: 2023-01-14-notion-shadertoy-gallery
   date: 2023-01-14
   title: NotionでShadertoyやつぶやき系のツイートをギャラリーにまとめる
@@ -10,6 +13,3 @@
 - name: 2018-02-23-packassistant-x64
   date: 2018-02-23
   title: PackAssistant 1.6.0 リリース
-- name: 2018-02-22-packassistant
-  date: 2018-02-22
-  title: PackAssistant について
