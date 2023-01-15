@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous" defer="defer"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" defer="defer"></script><link rel="stylesheet" href="/assets/css/styles.72fc09dc.css">
-<link rel="preload" href="/assets/js/runtime~main.c330d665.js" as="script">
+<link rel="preload" href="/assets/js/runtime~main.cbb52c22.js" as="script">
 <link rel="preload" href="/assets/js/main.1e508335.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
@@ -37,13 +37,13 @@ $$</p><p>となって，大きさと方向のみを表すことになります�
 |\vec{v}| = \sqrt{x^2+y^2+z^2}
 $$</p><p>で得られます．３次元ベクトルが３つの値を持っていることに対して，ベクトルの大きさは１つの量を表す値です．この値をベクトルに対して<strong>スカラ</strong>（scalar）といいます．</p><p>次に方向は，大きさが１のベクトルで表します．このようなベクトルを<strong>単位ベクトル</strong>（unit vector）といいます．単位ベクトルはベクトルの各成分を大きさで割ることで求められます．</p><p>$$
 \frac{\vec{v}}{|\vec{v}|} = \left(\frac{x}{|\vec{v}|},\frac{y}{|\vec{v}|},\frac{z}{|\vec{v}|}\right)
-$$</p><p>これを<strong>正規化</strong>（normalize）といいます．つまり，ベクトルを正規化すればそれは方向を表すベクトルということになります．</p><p>※ベクトルや行列の演算について，これから出てきますが詳しいことはここでは解説しません．ベクトルや行列などの線形代数については他を参照したり，もしくは私が書いた「<a href="https://zenn.dev/mebiusbox/books/132b654aa02124" target="_blank" rel="noopener noreferrer">CGのための数学</a>」を参照してください．</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="基底basis">基底（basis）<a class="hash-link" href="#基底basis" title="この見出しへのリンク">​</a></h3><p>ベクトルの成分表示でXYZで測った値を表記することがわかりました．もちろん，このXYZというのはそのベクトルを測った座標系に基づいています．この座標系とベクトルの関係を見ていきましょう．</p><p>XYZというのは座標系における軸のことです．これまで，上下・左右・前後という曖昧な表現でしたが，方向を表すベクトル，つまり単位ベクトルを使うと，XYZの向きをベクトルで表すことが出来ます．一般的な座標系として，左右をX，上下をY，前後をZとしたとき，それぞれの向き（単位ベクトル）$\vec{e}<!-- -->_<!-- -->x,\vec{e}<!-- -->_<!-- -->y,\vec{e}<!-- -->_<!-- -->z$は</p><p>$$
+$$</p><p>これを<strong>正規化</strong>（normalize）といいます．つまり，ベクトルを正規化すればそれは方向を表すベクトルということになります．</p><p>※ベクトルや行列の演算について，これから出てきますが詳しいことはここでは解説しません．ベクトルや行列などの線形代数については他を参照したり，もしくは私が書いた「<a href="https://zenn.dev/mebiusbox/books/132b654aa02124" target="_blank" rel="noopener noreferrer">CGのための数学</a>」を参照してください．</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="基底basis">基底（basis）<a class="hash-link" href="#基底basis" title="この見出しへのリンク">​</a></h3><p>ベクトルの成分表示でXYZで測った値を表記することがわかりました．もちろん，このXYZというのはそのベクトルを測った座標系に基づいています．この座標系とベクトルの関係を見ていきましょう．</p><p>XYZというのは座標系における軸のことです．これまで，上下・左右・前後という曖昧な表現でしたが，方向を表すベクトル，つまり単位ベクトルを使うと，XYZの向きをベクトルで表すことが出来ます．一般的な座標系として，左右をX，上下をY，前後をZとしたとき，それぞれの向き（単位ベクトル）$\vec{e} <em> x,\vec{e} </em> y,\vec{e} _ z$は</p><p>$$
 \vec{e}_x = (1,0,0), \quad \vec{e}_y = (0,1,0), \quad \vec{e}_z = (0,0,1)
 $$</p><p>となります．これを使うとベクトルの成分表示は</p><p>$$
-\vec{p} = \left(\begin{matrix}p_x <!-- -->\<!-- -->\<!-- --> p_y <!-- -->\<!-- -->\<!-- --> p_z\end{matrix}\right) =
-p_x \left(\begin{matrix}1 <!-- -->\<!-- -->\<!-- --> 0 <!-- -->\<!-- -->\<!-- --> 0\end{matrix}\right) +
-p_y \left(\begin{matrix}0 <!-- -->\<!-- -->\<!-- --> 1 <!-- -->\<!-- -->\<!-- --> 0\end{matrix}\right) +
-p_z \left(\begin{matrix}0 <!-- -->\<!-- -->\<!-- --> 0 <!-- -->\<!-- -->\<!-- --> 1\end{matrix}\right)
+\vec{p} = \left(\begin{matrix}p_x \newline p_y \newline p_z\end{matrix}\right) =
+p_x \left(\begin{matrix}1 \newline 0 \newline 0\end{matrix}\right) +
+p_y \left(\begin{matrix}0 \newline 1 \newline 0\end{matrix}\right) +
+p_z \left(\begin{matrix}0 \newline 0 \newline 1\end{matrix}\right)
 = p_x \vec{e}_x + p_y \vec{e}_y + p_z \vec{e}_z
 $$</p><p>となります．この$\vec{e}<!-- -->_<!-- -->x,\vec{e}<!-- -->_<!-- -->y,\vec{e}<!-- -->_<!-- -->z$はお互い直交関係になっています．ベクトルの内積が０のとき，直交であることから</p><p>$$
 \vec{e}_x \cdot \vec{e}_y =
@@ -51,16 +51,16 @@ $$</p><p>となります．この$\vec{e}<!-- -->_<!-- -->x,\vec{e}<!-- -->_<!--
 \vec{e}_z \cdot \vec{e}_x = 0
 $$</p><p>の関係であることがわかります．これらの単位ベクトルによって座標系の向きを決めることができます．このXYZの向きベクトルの組を<strong>基底</strong>といい，それぞれのベクトルのことを<strong>基底ベクトル</strong>といいます．ベクトルの内積は片方が単位ベクトルのとき，もう片方のベクトルのその単位ベクトル方向の大きさを求められます．これを使って，ある座標系の基底ベクトルと，位置を表すベクトルから</p><p>$$
 \begin{aligned}
-p_x &amp;= \vec{p} \cdot \vec{e}_x <!-- -->\<!-- -->\<!-- -->
-p_y &amp;= \vec{p} \cdot \vec{e}_y <!-- -->\<!-- -->\<!-- -->
-p_z &amp;= \vec{p} \cdot \vec{e}_z <!-- -->\<!-- -->\<!-- -->
+p_x &amp;= \vec{p} \cdot \vec{e}_x \newline
+p_y &amp;= \vec{p} \cdot \vec{e}_y \newline
+p_z &amp;= \vec{p} \cdot \vec{e}_z \newline
 \end{aligned}
 $$</p><p>と各成分が得られます．さらに行列を使って，$\vec{e}<!-- -->_<!-- -->x = i, \vec{e}<!-- -->_<!-- -->y = j, \vec{e}<!-- -->_<!-- -->z = k$とおくと</p><p>$$
 \begin{aligned}
-M &amp;= \left(\begin{matrix}i_x &amp; i_y &amp; i_z <!-- -->\<!-- -->\<!-- -->
-j_x &amp; j_y &amp; j_z <!-- -->\<!-- -->\<!-- -->
-k_x &amp; k_y &amp; k_z\end{matrix}\right) <!-- -->\<!-- -->\<!-- -->
-\vec{p}&#x27; &amp;= M\vec{p} <!-- -->\<!-- -->\<!-- -->
+M &amp;= \left(\begin{matrix}i_x &amp; i_y &amp; i_z \newline
+j_x &amp; j_y &amp; j_z \newline
+k_x &amp; k_y &amp; k_z\end{matrix}\right) \newline
+\vec{p}&#x27; &amp;= M\vec{p} \newline
 &amp;= \vec{p}\cdot i + \vec{p}\cdot j + \vec{p}\cdot k
 \end{aligned}
 $$</p><p>となります．この行列$M$はXYZの基底ベクトルで構成されていることから，基底を表していることが想像できると思います．行列とベクトルの内積の性質から，基底を表す行列$M$に，任意のベクトル$\vec{p}$をかけると（一次変換），行列$M$で表す基底での成分に変換することができ，この値は一意に決まります．よって，この行列$M$はベクトル$\vec{p}$から$\vec{p}&#x27;$の写像を表しています．</p><p>基底ベクトルというのは常に単位ベクトルというわけでもなく，また，３次元での基底は直交していなくても定義することができます．このような座標系は斜交座標系といったりします．ここでは，右手座標系ですので，基底ベクトルは直交関係であり，また，基底ベクトルが単位ベクトルであるとします．このような基底を<strong>正規直交基底</strong>といいます．</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="基底変換basis-transformation">基底変換（basis transformation）<a class="hash-link" href="#基底変換basis-transformation" title="この見出しへのリンク">​</a></h3><p>いよいよ座標変換に入っていきます．座標変換といっても色々種類がありますので，１つずつ見ていきましょう．まずは基底変換です．基底というのはすでに見てきたように，基底ベクトルの組であり，基底ベクトルは単位ベクトルで互いに直交になっています．座標系で出てきた「原点」「向き」「単位」のうち，「原点」は$O=(0,0,0)$のままでどの基底でも同じです．また，単位も基底ベクトルは常に単位ベクトルですので，単位も変わりません．結局，基底は向きのみを表しているといえます．そうすると基底が変わるということはどういうことでしょうか．原点が固定で，大きさも変わらないとなれば，それは向きが「回転」すると考えられます．つまり，基底変換は回転させる座標変換といえます．</p><p>ここで少し三角関数について復習しておきましょう．まずは三角比から．</p><p>$$
@@ -71,8 +71,8 @@ $$</p><p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-uploa
 \sin\theta^2 + \cos\theta^2 = 1
 $$</p><p>が得られます．三角関数の逆関数にはそれぞれ$\arcsin, \arccos, \arctan$があります．これらの関係は</p><p>$$
 \begin{aligned}
-\theta &amp;= \arcsin(\sin\theta) \quad ( -\frac{\pi}{2} \leqq \theta \leqq \frac{\pi}{2} ), <!-- -->\<!-- -->\<!-- -->
-\theta &amp;= \arccos(\cos\theta) \quad ( 0 \leqq \theta \leqq \pi ), <!-- -->\<!-- -->\<!-- -->
+\theta &amp;= \arcsin(\sin\theta) \quad ( -\frac{\pi}{2} \leqq \theta \leqq \frac{\pi}{2} ), \newline
+\theta &amp;= \arccos(\cos\theta) \quad ( 0 \leqq \theta \leqq \pi ), \newline
 \theta &amp;= \arctan(\tan\theta) \quad ( -\frac{\pi}{2} &lt; \theta &lt; \frac{\pi}{2} )
 \end{aligned}
 $$</p><p>となります．次に加法定理です．次の図を見てください．</p><p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/k4icxxiktalgyjqcm9x4xetbbtlu" alt="1554578863249" class="img_ev3q"></p><p>$\Delta abc$において，斜辺の長さが$1$から</p><p>$$
@@ -82,14 +82,14 @@ $$</p><p>$\Delta abd$において，</p><p>$$
 \overline{ad} = \sin B, \quad \overline{bd} = \cos B
 $$</p><p>次に</p><p>$$
 \begin{aligned}
-\overline{af} &amp;= \overline{ad}\cos A = \cos A \sin B <!-- -->\<!-- -->\<!-- -->
+\overline{af} &amp;= \overline{ad}\cos A = \cos A \sin B \newline
 \overline{fc} &amp;= \overline{de} = \overline{bd}\sin A = \sin A \cos B
 \end{aligned}
 $$</p><p>$\overline{ac} = \overline{af}+\overline{fc}$の関係から</p><p>$$
 \begin{aligned}
-\sin(A+B) &amp;= \sin A\cos B + \cos A\sin B <!-- -->\<!-- -->\<!-- -->
-\cos(A+B) &amp;= \cos A\cos B - \sin A\sin B <!-- -->\<!-- -->\<!-- -->
-\sin(A-B) &amp;= \sin A\cos B - \cos A\sin B <!-- -->\<!-- -->\<!-- -->
+\sin(A+B) &amp;= \sin A\cos B + \cos A\sin B \newline
+\cos(A+B) &amp;= \cos A\cos B - \sin A\sin B \newline
+\sin(A-B) &amp;= \sin A\cos B - \cos A\sin B \newline
 \cos(A-B) &amp;= \cos A\cos B + \sin A\sin B
 \end{aligned}
 $$</p><p>となります．</p><p>それでは回転を見ていきましょう．次の図のように点$p$を点$p&#x27;$に回転する場合を考えます．ここでは$z=0$とします．</p><p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/r9fszm4o15wgisb7abxea2qrv5ce" alt="1554580093216" class="img_ev3q"></p><p>すると点$p$の各成分は</p><p>$$
@@ -97,7 +97,7 @@ x = r\cos\phi, \quad y = r\sin\phi
 $$</p><p>となります．回転後の点$p&#x27;$の各成分は加法定理を使って</p><p>$$
 \begin{aligned}
 x&#x27; &amp;= r\cos(\theta+\phi)
-= r\cos\theta\cos\phi - r\sin\theta\sin\phi <!-- -->\<!-- -->\<!-- -->
+= r\cos\theta\cos\phi - r\sin\theta\sin\phi \newline
 y&#x27; &amp;= r\sin(\theta+\phi)
 = r\sin\theta\cos\phi + r\cos\theta\sin\phi
 \end{aligned}
@@ -106,157 +106,157 @@ r = \frac{x}{\cos\phi}, \quad r = \frac{y}{\sin\phi}
 $$</p><p>を代入して，整理すると</p><p>$$
 \begin{aligned}
 x&#x27; &amp;= \frac{x\cos\theta\cos\phi}{\cos\phi} - \frac{y\sin\theta\sin\phi}{\sin\phi}
-= x\cos\theta - y\sin\theta <!-- -->\<!-- -->\<!-- -->
+= x\cos\theta - y\sin\theta \newline
 y&#x27; &amp;= \frac{x\sin\theta\cos\phi}{\cos\phi} + \frac{y\cos\theta\sin\phi}{\sin\phi}
-= x\sin\theta + y\cos\theta <!-- -->\<!-- -->\<!-- -->
+= x\sin\theta + y\cos\theta \newline
 z&#x27; &amp;= z
 \end{aligned}
 $$</p><p>となって，行列で書くと</p><p>$$
-\left(\begin{matrix}x&#x27; <!-- -->\<!-- -->\<!-- --> y&#x27; <!-- -->\<!-- -->\<!-- --> z&#x27;\end{matrix}\right) =
+\left(\begin{matrix}x&#x27; \newline y&#x27; \newline z&#x27;\end{matrix}\right) =
 \left(\begin{matrix}
-\cos\theta &amp; -\sin\theta &amp; 0 <!-- -->\<!-- -->\<!-- -->
-\sin\theta &amp; \cos\theta &amp; 0 <!-- -->\<!-- -->\<!-- -->
+\cos\theta &amp; -\sin\theta &amp; 0 \newline
+\sin\theta &amp; \cos\theta &amp; 0 \newline
 0 &amp; 0 &amp; 1
 \end{matrix}\right)
-\left(\begin{matrix}x <!-- -->\<!-- -->\<!-- --> y <!-- -->\<!-- -->\<!-- --> z\end{matrix}\right)
+\left(\begin{matrix}x \newline y \newline z\end{matrix}\right)
 $$</p><p>となります．この行列の基底ベクトルに注目してみると，回転させたい方向とは逆の方向に回転したベクトルになっています．つまり，反対方向に回転させた基底を使って変換を行うと，回転した座標になるということになります．</p><p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/lw23oeaav3nlgs3z7rsszi90o4qx" alt="1554580132600" class="img_ev3q"></p><p>この回転行列はZ軸を基準に回転を表していることになります．このZ軸回転の行列を$R_z$とおくと</p><p>$$
 R_z =
 \left(\begin{matrix}
-\cos\theta &amp; -\sin\theta &amp; 0 <!-- -->\<!-- -->\<!-- -->
-\sin\theta &amp; \cos\theta &amp; 0 <!-- -->\<!-- -->\<!-- -->
+\cos\theta &amp; -\sin\theta &amp; 0 \newline
+\sin\theta &amp; \cos\theta &amp; 0 \newline
 0 &amp; 0 &amp; 1
 \end{matrix}\right)
 $$</p><p>となります．同じようにX軸，Y軸の回転行列$R_x,R_y$は</p><p>$$
 \begin{aligned}
 R_x &amp;= \left(\begin{matrix}
-1 &amp; 0 &amp; 0<!-- -->\<!-- -->\<!-- -->
-0 &amp; \cos\theta &amp; -\sin\theta <!-- -->\<!-- -->\<!-- -->
+1 &amp; 0 &amp; 0\newline
+0 &amp; \cos\theta &amp; -\sin\theta \newline
 0 &amp; \sin\theta &amp; \cos\theta
-\end{matrix}\right) <!-- -->\<!-- -->\<!-- -->
+\end{matrix}\right) \newline
 R_y &amp;= \left(\begin{matrix}
-\cos\theta &amp; 0 &amp; \sin\theta<!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; 0 <!-- -->\<!-- -->\<!-- -->
+\cos\theta &amp; 0 &amp; \sin\theta\newline
+0 &amp; 1 &amp; 0 \newline
 -\sin\theta &amp; 0 &amp; \cos\theta
 \end{matrix}\right)
 \end{aligned}
 $$</p><p>となります．ここで各回転行列の行ベクトル，および列ベクトルは</p><p>$$
 \sin\theta^2 + \cos\theta^2 = 1
-$$</p><p>から，すべて単位ベクトルであり，列ベクトルにおいても互いに内積がゼロなので直交していることがわかります．</p><p>行列は掛け合わせて合成できるので，例えばXYZ回転の行列$R<!-- -->\<!-- -->_{xyz}$は</p><p>$$
-R<!-- -->_<!-- -->{xyz} = R_z R_y R_x
+$$</p><p>から，すべて単位ベクトルであり，列ベクトルにおいても互いに内積がゼロなので直交していることがわかります．</p><p>行列は掛け合わせて合成できるので，例えばXYZ回転の行列$R <!-- -->_<!-- --> {xyz}$は</p><p>$$
+R <!-- -->_<!-- --> {xyz} = R_z R_y R_x
 $$</p><p>となります．ここでは取り上げませんが，任意の軸を基準に回転する行列の式も簡単に見つかると思います．これらの回転行列を組み合わせて基底変換の行列をつくることが出来ます．</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="剛体変換rigid-body-transformation">剛体変換（rigid-body transformation）<a class="hash-link" href="#剛体変換rigid-body-transformation" title="この見出しへのリンク">​</a></h3><p>基底変換では座標系のうち，向きしか変換できませんでした．ここで，原点を平行移動させる変換を考えます．このような大きさが変わらず，向きと位置が変わる変換を<strong>剛体変換</strong>といいます．剛体（rigid body）は力を加えても形状を変えない物体のことで物理シミュレーションでよく使います．
 基底変換では向きしか変換できなかったので，これに加えて平行移動する変換をしなければなりません．基底変換ではある点$p$を点$p&#x27;$に変換する行列$M$から</p><p>$$
 \vec{p}&#x27; = M\vec{p}
 $$</p><p>と表せました．ここで，この変換に$\vec{t}$の平行移動を追加するには</p><p>$$
 \vec{p}&#x27; = M\vec{p} + \vec{t}
 $$</p><p>とすればよいことになります．これは１次関数の形になっていますね．しかし，このままでは３行３列の行列で表すことができず，扱いづらいものになっています．そこで，４次元の<strong>同次座標系</strong>（homogeneous coordinate）を使います（同次座標系は斉次座標系とも呼ばれます）．４次元の同次座標系を使うと４次元空間の断面と３次元空間の座標を同じ（写像）扱いにすることができます．４次元空間の位置は$w$が追加された$x,y,z,w$で表し，３次元空間との関係は</p><p>$$
-\left(\begin{matrix}x <!-- -->\<!-- -->\<!-- --> y <!-- -->\<!-- -->\<!-- --> z\end{matrix}\right) =
-\left(\begin{matrix}x/w <!-- -->\<!-- -->\<!-- --> y/w <!-- -->\<!-- -->\<!-- --> z/w\end{matrix}\right)
+\left(\begin{matrix}x \newline y \newline z\end{matrix}\right) =
+\left(\begin{matrix}x/w \newline y/w \newline z/w\end{matrix}\right)
 $$</p><p>となります．通常は$w=1$として</p><p>$$
-\left(\begin{matrix}x <!-- -->\<!-- -->\<!-- --> y <!-- -->\<!-- -->\<!-- --> z\end{matrix}\right) =
-\left(\begin{matrix}x <!-- -->\<!-- -->\<!-- --> y <!-- -->\<!-- -->\<!-- --> z <!-- -->\<!-- -->\<!-- --> 1\end{matrix}\right)
+\left(\begin{matrix}x \newline y \newline z\end{matrix}\right) =
+\left(\begin{matrix}x \newline y \newline z \newline 1\end{matrix}\right)
 $$</p><p>とします．ちなみに$w=0$とすると，無限遠点となり大きさが無限となります．ただし，無限遠点でも向きは存在しているので，$w=0$の場合は向きだけを表しているとも考えることができます．</p><p>４次元の同次座標系を使うことで４行４列の行列を扱えるようになりました．平行移動を行列で表記すると</p><p>$$
 T =
 \left(\begin{matrix}
-1 &amp; 0 &amp; 0 &amp; t_x <!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; 0 &amp; t_y <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; 1 &amp; t_z <!-- -->\<!-- -->\<!-- -->
+1 &amp; 0 &amp; 0 &amp; t_x \newline
+0 &amp; 1 &amp; 0 &amp; t_y \newline
+0 &amp; 0 &amp; 1 &amp; t_z \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
 $$</p><p>となります．基底変換の行列は回転を表す行列なので，回転行列を$R$とおくと，剛体変換は次のようになります．</p><p>$$
 \begin{aligned}
 \vec{p}&#x27; = M\vec{p} + \vec{t} = TR\vec{p} &amp;=
 \left(\begin{matrix}
-1 &amp; 0 &amp; 0 &amp; t_x <!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; 0 &amp; t_y <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; 1 &amp; t_z <!-- -->\<!-- -->\<!-- -->
+1 &amp; 0 &amp; 0 &amp; t_x \newline
+0 &amp; 1 &amp; 0 &amp; t_y \newline
+0 &amp; 0 &amp; 1 &amp; t_z \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
 \left(\begin{matrix}
-R<!-- -->_<!-- -->{11} &amp; R<!-- -->_<!-- -->{12} &amp; R<!-- -->_<!-- -->{13} &amp; 0 <!-- -->\<!-- -->\<!-- -->
-R<!-- -->_<!-- -->{21} &amp; R<!-- -->_<!-- -->{22} &amp; R<!-- -->_<!-- -->{23} &amp; 0 <!-- -->\<!-- -->\<!-- -->
-R<!-- -->_<!-- -->{31} &amp; R<!-- -->_<!-- -->{32} &amp; R<!-- -->_<!-- -->{33} &amp; 0 <!-- -->\<!-- -->\<!-- -->
+R <!-- -->_<!-- --> {11} &amp; R <!-- -->_<!-- --> {12} &amp; R <!-- -->_<!-- --> {13} &amp; 0 \newline
+R <!-- -->_<!-- --> {21} &amp; R <!-- -->_<!-- --> {22} &amp; R <!-- -->_<!-- --> {23} &amp; 0 \newline
+R <!-- -->_<!-- --> {31} &amp; R <!-- -->_<!-- --> {32} &amp; R <!-- -->_<!-- --> {33} &amp; 0 \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
-\left(\begin{matrix}p_x <!-- -->\<!-- -->\<!-- --> p_y <!-- -->\<!-- -->\<!-- --> p_z <!-- -->\<!-- -->\<!-- --> 1\end{matrix}\right) <!-- -->\<!-- -->\<!-- --> &amp;=
+\left(\begin{matrix}p_x \newline p_y \newline p_z \newline 1\end{matrix}\right) \newline &amp;=
 \left(\begin{matrix}
-R<!-- -->_<!-- -->{11} &amp; R<!-- -->_<!-- -->{12} &amp; R<!-- -->_<!-- -->{13} &amp; t_x <!-- -->\<!-- -->\<!-- -->
-R<!-- -->_<!-- -->{21} &amp; R<!-- -->_<!-- -->{22} &amp; R<!-- -->_<!-- -->{23} &amp; t_y <!-- -->\<!-- -->\<!-- -->
-R<!-- -->_<!-- -->{31} &amp; R<!-- -->_<!-- -->{32} &amp; R<!-- -->_<!-- -->{33} &amp; t_z <!-- -->\<!-- -->\<!-- -->
+R <!-- -->_<!-- --> {11} &amp; R <!-- -->_<!-- --> {12} &amp; R <!-- -->_<!-- --> {13} &amp; t_x \newline
+R <!-- -->_<!-- --> {21} &amp; R <!-- -->_<!-- --> {22} &amp; R <!-- -->_<!-- --> {23} &amp; t_y \newline
+R <!-- -->_<!-- --> {31} &amp; R <!-- -->_<!-- --> {32} &amp; R <!-- -->_<!-- --> {33} &amp; t_z \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
-\left(\begin{matrix}p_x <!-- -->\<!-- -->\<!-- --> p_y <!-- -->\<!-- -->\<!-- --> p_z <!-- -->\<!-- -->\<!-- --> 1\end{matrix}\right)
+\left(\begin{matrix}p_x \newline p_y \newline p_z \newline 1\end{matrix}\right)
 \end{aligned}
 $$</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="アフィン変換affine-transformation">アフィン変換（affine transformation）<a class="hash-link" href="#アフィン変換affine-transformation" title="この見出しへのリンク">​</a></h3><p>基底変換の式</p><p>$$
 \vec{p}&#x27; = M\vec{p}
 $$</p><p>は一次変換でした．次に，剛体変換の式は基底変換に平行移動を追加した式</p><p>$$
 \vec{p}&#x27; = M\vec{p} + \vec{t}
 $$</p><p>は１次関数と同じ形になっていましたね．もちろん，これは写像を表しています．この１次関数をベクトル空間で一般化し，一次変換と平行移動を合わせた変換を<strong>アフィン変換</strong>といいます．よって，剛体変換も基底変換もアフィン変換の特殊な形となります．アフィン変換では回転，平行移動の他に，拡大・縮小，鏡映，せん断があります．</p><p>先に鏡映とせん断についてです．鏡映（reflection）は基準となる軸に対して対称となる位置に移動する変換です．例えば，右手座標系と左手座標系を相互に変換する場合は次のような行列になります．</p><p>$$
-M<!-- -->_<!-- -->{reflection} =
+M <!-- -->_<!-- --> {reflection} =
 \left(\begin{matrix}
-1 &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; 0 <!-- -->\<!-- -->\<!-- -->
+1 &amp; 0 &amp; 0 \newline
+0 &amp; 1 &amp; 0 \newline
 0 &amp; 0 &amp; -1
 \end{matrix}\right)
 $$</p><p>せん断（shearing）はスキュー（skew）変換とも呼ばれ，歪ませる変換です．これは別軸の成分の値が他の軸の成分に影響させることで歪ませます．例えば，$Y$軸方向の値分，$X$軸方向にずらす場合は</p><p>$$
-M<!-- -->_<!-- -->{skew} =
+M <!-- -->_<!-- --> {skew} =
 \left(\begin{matrix}
-1 &amp; 1 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; 0 <!-- -->\<!-- -->\<!-- -->
+1 &amp; 1 &amp; 0 \newline
+0 &amp; 1 &amp; 0 \newline
 0 &amp; 0 &amp; 1
 \end{matrix}\right)
 $$</p><p>となります．</p><p>次は拡大・縮小です．この行列$S$は次のようになります．</p><p>$$
 S =
 \left(\begin{matrix}
-s_x &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; s_y &amp; 0 <!-- -->\<!-- -->\<!-- -->
+s_x &amp; 0 &amp; 0 \newline
+0 &amp; s_y &amp; 0 \newline
 0 &amp; 0 &amp; s_z
 \end{matrix}\right)
 $$</p><p>拡大・縮小行列で変換してみると</p><p>$$
 \vec{p}&#x27; = S\vec{p} =
 \left(\begin{matrix}
-s_x &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; s_y &amp; 0 <!-- -->\<!-- -->\<!-- -->
+s_x &amp; 0 &amp; 0 \newline
+0 &amp; s_y &amp; 0 \newline
 0 &amp; 0 &amp; s_z
 \end{matrix}\right)
-\left(\begin{matrix}p_x <!-- -->\<!-- -->\<!-- --> p_y <!-- -->\<!-- -->\<!-- --> p_z\end{matrix}\right) =
-\left(\begin{matrix}s_x p_x <!-- -->\<!-- -->\<!-- --> s_y p_y <!-- -->\<!-- -->\<!-- --> s_z p_z\end{matrix}\right)
+\left(\begin{matrix}p_x \newline p_y \newline p_z\end{matrix}\right) =
+\left(\begin{matrix}s_x p_x \newline s_y p_y \newline s_z p_z\end{matrix}\right)
 $$</p><p>となります．この拡大・縮小と回転，平行移動の３つを組み合わせて座標変換行列をつくるのが基本的なやり方となります．式で表すと</p><p>$$
 \begin{aligned}
-\vec{p}&#x27; &amp;= TRS\vec{p} <!-- -->\<!-- -->\<!-- -->
+\vec{p}&#x27; &amp;= TRS\vec{p} \newline
 &amp;= \left(\begin{matrix}
-1 &amp; 0 &amp; 0 &amp; t_x <!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; 0 &amp; t_y <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; 1 &amp; t_z <!-- -->\<!-- -->\<!-- -->
+1 &amp; 0 &amp; 0 &amp; t_x \newline
+0 &amp; 1 &amp; 0 &amp; t_y \newline
+0 &amp; 0 &amp; 1 &amp; t_z \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
 \left(\begin{matrix}
-R<!-- -->_<!-- -->{11} &amp; R<!-- -->_<!-- -->{12} &amp; R<!-- -->_<!-- -->{13} &amp; 0 <!-- -->\<!-- -->\<!-- -->
-R<!-- -->_<!-- -->{21} &amp; R<!-- -->_<!-- -->{22} &amp; R<!-- -->_<!-- -->{23} &amp; 0 <!-- -->\<!-- -->\<!-- -->
-R<!-- -->_<!-- -->{31} &amp; R<!-- -->_<!-- -->{32} &amp; R<!-- -->_<!-- -->{33} &amp; 0 <!-- -->\<!-- -->\<!-- -->
+R <!-- -->_<!-- --> {11} &amp; R <!-- -->_<!-- --> {12} &amp; R <!-- -->_<!-- --> {13} &amp; 0 \newline
+R <!-- -->_<!-- --> {21} &amp; R <!-- -->_<!-- --> {22} &amp; R <!-- -->_<!-- --> {23} &amp; 0 \newline
+R <!-- -->_<!-- --> {31} &amp; R <!-- -->_<!-- --> {32} &amp; R <!-- -->_<!-- --> {33} &amp; 0 \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
 \left(\begin{matrix}
-s_x &amp; 0 &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; s_y &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; s_z &amp; 0 <!-- -->\<!-- -->\<!-- -->
+s_x &amp; 0 &amp; 0 &amp; 0 \newline
+0 &amp; s_y &amp; 0 &amp; 0 \newline
+0 &amp; 0 &amp; s_z &amp; 0 \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
-\left(\begin{matrix}p_x <!-- -->\<!-- -->\<!-- --> p_y <!-- -->\<!-- -->\<!-- --> p_z <!-- -->\<!-- -->\<!-- --> 1\end{matrix}\right) <!-- -->\<!-- -->\<!-- -->
+\left(\begin{matrix}p_x \newline p_y \newline p_z \newline 1\end{matrix}\right) \newline
 &amp;=
 \left(\begin{matrix}
-s_x R<!-- -->_<!-- -->{11} &amp; s_y R<!-- -->_<!-- -->{12} &amp; s_z R<!-- -->_<!-- -->{13} &amp; t_x <!-- -->\<!-- -->\<!-- -->
-s_x R<!-- -->_<!-- -->{21} &amp; s_y R<!-- -->_<!-- -->{22} &amp; s_z R<!-- -->_<!-- -->{23} &amp; t_y <!-- -->\<!-- -->\<!-- -->
-s_x R<!-- -->_<!-- -->{31} &amp; s_y R<!-- -->_<!-- -->{32} &amp; s_z R<!-- -->_<!-- -->{33} &amp; t_z <!-- -->\<!-- -->\<!-- -->
+s_x R <!-- -->_<!-- --> {11} &amp; s_y R <!-- -->_<!-- --> {12} &amp; s_z R <!-- -->_<!-- --> {13} &amp; t_x \newline
+s_x R <!-- -->_<!-- --> {21} &amp; s_y R <!-- -->_<!-- --> {22} &amp; s_z R <!-- -->_<!-- --> {23} &amp; t_y \newline
+s_x R <!-- -->_<!-- --> {31} &amp; s_y R <!-- -->_<!-- --> {32} &amp; s_z R <!-- -->_<!-- --> {33} &amp; t_z \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
-\left(\begin{matrix}p_x <!-- -->\<!-- -->\<!-- --> p_y <!-- -->\<!-- -->\<!-- --> p_z <!-- -->\<!-- -->\<!-- --> 1\end{matrix}\right)
+\left(\begin{matrix}p_x \newline p_y \newline p_z \newline 1\end{matrix}\right)
 \end{aligned}
 $$</p><p>となります．また，TRSの変換行列において４行目のベクトルは固定値になっているため</p><p>$$
 TRS =
 \left(\begin{matrix}
-s_x R<!-- -->_<!-- -->{11} &amp; s_y R<!-- -->_<!-- -->{12} &amp; s_z R<!-- -->_<!-- -->{13} &amp; t_x <!-- -->\<!-- -->\<!-- -->
-s_x R<!-- -->_<!-- -->{21} &amp; s_y R<!-- -->_<!-- -->{22} &amp; s_z R<!-- -->_<!-- -->{23} &amp; t_y <!-- -->\<!-- -->\<!-- -->
-s_x R<!-- -->_<!-- -->{31} &amp; s_y R<!-- -->_<!-- -->{32} &amp; s_z R<!-- -->_<!-- -->{33} &amp; t_z <!-- -->\<!-- -->\<!-- -->
+s_x R <!-- -->_<!-- --> {11} &amp; s_y R <!-- -->_<!-- --> {12} &amp; s_z R <!-- -->_<!-- --> {13} &amp; t_x \newline
+s_x R <!-- -->_<!-- --> {21} &amp; s_y R <!-- -->_<!-- --> {22} &amp; s_z R <!-- -->_<!-- --> {23} &amp; t_y \newline
+s_x R <!-- -->_<!-- --> {31} &amp; s_y R <!-- -->_<!-- --> {32} &amp; s_z R <!-- -->_<!-- --> {33} &amp; t_z \newline
 \end{matrix}\right)
 $$</p><p>と３行４列の部分だけあればよいことになります．これは変換行列のデータ量を小さくするときに利用します．</p><p>TRSの変換行列が得られたので，今度はTRSから拡大・縮小，回転，平行移動に分解することを考えてみましょう．まず，平行移動は$t<!-- -->_<!-- -->x,t<!-- -->_<!-- -->y,t<!-- -->_<!-- -->z$をそのまま取り出すことができます．問題は拡大・縮小と回転です．これを抽出するためには回転行列の性質を利用します．</p><p>ここからは少しややこしくなりますが，１つ１つ整理しながら読み進んでもらえるといいかなと思います．</p><p>基底変換のところで回転行列について扱いました．$\theta$回転させる場合，反対方向に回転，つまり$-\theta$回転した基底を使えば$\theta$回転することになるということでしたね．さらにいうと，回転した座標を回転した基底で変換すると，回転前と同じ座標になります．ここで注意なのが，回転した基底は回転行列とは異なるということです．基底を表す行列$M$，点を$p$として，回転前の行列$M_1$，回転前の点$p_1$，回転後の行列$M_2$，回転後の点$p_2$とすれば</p><p>$$
 M_1 p_1 = M_2 p_2
@@ -281,35 +281,35 @@ $$</p><p>となり，</p><p>$$
 $$</p><p>となります．よって，二乗して$1$となる値が直交行列の行列式となるので，$1$と$-1$ということになります．また，回転行列のように行ベクトル，列ベクトルがすべて単位ベクトルであり，互いに直交である場合は行列式の値が$1$になります．</p><p>これまで直交行列の性質をみてきました．回転行列は直交行列ですので，直交行列の性質から回転行列の逆行列は転置行列と等しくなります．このことを踏まえて</p><ul><li>基底を表す行列の逆行列は，回転後の基底である</li></ul><p>を考えてみると，逆行列は転置行列だったので，基底を表す行列の列ベクトルが回転後の基底ベクトルとなります．結局</p><ul><li>基底を表す行列の列ベクトルは，回転後の基底ベクトルである</li><li>基底を表す行列は，回転後の基底における回転前の基底である</li></ul><p>となります．これでTRSの座標変換行列から回転と拡大・縮小を抽出する準備ができました．もう一度変換行列を確認してみると</p><p>$$
 \vec{p}&#x27; = TRS\vec{p} =
 \left(\begin{matrix}
-s_x R<!-- -->_<!-- -->{11} &amp; s_y R<!-- -->_<!-- -->{12} &amp; s_z R<!-- -->_<!-- -->{13} &amp; t_x <!-- -->\<!-- -->\<!-- -->
-s_x R<!-- -->_<!-- -->{21} &amp; s_y R<!-- -->_<!-- -->{22} &amp; s_z R<!-- -->_<!-- -->{23} &amp; t_y <!-- -->\<!-- -->\<!-- -->
-s_x R<!-- -->_<!-- -->{31} &amp; s_y R<!-- -->_<!-- -->{32} &amp; s_z R<!-- -->_<!-- -->{33} &amp; t_z <!-- -->\<!-- -->\<!-- -->
+s_x R <!-- -->_<!-- --> {11} &amp; s_y R <!-- -->_<!-- --> {12} &amp; s_z R <!-- -->_<!-- --> {13} &amp; t_x \newline
+s_x R <!-- -->_<!-- --> {21} &amp; s_y R <!-- -->_<!-- --> {22} &amp; s_z R <!-- -->_<!-- --> {23} &amp; t_y \newline
+s_x R <!-- -->_<!-- --> {31} &amp; s_y R <!-- -->_<!-- --> {32} &amp; s_z R <!-- -->_<!-- --> {33} &amp; t_z \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
-\left(\begin{matrix}p_x <!-- -->\<!-- -->\<!-- --> p_y <!-- -->\<!-- -->\<!-- --> p_z <!-- -->\<!-- -->\<!-- --> 1\end{matrix}\right)
+\left(\begin{matrix}p_x \newline p_y \newline p_z \newline 1\end{matrix}\right)
 $$</p><p>ここで列ベクトルに注目し，それぞれ$\vec{v}<!-- -->_<!-- -->x,\vec{v}<!-- -->_<!-- -->y,\vec{v}<!-- -->_<!-- -->z$とおくと</p><p>$$
-\vec{v}_x = \left(\begin{matrix} s_x R<!-- -->_<!-- -->{11} <!-- -->\<!-- -->\<!-- --> s_x R<!-- -->_<!-- -->{21} <!-- -->\<!-- -->\<!-- --> s_x R<!-- -->_<!-- -->{31}\end{matrix}\right),
+\vec{v}_x = \left(\begin{matrix} s_x R <!-- -->_<!-- --> {11} \newline s_x R <!-- -->_<!-- --> {21} \newline s_x R <!-- -->_<!-- --> {31}\end{matrix}\right),
 \quad
-\vec{v}_y = \left(\begin{matrix} s_y R<!-- -->_<!-- -->{12} <!-- -->\<!-- -->\<!-- --> s_y R<!-- -->_<!-- -->{22} <!-- -->\<!-- -->\<!-- --> s_y R<!-- -->_<!-- -->{32}\end{matrix}\right),
+\vec{v}_y = \left(\begin{matrix} s_y R <!-- -->_<!-- --> {12} \newline s_y R <!-- -->_<!-- --> {22} \newline s_y R <!-- -->_<!-- --> {32}\end{matrix}\right),
 \quad
-\vec{v}_z = \left(\begin{matrix} s_z R<!-- -->_<!-- -->{13} <!-- -->\<!-- -->\<!-- --> s_z R<!-- -->_<!-- -->{23} <!-- -->\<!-- -->\<!-- --> s_z R<!-- -->_<!-- -->{33}\end{matrix}\right)
+\vec{v}_z = \left(\begin{matrix} s_z R <!-- -->_<!-- --> {13} \newline s_z R <!-- -->_<!-- --> {23} \newline s_z R <!-- -->_<!-- --> {33}\end{matrix}\right)
 $$</p><p>となります．各ベクトルの大きさを求めると</p><p>$$
 \begin{aligned}
-|\vec{v}_x| &amp;= \sqrt{(s_x R<!-- -->_<!-- -->{11})^2 + (s_x R<!-- -->_<!-- -->{21})^2 + (s_x R<!-- -->_<!-- -->{31})^2} <!-- -->\<!-- -->\<!-- -->
-|\vec{v}_y| &amp;= \sqrt{(s_y R<!-- -->_<!-- -->{12})^2 + (s_y R<!-- -->_<!-- -->{22})^2 + (s_y R<!-- -->_<!-- -->{32})^2} <!-- -->\<!-- -->\<!-- -->
-|\vec{v}_z| &amp;= \sqrt{(s_z R<!-- -->_<!-- -->{13})^2 + (s_z R<!-- -->_<!-- -->{23})^2 + (s_z R<!-- -->_<!-- -->{33})^2}
+|\vec{v}_x| &amp;= \sqrt{(s_x R <!-- -->_<!-- --> {11})^2 + (s_x R <!-- -->_<!-- --> {21})^2 + (s_x R <!-- -->_<!-- --> {31})^2} \newline
+|\vec{v}_y| &amp;= \sqrt{(s_y R <!-- -->_<!-- --> {12})^2 + (s_y R <!-- -->_<!-- --> {22})^2 + (s_y R <!-- -->_<!-- --> {32})^2} \newline
+|\vec{v}_z| &amp;= \sqrt{(s_z R <!-- -->_<!-- --> {13})^2 + (s_z R <!-- -->_<!-- --> {23})^2 + (s_z R <!-- -->_<!-- --> {33})^2}
 \end{aligned}
 $$</p><p>となります．さらに二乗して平方根をはずして整理すると</p><p>$$
 \begin{aligned}
-|\vec{v}_x|^2 &amp;= s_x^2 R<!-- -->_<!-- -->{11}^2 + s_x^2 R<!-- -->_<!-- -->{21}^2 + s_x^2 R<!-- -->_<!-- -->{31}^2 = s_x^2(R<!-- -->_<!-- -->{11}^2 + R<!-- -->_<!-- -->{21}^2 + R<!-- -->_<!-- -->{31}^2) <!-- -->\<!-- -->\<!-- -->
-|\vec{v}_y|^2 &amp;= s_y^2 R<!-- -->_<!-- -->{12}^2 + s_y^2 R<!-- -->_<!-- -->{22}^2 + s_y^2 R<!-- -->_<!-- -->{32}^2 = s_y^2(R<!-- -->_<!-- -->{12}^2+R<!-- -->_<!-- -->{22}^2+R<!-- -->_<!-- -->{32}^2) <!-- -->\<!-- -->\<!-- -->
-|\vec{v}_z|^2 &amp;= s_z^2 R<!-- -->_<!-- -->{13}^2 + s_z^2 R<!-- -->_<!-- -->{23}^2 + s_z^2 R<!-- -->_<!-- -->{33}^2 = s_z^2(R<!-- -->_<!-- -->{13}^2+R<!-- -->_<!-- -->{23}^2+R<!-- -->_<!-- -->{33}^2)
+|\vec{v}_x|^2 &amp;= s_x^2 R <!-- -->_<!-- --> {11}^2 + s_x^2 R <!-- -->_<!-- --> {21}^2 + s_x^2 R <!-- -->_<!-- --> {31}^2 = s_x^2(R <!-- -->_<!-- --> {11}^2 + R <!-- -->_<!-- --> {21}^2 + R <!-- -->_<!-- --> {31}^2) \newline
+|\vec{v}_y|^2 &amp;= s_y^2 R <!-- -->_<!-- --> {12}^2 + s_y^2 R <!-- -->_<!-- --> {22}^2 + s_y^2 R <!-- -->_<!-- --> {32}^2 = s_y^2(R <!-- -->_<!-- --> {12}^2+R <!-- -->_<!-- --> {22}^2+R <!-- -->_<!-- --> {32}^2) \newline
+|\vec{v}_z|^2 &amp;= s_z^2 R <!-- -->_<!-- --> {13}^2 + s_z^2 R <!-- -->_<!-- --> {23}^2 + s_z^2 R <!-- -->_<!-- --> {33}^2 = s_z^2(R <!-- -->_<!-- --> {13}^2+R <!-- -->_<!-- --> {23}^2+R <!-- -->_<!-- --> {33}^2)
 \end{aligned}
 $$</p><p>となります．ここで回転行列の列ベクトルは回転後の基底ベクトルであり，単位ベクトルなので，</p><p>$$
 \begin{aligned}
-\sqrt{R<!-- -->_<!-- -->{11}^2 + R<!-- -->_<!-- -->{21}^2 + R<!-- -->_<!-- -->{31}^2} = 1 \quad \therefore R<!-- -->_<!-- -->{11}^2 + R<!-- -->_<!-- -->{21}^2 + R<!-- -->_<!-- -->{31}^2 = 1^2 = 1 <!-- -->\<!-- -->\<!-- -->
-\sqrt{R<!-- -->_<!-- -->{12}^2+R<!-- -->_<!-- -->{22}^2+R<!-- -->_<!-- -->{32}^2} = 1 \quad \therefore R<!-- -->_<!-- -->{12}^2+R<!-- -->_<!-- -->{22}^2+R<!-- -->_<!-- -->{32}^2 = 1^2 = 1 <!-- -->\<!-- -->\<!-- -->
-\sqrt{R<!-- -->_<!-- -->{13}^2+R<!-- -->_<!-- -->{23}^2+R<!-- -->_<!-- -->{33}^2} = 1 \quad \therefore R<!-- -->_<!-- -->{13}^2+R<!-- -->_<!-- -->{23}^2+R<!-- -->_<!-- -->{33}^2 = 1^2 = 1
+\sqrt{R <!-- -->_<!-- --> {11}^2 + R <!-- -->_<!-- --> {21}^2 + R <!-- -->_<!-- --> {31}^2} = 1 \quad \therefore R <!-- -->_<!-- --> {11}^2 + R <!-- -->_<!-- --> {21}^2 + R <!-- -->_<!-- --> {31}^2 = 1^2 = 1 \newline
+\sqrt{R <!-- -->_<!-- --> {12}^2+R <!-- -->_<!-- --> {22}^2+R <!-- -->_<!-- --> {32}^2} = 1 \quad \therefore R <!-- -->_<!-- --> {12}^2+R <!-- -->_<!-- --> {22}^2+R <!-- -->_<!-- --> {32}^2 = 1^2 = 1 \newline
+\sqrt{R <!-- -->_<!-- --> {13}^2+R <!-- -->_<!-- --> {23}^2+R <!-- -->_<!-- --> {33}^2} = 1 \quad \therefore R <!-- -->_<!-- --> {13}^2+R <!-- -->_<!-- --> {23}^2+R <!-- -->_<!-- --> {33}^2 = 1^2 = 1
 \end{aligned}
 $$</p><p>となります．これを代入すると</p><p>$$
 |\vec{v}_x|^2 = s_x^2, \quad
@@ -323,29 +323,29 @@ $$</p><p>となって，列ベクトルの大きさが拡大・縮小の値と�
 $$</p><p>で各成分が得られます．まとめると，TRSの合成行列を$M$とおくと</p><p>$$
 \vec{p}&#x27; = TRS\vec{p} =
 \left(\begin{matrix}
-M<!-- -->_<!-- -->{11} &amp; M<!-- -->_<!-- -->{12} &amp; M<!-- -->_<!-- -->{13} &amp; M<!-- -->_<!-- -->{14} <!-- -->\<!-- -->\<!-- -->
-M<!-- -->_<!-- -->{21} &amp; M<!-- -->_<!-- -->{22} &amp; M<!-- -->_<!-- -->{23} &amp; M<!-- -->_<!-- -->{24} <!-- -->\<!-- -->\<!-- -->
-M<!-- -->_<!-- -->{31} &amp; M<!-- -->_<!-- -->{32} &amp; M<!-- -->_<!-- -->{33} &amp; M<!-- -->_<!-- -->{34} <!-- -->\<!-- -->\<!-- -->
-M<!-- -->_<!-- -->{41} &amp; M<!-- -->_<!-- -->{42} &amp; M<!-- -->_<!-- -->{43} &amp; M<!-- -->_<!-- -->{44}
+M <!-- -->_<!-- --> {11} &amp; M <!-- -->_<!-- --> {12} &amp; M <!-- -->_<!-- --> {13} &amp; M <!-- -->_<!-- --> {14} \newline
+M <!-- -->_<!-- --> {21} &amp; M <!-- -->_<!-- --> {22} &amp; M <!-- -->_<!-- --> {23} &amp; M <!-- -->_<!-- --> {24} \newline
+M <!-- -->_<!-- --> {31} &amp; M <!-- -->_<!-- --> {32} &amp; M <!-- -->_<!-- --> {33} &amp; M <!-- -->_<!-- --> {34} \newline
+M <!-- -->_<!-- --> {41} &amp; M <!-- -->_<!-- --> {42} &amp; M <!-- -->_<!-- --> {43} &amp; M <!-- -->_<!-- --> {44}
 \end{matrix}\right)
-\left(\begin{matrix}p_x <!-- -->\<!-- -->\<!-- --> p_y <!-- -->\<!-- -->\<!-- --> p_z <!-- -->\<!-- -->\<!-- --> 1\end{matrix}\right)
+\left(\begin{matrix}p_x \newline p_y \newline p_z \newline 1\end{matrix}\right)
 $$</p><p>これからTRSを求めると</p><p>$$
-\vec{t} = \left(\begin{matrix}M<!-- -->_<!-- -->{14} <!-- -->\<!-- -->\<!-- --> M<!-- -->_<!-- -->{24} <!-- -->\<!-- -->\<!-- --> M<!-- -->_<!-- -->{34}\end{matrix}\right), \quad
+\vec{t} = \left(\begin{matrix}M <!-- -->_<!-- --> {14} \newline M <!-- -->_<!-- --> {24} \newline M <!-- -->_<!-- --> {34}\end{matrix}\right), \quad
 \vec{s} = \left(\begin{matrix}
-\sqrt{M<!-- -->_<!-- -->{11}^2+M<!-- -->_<!-- -->{21}^2+M<!-- -->_<!-- -->{31}^2} <!-- -->\<!-- -->\<!-- -->
-\sqrt{M<!-- -->_<!-- -->{12}^2+M<!-- -->_<!-- -->{22}^2+M<!-- -->_<!-- -->{32}^2} <!-- -->\<!-- -->\<!-- -->
-\sqrt{M<!-- -->_<!-- -->{13}^2+M<!-- -->_<!-- -->{23}^2+M<!-- -->_<!-- -->{33}^2}
+\sqrt{M <!-- -->_<!-- --> {11}^2+M <!-- -->_<!-- --> {21}^2+M <!-- -->_<!-- --> {31}^2} \newline
+\sqrt{M <!-- -->_<!-- --> {12}^2+M <!-- -->_<!-- --> {22}^2+M <!-- -->_<!-- --> {32}^2} \newline
+\sqrt{M <!-- -->_<!-- --> {13}^2+M <!-- -->_<!-- --> {23}^2+M <!-- -->_<!-- --> {33}^2}
 \end{matrix}\right), \quad
 R = \left(\begin{matrix}
-M<!-- -->_<!-- -->{11}/s_x &amp; M<!-- -->_<!-- -->{12}/s_y &amp; M<!-- -->_<!-- -->{13}/s_z <!-- -->\<!-- -->\<!-- -->
-M<!-- -->_<!-- -->{21}/s_x &amp; M<!-- -->_<!-- -->{22}/s_y &amp; M<!-- -->_<!-- -->{23}/s_z <!-- -->\<!-- -->\<!-- -->
-M<!-- -->_<!-- -->{31}/s_x &amp; M<!-- -->_<!-- -->{32}/s_y &amp; M<!-- -->_<!-- -->{33}/s_z
+M <!-- -->_<!-- --> {11}/s_x &amp; M <!-- -->_<!-- --> {12}/s_y &amp; M <!-- -->_<!-- --> {13}/s_z \newline
+M <!-- -->_<!-- --> {21}/s_x &amp; M <!-- -->_<!-- --> {22}/s_y &amp; M <!-- -->_<!-- --> {23}/s_z \newline
+M <!-- -->_<!-- --> {31}/s_x &amp; M <!-- -->_<!-- --> {32}/s_y &amp; M <!-- -->_<!-- --> {33}/s_z
 \end{matrix}\right)
 $$</p><p>となります．</p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="レンダリングパイプライン">レンダリングパイプライン<a class="hash-link" href="#レンダリングパイプライン" title="この見出しへのリンク">​</a></h2><p>コンピュータグラフィックスでは，レンダリングするために入力データ（頂点データやテクスチャなど）から画面に表示するまでの工程があり，その工程順番を決めたものをレンダリングパイプラインといいます．座標変換はそのレンダリングパイプラインの工程で行われます．具体的にはモデル変換，ビュー変換，投影変換，ビューポート変換です．</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="モデル変換modeling-transformation">モデル変換（modeling transformation）<a class="hash-link" href="#モデル変換modeling-transformation" title="この見出しへのリンク">​</a></h3><p>座標変換ができれば座標系がいくつもあっても構わないのですが，一般的に<strong>ローカル座標系</strong>（local coordinate system）と<strong>ワールド座標系</strong>（world coordinate system）が使われます．頂点データはローカル座標系で作成し，それをワールド座標系に変換します．このワールド座標系への変換を<strong>モデル変換</strong>といいます．頂点データはローカル座標系で作成しますが，普通は親子階層を持っていて，親の座標系の下にさらに子の座標系，さらにその子の座標系・・・というようになっています．座標変換は一方向に伝搬するので，ワールド←親←子←孫・・・と座標変換できます．逆行列を使えば逆方向に伝搬することも出来ますね．モデル変換や親子での座標変換も基本的に平行移動・回転・拡大・縮小のTRSで座標変換されます．</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ビュー変換viewing-transformation">ビュー変換（viewing transformation）<a class="hash-link" href="#ビュー変換viewing-transformation" title="この見出しへのリンク">​</a></h3><p>レンダリングではカメラを導入して，カメラから見えるシーンを描画します．モデル変換によってワールド座標系にすべて変換されますので，ワールド空間上にカメラを配置します．そして，ワールド座標系の座標をカメラから見た座標系（カメラ座標系またはビュー座標系）に変換します．これを<strong>ビュー変換</strong>といいます．ビュー変換には一般的に２種類あります．</p><h6 class="anchor anchorWithStickyNavbar_LWe7" id="lookat方式">LookAt方式<a class="hash-link" href="#lookat方式" title="この見出しへのリンク">​</a></h6><p>まず，LookAt方式です．これはカメラの位置（C）と対象の位置（P），カメラの傾きを表す方向（U）の３つで指定します．まず，カメラの位置が原点となりますので，平行移動が必要です．</p><p>$$
 M = \left(\begin{matrix}
-1 &amp; 0 &amp; 0 &amp; -t_x <!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; 0 &amp; -t_y <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; 1 &amp; -t_z <!-- -->\<!-- -->\<!-- -->
+1 &amp; 0 &amp; 0 &amp; -t_x \newline
+0 &amp; 1 &amp; 0 &amp; -t_y \newline
+0 &amp; 0 &amp; 1 &amp; -t_z \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
 $$</p><p>次に，カメラから見て前後方向（Z軸）を決定します．それは対象の位置からカメラの位置に向かうベクトルです．</p><p>$$
@@ -356,21 +356,21 @@ $$</p><p>最後に，Z方向とX方向の外積を求めます．これはY方�
 \vec{y} = \frac{\vec{z}\times \vec{x}}{|\vec{z}\times \vec{x}|}
 $$</p><p>これで基底ベクトルが揃ったので，行列にすると</p><p>$$
 M = \left(\begin{matrix}
-x_x &amp; x_y &amp; x_z &amp; 0 <!-- -->\<!-- -->\<!-- -->
-y_x &amp; y_y &amp; y_z &amp; 0 <!-- -->\<!-- -->\<!-- -->
-z_x &amp; z_y &amp; z_z &amp; 0 <!-- -->\<!-- -->\<!-- -->
+x_x &amp; x_y &amp; x_z &amp; 0 \newline
+y_x &amp; y_y &amp; y_z &amp; 0 \newline
+z_x &amp; z_y &amp; z_z &amp; 0 \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
 \left(\begin{matrix}
-1 &amp; 0 &amp; 0 &amp; -t_x <!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; 0 &amp; -t_y <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; 1 &amp; -t_z <!-- -->\<!-- -->\<!-- -->
+1 &amp; 0 &amp; 0 &amp; -t_x \newline
+0 &amp; 1 &amp; 0 &amp; -t_y \newline
+0 &amp; 0 &amp; 1 &amp; -t_z \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right) =
 \left(\begin{matrix}
-x_x &amp; x_y &amp; x_z &amp; -\vec{x}\cdot \vec{t} <!-- -->\<!-- -->\<!-- -->
-y_x &amp; y_y &amp; y_z &amp; -\vec{y}\cdot \vec{t} <!-- -->\<!-- -->\<!-- -->
-z_x &amp; z_y &amp; z_z &amp; -\vec{z}\cdot \vec{t} <!-- -->\<!-- -->\<!-- -->
+x_x &amp; x_y &amp; x_z &amp; -\vec{x}\cdot \vec{t} \newline
+y_x &amp; y_y &amp; y_z &amp; -\vec{y}\cdot \vec{t} \newline
+z_x &amp; z_y &amp; z_z &amp; -\vec{z}\cdot \vec{t} \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
 $$</p><p>となります．</p><h6 class="anchor anchorWithStickyNavbar_LWe7" id="位置と回転を指定する方式">位置と回転を指定する方式<a class="hash-link" href="#位置と回転を指定する方式" title="この見出しへのリンク">​</a></h6><p>カメラの位置と回転を表す行列をそれぞれ$T,R$とすれば，</p><p>$$
@@ -379,29 +379,29 @@ $$</p><p>はカメラ座標系からワールド座標系に変換する式で�
 \vec{p} = R^{-1}T^{-1}\vec{p}&#x27; = (RT)^{-1}\vec{p}&#x27;
 $$</p><p>となって，ワールド座標系からカメラ座標系に変換する式となります．さらに，回転行列の逆行列は転置行列，平行移動の逆行列は符号を反転したもの</p><p>$$
 T = \left(\begin{matrix}
-1 &amp; 0 &amp; 0 &amp; t_x <!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; 0 &amp; t_y <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; 1 &amp; t_z <!-- -->\<!-- -->\<!-- -->
+1 &amp; 0 &amp; 0 &amp; t_x \newline
+0 &amp; 1 &amp; 0 &amp; t_y \newline
+0 &amp; 0 &amp; 1 &amp; t_z \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right), \quad
 T^{-1} = \left(\begin{matrix}
-1 &amp; 0 &amp; 0 &amp; -t_x <!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; 0 &amp; -t_y <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; 1 &amp; -t_z <!-- -->\<!-- -->\<!-- -->
+1 &amp; 0 &amp; 0 &amp; -t_x \newline
+0 &amp; 1 &amp; 0 &amp; -t_y \newline
+0 &amp; 0 &amp; 1 &amp; -t_z \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
 $$</p><p>ですから，</p><p>$$
 R^{-1}T^{-1} =
 \left(\begin{matrix}
-R<!-- -->_<!-- -->{11} &amp; R<!-- -->_<!-- -->{21} &amp; R<!-- -->_<!-- -->{31} &amp; 0 <!-- -->\<!-- -->\<!-- -->
-R<!-- -->_<!-- -->{12} &amp; R<!-- -->_<!-- -->{22} &amp; R<!-- -->_<!-- -->{32} &amp; 0 <!-- -->\<!-- -->\<!-- -->
-R<!-- -->_<!-- -->{13} &amp; R<!-- -->_<!-- -->{23} &amp; R<!-- -->_<!-- -->{33} &amp; 0 <!-- -->\<!-- -->\<!-- -->
+R <!-- -->_<!-- --> {11} &amp; R <!-- -->_<!-- --> {21} &amp; R <!-- -->_<!-- --> {31} &amp; 0 \newline
+R <!-- -->_<!-- --> {12} &amp; R <!-- -->_<!-- --> {22} &amp; R <!-- -->_<!-- --> {32} &amp; 0 \newline
+R <!-- -->_<!-- --> {13} &amp; R <!-- -->_<!-- --> {23} &amp; R <!-- -->_<!-- --> {33} &amp; 0 \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
 \left(\begin{matrix}
-1 &amp; 0 &amp; 0 &amp; -t_x <!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; 0 &amp; -t_y <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; 1 &amp; -t_z <!-- -->\<!-- -->\<!-- -->
+1 &amp; 0 &amp; 0 &amp; -t_x \newline
+0 &amp; 1 &amp; 0 &amp; -t_y \newline
+0 &amp; 0 &amp; 1 &amp; -t_z \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
 $$</p><p>と書くことも出来ます．</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="投影変換projective-transformation">投影変換（projective transformation）<a class="hash-link" href="#投影変換projective-transformation" title="この見出しへのリンク">​</a></h3><p>投影変換はとても重要な変換であり，ここは環境に依存する部分でもあります．投影変換は射影変換とも言われます．投影変換には近くのものが大きく，遠いものが小さくなる<strong>透視投影変換</strong>（perspective projection）と，奥行きによって変換しない<strong>正投影変換</strong>（orthogonal projection）があります．</p><p>投影変換の手順としては，まず，カメラから見える範囲を決めます．具体的には<strong>前方クリッピング面</strong>（near clipping plane）と<strong>後方クリッピング面</strong>（far clipping plane）というのを導入し，その空間内に入っているものだけが投影されるようにします．この領域を<strong>ビューボリューム</strong>（view volume）といい，透視投影変換では視錐台（view frustum），正投影変換では長方体の形になります．</p><p>次に，このビューボリュームの後方クリッピング面が$z=1$で，このときのビューボリュームの$x,y$が $-1\leq x\leq 1$, $-1\leq y\leq 1$となるように正規化します．このビューボリュームを<strong>正規化ビューボリューム</strong>といいます．</p><p>この時点でビューボリュームも正規化ビューボリュームもまだカメラ空間にありますが，正規化ビューボリュームを$-1\leq z\leq 1$の空間に変換します．この空間をクリップ空間（clip space）といい，この空間でのビューボリュームは<strong>標準視体積</strong>（canonical view volume）といいます．このとき，Zは奥の方向が正となって左手座標系になります．このクリップ空間は４次元の同次座標系になっていて，$x,y,z,w$で表されます．投影変換はカメラ空間からクリップ空間に変換することをいいます．</p><p>※DirectXなどはZの範囲が$<!-- -->[0,1]<!-- -->$になっているので注意が必要です．</p><p>クリップ空間の座標で$x,y,z$を$w$で除算することを<strong>透視除算</strong>といい，$x/w,y/w,z/w$となります．この透視除算した座標を<strong>正規化デバイス座標</strong>（normalized device coordinate）といいます．</p><h6 class="anchor anchorWithStickyNavbar_LWe7" id="透視投影変換">透視投影変換<a class="hash-link" href="#透視投影変換" title="この見出しへのリンク">​</a></h6><p>まずは透視投影変換から見ていきましょう．透視投影では近いほど大きく，遠いほど小さく見えます．次の図を見てください．</p><p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/bcit5ohu7r2dxxg3wpg0e209kcao" alt="1554621898018_half" class="img_ev3q"></p><p>原点$O$の位置から点$P$を見たとき，点$P$を$z&#x27;=-1$の平面に投影すると，三角形$xoz$と$x&#x27;oz&#x27;$は相似の関係なので</p><p>$$
@@ -410,210 +410,210 @@ $$</p><p>となります．これは$Y$についても同じです．よって</
 x&#x27; = x/-z, \quad y&#x27; = y/-z
 $$</p><p>となります．次に投影面というのを考えます．これは先程の投影される平面のことで，$z&#x27;=-1$です．</p><p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/z1evy3ejqfpxzlhcu2awpmzi1gyp" alt="1554623777860_half" class="img_ev3q"></p><p>また視野角を$90^{\circ}$とします．そうすると$z&#x27;$におけるXとYは$<!-- -->[-1,1]<!-- -->$になります．</p><p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/4y7bc8hpduj1gq53peoff18032wk" alt="1554628026091_half" class="img_ev3q"></p><p>ここで，最初の透視変換の式と，投影面を考慮して行列で表すと次のようになります．</p><p>$$
 M_p = \left(\begin{matrix}
-1 &amp; 0 &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; 1 &amp; 0 <!-- -->\<!-- -->\<!-- -->
+1 &amp; 0 &amp; 0 &amp; 0 \newline
+0 &amp; 1 &amp; 0 &amp; 0 \newline
+0 &amp; 0 &amp; 1 &amp; 0 \newline
 0 &amp; 0 &amp; -1 &amp; 0 \end{matrix}\right)
 $$</p><p>この行列で頂点$p$を座標変換すると</p><p>$$
-p&#x27; = M_p\cdot p = M_p \left(\begin{matrix}x <!-- -->\<!-- -->\<!-- --> y <!-- -->\<!-- -->\<!-- --> z <!-- -->\<!-- -->\<!-- --> 1\end{matrix}\right) =
-\left(\begin{matrix}x <!-- -->\<!-- -->\<!-- --> y <!-- -->\<!-- -->\<!-- --> z <!-- -->\<!-- -->\<!-- --> -z\end{matrix}\right)
-$$</p><p>となります．$p<!-- -->_<!-- -->{w}&#x27;$で$p<!-- -->_<!-- -->{xyz}&#x27;$の各成分を除算すれば</p><p>$$
+p&#x27; = M_p\cdot p = M_p \left(\begin{matrix}x \newline y \newline z \newline 1\end{matrix}\right) =
+\left(\begin{matrix}x \newline y \newline z \newline -z\end{matrix}\right)
+$$</p><p>となります．$p <!-- -->_<!-- --> {w}&#x27;$で$p <!-- -->_<!-- --> {xyz}&#x27;$の各成分を除算すれば</p><p>$$
 \left(\begin{matrix}
-x/-z <!-- -->\<!-- -->\<!-- --> y/-z <!-- -->\<!-- -->\<!-- --> -1
+x/-z \newline y/-z \newline -1
 \end{matrix}\right)
 $$</p><p>となります．次に正規化ビューボリュームの範囲$<!-- -->[-1,1]<!-- -->$に値を変換する必要があります．まずは$Z$値からですが，次のような1次関数を考えます．</p><p>$$
-p<!-- -->_<!-- -->{z}&#x27; = az+b
+p <!-- -->_<!-- --> {z}&#x27; = az+b
 $$</p><p>この行列は次のようになります．</p><p>$$
 M_w = \left(\begin{matrix}
-1 &amp; 0 &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; a &amp; b <!-- -->\<!-- -->\<!-- -->
+1 &amp; 0 &amp; 0 &amp; 0 \newline
+0 &amp; 1 &amp; 0 &amp; 0 \newline
+0 &amp; 0 &amp; a &amp; b \newline
 0 &amp; 0 &amp; -1 &amp; 0 \end{matrix}\right)
 \quad
-M_w \left(\begin{matrix}x <!-- -->\<!-- -->\<!-- --> y <!-- -->\<!-- -->\<!-- --> z <!-- -->\<!-- -->\<!-- --> 1\end{matrix}\right) =
-\left(\begin{matrix}x <!-- -->\<!-- -->\<!-- --> y <!-- -->\<!-- -->\<!-- --> za+b <!-- -->\<!-- -->\<!-- --> -z\end{matrix}\right)
+M_w \left(\begin{matrix}x \newline y \newline z \newline 1\end{matrix}\right) =
+\left(\begin{matrix}x \newline y \newline za+b \newline -z\end{matrix}\right)
 $$</p><p>クリップ座標系は同次座標系ですので，$w$で各成分を割ることになります．透視投影ではこれを透視除算といい，透視除算した座標を正規化デバイス座標といいます．ここで</p><p>$$
-p<!-- -->_<!-- -->{w}&#x27; = -z
+p <!-- -->_<!-- --> {w}&#x27; = -z
 $$</p><p>ですから，</p><p>$$
-p<!-- -->_<!-- -->{z}&#x27; = az+b = -a\cdot p<!-- -->_<!-- -->{w}&#x27;+b
-$$</p><p>という関係になります．また，正規化デバイス座標の$z<!-- -->_<!-- -->{ndc}$は</p><p>$$
-z<!-- -->_<!-- -->{ndc} = \frac{p<!-- -->_<!-- -->{z}&#x27;}{p<!-- -->_<!-- -->{w}&#x27;} = \frac{-a\cdot p<!-- -->_<!-- -->{w}&#x27;+b}{p<!-- -->_<!-- -->{w}&#x27;} = -a+\frac{b}{p<!-- -->_<!-- -->{w}&#x27;} = -a+\frac{b}{-z}
-$$</p><p>となります．ここで，前方クリッピング面と後方クリッピング面を導入します．</p><p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/5ccc1j6slu80pe9et8fot2rk1q5m" alt="1554629530337_half" class="img_ev3q"></p><p>この前方クリッピング面（$z=n$）のとき$z<!-- -->_<!-- -->{ndc}=-1$，後方クリッピング面（$z=f$）のとき$z<!-- -->_<!-- -->{ndc}=1$となるように，$a$と$b$を求めます．</p><p>$$
+p <!-- -->_<!-- --> {z}&#x27; = az+b = -a\cdot p <!-- -->_<!-- --> {w}&#x27;+b
+$$</p><p>という関係になります．また，正規化デバイス座標の$z <!-- -->_<!-- --> {ndc}$は</p><p>$$
+z <!-- -->_<!-- --> {ndc} = \frac{p <!-- -->_<!-- --> {z}&#x27;}{p <!-- -->_<!-- --> {w}&#x27;} = \frac{-a\cdot p <!-- -->_<!-- --> {w}&#x27;+b}{p <!-- -->_<!-- --> {w}&#x27;} = -a+\frac{b}{p <!-- -->_<!-- --> {w}&#x27;} = -a+\frac{b}{-z}
+$$</p><p>となります．ここで，前方クリッピング面と後方クリッピング面を導入します．</p><p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/5ccc1j6slu80pe9et8fot2rk1q5m" alt="1554629530337_half" class="img_ev3q"></p><p>この前方クリッピング面（$z=n$）のとき$z <!-- -->_<!-- --> {ndc}=-1$，後方クリッピング面（$z=f$）のとき$z <!-- -->_<!-- --> {ndc}=1$となるように，$a$と$b$を求めます．</p><p>$$
 -a+\frac{b}{-n} = -1, \quad -a+\frac{b}{-f} = 1, \quad \therefore b = -f(1+a)
 $$</p><hr><p>$$
 \begin{aligned}
--a+\frac{b}{-n} &amp;= -1 <!-- -->\<!-- -->\<!-- -->
-a &amp;= \frac{b}{-n}+1 = \frac{-f(1+a)}{-n}+1 = \frac{-f-af-n}{-n} = \frac{f+af+n}{n} <!-- -->\<!-- -->\<!-- -->
-an &amp;= f+af+n <!-- -->\<!-- -->\<!-- -->
-an-af &amp;= a(n-f) = f+n <!-- -->\<!-- -->\<!-- -->
+-a+\frac{b}{-n} &amp;= -1 \newline
+a &amp;= \frac{b}{-n}+1 = \frac{-f(1+a)}{-n}+1 = \frac{-f-af-n}{-n} = \frac{f+af+n}{n} \newline
+an &amp;= f+af+n \newline
+an-af &amp;= a(n-f) = f+n \newline
 a &amp;= \frac{n+f}{n-f}
 \end{aligned}
 $$</p><hr><p>$$
 \begin{aligned}
-b &amp;= -f(1+a) = -f-af <!-- -->\<!-- -->\<!-- -->
-&amp;= -f-f\left(\frac{n+f}{n-f}\right) <!-- -->\<!-- -->\<!-- -->
-&amp;= -\frac{nf-f^2}{n-f}-\frac{nf+f^2}{n-f} <!-- -->\<!-- -->\<!-- -->
-&amp;= \frac{nf+f^2-nf-f^2}{n-f} <!-- -->\<!-- -->\<!-- -->
+b &amp;= -f(1+a) = -f-af \newline
+&amp;= -f-f\left(\frac{n+f}{n-f}\right) \newline
+&amp;= -\frac{nf-f^2}{n-f}-\frac{nf+f^2}{n-f} \newline
+&amp;= \frac{nf+f^2-nf-f^2}{n-f} \newline
 &amp;= \frac{-2nf}{n-f}
 \end{aligned}
 $$</p><p>よって</p><p>$$
 \therefore a = \frac{n+f}{n-f}, \quad b = \frac{-2nf}{n-f}
 $$</p><p>また，</p><p>$$
-p<!-- -->_<!-- -->{z}&#x27; = az+b = \frac{n+f}{n-f}z + \frac{-2nf}{n-f}
+p <!-- -->_<!-- --> {z}&#x27; = az+b = \frac{n+f}{n-f}z + \frac{-2nf}{n-f}
 $$</p><p>行列に書き直せば</p><p>$$
 M_w = \left(\begin{matrix}
-1 &amp; 0 &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; \frac{n+f}{n-f} &amp; \frac{-2nf}{n-f} <!-- -->\<!-- -->\<!-- -->
+1 &amp; 0 &amp; 0 &amp; 0 \newline
+0 &amp; 1 &amp; 0 &amp; 0 \newline
+0 &amp; 0 &amp; \frac{n+f}{n-f} &amp; \frac{-2nf}{n-f} \newline
 0 &amp; 0 &amp; -1 &amp; 0 \end{matrix}\right)
 \quad
-M_w \left(\begin{matrix}x <!-- -->\<!-- -->\<!-- --> y <!-- -->\<!-- -->\<!-- --> z <!-- -->\<!-- -->\<!-- --> 1\end{matrix}\right) =
-\left(\begin{matrix}x <!-- -->\<!-- -->\<!-- --> y <!-- -->\<!-- -->\<!-- --> z\frac{n+f}{n-f}+\frac{-2nf}{n-f} <!-- -->\<!-- -->\<!-- --> -z\end{matrix}\right)
-$$</p><p>となります．ここで，$n=-1, f=-5$としたときの図を以下に示します．</p><p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/47h8ky78l55xbyttnebzwf9oje26" alt="1554748535650_resize" class="img_ev3q"></p><p>この図では横軸が$z$，縦軸が$z<!-- -->_<!-- -->{ndc}$です．$z=-1$のとき$z<!-- -->_<!-- -->{ndc}=-1$，$z=-5$のとき$z<!-- -->_<!-- -->{ndc}=1$になっているのがわかります．</p><p>次に$l,r,t,b$を$<!-- -->[-1,1]<!-- -->$に収まるように拡大・縮小します．$z=-1$のとき$-1,1$，$z=-n$のとき$l,r$または$t,b$ですから，相似の関係から</p><p>$$
+M_w \left(\begin{matrix}x \newline y \newline z \newline 1\end{matrix}\right) =
+\left(\begin{matrix}x \newline y \newline z\frac{n+f}{n-f}+\frac{-2nf}{n-f} \newline -z\end{matrix}\right)
+$$</p><p>となります．ここで，$n=-1, f=-5$としたときの図を以下に示します．</p><p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/47h8ky78l55xbyttnebzwf9oje26" alt="1554748535650_resize" class="img_ev3q"></p><p>この図では横軸が$z$，縦軸が$z <!-- -->_<!-- --> {ndc}$です．$z=-1$のとき$z <!-- -->_<!-- --> {ndc}=-1$，$z=-5$のとき$z <!-- -->_<!-- --> {ndc}=1$になっているのがわかります．</p><p>次に$l,r,t,b$を$<!-- -->[-1,1]<!-- -->$に収まるように拡大・縮小します．$z=-1$のとき$-1,1$，$z=-n$のとき$l,r$または$t,b$ですから，相似の関係から</p><p>$$
 \frac{1-(-1)}{-1}/\frac{r-l}{n} = \frac{-2n}{r-l}, \quad
 \frac{1-(-1)}{-1}/\frac{t-b}{n} = \frac{-2n}{t-b}
 $$</p><p>となります．これを行列表記すると</p><p>$$
 M_s = \left(\begin{matrix}
-\frac{-2n}{r-l} &amp; 0 &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; \frac{-2n}{t-b} &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; 1 &amp; 0 <!-- -->\<!-- -->\<!-- -->
+\frac{-2n}{r-l} &amp; 0 &amp; 0 &amp; 0 \newline
+0 &amp; \frac{-2n}{t-b} &amp; 0 &amp; 0 \newline
+0 &amp; 0 &amp; 1 &amp; 0 \newline
 0 &amp; 0 &amp; 0 &amp; 1 \end{matrix}\right)
 $$</p><p>となります．あとは，これまでZ軸がクリッピング面の中心を通っていることを想定していました．これがずれている場合に対処します．そのためにせん断を使います．前方クリッピング面での中心位置分をZ軸の値によって変化させてずらします．この行列は次のようになります．</p><p>$$
-M<!-- -->_<!-- -->{sh} = \left(\begin{matrix}
-1 &amp; 0 &amp; -\frac{r+l}{2}\frac{1}{n} &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; -\frac{t+b}{2}\frac{1}{n} &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; 1 &amp; 0 <!-- -->\<!-- -->\<!-- -->
+M <!-- -->_<!-- --> {sh} = \left(\begin{matrix}
+1 &amp; 0 &amp; -\frac{r+l}{2}\frac{1}{n} &amp; 0 \newline
+0 &amp; 1 &amp; -\frac{t+b}{2}\frac{1}{n} &amp; 0 \newline
+0 &amp; 0 &amp; 1 &amp; 0 \newline
 0 &amp; 0 &amp; 0 &amp; 1 \end{matrix}\right)
 \quad
-M<!-- -->_<!-- -->{sh} \left(\begin{matrix}x <!-- -->\<!-- -->\<!-- --> y <!-- -->\<!-- -->\<!-- --> z <!-- -->\<!-- -->\<!-- --> 1\end{matrix}\right) =
-\left(\begin{matrix}x-\frac{r+l}{2}\frac{z}{n} <!-- -->\<!-- -->\<!-- --> y-\frac{t+b}{2}\frac{z}{n} <!-- -->\<!-- -->\<!-- --> z <!-- -->\<!-- -->\<!-- --> 1\end{matrix}\right)
+M <!-- -->_<!-- --> {sh} \left(\begin{matrix}x \newline y \newline z \newline 1\end{matrix}\right) =
+\left(\begin{matrix}x-\frac{r+l}{2}\frac{z}{n} \newline y-\frac{t+b}{2}\frac{z}{n} \newline z \newline 1\end{matrix}\right)
 $$</p><p>最終的に透視投影変換は</p><p>$$
 \begin{aligned}
-M_p = M_w M_s M<!-- -->_<!-- -->{sh} &amp;=
+M_p = M_w M_s M <!-- -->_<!-- --> {sh} &amp;=
 \left(\begin{matrix}
-1 &amp; 0 &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; \frac{n+f}{n-f} &amp; \frac{-2nf}{n-f} <!-- -->\<!-- -->\<!-- -->
+1 &amp; 0 &amp; 0 &amp; 0 \newline
+0 &amp; 1 &amp; 0 &amp; 0 \newline
+0 &amp; 0 &amp; \frac{n+f}{n-f} &amp; \frac{-2nf}{n-f} \newline
 0 &amp; 0 &amp; -1 &amp; 0 \end{matrix}\right)
 \left(\begin{matrix}
-\frac{-2n}{r-l} &amp; 0 &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; \frac{-2n}{t-b} &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; 1 &amp; 0 <!-- -->\<!-- -->\<!-- -->
+\frac{-2n}{r-l} &amp; 0 &amp; 0 &amp; 0 \newline
+0 &amp; \frac{-2n}{t-b} &amp; 0 &amp; 0 \newline
+0 &amp; 0 &amp; 1 &amp; 0 \newline
 0 &amp; 0 &amp; 0 &amp; 1 \end{matrix}\right)
 \left(\begin{matrix}
-1 &amp; 0 &amp; -\frac{r+l}{2}\frac{1}{n} &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; -\frac{t+b}{2}\frac{1}{n} &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; 1 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; 0 &amp; 1 \end{matrix}\right) <!-- -->\<!-- -->\<!-- -->
+1 &amp; 0 &amp; -\frac{r+l}{2}\frac{1}{n} &amp; 0 \newline
+0 &amp; 1 &amp; -\frac{t+b}{2}\frac{1}{n} &amp; 0 \newline
+0 &amp; 0 &amp; 1 &amp; 0 \newline
+0 &amp; 0 &amp; 0 &amp; 1 \end{matrix}\right) \newline
 &amp;=
 \left(\begin{matrix}
-\frac{-2n}{r-l} &amp; 0 &amp; \frac{r+l}{r-l} &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; \frac{-2n}{t-b} &amp; \frac{t+b}{t-b} &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; \frac{n+f}{n-f} &amp; \frac{-2nf}{n-f} <!-- -->\<!-- -->\<!-- -->
+\frac{-2n}{r-l} &amp; 0 &amp; \frac{r+l}{r-l} &amp; 0 \newline
+0 &amp; \frac{-2n}{t-b} &amp; \frac{t+b}{t-b} &amp; 0 \newline
+0 &amp; 0 &amp; \frac{n+f}{n-f} &amp; \frac{-2nf}{n-f} \newline
 0 &amp; 0 &amp; -1 &amp; 0
 \end{matrix}\right)
 \end{aligned}
 $$</p><p>となります．</p><p>この方法は汎用性が高いものの扱いづらいため，実際には画角とアスペクト比を使った方法がよく使われます．画角をfovy，アスペクト比をaspect(=幅/高さ)とすれば</p><p>$$
 M_p = \left(\begin{matrix}
-\frac{f}{aspect} &amp; 0 &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; f &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; \frac{n+f}{n-f} &amp; \frac{-2nf}{n-f} <!-- -->\<!-- -->\<!-- -->
+\frac{f}{aspect} &amp; 0 &amp; 0 &amp; 0 \newline
+0 &amp; f &amp; 0 &amp; 0 \newline
+0 &amp; 0 &amp; \frac{n+f}{n-f} &amp; \frac{-2nf}{n-f} \newline
 0 &amp; 0 &amp; -1 &amp; 0
 \end{matrix}\right)
 $$</p><p>ここで</p><p>$$
 f = \frac{1}{\tan\left(\frac{fovy}{2}\right)} = \cot\left(\frac{fovy}{2}\right)
 $$</p><p>となっています．</p><h6 class="anchor anchorWithStickyNavbar_LWe7" id="正投影変換">正投影変換<a class="hash-link" href="#正投影変換" title="この見出しへのリンク">​</a></h6><p>透視投影変換のときは奥行きによって見え方が変わらないので，$w$による透視除算がありません．正投影変換では，ビューボリュームの中心を原点に持ってきて，大きさを正規化するだけです．まずはビューボリュームの中心を原点にする平行移動を求めます．これは次のようになります．</p><p>$$
 M_t = \left(\begin{matrix}
-1 &amp; 0 &amp; 0 &amp; -\frac{r+l}{2} <!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; 0 &amp; -\frac{t+b}{2} <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; 1 &amp; -\frac{f+n}{2} <!-- -->\<!-- -->\<!-- -->
+1 &amp; 0 &amp; 0 &amp; -\frac{r+l}{2} \newline
+0 &amp; 1 &amp; 0 &amp; -\frac{t+b}{2} \newline
+0 &amp; 0 &amp; 1 &amp; -\frac{f+n}{2} \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
 $$</p><p>各軸での中心を求めて移動しています．</p><p>次に正規化です．各軸がそれぞれ$<!-- -->[-1,1]<!-- -->$の範囲になるようにします．これは次のようになります．</p><p>$$
 M_s = \left(\begin{matrix}
-\frac{2}{r-l} &amp; 0 &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; \frac{2}{t-b} &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; \frac{2}{f-n} &amp; 0 <!-- -->\<!-- -->\<!-- -->
+\frac{2}{r-l} &amp; 0 &amp; 0 &amp; 0 \newline
+0 &amp; \frac{2}{t-b} &amp; 0 &amp; 0 \newline
+0 &amp; 0 &amp; \frac{2}{f-n} &amp; 0 \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
 $$</p><p>よって，正投影変換の行列は</p><p>$$
 \begin{aligned}
 M_o = M_s M_t &amp;=
 \left(\begin{matrix}
-\frac{2}{r-l} &amp; 0 &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; \frac{2}{t-b} &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; \frac{2}{f-n} &amp; 0 <!-- -->\<!-- -->\<!-- -->
+\frac{2}{r-l} &amp; 0 &amp; 0 &amp; 0 \newline
+0 &amp; \frac{2}{t-b} &amp; 0 &amp; 0 \newline
+0 &amp; 0 &amp; \frac{2}{f-n} &amp; 0 \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
 \left(\begin{matrix}
-1 &amp; 0 &amp; 0 &amp; -\frac{r+l}{2} <!-- -->\<!-- -->\<!-- -->
-0 &amp; 1 &amp; 0 &amp; -\frac{t+b}{2} <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; 1 &amp; -\frac{f+n}{2} <!-- -->\<!-- -->\<!-- -->
+1 &amp; 0 &amp; 0 &amp; -\frac{r+l}{2} \newline
+0 &amp; 1 &amp; 0 &amp; -\frac{t+b}{2} \newline
+0 &amp; 0 &amp; 1 &amp; -\frac{f+n}{2} \newline
 0 &amp; 0 &amp; 0 &amp; 1
-\end{matrix}\right) <!-- -->\<!-- -->\<!-- --> &amp;=
+\end{matrix}\right) \newline &amp;=
 \left(\begin{matrix}
-\frac{2}{r-l} &amp; 0 &amp; 0 &amp; -\frac{r+l}{r-l} <!-- -->\<!-- -->\<!-- -->
-0 &amp; \frac{2}{t-b} &amp; 0 &amp; -\frac{t+b}{t-b} <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; \frac{2}{f-n} &amp; -\frac{f+n}{f-n} <!-- -->\<!-- -->\<!-- -->
+\frac{2}{r-l} &amp; 0 &amp; 0 &amp; -\frac{r+l}{r-l} \newline
+0 &amp; \frac{2}{t-b} &amp; 0 &amp; -\frac{t+b}{t-b} \newline
+0 &amp; 0 &amp; \frac{2}{f-n} &amp; -\frac{f+n}{f-n} \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
 \end{aligned}
 $$</p><p>となります．次の図は正投影変換において$n=-1,f=-5$のときのグラフです．</p><p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/eyt3mgh0t247bmc635mjowqvd8h6" alt="1554826933051_resize" class="img_ev3q"></p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="openglの投影関数">OpenGLの投影関数<a class="hash-link" href="#openglの投影関数" title="この見出しへのリンク">​</a></h3><p>OpenGLには投影変換行列を設定してくれる関数があります．<code>glFrustum</code>関数は前方クリッピング面の左右上下の座標$l,r,t,b$とZ軸の距離$n$，および遠方クリッピング面のZ軸の距離$f$を指定して，透視投影変換行列を設定します．<code>gluPerspective</code>関数は視野角(fovy)とアスペクト比(aspect)，前方・後方クリッピング面のZ軸の距離$n,f$を指定して，透視投影変換行列を設定します．<code>glOrtho</code>関数はクリッピング面の左右上下の座標$l,r,t,b$と前方・後方クリッピング面のZ軸の距離$n,f$を指定して正投影行列を設定します．これらの関数のドキュメントには行列の各要素が記載されています．その行列と，これまで導出してきた行列と比較してみるといくつか符号が違っているところがあります．これは，OpenGLの関数では$n,f$を正の値，導出した行列の$n,f$は負の値だからです．そのため，導出した行列をOpenGLの関数の行列と同じにするには$n,f$の符号を反転すればよいことになります．よって，それぞれの行列は</p><p>$$
 \begin{aligned}
-M<!-- -->_<!-- -->{frustum} &amp;=
+M <!-- -->_<!-- --> {frustum} &amp;=
 \left(\begin{matrix}
-\frac{-2(-n)}{r-l} &amp; 0 &amp; \frac{r+l}{r-l} &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; \frac{-2(-n)}{t-b} &amp; \frac{t+b}{t-b} &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; \frac{(-n)+(-f)}{(-n)-(-f)} &amp; \frac{-2(-n)(-f)}{(-n)-(-f)} <!-- -->\<!-- -->\<!-- -->
+\frac{-2(-n)}{r-l} &amp; 0 &amp; \frac{r+l}{r-l} &amp; 0 \newline
+0 &amp; \frac{-2(-n)}{t-b} &amp; \frac{t+b}{t-b} &amp; 0 \newline
+0 &amp; 0 &amp; \frac{(-n)+(-f)}{(-n)-(-f)} &amp; \frac{-2(-n)(-f)}{(-n)-(-f)} \newline
 0 &amp; 0 &amp; -1 &amp; 0
 \end{matrix}\right) =
 \left(\begin{matrix}
-\frac{2n}{r-l} &amp; 0 &amp; \frac{r+l}{r-l} &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; \frac{2n}{t-b} &amp; \frac{t+b}{t-b} &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; -\frac{f+n}{f-n} &amp; \frac{-2nf}{f-n} <!-- -->\<!-- -->\<!-- -->
+\frac{2n}{r-l} &amp; 0 &amp; \frac{r+l}{r-l} &amp; 0 \newline
+0 &amp; \frac{2n}{t-b} &amp; \frac{t+b}{t-b} &amp; 0 \newline
+0 &amp; 0 &amp; -\frac{f+n}{f-n} &amp; \frac{-2nf}{f-n} \newline
 0 &amp; 0 &amp; -1 &amp; 0
-\end{matrix}\right) <!-- -->\<!-- -->\<!-- -->
-M<!-- -->_<!-- -->{perspective} &amp;=
+\end{matrix}\right) \newline
+M <!-- -->_<!-- --> {perspective} &amp;=
 \left(\begin{matrix}
-\frac{f}{aspect} &amp; 0 &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; f &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; \frac{(-n)+(-f)}{(-n)-(-f)} &amp; \frac{-2(-n)(-f)}{(-n)-(-f)} <!-- -->\<!-- -->\<!-- -->
+\frac{f}{aspect} &amp; 0 &amp; 0 &amp; 0 \newline
+0 &amp; f &amp; 0 &amp; 0 \newline
+0 &amp; 0 &amp; \frac{(-n)+(-f)}{(-n)-(-f)} &amp; \frac{-2(-n)(-f)}{(-n)-(-f)} \newline
 0 &amp; 0 &amp; -1 &amp; 0
 \end{matrix}\right) =
 \left(\begin{matrix}
-\frac{f}{aspect} &amp; 0 &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; f &amp; 0 &amp; 0 <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; -\frac{f+n}{f-n} &amp; \frac{-2nf}{f-n} <!-- -->\<!-- -->\<!-- -->
+\frac{f}{aspect} &amp; 0 &amp; 0 &amp; 0 \newline
+0 &amp; f &amp; 0 &amp; 0 \newline
+0 &amp; 0 &amp; -\frac{f+n}{f-n} &amp; \frac{-2nf}{f-n} \newline
 0 &amp; 0 &amp; -1 &amp; 0
-\end{matrix}\right) <!-- -->\<!-- -->\<!-- -->
-M<!-- -->_<!-- -->{ortho} &amp;=
+\end{matrix}\right) \newline
+M <!-- -->_<!-- --> {ortho} &amp;=
 \left(\begin{matrix}
-\frac{2}{r-l} &amp; 0 &amp; 0 &amp; -\frac{r+l}{r-l} <!-- -->\<!-- -->\<!-- -->
-0 &amp; \frac{2}{t-b} &amp; 0 &amp; -\frac{t+b}{t-b} <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; \frac{2}{(-f)-(-n)} &amp; -\frac{(-f)+(-n)}{(-f)-(-n)} <!-- -->\<!-- -->\<!-- -->
+\frac{2}{r-l} &amp; 0 &amp; 0 &amp; -\frac{r+l}{r-l} \newline
+0 &amp; \frac{2}{t-b} &amp; 0 &amp; -\frac{t+b}{t-b} \newline
+0 &amp; 0 &amp; \frac{2}{(-f)-(-n)} &amp; -\frac{(-f)+(-n)}{(-f)-(-n)} \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right) =
 \left(\begin{matrix}
-\frac{2}{r-l} &amp; 0 &amp; 0 &amp; -\frac{r+l}{r-l} <!-- -->\<!-- -->\<!-- -->
-0 &amp; \frac{2}{t-b} &amp; 0 &amp; -\frac{t+b}{t-b} <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; \frac{2}{n-f} &amp; -\frac{f+n}{f-n} <!-- -->\<!-- -->\<!-- -->
+\frac{2}{r-l} &amp; 0 &amp; 0 &amp; -\frac{r+l}{r-l} \newline
+0 &amp; \frac{2}{t-b} &amp; 0 &amp; -\frac{t+b}{t-b} \newline
+0 &amp; 0 &amp; \frac{2}{n-f} &amp; -\frac{f+n}{f-n} \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right)
 \end{aligned}
 $$</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ビューポート変換viewport-transformation">ビューポート変換（viewport transformation）<a class="hash-link" href="#ビューポート変換viewport-transformation" title="この見出しへのリンク">​</a></h3><p>投影変換によってクリップ空間に変換された座標は透視除算することで正規化デバイス座標に変換されます．</p><p>$$
-\vec{p}<!-- -->_<!-- -->{ndc} = \left(\begin{matrix}x/w <!-- -->\<!-- -->\<!-- --> y/w <!-- -->\<!-- -->\<!-- --> z/w\end{matrix}\right)
+\vec{p} <!-- -->_<!-- --> {ndc} = \left(\begin{matrix}x/w \newline y/w \newline z/w\end{matrix}\right)
 $$</p><p>この正規化デバイス座標系はXYZともに$-1$から$1$の範囲になっています．これを画面に表示するためにビューポート変換をします．画面のことをウィンドウとかスクリーンというので，ビューポート変換後をウィンドウ座標系やスクリーン座標系ともいいます．また，ビューポート変換をスクリーン座標変換ということもあります．</p><p>ビューポート変換ではスクリーンに表示する領域と位置を指定します．ここで，スクリーンの幅を$w$，高さを$h$，始点を$ox,oy$とおくとビューポート変換は</p><p>$$
 M_v = \left(\begin{matrix}
-\frac{w}{2} &amp; 0 &amp; 0 &amp; \frac{w}{2}+ox <!-- -->\<!-- -->\<!-- -->
-0 &amp; -\frac{h}{2} &amp; 0 &amp; \frac{h}{2}+oy <!-- -->\<!-- -->\<!-- -->
-0 &amp; 0 &amp; \frac{f-n}{2} &amp; \frac{f+n}{2} <!-- -->\<!-- -->\<!-- -->
+\frac{w}{2} &amp; 0 &amp; 0 &amp; \frac{w}{2}+ox \newline
+0 &amp; -\frac{h}{2} &amp; 0 &amp; \frac{h}{2}+oy \newline
+0 &amp; 0 &amp; \frac{f-n}{2} &amp; \frac{f+n}{2} \newline
 0 &amp; 0 &amp; 0 &amp; 1
 \end{matrix}\right),
 \quad
-M_v \vec{p}<!-- -->_<!-- -->{ndc} = \left(\begin{matrix}
-x \frac{w}{2} + \frac{w}{2} + ox <!-- -->\<!-- -->\<!-- -->
--y \frac{h}{2} + \frac{h}{2} + oy <!-- -->\<!-- -->\<!-- -->
-z \frac{f-n}{2} + \frac{f+n}{2} <!-- -->\<!-- -->\<!-- -->
+M_v \vec{p} <!-- -->_<!-- --> {ndc} = \left(\begin{matrix}
+x \frac{w}{2} + \frac{w}{2} + ox \newline
+-y \frac{h}{2} + \frac{h}{2} + oy \newline
+z \frac{f-n}{2} + \frac{f+n}{2} \newline
 1
 \end{matrix}\right)
 $$</p><p>となります．$Y$が反転しているのは正規化デバイス座標系ではY軸の上が正に対して，スクリーンでは左上が原点でありY軸は下が正だからです．$Z$は$<!-- -->[n,f]<!-- -->$の間になるようにしています．通常は$n=0,f=1$です．</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="一般的な頂点データのパイプライン">一般的な頂点データのパイプライン<a class="hash-link" href="#一般的な頂点データのパイプライン" title="この見出しへのリンク">​</a></h3><p>レンダリングパイプラインの主要な座標変換を一通り見てきました．一般的に頂点データがどのような座標変換が適用されて画面に表示されるかを図にしてみました．</p><p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/3yhvqigxx4oyb3rghqd525t7r3rr" alt="1554646680440" class="img_ev3q"></p><p>実際は環境によって変わる場合があると思いますので，この辺り触れる機会があれば，その環境のドキュメントを確認してください．</p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="おわりに">おわりに<a class="hash-link" href="#おわりに" title="この見出しへのリンク">​</a></h2><p>簡単にまとめるつもりが，なんか思っていた以上に長くなってしまった気がしますね．また，説明がまだ上手く出来ていないところが多々あるので反省．意見や感想，間違いの指摘など受け付けていますので，なにかあればよろしくおねがいします．また，少しでも参考になれば幸いです．</p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="付録-athreejsの深度の関数">付録 A：Three.jsの深度の関数<a class="hash-link" href="#付録-athreejsの深度の関数" title="この見出しへのリンク">​</a></h2><p>Three.jsのシェーダコードには深度とZ値を変換する以下の関数があります．</p><ul><li>viewZToOrthographicDepth</li><li>orthographicDepthToViewZ</li><li>viewZToPerspectiveDepth</li><li>perspectiveDepthToViewZ</li></ul><p>例えば，深度の値からカメラ座標系でのZ値を求めれば，スクリーンの座標からカメラ座標系での座標(XYZ)を求めることができます．また，透視変換の場合は一般的に深度の値が線形になっていないため，線形に変換して使用することがあります．これらの関数のコードは次のようになっています．</p><div class="language-glsl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-glsl codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">float viewZToOrthographicDepth(float viewZ, float near, float far) </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">{</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  return (viewZ + near) / (near - far);</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">float orthographicDepthToViewZ(float linearClipZ, float near, float far)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">{</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    return linearClipZ * (near - far) - near;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">float viewZToPerspectiveDepth(float viewZ, float near, float far)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">{</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    return ((near + viewZ) * far) / ((far - near) * viewZ);</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">float perspectiveDepthToViewZ(float invClipZ, float near, float far) </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">{</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  return (near * far) / ((far - near) * invClipZ - far);</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="クリップボードにコードをコピー" title="コピー" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg class="copyButtonIcon_y97N" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg class="copyButtonSuccessIcon_LjdS" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div><p>最初に，<strong>perspectiveDepthToViewZ</strong>から見ていきましょう．これを数式で表すと</p><p>$$
@@ -621,31 +621,31 @@ viewZ = \frac{nf}{(f-n)\times invClipZ-f}
 \tag{1}
 $$</p><p>となります．まず，これらの関数の<strong>n</strong>と<strong>f</strong>は正の値を指定します．よって，透視投影の式は</p><p>$$
 \begin{aligned}
-p<!-- -->_<!-- -->{z}&#x27; &amp;= az+b = \frac{n+f}{n-f}z + \frac{-2nf}{f-n} <!-- -->\<!-- -->\<!-- -->
-a &amp;= \frac{n+f}{n-f} <!-- -->\<!-- -->\<!-- -->
+p <!-- -->_<!-- --> {z}&#x27; &amp;= az+b = \frac{n+f}{n-f}z + \frac{-2nf}{f-n} \newline
+a &amp;= \frac{n+f}{n-f} \newline
 b &amp;= \frac{-2nf}{f-n}
 \end{aligned}
-$$</p><p>です．また，正規化デバイス座標の$z<!-- -->_<!-- -->{ndc}$は次のようになります．</p><p>$$
-z<!-- -->_<!-- -->{ndc} = \frac{p<!-- -->_<!-- -->{z}&#x27;}{p<!-- -->_<!-- -->{w}&#x27;} = \frac{1}{-z}\left(\frac{n+f}{n-f}z + \frac{-2nf}{f-n}\right)
+$$</p><p>です．また，正規化デバイス座標の$z <!-- -->_<!-- --> {ndc}$は次のようになります．</p><p>$$
+z <!-- -->_<!-- --> {ndc} = \frac{p <!-- -->_<!-- --> {z}&#x27;}{p <!-- -->_<!-- --> {w}&#x27;} = \frac{1}{-z}\left(\frac{n+f}{n-f}z + \frac{-2nf}{f-n}\right)
 \tag{2}
 $$</p><p>正規化デバイス座標では$<!-- -->[-1,1]<!-- -->$の範囲になりますが，一般的に深度バッファに格納される深度値$depth$は$<!-- -->[0,1]<!-- -->$の範囲にビューポート変換されます．よって</p><p>$$
-depth = \frac{z<!-- -->_<!-- -->{ndc}}{2}+\frac{1}{2}, \qquad \therefore z<!-- -->_<!-- -->{ndc} = 2\cdot depth - 1
+depth = \frac{z <!-- -->_<!-- --> {ndc}}{2}+\frac{1}{2}, \qquad \therefore z <!-- -->_<!-- --> {ndc} = 2\cdot depth - 1
 $$</p><p>これを式（２）に代入すると</p><p>$$
 2\cdot depth - 1 = \frac{1}{-z}\left(\frac{n+f}{n-f}z + \frac{-2nf}{f-n}\right)
 $$</p><p>となります．$z$について解くと</p><p>$$
 \begin{aligned}
-2\cdot depth - 1 &amp;= \frac{1}{-z}\left(\frac{n+f}{n-f}z + \frac{-2nf}{f-n}\right) <!-- -->\<!-- -->\<!-- -->
-&amp;= -\frac{n+f}{n-f}+\frac{-2nf}{f-n}(-z) <!-- -->\<!-- -->\<!-- -->
-2\cdot depth &amp;= \frac{f+n}{f-n} + \frac{2nf}{(f-n)z} + 1 <!-- -->\<!-- -->\<!-- -->
-&amp;= \frac{(f+n)z}{(f-n)z} + \frac{2nf}{(f-n)z} + \frac{(f-n)z}{(f-n)z} <!-- -->\<!-- -->\<!-- -->
-&amp;= \frac{fz + nz + 2nf + fz - nz}{(f-n)z} <!-- -->\<!-- -->\<!-- -->
-&amp;= \frac{2fz + 2nf}{(f-z)n} <!-- -->\<!-- -->\<!-- -->
-depth &amp;= \frac{fz+nf}{(f-n)z} \qquad \qquad \text{\color{blue}(3)} <!-- -->\<!-- -->\<!-- -->
-&amp;= \frac{fz}{(f-n)z} + \frac{fn}{(f-n)z} = \frac{f}{f-n} + \frac{fn}{(f-n)z} <!-- -->\<!-- -->\<!-- -->
-\frac{nf}{(f-n)z} &amp;= depth - \frac{f}{f-n} <!-- -->\<!-- -->\<!-- -->
-\frac{nf}{(f-n)z} &amp;= \frac{(f-n)\cdot depth}{f-n} - \frac{f}{f-n} = \frac{(f-n)\cdot depth-f}{f-n} <!-- -->\<!-- -->\<!-- -->
-\frac{(f-n)z}{nf} &amp;= \frac{f-n}{(f-n)\cdot depth-f} <!-- -->\<!-- -->\<!-- -->
-(f-n)z &amp;= \frac{(f-n)nf}{(f-n)\cdot depth-f} <!-- -->\<!-- -->\<!-- -->
+2\cdot depth - 1 &amp;= \frac{1}{-z}\left(\frac{n+f}{n-f}z + \frac{-2nf}{f-n}\right) \newline
+&amp;= -\frac{n+f}{n-f}+\frac{-2nf}{f-n}(-z) \newline
+2\cdot depth &amp;= \frac{f+n}{f-n} + \frac{2nf}{(f-n)z} + 1 \newline
+&amp;= \frac{(f+n)z}{(f-n)z} + \frac{2nf}{(f-n)z} + \frac{(f-n)z}{(f-n)z} \newline
+&amp;= \frac{fz + nz + 2nf + fz - nz}{(f-n)z} \newline
+&amp;= \frac{2fz + 2nf}{(f-z)n} \newline
+depth &amp;= \frac{fz+nf}{(f-n)z} \qquad \qquad \text{\color{blue}(3)} \newline
+&amp;= \frac{fz}{(f-n)z} + \frac{fn}{(f-n)z} = \frac{f}{f-n} + \frac{fn}{(f-n)z} \newline
+\frac{nf}{(f-n)z} &amp;= depth - \frac{f}{f-n} \newline
+\frac{nf}{(f-n)z} &amp;= \frac{(f-n)\cdot depth}{f-n} - \frac{f}{f-n} = \frac{(f-n)\cdot depth-f}{f-n} \newline
+\frac{(f-n)z}{nf} &amp;= \frac{f-n}{(f-n)\cdot depth-f} \newline
+(f-n)z &amp;= \frac{(f-n)nf}{(f-n)\cdot depth-f} \newline
 z &amp;= \frac{nf}{(f-n)\cdot depth-f} \qquad \qquad \text{\color{blue}(4)}
 \end{aligned}
 $$</p><p>ここで式（１）と比べると</p><p>$$
@@ -657,28 +657,28 @@ viewZ = linearClipZ * (n-f) - n
 \tag{5}
 $$</p><p>となっています．こちらも$n$と$f$は正の値なので</p><p>$$
 \begin{aligned}
-p<!-- -->_<!-- -->{z}&#x27; &amp;= az+b = \frac{2}{n-f}z + \frac{n+f}{n-f} <!-- -->\<!-- -->\<!-- -->
-a &amp;= \frac{2}{n-f} <!-- -->\<!-- -->\<!-- -->
+p <!-- -->_<!-- --> {z}&#x27; &amp;= az+b = \frac{2}{n-f}z + \frac{n+f}{n-f} \newline
+a &amp;= \frac{2}{n-f} \newline
 b &amp;= \frac{n+f}{n-f}
 \end{aligned}
-$$</p><p>正規化デバイス座標の$z<!-- -->_<!-- -->{ndc}$は</p><p>$$
-z<!-- -->_<!-- -->{ndc} = \frac{p<!-- -->_<!-- -->{z}&#x27;}{p<!-- -->_<!-- -->{w}&#x27;} = \frac{p<!-- -->_<!-- -->{z}&#x27;}{1} = p<!-- -->_<!-- -->{z}&#x27;
+$$</p><p>正規化デバイス座標の$z <!-- -->_<!-- --> {ndc}$は</p><p>$$
+z <!-- -->_<!-- --> {ndc} = \frac{p <!-- -->_<!-- --> {z}&#x27;}{p <!-- -->_<!-- --> {w}&#x27;} = \frac{p <!-- -->_<!-- --> {z}&#x27;}{1} = p <!-- -->_<!-- --> {z}&#x27;
 \tag{6}
 $$</p><p>深度値$depth$は</p><p>$$
-depth = \frac{z<!-- -->_<!-- -->{ndc}}{2}+\frac{1}{2}, \qquad \therefore z<!-- -->_<!-- -->{ndc} = 2\cdot depth - 1
+depth = \frac{z <!-- -->_<!-- --> {ndc}}{2}+\frac{1}{2}, \qquad \therefore z <!-- -->_<!-- --> {ndc} = 2\cdot depth - 1
 $$</p><p>これらの式から</p><p>$$
 \begin{aligned}
-2\cdot depth - 1 &amp;= \frac{2}{n-f}z + \frac{n+f}{n-f} <!-- -->\<!-- -->\<!-- -->
-\frac{2}{n-f}z &amp;= 2\cdot depth - 1 - \frac{n+f}{n-f} <!-- -->\<!-- -->\<!-- -->
-&amp;= \frac{2\cdot depth\cdot (n-f)}{n-f} - \frac{n-f}{n-f} - \frac{n+f}{n-f} <!-- -->\<!-- -->\<!-- -->
-&amp;= \frac{2\cdot depth\cdot (n-f)-n+f-n-f}{n-f} = \frac{2\cdot depth\cdot (n-f)-2n}{n-f} <!-- -->\<!-- -->\<!-- -->
-2z &amp;= 2\cdot depth\cdot (n-f)-2n <!-- -->\<!-- -->\<!-- -->
+2\cdot depth - 1 &amp;= \frac{2}{n-f}z + \frac{n+f}{n-f} \newline
+\frac{2}{n-f}z &amp;= 2\cdot depth - 1 - \frac{n+f}{n-f} \newline
+&amp;= \frac{2\cdot depth\cdot (n-f)}{n-f} - \frac{n-f}{n-f} - \frac{n+f}{n-f} \newline
+&amp;= \frac{2\cdot depth\cdot (n-f)-n+f-n-f}{n-f} = \frac{2\cdot depth\cdot (n-f)-2n}{n-f} \newline
+2z &amp;= 2\cdot depth\cdot (n-f)-2n \newline
 z &amp;= depth\cdot (n-f)-n \qquad \qquad \text{\color{blue}(7)}
 \end{aligned}
 $$</p><p>となります．これは式（５）と一致します．また，<strong>orthographicDepthToViewZ</strong>の逆関数<strong>viewZToOrthographicDepth</strong>は</p><p>$$
 \begin{aligned}
-depth\cdot(n-f)-n &amp;= z <!-- -->\<!-- -->\<!-- -->
-depth\cdot(n-f) &amp;= z+n <!-- -->\<!-- -->\<!-- -->
+depth\cdot(n-f)-n &amp;= z \newline
+depth\cdot(n-f) &amp;= z+n \newline
 depth &amp;= \frac{z+n}{n-f}
 \end{aligned}
 $$</p><p>となります．</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="線形リニア深度">線形（リニア）深度<a class="hash-link" href="#線形リニア深度" title="この見出しへのリンク">​</a></h3><p>一般的に透視投影の深度は線形ではありません．これだと扱いづらいので，線形深度に変換して使用します．透視投影では深度が線形ではありませんが，正投影では線形深度になっています．</p><p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/2gwgrizz07hnzji81xerox4zcu0f" alt="1559404608_half" class="img_ev3q">
@@ -688,19 +688,19 @@ linearDepth = \frac{z+n}{n-f}, \qquad
 z = \frac{nf}{(f-n)\cdot depth-f}
 $$</p><p>linearDepthについて解くと</p><p>$$
 \begin{aligned}
-linearDepth &amp;= \frac{z+n}{n-f} <!-- -->\<!-- -->\<!-- -->
-(n-f)\cdot linearDepth &amp;= z+n <!-- -->\<!-- -->\<!-- -->
-&amp;= \frac{nf}{(f-n)\cdot depth-f}+n <!-- -->\<!-- -->\<!-- -->
-&amp;= \frac{nf}{(f-n)\cdot depth-f} + \frac{<!-- -->{<!-- -->(f-n)\cdot depth-f<!-- -->}<!-- -->\cdot n}{(f-n)\cdot depth-f} <!-- -->\<!-- -->\<!-- -->
-&amp;= \frac{nf+n(f-n)\cdot depth-nf}{(f-n)\cdot depth-f} <!-- -->\<!-- -->\<!-- -->
-&amp;= \frac{n(f-n)\cdot depth}{(f-n)\cdot depth-f} <!-- -->\<!-- -->\<!-- -->
--(f-n)\cdot linearDepth &amp;= \frac{n(f-n)\cdot depth}{(f-n)\cdot depth-f} <!-- -->\<!-- -->\<!-- -->
-linearDepth &amp;= \frac{-n\cdot depth}{(f-n)\cdot depth-f} <!-- -->\<!-- -->\<!-- -->
-&amp;= \frac{-n\cdot depth}{f\cdot depth - n\cdot depth - f} <!-- -->\<!-- -->\<!-- -->
+linearDepth &amp;= \frac{z+n}{n-f} \newline
+(n-f)\cdot linearDepth &amp;= z+n \newline
+&amp;= \frac{nf}{(f-n)\cdot depth-f}+n \newline
+&amp;= \frac{nf}{(f-n)\cdot depth-f} + \frac{<!-- -->{<!-- -->(f-n)\cdot depth-f<!-- -->}<!-- -->\cdot n}{(f-n)\cdot depth-f} \newline
+&amp;= \frac{nf+n(f-n)\cdot depth-nf}{(f-n)\cdot depth-f} \newline
+&amp;= \frac{n(f-n)\cdot depth}{(f-n)\cdot depth-f} \newline
+-(f-n)\cdot linearDepth &amp;= \frac{n(f-n)\cdot depth}{(f-n)\cdot depth-f} \newline
+linearDepth &amp;= \frac{-n\cdot depth}{(f-n)\cdot depth-f} \newline
+&amp;= \frac{-n\cdot depth}{f\cdot depth - n\cdot depth - f} \newline
 &amp;= \frac{-n\cdot depth}{f(depth-1) - n\cdot depth}
 \end{aligned}
 $$</p><p>となります．よって，getLinearDepth関数は次のように書きかえることができます．</p><div class="language-glsl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-glsl codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">  float getLinearDepth(float depth, float near, float far)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    float nz = near * depth;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    return -nz / (far * (depth-1.0) - nz);</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="クリップボードにコードをコピー" title="コピー" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg class="copyButtonIcon_y97N" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg class="copyButtonSuccessIcon_LjdS" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div><h2 class="anchor anchorWithStickyNavbar_LWe7" id="参考文献">参考文献<a class="hash-link" href="#参考文献" title="この見出しへのリンク">​</a></h2><ul><li>CG-ARTS協会「コンピュータグラフィックス」CG-ARTS協会，2015</li><li>久富木隆一「ゲームアプリの数学　Unityで学ぶ基礎からシェーダまで」SBクリエイティブ株式会社，2015</li><li>Yuki Ozawa「<a href="https://qpp.bitbucket.io/translation/maximizing_depth_buffer_range_and/" target="_blank" rel="noopener noreferrer">深度バッファのレンジと精度を最大化する</a>」</li><li>Brano Kemen「<a href="http://outerra.blogspot.com.ar/2012/11/maximizing-depth-buffer-range-and.html" target="_blank" rel="noopener noreferrer">Maximizing Depth Buffer Range and Precision</a></li><li>「<a href="https://threejs.org/" target="_blank" rel="noopener noreferrer">Three.js</a>」</li></ul></div></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="ドキュメントのナビゲーション"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#はじめに" class="table-of-contents__link toc-highlight">はじめに</a></li><li><a href="#基本的な座標変換" class="table-of-contents__link toc-highlight">基本的な座標変換</a><ul><li><a href="#座標系coordinate-system" class="table-of-contents__link toc-highlight">座標系（coordinate system）</a></li><li><a href="#ベクトルvector" class="table-of-contents__link toc-highlight">ベクトル（vector）</a></li><li><a href="#基底basis" class="table-of-contents__link toc-highlight">基底（basis）</a></li><li><a href="#基底変換basis-transformation" class="table-of-contents__link toc-highlight">基底変換（basis transformation）</a></li><li><a href="#剛体変換rigid-body-transformation" class="table-of-contents__link toc-highlight">剛体変換（rigid-body transformation）</a></li><li><a href="#アフィン変換affine-transformation" class="table-of-contents__link toc-highlight">アフィン変換（affine transformation）</a></li></ul></li><li><a href="#レンダリングパイプライン" class="table-of-contents__link toc-highlight">レンダリングパイプライン</a><ul><li><a href="#モデル変換modeling-transformation" class="table-of-contents__link toc-highlight">モデル変換（modeling transformation）</a></li><li><a href="#ビュー変換viewing-transformation" class="table-of-contents__link toc-highlight">ビュー変換（viewing transformation）</a></li><li><a href="#投影変換projective-transformation" class="table-of-contents__link toc-highlight">投影変換（projective transformation）</a></li><li><a href="#openglの投影関数" class="table-of-contents__link toc-highlight">OpenGLの投影関数</a></li><li><a href="#ビューポート変換viewport-transformation" class="table-of-contents__link toc-highlight">ビューポート変換（viewport transformation）</a></li><li><a href="#一般的な頂点データのパイプライン" class="table-of-contents__link toc-highlight">一般的な頂点データのパイプライン</a></li></ul></li><li><a href="#おわりに" class="table-of-contents__link toc-highlight">おわりに</a></li><li><a href="#付録-athreejsの深度の関数" class="table-of-contents__link toc-highlight">付録 A：Three.jsの深度の関数</a><ul><li><a href="#線形リニア深度" class="table-of-contents__link toc-highlight">線形（リニア）深度</a></li></ul></li><li><a href="#参考文献" class="table-of-contents__link toc-highlight">参考文献</a></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Contents</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/docs/category/lab">Lab</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/category/note">Note</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/category/software">Software</a></li><li class="footer__item"><a class="footer__link-item" href="/blog">Blog</a></li></ul></div><div class="col footer__col"><div class="footer__title">Contact</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://mebiusbox.booth.pm/" target="_blank" rel="noopener noreferrer" class="footer__link-item">BOOTH<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://twitter.com/mebiusbox2" target="_blank" rel="noopener noreferrer" class="footer__link-item">Twitter<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://github.com/mebiusbox" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/privacy">Privacy Policy</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2023 mebiusbox software.</div></div></div></footer></div>
-<script src="/assets/js/runtime~main.c330d665.js"></script>
+<script src="/assets/js/runtime~main.cbb52c22.js"></script>
 <script src="/assets/js/main.1e508335.js"></script>
 </body>
 </html>
