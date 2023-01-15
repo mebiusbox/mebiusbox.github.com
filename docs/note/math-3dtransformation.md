@@ -72,7 +72,7 @@ $$
 
 ベクトルの成分表示でXYZで測った値を表記することがわかりました．もちろん，このXYZというのはそのベクトルを測った座標系に基づいています．この座標系とベクトルの関係を見ていきましょう．
 
-XYZというのは座標系における軸のことです．これまで，上下・左右・前後という曖昧な表現でしたが，方向を表すベクトル，つまり単位ベクトルを使うと，XYZの向きをベクトルで表すことが出来ます．一般的な座標系として，左右をX，上下をY，前後をZとしたとき，それぞれの向き（単位ベクトル）$\vec{e}\_x,\vec{e}\_y,\vec{e}\_z$は
+XYZというのは座標系における軸のことです．これまで，上下・左右・前後という曖昧な表現でしたが，方向を表すベクトル，つまり単位ベクトルを使うと，XYZの向きをベクトルで表すことが出来ます．一般的な座標系として，左右をX，上下をY，前後をZとしたとき，それぞれの向き（単位ベクトル）$\vec{e} _ x,\vec{e} _ y,\vec{e} _ z$は
 
 $$
     \vec{e}_x = (1,0,0), \quad \vec{e}_y = (0,1,0), \quad \vec{e}_z = (0,0,1)
@@ -81,10 +81,10 @@ $$
 となります．これを使うとベクトルの成分表示は
 
 $$
-    \vec{p} = \left(\begin{matrix}p_x \\\\ p_y \\\\ p_z\end{matrix}\right) =
-    p_x \left(\begin{matrix}1 \\\\ 0 \\\\ 0\end{matrix}\right) + 
-    p_y \left(\begin{matrix}0 \\\\ 1 \\\\ 0\end{matrix}\right) +
-    p_z \left(\begin{matrix}0 \\\\ 0 \\\\ 1\end{matrix}\right) 
+    \vec{p} = \left(\begin{matrix}p_x \newline p_y \newline p_z\end{matrix}\right) =
+    p_x \left(\begin{matrix}1 \newline 0 \newline 0\end{matrix}\right) + 
+    p_y \left(\begin{matrix}0 \newline 1 \newline 0\end{matrix}\right) +
+    p_z \left(\begin{matrix}0 \newline 0 \newline 1\end{matrix}\right) 
     = p_x \vec{e}_x + p_y \vec{e}_y + p_z \vec{e}_z
 $$
 
@@ -100,9 +100,9 @@ $$
 
 $$
     \begin{aligned}
-    p_x &= \vec{p} \cdot \vec{e}_x \\\\
-    p_y &= \vec{p} \cdot \vec{e}_y \\\\
-    p_z &= \vec{p} \cdot \vec{e}_z \\\\
+    p_x &= \vec{p} \cdot \vec{e}_x \newline
+    p_y &= \vec{p} \cdot \vec{e}_y \newline
+    p_z &= \vec{p} \cdot \vec{e}_z \newline
     \end{aligned}
 $$
 
@@ -110,10 +110,10 @@ $$
 
 $$
     \begin{aligned}
-    M &= \left(\begin{matrix}i_x & i_y & i_z \\\\
-    j_x & j_y & j_z \\\\
-    k_x & k_y & k_z\end{matrix}\right) \\\\
-    \vec{p}' &= M\vec{p} \\\\
+    M &= \left(\begin{matrix}i_x & i_y & i_z \newline
+    j_x & j_y & j_z \newline
+    k_x & k_y & k_z\end{matrix}\right) \newline
+    \vec{p}' &= M\vec{p} \newline
     &= \vec{p}\cdot i + \vec{p}\cdot j + \vec{p}\cdot k
     \end{aligned}
 $$
@@ -152,8 +152,8 @@ $$
 
 $$
     \begin{aligned}
-    \theta &= \arcsin(\sin\theta) \quad ( -\frac{\pi}{2} \leqq \theta \leqq \frac{\pi}{2} ), \\\\
-    \theta &= \arccos(\cos\theta) \quad ( 0 \leqq \theta \leqq \pi ), \\\\
+    \theta &= \arcsin(\sin\theta) \quad ( -\frac{\pi}{2} \leqq \theta \leqq \frac{\pi}{2} ), \newline
+    \theta &= \arccos(\cos\theta) \quad ( 0 \leqq \theta \leqq \pi ), \newline
     \theta &= \arctan(\tan\theta) \quad ( -\frac{\pi}{2} < \theta < \frac{\pi}{2} )
     \end{aligned}
 $$
@@ -179,7 +179,7 @@ $$
 
 $$
     \begin{aligned}
-    \overline{af} &= \overline{ad}\cos A = \cos A \sin B \\\\
+    \overline{af} &= \overline{ad}\cos A = \cos A \sin B \newline
     \overline{fc} &= \overline{de} = \overline{bd}\sin A = \sin A \cos B
     \end{aligned}
 $$
@@ -188,9 +188,9 @@ $\overline{ac} = \overline{af}+\overline{fc}$の関係から
 
 $$
     \begin{aligned}
-    \sin(A+B) &= \sin A\cos B + \cos A\sin B \\\\
-    \cos(A+B) &= \cos A\cos B - \sin A\sin B \\\\
-    \sin(A-B) &= \sin A\cos B - \cos A\sin B \\\\
+    \sin(A+B) &= \sin A\cos B + \cos A\sin B \newline
+    \cos(A+B) &= \cos A\cos B - \sin A\sin B \newline
+    \sin(A-B) &= \sin A\cos B - \cos A\sin B \newline
     \cos(A-B) &= \cos A\cos B + \sin A\sin B
     \end{aligned}
 $$
@@ -212,7 +212,7 @@ $$
 $$
     \begin{aligned}
     x' &= r\cos(\theta+\phi)
-       = r\cos\theta\cos\phi - r\sin\theta\sin\phi \\\\
+       = r\cos\theta\cos\phi - r\sin\theta\sin\phi \newline
     y' &= r\sin(\theta+\phi)
        = r\sin\theta\cos\phi + r\cos\theta\sin\phi
     \end{aligned}
@@ -229,9 +229,9 @@ $$
 $$
     \begin{aligned}
     x' &= \frac{x\cos\theta\cos\phi}{\cos\phi} - \frac{y\sin\theta\sin\phi}{\sin\phi}
-       = x\cos\theta - y\sin\theta \\\\
+       = x\cos\theta - y\sin\theta \newline
     y' &= \frac{x\sin\theta\cos\phi}{\cos\phi} + \frac{y\cos\theta\sin\phi}{\sin\phi}
-       = x\sin\theta + y\cos\theta \\\\
+       = x\sin\theta + y\cos\theta \newline
     z' &= z
     \end{aligned}
 $$
@@ -239,13 +239,13 @@ $$
 となって，行列で書くと
 
 $$
-    \left(\begin{matrix}x' \\\\ y' \\\\ z'\end{matrix}\right) = 
+    \left(\begin{matrix}x' \newline y' \newline z'\end{matrix}\right) = 
     \left(\begin{matrix}
-        \cos\theta & -\sin\theta & 0 \\\\
-        \sin\theta & \cos\theta & 0 \\\\
+        \cos\theta & -\sin\theta & 0 \newline
+        \sin\theta & \cos\theta & 0 \newline
         0 & 0 & 1
     \end{matrix}\right)
-    \left(\begin{matrix}x \\\\ y \\\\ z\end{matrix}\right)
+    \left(\begin{matrix}x \newline y \newline z\end{matrix}\right)
 $$
 
 となります．この行列の基底ベクトルに注目してみると，回転させたい方向とは逆の方向に回転したベクトルになっています．つまり，反対方向に回転させた基底を使って変換を行うと，回転した座標になるということになります．
@@ -257,8 +257,8 @@ $$
 $$
     R_z = 
     \left(\begin{matrix}
-        \cos\theta & -\sin\theta & 0 \\\\
-        \sin\theta & \cos\theta & 0 \\\\
+        \cos\theta & -\sin\theta & 0 \newline
+        \sin\theta & \cos\theta & 0 \newline
         0 & 0 & 1
     \end{matrix}\right)
 $$
@@ -268,13 +268,13 @@ $$
 $$
     \begin{aligned}
     R_x &= \left(\begin{matrix}
-        1 & 0 & 0\\\\
-        0 & \cos\theta & -\sin\theta \\\\
+        1 & 0 & 0\newline
+        0 & \cos\theta & -\sin\theta \newline
         0 & \sin\theta & \cos\theta
-    \end{matrix}\right) \\\\
+    \end{matrix}\right) \newline
     R_y &= \left(\begin{matrix}
-        \cos\theta & 0 & \sin\theta\\\\
-        0 & 1 & 0 \\\\
+        \cos\theta & 0 & \sin\theta\newline
+        0 & 1 & 0 \newline
         -\sin\theta & 0 & \cos\theta
     \end{matrix}\right)
     \end{aligned}
@@ -288,10 +288,10 @@ $$
 
 から，すべて単位ベクトルであり，列ベクトルにおいても互いに内積がゼロなので直交していることがわかります．
 
-行列は掛け合わせて合成できるので，例えばXYZ回転の行列$R\\_{xyz}$は
+行列は掛け合わせて合成できるので，例えばXYZ回転の行列$R \_ {xyz}$は
 
 $$
-    R\_{xyz} = R_z R_y R_x
+    R \_ {xyz} = R_z R_y R_x
 $$
 
 となります．ここでは取り上げませんが，任意の軸を基準に回転する行列の式も簡単に見つかると思います．これらの回転行列を組み合わせて基底変換の行列をつくることが出来ます．
@@ -315,15 +315,15 @@ $$
 とすればよいことになります．これは１次関数の形になっていますね．しかし，このままでは３行３列の行列で表すことができず，扱いづらいものになっています．そこで，４次元の**同次座標系**（homogeneous coordinate）を使います（同次座標系は斉次座標系とも呼ばれます）．４次元の同次座標系を使うと４次元空間の断面と３次元空間の座標を同じ（写像）扱いにすることができます．４次元空間の位置は$w$が追加された$x,y,z,w$で表し，３次元空間との関係は
 
 $$
-    \left(\begin{matrix}x \\\\ y \\\\ z\end{matrix}\right) = 
-    \left(\begin{matrix}x/w \\\\ y/w \\\\ z/w\end{matrix}\right)
+    \left(\begin{matrix}x \newline y \newline z\end{matrix}\right) = 
+    \left(\begin{matrix}x/w \newline y/w \newline z/w\end{matrix}\right)
 $$
 
 となります．通常は$w=1$として
 
 $$
-    \left(\begin{matrix}x \\\\ y \\\\ z\end{matrix}\right) = 
-    \left(\begin{matrix}x \\\\ y \\\\ z \\\\ 1\end{matrix}\right)
+    \left(\begin{matrix}x \newline y \newline z\end{matrix}\right) = 
+    \left(\begin{matrix}x \newline y \newline z \newline 1\end{matrix}\right)
 $$
 
 とします．ちなみに$w=0$とすると，無限遠点となり大きさが無限となります．ただし，無限遠点でも向きは存在しているので，$w=0$の場合は向きだけを表しているとも考えることができます．
@@ -333,9 +333,9 @@ $$
 $$
     T = 
     \left(\begin{matrix}
-        1 & 0 & 0 & t_x \\\\
-        0 & 1 & 0 & t_y \\\\
-        0 & 0 & 1 & t_z \\\\
+        1 & 0 & 0 & t_x \newline
+        0 & 1 & 0 & t_y \newline
+        0 & 0 & 1 & t_z \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
 $$
@@ -346,25 +346,25 @@ $$
 \begin{aligned}
     \vec{p}' = M\vec{p} + \vec{t} = TR\vec{p} &=
     \left(\begin{matrix}
-        1 & 0 & 0 & t_x \\\\
-        0 & 1 & 0 & t_y \\\\
-        0 & 0 & 1 & t_z \\\\
+        1 & 0 & 0 & t_x \newline
+        0 & 1 & 0 & t_y \newline
+        0 & 0 & 1 & t_z \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
     \left(\begin{matrix}
-        R\_{11} & R\_{12} & R\_{13} & 0 \\\\
-        R\_{21} & R\_{22} & R\_{23} & 0 \\\\
-        R\_{31} & R\_{32} & R\_{33} & 0 \\\\
+        R \_ {11} & R \_ {12} & R \_ {13} & 0 \newline
+        R \_ {21} & R \_ {22} & R \_ {23} & 0 \newline
+        R \_ {31} & R \_ {32} & R \_ {33} & 0 \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
-    \left(\begin{matrix}p_x \\\\ p_y \\\\ p_z \\\\ 1\end{matrix}\right) \\\\ &=
+    \left(\begin{matrix}p_x \newline p_y \newline p_z \newline 1\end{matrix}\right) \newline &=
     \left(\begin{matrix}
-        R\_{11} & R\_{12} & R\_{13} & t_x \\\\
-        R\_{21} & R\_{22} & R\_{23} & t_y \\\\
-        R\_{31} & R\_{32} & R\_{33} & t_z \\\\
+        R \_ {11} & R \_ {12} & R \_ {13} & t_x \newline
+        R \_ {21} & R \_ {22} & R \_ {23} & t_y \newline
+        R \_ {31} & R \_ {32} & R \_ {33} & t_z \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
-    \left(\begin{matrix}p_x \\\\ p_y \\\\ p_z \\\\ 1\end{matrix}\right)
+    \left(\begin{matrix}p_x \newline p_y \newline p_z \newline 1\end{matrix}\right)
 \end{aligned}
 $$
 
@@ -387,10 +387,10 @@ $$
 先に鏡映とせん断についてです．鏡映（reflection）は基準となる軸に対して対称となる位置に移動する変換です．例えば，右手座標系と左手座標系を相互に変換する場合は次のような行列になります．
 
 $$
-    M\_{reflection} = 
+    M \_ {reflection} = 
     \left(\begin{matrix}
-        1 & 0 & 0 \\\\
-        0 & 1 & 0 \\\\
+        1 & 0 & 0 \newline
+        0 & 1 & 0 \newline
         0 & 0 & -1
     \end{matrix}\right)
 $$
@@ -398,10 +398,10 @@ $$
 せん断（shearing）はスキュー（skew）変換とも呼ばれ，歪ませる変換です．これは別軸の成分の値が他の軸の成分に影響させることで歪ませます．例えば，$Y$軸方向の値分，$X$軸方向にずらす場合は
 
 $$
-    M\_{skew} = 
+    M \_ {skew} = 
     \left(\begin{matrix}
-        1 & 1 & 0 \\\\
-        0 & 1 & 0 \\\\
+        1 & 1 & 0 \newline
+        0 & 1 & 0 \newline
         0 & 0 & 1
     \end{matrix}\right)
 $$
@@ -413,8 +413,8 @@ $$
 $$
     S = 
     \left(\begin{matrix}
-        s_x & 0 & 0 \\\\
-        0 & s_y & 0 \\\\
+        s_x & 0 & 0 \newline
+        0 & s_y & 0 \newline
         0 & 0 & s_z
     \end{matrix}\right)
 $$
@@ -424,46 +424,46 @@ $$
 $$
     \vec{p}' = S\vec{p} =
     \left(\begin{matrix}
-        s_x & 0 & 0 \\\\
-        0 & s_y & 0 \\\\
+        s_x & 0 & 0 \newline
+        0 & s_y & 0 \newline
         0 & 0 & s_z
     \end{matrix}\right)
-    \left(\begin{matrix}p_x \\\\ p_y \\\\ p_z\end{matrix}\right) =
-    \left(\begin{matrix}s_x p_x \\\\ s_y p_y \\\\ s_z p_z\end{matrix}\right)
+    \left(\begin{matrix}p_x \newline p_y \newline p_z\end{matrix}\right) =
+    \left(\begin{matrix}s_x p_x \newline s_y p_y \newline s_z p_z\end{matrix}\right)
 $$
 
 となります．この拡大・縮小と回転，平行移動の３つを組み合わせて座標変換行列をつくるのが基本的なやり方となります．式で表すと
 
 $$
     \begin{aligned}
-    \vec{p}' &= TRS\vec{p} \\\\
+    \vec{p}' &= TRS\vec{p} \newline
     &= \left(\begin{matrix}
-        1 & 0 & 0 & t_x \\\\
-        0 & 1 & 0 & t_y \\\\
-        0 & 0 & 1 & t_z \\\\
+        1 & 0 & 0 & t_x \newline
+        0 & 1 & 0 & t_y \newline
+        0 & 0 & 1 & t_z \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
     \left(\begin{matrix}
-        R\_{11} & R\_{12} & R\_{13} & 0 \\\\
-        R\_{21} & R\_{22} & R\_{23} & 0 \\\\
-        R\_{31} & R\_{32} & R\_{33} & 0 \\\\
+        R \_ {11} & R \_ {12} & R \_ {13} & 0 \newline
+        R \_ {21} & R \_ {22} & R \_ {23} & 0 \newline
+        R \_ {31} & R \_ {32} & R \_ {33} & 0 \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
     \left(\begin{matrix}
-        s_x & 0 & 0 & 0 \\\\
-        0 & s_y & 0 & 0 \\\\
-        0 & 0 & s_z & 0 \\\\
+        s_x & 0 & 0 & 0 \newline
+        0 & s_y & 0 & 0 \newline
+        0 & 0 & s_z & 0 \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
-    \left(\begin{matrix}p_x \\\\ p_y \\\\ p_z \\\\ 1\end{matrix}\right) \\\\
+    \left(\begin{matrix}p_x \newline p_y \newline p_z \newline 1\end{matrix}\right) \newline
     &= 
     \left(\begin{matrix}
-        s_x R\_{11} & s_y R\_{12} & s_z R\_{13} & t_x \\\\
-        s_x R\_{21} & s_y R\_{22} & s_z R\_{23} & t_y \\\\
-        s_x R\_{31} & s_y R\_{32} & s_z R\_{33} & t_z \\\\
+        s_x R \_ {11} & s_y R \_ {12} & s_z R \_ {13} & t_x \newline
+        s_x R \_ {21} & s_y R \_ {22} & s_z R \_ {23} & t_y \newline
+        s_x R \_ {31} & s_y R \_ {32} & s_z R \_ {33} & t_z \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
-    \left(\begin{matrix}p_x \\\\ p_y \\\\ p_z \\\\ 1\end{matrix}\right)
+    \left(\begin{matrix}p_x \newline p_y \newline p_z \newline 1\end{matrix}\right)
     \end{aligned}
 $$
 
@@ -472,9 +472,9 @@ $$
 $$
     TRS = 
     \left(\begin{matrix}
-        s_x R\_{11} & s_y R\_{12} & s_z R\_{13} & t_x \\\\
-        s_x R\_{21} & s_y R\_{22} & s_z R\_{23} & t_y \\\\
-        s_x R\_{31} & s_y R\_{32} & s_z R\_{33} & t_z \\\\
+        s_x R \_ {11} & s_y R \_ {12} & s_z R \_ {13} & t_x \newline
+        s_x R \_ {21} & s_y R \_ {22} & s_z R \_ {23} & t_y \newline
+        s_x R \_ {31} & s_y R \_ {32} & s_z R \_ {33} & t_z \newline
     \end{matrix}\right)
 $$
 
@@ -565,31 +565,31 @@ $$
 $$
     \vec{p}' = TRS\vec{p} =
     \left(\begin{matrix}
-        s_x R\_{11} & s_y R\_{12} & s_z R\_{13} & t_x \\\\
-        s_x R\_{21} & s_y R\_{22} & s_z R\_{23} & t_y \\\\
-        s_x R\_{31} & s_y R\_{32} & s_z R\_{33} & t_z \\\\
+        s_x R \_ {11} & s_y R \_ {12} & s_z R \_ {13} & t_x \newline
+        s_x R \_ {21} & s_y R \_ {22} & s_z R \_ {23} & t_y \newline
+        s_x R \_ {31} & s_y R \_ {32} & s_z R \_ {33} & t_z \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
-    \left(\begin{matrix}p_x \\\\ p_y \\\\ p_z \\\\ 1\end{matrix}\right)
+    \left(\begin{matrix}p_x \newline p_y \newline p_z \newline 1\end{matrix}\right)
 $$
 
 ここで列ベクトルに注目し，それぞれ$\vec{v}\_x,\vec{v}\_y,\vec{v}\_z$とおくと
 
 $$
-    \vec{v}_x = \left(\begin{matrix} s_x R\_{11} \\\\ s_x R\_{21} \\\\ s_x R\_{31}\end{matrix}\right),
+    \vec{v}_x = \left(\begin{matrix} s_x R \_ {11} \newline s_x R \_ {21} \newline s_x R \_ {31}\end{matrix}\right),
     \quad
-    \vec{v}_y = \left(\begin{matrix} s_y R\_{12} \\\\ s_y R\_{22} \\\\ s_y R\_{32}\end{matrix}\right),
+    \vec{v}_y = \left(\begin{matrix} s_y R \_ {12} \newline s_y R \_ {22} \newline s_y R \_ {32}\end{matrix}\right),
     \quad
-    \vec{v}_z = \left(\begin{matrix} s_z R\_{13} \\\\ s_z R\_{23} \\\\ s_z R\_{33}\end{matrix}\right)
+    \vec{v}_z = \left(\begin{matrix} s_z R \_ {13} \newline s_z R \_ {23} \newline s_z R \_ {33}\end{matrix}\right)
 $$
 
 となります．各ベクトルの大きさを求めると
 
 $$
     \begin{aligned}
-    |\vec{v}_x| &= \sqrt{(s_x R\_{11})^2 + (s_x R\_{21})^2 + (s_x R\_{31})^2} \\\\
-    |\vec{v}_y| &= \sqrt{(s_y R\_{12})^2 + (s_y R\_{22})^2 + (s_y R\_{32})^2} \\\\
-    |\vec{v}_z| &= \sqrt{(s_z R\_{13})^2 + (s_z R\_{23})^2 + (s_z R\_{33})^2}
+    |\vec{v}_x| &= \sqrt{(s_x R \_ {11})^2 + (s_x R \_ {21})^2 + (s_x R \_ {31})^2} \newline
+    |\vec{v}_y| &= \sqrt{(s_y R \_ {12})^2 + (s_y R \_ {22})^2 + (s_y R \_ {32})^2} \newline
+    |\vec{v}_z| &= \sqrt{(s_z R \_ {13})^2 + (s_z R \_ {23})^2 + (s_z R \_ {33})^2}
     \end{aligned}
 $$
 
@@ -597,9 +597,9 @@ $$
 
 $$
     \begin{aligned}
-    |\vec{v}_x|^2 &= s_x^2 R\_{11}^2 + s_x^2 R\_{21}^2 + s_x^2 R\_{31}^2 = s_x^2(R\_{11}^2 + R\_{21}^2 + R\_{31}^2) \\\\
-    |\vec{v}_y|^2 &= s_y^2 R\_{12}^2 + s_y^2 R\_{22}^2 + s_y^2 R\_{32}^2 = s_y^2(R\_{12}^2+R\_{22}^2+R\_{32}^2) \\\\
-    |\vec{v}_z|^2 &= s_z^2 R\_{13}^2 + s_z^2 R\_{23}^2 + s_z^2 R\_{33}^2 = s_z^2(R\_{13}^2+R\_{23}^2+R\_{33}^2)
+    |\vec{v}_x|^2 &= s_x^2 R \_ {11}^2 + s_x^2 R \_ {21}^2 + s_x^2 R \_ {31}^2 = s_x^2(R \_ {11}^2 + R \_ {21}^2 + R \_ {31}^2) \newline
+    |\vec{v}_y|^2 &= s_y^2 R \_ {12}^2 + s_y^2 R \_ {22}^2 + s_y^2 R \_ {32}^2 = s_y^2(R \_ {12}^2+R \_ {22}^2+R \_ {32}^2) \newline
+    |\vec{v}_z|^2 &= s_z^2 R \_ {13}^2 + s_z^2 R \_ {23}^2 + s_z^2 R \_ {33}^2 = s_z^2(R \_ {13}^2+R \_ {23}^2+R \_ {33}^2)
     \end{aligned}
 $$
 
@@ -607,9 +607,9 @@ $$
 
 $$
     \begin{aligned}
-    \sqrt{R\_{11}^2 + R\_{21}^2 + R\_{31}^2} = 1 \quad \therefore R\_{11}^2 + R\_{21}^2 + R\_{31}^2 = 1^2 = 1 \\\\
-    \sqrt{R\_{12}^2+R\_{22}^2+R\_{32}^2} = 1 \quad \therefore R\_{12}^2+R\_{22}^2+R\_{32}^2 = 1^2 = 1 \\\\
-    \sqrt{R\_{13}^2+R\_{23}^2+R\_{33}^2} = 1 \quad \therefore R\_{13}^2+R\_{23}^2+R\_{33}^2 = 1^2 = 1
+    \sqrt{R \_ {11}^2 + R \_ {21}^2 + R \_ {31}^2} = 1 \quad \therefore R \_ {11}^2 + R \_ {21}^2 + R \_ {31}^2 = 1^2 = 1 \newline
+    \sqrt{R \_ {12}^2+R \_ {22}^2+R \_ {32}^2} = 1 \quad \therefore R \_ {12}^2+R \_ {22}^2+R \_ {32}^2 = 1^2 = 1 \newline
+    \sqrt{R \_ {13}^2+R \_ {23}^2+R \_ {33}^2} = 1 \quad \therefore R \_ {13}^2+R \_ {23}^2+R \_ {33}^2 = 1^2 = 1
     \end{aligned}
 $$
 
@@ -635,27 +635,27 @@ $$
 $$
     \vec{p}' = TRS\vec{p} =
     \left(\begin{matrix}
-        M\_{11} & M\_{12} & M\_{13} & M\_{14} \\\\
-        M\_{21} & M\_{22} & M\_{23} & M\_{24} \\\\
-        M\_{31} & M\_{32} & M\_{33} & M\_{34} \\\\
-        M\_{41} & M\_{42} & M\_{43} & M\_{44}
+        M \_ {11} & M \_ {12} & M \_ {13} & M \_ {14} \newline
+        M \_ {21} & M \_ {22} & M \_ {23} & M \_ {24} \newline
+        M \_ {31} & M \_ {32} & M \_ {33} & M \_ {34} \newline
+        M \_ {41} & M \_ {42} & M \_ {43} & M \_ {44}
     \end{matrix}\right)
-    \left(\begin{matrix}p_x \\\\ p_y \\\\ p_z \\\\ 1\end{matrix}\right)
+    \left(\begin{matrix}p_x \newline p_y \newline p_z \newline 1\end{matrix}\right)
 $$
 
 これからTRSを求めると
 
 $$
-    \vec{t} = \left(\begin{matrix}M\_{14} \\\\ M\_{24} \\\\ M\_{34}\end{matrix}\right), \quad
+    \vec{t} = \left(\begin{matrix}M \_ {14} \newline M \_ {24} \newline M \_ {34}\end{matrix}\right), \quad
     \vec{s} = \left(\begin{matrix}
-        \sqrt{M\_{11}^2+M\_{21}^2+M\_{31}^2} \\\\
-        \sqrt{M\_{12}^2+M\_{22}^2+M\_{32}^2} \\\\
-        \sqrt{M\_{13}^2+M\_{23}^2+M\_{33}^2}
+        \sqrt{M \_ {11}^2+M \_ {21}^2+M \_ {31}^2} \newline
+        \sqrt{M \_ {12}^2+M \_ {22}^2+M \_ {32}^2} \newline
+        \sqrt{M \_ {13}^2+M \_ {23}^2+M \_ {33}^2}
     \end{matrix}\right), \quad
     R = \left(\begin{matrix}
-        M\_{11}/s_x & M\_{12}/s_y & M\_{13}/s_z \\\\
-        M\_{21}/s_x & M\_{22}/s_y & M\_{23}/s_z \\\\
-        M\_{31}/s_x & M\_{32}/s_y & M\_{33}/s_z
+        M \_ {11}/s_x & M \_ {12}/s_y & M \_ {13}/s_z \newline
+        M \_ {21}/s_x & M \_ {22}/s_y & M \_ {23}/s_z \newline
+        M \_ {31}/s_x & M \_ {32}/s_y & M \_ {33}/s_z
     \end{matrix}\right)
 $$
 
@@ -679,9 +679,9 @@ $$
 
 $$
     M = \left(\begin{matrix}
-        1 & 0 & 0 & -t_x \\\\
-        0 & 1 & 0 & -t_y \\\\
-        0 & 0 & 1 & -t_z \\\\
+        1 & 0 & 0 & -t_x \newline
+        0 & 1 & 0 & -t_y \newline
+        0 & 0 & 1 & -t_z \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
 $$
@@ -708,21 +708,21 @@ $$
 
 $$
     M = \left(\begin{matrix}
-        x_x & x_y & x_z & 0 \\\\
-        y_x & y_y & y_z & 0 \\\\
-        z_x & z_y & z_z & 0 \\\\
+        x_x & x_y & x_z & 0 \newline
+        y_x & y_y & y_z & 0 \newline
+        z_x & z_y & z_z & 0 \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
     \left(\begin{matrix}
-        1 & 0 & 0 & -t_x \\\\
-        0 & 1 & 0 & -t_y \\\\
-        0 & 0 & 1 & -t_z \\\\
+        1 & 0 & 0 & -t_x \newline
+        0 & 1 & 0 & -t_y \newline
+        0 & 0 & 1 & -t_z \newline
         0 & 0 & 0 & 1
     \end{matrix}\right) = 
     \left(\begin{matrix}
-        x_x & x_y & x_z & -\vec{x}\cdot \vec{t} \\\\
-        y_x & y_y & y_z & -\vec{y}\cdot \vec{t} \\\\
-        z_x & z_y & z_z & -\vec{z}\cdot \vec{t} \\\\
+        x_x & x_y & x_z & -\vec{x}\cdot \vec{t} \newline
+        y_x & y_y & y_z & -\vec{y}\cdot \vec{t} \newline
+        z_x & z_y & z_z & -\vec{z}\cdot \vec{t} \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
 $$
@@ -747,15 +747,15 @@ $$
 
 $$
     T = \left(\begin{matrix}
-        1 & 0 & 0 & t_x \\\\
-        0 & 1 & 0 & t_y \\\\
-        0 & 0 & 1 & t_z \\\\
+        1 & 0 & 0 & t_x \newline
+        0 & 1 & 0 & t_y \newline
+        0 & 0 & 1 & t_z \newline
         0 & 0 & 0 & 1
     \end{matrix}\right), \quad
     T^{-1} = \left(\begin{matrix}
-        1 & 0 & 0 & -t_x \\\\
-        0 & 1 & 0 & -t_y \\\\
-        0 & 0 & 1 & -t_z \\\\
+        1 & 0 & 0 & -t_x \newline
+        0 & 1 & 0 & -t_y \newline
+        0 & 0 & 1 & -t_z \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
 $$
@@ -765,15 +765,15 @@ $$
 $$
     R^{-1}T^{-1} = 
     \left(\begin{matrix}
-        R\_{11} & R\_{21} & R\_{31} & 0 \\\\
-        R\_{12} & R\_{22} & R\_{32} & 0 \\\\
-        R\_{13} & R\_{23} & R\_{33} & 0 \\\\
+        R \_ {11} & R \_ {21} & R \_ {31} & 0 \newline
+        R \_ {12} & R \_ {22} & R \_ {32} & 0 \newline
+        R \_ {13} & R \_ {23} & R \_ {33} & 0 \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
     \left(\begin{matrix}
-        1 & 0 & 0 & -t_x \\\\
-        0 & 1 & 0 & -t_y \\\\
-        0 & 0 & 1 & -t_z \\\\
+        1 & 0 & 0 & -t_x \newline
+        0 & 1 & 0 & -t_y \newline
+        0 & 0 & 1 & -t_z \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
 $$
@@ -824,69 +824,69 @@ $$
 
 $$
     M_p = \left(\begin{matrix}
-    1 & 0 & 0 & 0 \\\\
-    0 & 1 & 0 & 0 \\\\
-    0 & 0 & 1 & 0 \\\\
+    1 & 0 & 0 & 0 \newline
+    0 & 1 & 0 & 0 \newline
+    0 & 0 & 1 & 0 \newline
     0 & 0 & -1 & 0 \end{matrix}\right)
 $$
 
 この行列で頂点$p$を座標変換すると
 
 $$
-    p' = M_p\cdot p = M_p \left(\begin{matrix}x \\\\ y \\\\ z \\\\ 1\end{matrix}\right) =
-    \left(\begin{matrix}x \\\\ y \\\\ z \\\\ -z\end{matrix}\right)
+    p' = M_p\cdot p = M_p \left(\begin{matrix}x \newline y \newline z \newline 1\end{matrix}\right) =
+    \left(\begin{matrix}x \newline y \newline z \newline -z\end{matrix}\right)
 $$
 
-となります．$p\_{w}'$で$p\_{xyz}'$の各成分を除算すれば
+となります．$p \_ {w}'$で$p \_ {xyz}'$の各成分を除算すれば
 
 $$
     \left(\begin{matrix}
-        x/-z \\\\ y/-z \\\\ -1
+        x/-z \newline y/-z \newline -1
     \end{matrix}\right)
 $$
 
 となります．次に正規化ビューボリュームの範囲$[-1,1]$に値を変換する必要があります．まずは$Z$値からですが，次のような1次関数を考えます．
 
 $$
-p\_{z}' = az+b
+p \_ {z}' = az+b
 $$
 
 この行列は次のようになります．
 
 $$
     M_w = \left(\begin{matrix}
-    1 & 0 & 0 & 0 \\\\
-    0 & 1 & 0 & 0 \\\\
-    0 & 0 & a & b \\\\
+    1 & 0 & 0 & 0 \newline
+    0 & 1 & 0 & 0 \newline
+    0 & 0 & a & b \newline
     0 & 0 & -1 & 0 \end{matrix}\right)
     \quad
-    M_w \left(\begin{matrix}x \\\\ y \\\\ z \\\\ 1\end{matrix}\right) =
-    \left(\begin{matrix}x \\\\ y \\\\ za+b \\\\ -z\end{matrix}\right)
+    M_w \left(\begin{matrix}x \newline y \newline z \newline 1\end{matrix}\right) =
+    \left(\begin{matrix}x \newline y \newline za+b \newline -z\end{matrix}\right)
 $$
 
 クリップ座標系は同次座標系ですので，$w$で各成分を割ることになります．透視投影ではこれを透視除算といい，透視除算した座標を正規化デバイス座標といいます．ここで
 
 $$
-p\_{w}' = -z
+p \_ {w}' = -z
 $$
 
 ですから，
 
 $$
-p\_{z}' = az+b = -a\cdot p\_{w}'+b
+p \_ {z}' = az+b = -a\cdot p \_ {w}'+b
 $$
 
-という関係になります．また，正規化デバイス座標の$z\_{ndc}$は
+という関係になります．また，正規化デバイス座標の$z \_ {ndc}$は
 
 $$
-    z\_{ndc} = \frac{p\_{z}'}{p\_{w}'} = \frac{-a\cdot p\_{w}'+b}{p\_{w}'} = -a+\frac{b}{p\_{w}'} = -a+\frac{b}{-z}
+    z \_ {ndc} = \frac{p \_ {z}'}{p \_ {w}'} = \frac{-a\cdot p \_ {w}'+b}{p \_ {w}'} = -a+\frac{b}{p \_ {w}'} = -a+\frac{b}{-z}
 $$
 
 となります．ここで，前方クリッピング面と後方クリッピング面を導入します．
 
 ![1554629530337_half](https://storage.googleapis.com/zenn-user-upload/5ccc1j6slu80pe9et8fot2rk1q5m)
 
-この前方クリッピング面（$z=n$）のとき$z\_{ndc}=-1$，後方クリッピング面（$z=f$）のとき$z\_{ndc}=1$となるように，$a$と$b$を求めます．
+この前方クリッピング面（$z=n$）のとき$z \_ {ndc}=-1$，後方クリッピング面（$z=f$）のとき$z \_ {ndc}=1$となるように，$a$と$b$を求めます．
 
 $$
     -a+\frac{b}{-n} = -1, \quad -a+\frac{b}{-f} = 1, \quad \therefore b = -f(1+a)
@@ -896,10 +896,10 @@ $$
 
 $$
     \begin{aligned}
-    -a+\frac{b}{-n} &= -1 \\\\
-    a &= \frac{b}{-n}+1 = \frac{-f(1+a)}{-n}+1 = \frac{-f-af-n}{-n} = \frac{f+af+n}{n} \\\\
-    an &= f+af+n \\\\
-    an-af &= a(n-f) = f+n \\\\
+    -a+\frac{b}{-n} &= -1 \newline
+    a &= \frac{b}{-n}+1 = \frac{-f(1+a)}{-n}+1 = \frac{-f-af-n}{-n} = \frac{f+af+n}{n} \newline
+    an &= f+af+n \newline
+    an-af &= a(n-f) = f+n \newline
     a &= \frac{n+f}{n-f}
     \end{aligned}
 $$
@@ -908,10 +908,10 @@ $$
 
 $$
     \begin{aligned}
-    b &= -f(1+a) = -f-af \\\\
-      &= -f-f\left(\frac{n+f}{n-f}\right) \\\\
-      &= -\frac{nf-f^2}{n-f}-\frac{nf+f^2}{n-f} \\\\
-      &= \frac{nf+f^2-nf-f^2}{n-f} \\\\
+    b &= -f(1+a) = -f-af \newline
+      &= -f-f\left(\frac{n+f}{n-f}\right) \newline
+      &= -\frac{nf-f^2}{n-f}-\frac{nf+f^2}{n-f} \newline
+      &= \frac{nf+f^2-nf-f^2}{n-f} \newline
       &= \frac{-2nf}{n-f}
     \end{aligned}
 $$
@@ -925,27 +925,27 @@ $$
 また，
 
 $$
-    p\_{z}' = az+b = \frac{n+f}{n-f}z + \frac{-2nf}{n-f}
+    p \_ {z}' = az+b = \frac{n+f}{n-f}z + \frac{-2nf}{n-f}
 $$
 
 行列に書き直せば
 
 $$
     M_w = \left(\begin{matrix}
-    1 & 0 & 0 & 0 \\\\
-    0 & 1 & 0 & 0 \\\\
-    0 & 0 & \frac{n+f}{n-f} & \frac{-2nf}{n-f} \\\\
+    1 & 0 & 0 & 0 \newline
+    0 & 1 & 0 & 0 \newline
+    0 & 0 & \frac{n+f}{n-f} & \frac{-2nf}{n-f} \newline
     0 & 0 & -1 & 0 \end{matrix}\right)
     \quad
-    M_w \left(\begin{matrix}x \\\\ y \\\\ z \\\\ 1\end{matrix}\right) =
-    \left(\begin{matrix}x \\\\ y \\\\ z\frac{n+f}{n-f}+\frac{-2nf}{n-f} \\\\ -z\end{matrix}\right)
+    M_w \left(\begin{matrix}x \newline y \newline z \newline 1\end{matrix}\right) =
+    \left(\begin{matrix}x \newline y \newline z\frac{n+f}{n-f}+\frac{-2nf}{n-f} \newline -z\end{matrix}\right)
 $$
 
 となります．ここで，$n=-1, f=-5$としたときの図を以下に示します．
 
 ![1554748535650_resize](https://storage.googleapis.com/zenn-user-upload/47h8ky78l55xbyttnebzwf9oje26)
 
-この図では横軸が$z$，縦軸が$z\_{ndc}$です．$z=-1$のとき$z\_{ndc}=-1$，$z=-5$のとき$z\_{ndc}=1$になっているのがわかります．
+この図では横軸が$z$，縦軸が$z \_ {ndc}$です．$z=-1$のとき$z \_ {ndc}=-1$，$z=-5$のとき$z \_ {ndc}=1$になっているのがわかります．
 
 次に$l,r,t,b$を$[-1,1]$に収まるように拡大・縮小します．$z=-1$のとき$-1,1$，$z=-n$のとき$l,r$または$t,b$ですから，相似の関係から
 
@@ -958,50 +958,50 @@ $$
 
 $$
     M_s = \left(\begin{matrix}
-    \frac{-2n}{r-l} & 0 & 0 & 0 \\\\
-    0 & \frac{-2n}{t-b} & 0 & 0 \\\\
-    0 & 0 & 1 & 0 \\\\
+    \frac{-2n}{r-l} & 0 & 0 & 0 \newline
+    0 & \frac{-2n}{t-b} & 0 & 0 \newline
+    0 & 0 & 1 & 0 \newline
     0 & 0 & 0 & 1 \end{matrix}\right)
 $$
 
 となります．あとは，これまでZ軸がクリッピング面の中心を通っていることを想定していました．これがずれている場合に対処します．そのためにせん断を使います．前方クリッピング面での中心位置分をZ軸の値によって変化させてずらします．この行列は次のようになります．
 
 $$
-    M\_{sh} = \left(\begin{matrix}
-    1 & 0 & -\frac{r+l}{2}\frac{1}{n} & 0 \\\\
-    0 & 1 & -\frac{t+b}{2}\frac{1}{n} & 0 \\\\
-    0 & 0 & 1 & 0 \\\\
+    M \_ {sh} = \left(\begin{matrix}
+    1 & 0 & -\frac{r+l}{2}\frac{1}{n} & 0 \newline
+    0 & 1 & -\frac{t+b}{2}\frac{1}{n} & 0 \newline
+    0 & 0 & 1 & 0 \newline
     0 & 0 & 0 & 1 \end{matrix}\right)
     \quad
-    M\_{sh} \left(\begin{matrix}x \\\\ y \\\\ z \\\\ 1\end{matrix}\right) =
-    \left(\begin{matrix}x-\frac{r+l}{2}\frac{z}{n} \\\\ y-\frac{t+b}{2}\frac{z}{n} \\\\ z \\\\ 1\end{matrix}\right)
+    M \_ {sh} \left(\begin{matrix}x \newline y \newline z \newline 1\end{matrix}\right) =
+    \left(\begin{matrix}x-\frac{r+l}{2}\frac{z}{n} \newline y-\frac{t+b}{2}\frac{z}{n} \newline z \newline 1\end{matrix}\right)
 $$
 
 最終的に透視投影変換は
 
 $$
     \begin{aligned}
-    M_p = M_w M_s M\_{sh} &= 
+    M_p = M_w M_s M \_ {sh} &= 
     \left(\begin{matrix}
-    1 & 0 & 0 & 0 \\\\
-    0 & 1 & 0 & 0 \\\\
-    0 & 0 & \frac{n+f}{n-f} & \frac{-2nf}{n-f} \\\\
+    1 & 0 & 0 & 0 \newline
+    0 & 1 & 0 & 0 \newline
+    0 & 0 & \frac{n+f}{n-f} & \frac{-2nf}{n-f} \newline
     0 & 0 & -1 & 0 \end{matrix}\right)
     \left(\begin{matrix}
-    \frac{-2n}{r-l} & 0 & 0 & 0 \\\\
-    0 & \frac{-2n}{t-b} & 0 & 0 \\\\
-    0 & 0 & 1 & 0 \\\\
+    \frac{-2n}{r-l} & 0 & 0 & 0 \newline
+    0 & \frac{-2n}{t-b} & 0 & 0 \newline
+    0 & 0 & 1 & 0 \newline
     0 & 0 & 0 & 1 \end{matrix}\right)
     \left(\begin{matrix}
-    1 & 0 & -\frac{r+l}{2}\frac{1}{n} & 0 \\\\
-    0 & 1 & -\frac{t+b}{2}\frac{1}{n} & 0 \\\\
-    0 & 0 & 1 & 0 \\\\
-    0 & 0 & 0 & 1 \end{matrix}\right) \\\\
+    1 & 0 & -\frac{r+l}{2}\frac{1}{n} & 0 \newline
+    0 & 1 & -\frac{t+b}{2}\frac{1}{n} & 0 \newline
+    0 & 0 & 1 & 0 \newline
+    0 & 0 & 0 & 1 \end{matrix}\right) \newline
     &= 
     \left(\begin{matrix}
-        \frac{-2n}{r-l} & 0 & \frac{r+l}{r-l} & 0 \\\\
-        0 & \frac{-2n}{t-b} & \frac{t+b}{t-b} & 0 \\\\
-        0 & 0 & \frac{n+f}{n-f} & \frac{-2nf}{n-f} \\\\
+        \frac{-2n}{r-l} & 0 & \frac{r+l}{r-l} & 0 \newline
+        0 & \frac{-2n}{t-b} & \frac{t+b}{t-b} & 0 \newline
+        0 & 0 & \frac{n+f}{n-f} & \frac{-2nf}{n-f} \newline
         0 & 0 & -1 & 0
     \end{matrix}\right)
     \end{aligned}
@@ -1013,9 +1013,9 @@ $$
 
 $$
     M_p = \left(\begin{matrix}
-    \frac{f}{aspect} & 0 & 0 & 0 \\\\
-    0 & f & 0 & 0 \\\\
-    0 & 0 & \frac{n+f}{n-f} & \frac{-2nf}{n-f} \\\\
+    \frac{f}{aspect} & 0 & 0 & 0 \newline
+    0 & f & 0 & 0 \newline
+    0 & 0 & \frac{n+f}{n-f} & \frac{-2nf}{n-f} \newline
     0 & 0 & -1 & 0
     \end{matrix}\right)
 $$
@@ -1034,9 +1034,9 @@ $$
 
 $$
     M_t = \left(\begin{matrix}
-        1 & 0 & 0 & -\frac{r+l}{2} \\\\
-        0 & 1 & 0 & -\frac{t+b}{2} \\\\
-        0 & 0 & 1 & -\frac{f+n}{2} \\\\
+        1 & 0 & 0 & -\frac{r+l}{2} \newline
+        0 & 1 & 0 & -\frac{t+b}{2} \newline
+        0 & 0 & 1 & -\frac{f+n}{2} \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
 $$
@@ -1047,9 +1047,9 @@ $$
 
 $$
     M_s = \left(\begin{matrix}
-        \frac{2}{r-l} & 0 & 0 & 0 \\\\
-        0 & \frac{2}{t-b} & 0 & 0 \\\\
-        0 & 0 & \frac{2}{f-n} & 0 \\\\
+        \frac{2}{r-l} & 0 & 0 & 0 \newline
+        0 & \frac{2}{t-b} & 0 & 0 \newline
+        0 & 0 & \frac{2}{f-n} & 0 \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
 $$
@@ -1060,21 +1060,21 @@ $$
 \begin{aligned}
     M_o = M_s M_t &= 
     \left(\begin{matrix}
-        \frac{2}{r-l} & 0 & 0 & 0 \\\\
-        0 & \frac{2}{t-b} & 0 & 0 \\\\
-        0 & 0 & \frac{2}{f-n} & 0 \\\\
+        \frac{2}{r-l} & 0 & 0 & 0 \newline
+        0 & \frac{2}{t-b} & 0 & 0 \newline
+        0 & 0 & \frac{2}{f-n} & 0 \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
     \left(\begin{matrix}
-        1 & 0 & 0 & -\frac{r+l}{2} \\\\
-        0 & 1 & 0 & -\frac{t+b}{2} \\\\
-        0 & 0 & 1 & -\frac{f+n}{2} \\\\
+        1 & 0 & 0 & -\frac{r+l}{2} \newline
+        0 & 1 & 0 & -\frac{t+b}{2} \newline
+        0 & 0 & 1 & -\frac{f+n}{2} \newline
         0 & 0 & 0 & 1
-    \end{matrix}\right) \\\\ &=
+    \end{matrix}\right) \newline &=
     \left(\begin{matrix}
-        \frac{2}{r-l} & 0 & 0 & -\frac{r+l}{r-l} \\\\
-        0 & \frac{2}{t-b} & 0 & -\frac{t+b}{t-b} \\\\
-        0 & 0 & \frac{2}{f-n} & -\frac{f+n}{f-n} \\\\
+        \frac{2}{r-l} & 0 & 0 & -\frac{r+l}{r-l} \newline
+        0 & \frac{2}{t-b} & 0 & -\frac{t+b}{t-b} \newline
+        0 & 0 & \frac{2}{f-n} & -\frac{f+n}{f-n} \newline
         0 & 0 & 0 & 1
     \end{matrix}\right)
 \end{aligned}
@@ -1090,43 +1090,43 @@ OpenGLには投影変換行列を設定してくれる関数があります．`g
 
 $$
     \begin{aligned}
-        M\_{frustum} &= 
+        M \_ {frustum} &= 
         \left(\begin{matrix}
-            \frac{-2(-n)}{r-l} & 0 & \frac{r+l}{r-l} & 0 \\\\
-            0 & \frac{-2(-n)}{t-b} & \frac{t+b}{t-b} & 0 \\\\
-            0 & 0 & \frac{(-n)+(-f)}{(-n)-(-f)} & \frac{-2(-n)(-f)}{(-n)-(-f)} \\\\
+            \frac{-2(-n)}{r-l} & 0 & \frac{r+l}{r-l} & 0 \newline
+            0 & \frac{-2(-n)}{t-b} & \frac{t+b}{t-b} & 0 \newline
+            0 & 0 & \frac{(-n)+(-f)}{(-n)-(-f)} & \frac{-2(-n)(-f)}{(-n)-(-f)} \newline
             0 & 0 & -1 & 0
         \end{matrix}\right) = 
         \left(\begin{matrix}
-            \frac{2n}{r-l} & 0 & \frac{r+l}{r-l} & 0 \\\\
-            0 & \frac{2n}{t-b} & \frac{t+b}{t-b} & 0 \\\\
-            0 & 0 & -\frac{f+n}{f-n} & \frac{-2nf}{f-n} \\\\
+            \frac{2n}{r-l} & 0 & \frac{r+l}{r-l} & 0 \newline
+            0 & \frac{2n}{t-b} & \frac{t+b}{t-b} & 0 \newline
+            0 & 0 & -\frac{f+n}{f-n} & \frac{-2nf}{f-n} \newline
             0 & 0 & -1 & 0
-        \end{matrix}\right) \\\\
-        M\_{perspective} &= 
+        \end{matrix}\right) \newline
+        M \_ {perspective} &= 
         \left(\begin{matrix}
-            \frac{f}{aspect} & 0 & 0 & 0 \\\\
-            0 & f & 0 & 0 \\\\
-            0 & 0 & \frac{(-n)+(-f)}{(-n)-(-f)} & \frac{-2(-n)(-f)}{(-n)-(-f)} \\\\
+            \frac{f}{aspect} & 0 & 0 & 0 \newline
+            0 & f & 0 & 0 \newline
+            0 & 0 & \frac{(-n)+(-f)}{(-n)-(-f)} & \frac{-2(-n)(-f)}{(-n)-(-f)} \newline
             0 & 0 & -1 & 0
         \end{matrix}\right) =
         \left(\begin{matrix}
-            \frac{f}{aspect} & 0 & 0 & 0 \\\\
-            0 & f & 0 & 0 \\\\
-            0 & 0 & -\frac{f+n}{f-n} & \frac{-2nf}{f-n} \\\\
+            \frac{f}{aspect} & 0 & 0 & 0 \newline
+            0 & f & 0 & 0 \newline
+            0 & 0 & -\frac{f+n}{f-n} & \frac{-2nf}{f-n} \newline
             0 & 0 & -1 & 0
-        \end{matrix}\right) \\\\
-        M\_{ortho} &= 
+        \end{matrix}\right) \newline
+        M \_ {ortho} &= 
         \left(\begin{matrix}
-            \frac{2}{r-l} & 0 & 0 & -\frac{r+l}{r-l} \\\\
-            0 & \frac{2}{t-b} & 0 & -\frac{t+b}{t-b} \\\\
-            0 & 0 & \frac{2}{(-f)-(-n)} & -\frac{(-f)+(-n)}{(-f)-(-n)} \\\\
+            \frac{2}{r-l} & 0 & 0 & -\frac{r+l}{r-l} \newline
+            0 & \frac{2}{t-b} & 0 & -\frac{t+b}{t-b} \newline
+            0 & 0 & \frac{2}{(-f)-(-n)} & -\frac{(-f)+(-n)}{(-f)-(-n)} \newline
             0 & 0 & 0 & 1
         \end{matrix}\right) = 
         \left(\begin{matrix}
-            \frac{2}{r-l} & 0 & 0 & -\frac{r+l}{r-l} \\\\
-            0 & \frac{2}{t-b} & 0 & -\frac{t+b}{t-b} \\\\
-            0 & 0 & \frac{2}{n-f} & -\frac{f+n}{f-n} \\\\
+            \frac{2}{r-l} & 0 & 0 & -\frac{r+l}{r-l} \newline
+            0 & \frac{2}{t-b} & 0 & -\frac{t+b}{t-b} \newline
+            0 & 0 & \frac{2}{n-f} & -\frac{f+n}{f-n} \newline
             0 & 0 & 0 & 1
         \end{matrix}\right)
     \end{aligned}
@@ -1137,7 +1137,7 @@ $$
 投影変換によってクリップ空間に変換された座標は透視除算することで正規化デバイス座標に変換されます．
 
 $$
-    \vec{p}\_{ndc} = \left(\begin{matrix}x/w \\\\ y/w \\\\ z/w\end{matrix}\right)
+    \vec{p} \_ {ndc} = \left(\begin{matrix}x/w \newline y/w \newline z/w\end{matrix}\right)
 $$
 
 この正規化デバイス座標系はXYZともに$-1$から$1$の範囲になっています．これを画面に表示するためにビューポート変換をします．画面のことをウィンドウとかスクリーンというので，ビューポート変換後をウィンドウ座標系やスクリーン座標系ともいいます．また，ビューポート変換をスクリーン座標変換ということもあります．
@@ -1146,16 +1146,16 @@ $$
 
 $$
     M_v = \left(\begin{matrix}
-        \frac{w}{2} & 0 & 0 & \frac{w}{2}+ox \\\\
-        0 & -\frac{h}{2} & 0 & \frac{h}{2}+oy \\\\
-        0 & 0 & \frac{f-n}{2} & \frac{f+n}{2} \\\\
+        \frac{w}{2} & 0 & 0 & \frac{w}{2}+ox \newline
+        0 & -\frac{h}{2} & 0 & \frac{h}{2}+oy \newline
+        0 & 0 & \frac{f-n}{2} & \frac{f+n}{2} \newline
         0 & 0 & 0 & 1
     \end{matrix}\right),
     \quad
-    M_v \vec{p}\_{ndc} = \left(\begin{matrix}
-        x \frac{w}{2} + \frac{w}{2} + ox \\\\
-        -y \frac{h}{2} + \frac{h}{2} + oy \\\\
-        z \frac{f-n}{2} + \frac{f+n}{2} \\\\
+    M_v \vec{p} \_ {ndc} = \left(\begin{matrix}
+        x \frac{w}{2} + \frac{w}{2} + ox \newline
+        -y \frac{h}{2} + \frac{h}{2} + oy \newline
+        z \frac{f-n}{2} + \frac{f+n}{2} \newline
         1
     \end{matrix}\right)
 $$
@@ -1218,23 +1218,23 @@ $$
 
 $$
 \begin{aligned}
-  p\_{z}' &= az+b = \frac{n+f}{n-f}z + \frac{-2nf}{f-n} \\\\
-  a &= \frac{n+f}{n-f} \\\\
+  p \_ {z}' &= az+b = \frac{n+f}{n-f}z + \frac{-2nf}{f-n} \newline
+  a &= \frac{n+f}{n-f} \newline
   b &= \frac{-2nf}{f-n}
 \end{aligned}
 $$
 
-です．また，正規化デバイス座標の$z\_{ndc}$は次のようになります．
+です．また，正規化デバイス座標の$z \_ {ndc}$は次のようになります．
 
 $$
-  z\_{ndc} = \frac{p\_{z}'}{p\_{w}'} = \frac{1}{-z}\left(\frac{n+f}{n-f}z + \frac{-2nf}{f-n}\right)
+  z \_ {ndc} = \frac{p \_ {z}'}{p \_ {w}'} = \frac{1}{-z}\left(\frac{n+f}{n-f}z + \frac{-2nf}{f-n}\right)
   \tag{2}
 $$
 
 正規化デバイス座標では$[-1,1]$の範囲になりますが，一般的に深度バッファに格納される深度値$depth$は$[0,1]$の範囲にビューポート変換されます．よって
 
 $$
-  depth = \frac{z\_{ndc}}{2}+\frac{1}{2}, \qquad \therefore z\_{ndc} = 2\cdot depth - 1
+  depth = \frac{z \_ {ndc}}{2}+\frac{1}{2}, \qquad \therefore z \_ {ndc} = 2\cdot depth - 1
 $$
 
 これを式（２）に代入すると
@@ -1247,18 +1247,18 @@ $$
 
 $$
 \begin{aligned}
-  2\cdot depth - 1 &= \frac{1}{-z}\left(\frac{n+f}{n-f}z + \frac{-2nf}{f-n}\right) \\\\
-      &= -\frac{n+f}{n-f}+\frac{-2nf}{f-n}(-z) \\\\
-    2\cdot depth &= \frac{f+n}{f-n} + \frac{2nf}{(f-n)z} + 1 \\\\
-      &= \frac{(f+n)z}{(f-n)z} + \frac{2nf}{(f-n)z} + \frac{(f-n)z}{(f-n)z} \\\\
-      &= \frac{fz + nz + 2nf + fz - nz}{(f-n)z} \\\\
-      &= \frac{2fz + 2nf}{(f-z)n} \\\\
-    depth &= \frac{fz+nf}{(f-n)z} \qquad \qquad \text{\color{blue}(3)} \\\\
-      &= \frac{fz}{(f-n)z} + \frac{fn}{(f-n)z} = \frac{f}{f-n} + \frac{fn}{(f-n)z} \\\\
-    \frac{nf}{(f-n)z} &= depth - \frac{f}{f-n} \\\\
-    \frac{nf}{(f-n)z} &= \frac{(f-n)\cdot depth}{f-n} - \frac{f}{f-n} = \frac{(f-n)\cdot depth-f}{f-n} \\\\
-    \frac{(f-n)z}{nf} &= \frac{f-n}{(f-n)\cdot depth-f} \\\\
-    (f-n)z &= \frac{(f-n)nf}{(f-n)\cdot depth-f} \\\\
+  2\cdot depth - 1 &= \frac{1}{-z}\left(\frac{n+f}{n-f}z + \frac{-2nf}{f-n}\right) \newline
+      &= -\frac{n+f}{n-f}+\frac{-2nf}{f-n}(-z) \newline
+    2\cdot depth &= \frac{f+n}{f-n} + \frac{2nf}{(f-n)z} + 1 \newline
+      &= \frac{(f+n)z}{(f-n)z} + \frac{2nf}{(f-n)z} + \frac{(f-n)z}{(f-n)z} \newline
+      &= \frac{fz + nz + 2nf + fz - nz}{(f-n)z} \newline
+      &= \frac{2fz + 2nf}{(f-z)n} \newline
+    depth &= \frac{fz+nf}{(f-n)z} \qquad \qquad \text{\color{blue}(3)} \newline
+      &= \frac{fz}{(f-n)z} + \frac{fn}{(f-n)z} = \frac{f}{f-n} + \frac{fn}{(f-n)z} \newline
+    \frac{nf}{(f-n)z} &= depth - \frac{f}{f-n} \newline
+    \frac{nf}{(f-n)z} &= \frac{(f-n)\cdot depth}{f-n} - \frac{f}{f-n} = \frac{(f-n)\cdot depth-f}{f-n} \newline
+    \frac{(f-n)z}{nf} &= \frac{f-n}{(f-n)\cdot depth-f} \newline
+    (f-n)z &= \frac{(f-n)nf}{(f-n)\cdot depth-f} \newline
     z &= \frac{nf}{(f-n)\cdot depth-f} \qquad \qquad \text{\color{blue}(4)}
 \end{aligned}
 $$
@@ -1286,34 +1286,34 @@ $$
 
 $$
 \begin{aligned}
-  p\_{z}' &= az+b = \frac{2}{n-f}z + \frac{n+f}{n-f} \\\\
-  a &= \frac{2}{n-f} \\\\
+  p \_ {z}' &= az+b = \frac{2}{n-f}z + \frac{n+f}{n-f} \newline
+  a &= \frac{2}{n-f} \newline
   b &= \frac{n+f}{n-f}
 \end{aligned}
 $$
 
-正規化デバイス座標の$z\_{ndc}$は
+正規化デバイス座標の$z \_ {ndc}$は
 
 $$
-  z\_{ndc} = \frac{p\_{z}'}{p\_{w}'} = \frac{p\_{z}'}{1} = p\_{z}'
+  z \_ {ndc} = \frac{p \_ {z}'}{p \_ {w}'} = \frac{p \_ {z}'}{1} = p \_ {z}'
   \tag{6}
 $$
 
 深度値$depth$は
 
 $$
-  depth = \frac{z\_{ndc}}{2}+\frac{1}{2}, \qquad \therefore z\_{ndc} = 2\cdot depth - 1
+  depth = \frac{z \_ {ndc}}{2}+\frac{1}{2}, \qquad \therefore z \_ {ndc} = 2\cdot depth - 1
 $$
 
 これらの式から
 
 $$
 \begin{aligned}
-  2\cdot depth - 1 &= \frac{2}{n-f}z + \frac{n+f}{n-f} \\\\
-  \frac{2}{n-f}z &= 2\cdot depth - 1 - \frac{n+f}{n-f} \\\\
-    &= \frac{2\cdot depth\cdot (n-f)}{n-f} - \frac{n-f}{n-f} - \frac{n+f}{n-f} \\\\
-    &= \frac{2\cdot depth\cdot (n-f)-n+f-n-f}{n-f} = \frac{2\cdot depth\cdot (n-f)-2n}{n-f} \\\\
-  2z &= 2\cdot depth\cdot (n-f)-2n \\\\
+  2\cdot depth - 1 &= \frac{2}{n-f}z + \frac{n+f}{n-f} \newline
+  \frac{2}{n-f}z &= 2\cdot depth - 1 - \frac{n+f}{n-f} \newline
+    &= \frac{2\cdot depth\cdot (n-f)}{n-f} - \frac{n-f}{n-f} - \frac{n+f}{n-f} \newline
+    &= \frac{2\cdot depth\cdot (n-f)-n+f-n-f}{n-f} = \frac{2\cdot depth\cdot (n-f)-2n}{n-f} \newline
+  2z &= 2\cdot depth\cdot (n-f)-2n \newline
    z &= depth\cdot (n-f)-n \qquad \qquad \text{\color{blue}(7)}
 \end{aligned}
 $$
@@ -1322,8 +1322,8 @@ $$
 
 $$
 \begin{aligned}
-  depth\cdot(n-f)-n &= z \\\\
-  depth\cdot(n-f) &= z+n \\\\
+  depth\cdot(n-f)-n &= z \newline
+  depth\cdot(n-f) &= z+n \newline
   depth &= \frac{z+n}{n-f}
 \end{aligned}
 $$
@@ -1361,15 +1361,15 @@ linearDepthについて解くと
 
 $$
 \begin{aligned}
-linearDepth &= \frac{z+n}{n-f} \\\\
-(n-f)\cdot linearDepth &= z+n \\\\
-  &= \frac{nf}{(f-n)\cdot depth-f}+n \\\\
-  &= \frac{nf}{(f-n)\cdot depth-f} + \frac{\{(f-n)\cdot depth-f\}\cdot n}{(f-n)\cdot depth-f} \\\\
-  &= \frac{nf+n(f-n)\cdot depth-nf}{(f-n)\cdot depth-f} \\\\
-  &= \frac{n(f-n)\cdot depth}{(f-n)\cdot depth-f} \\\\
--(f-n)\cdot linearDepth &= \frac{n(f-n)\cdot depth}{(f-n)\cdot depth-f} \\\\
-linearDepth &= \frac{-n\cdot depth}{(f-n)\cdot depth-f} \\\\
-  &= \frac{-n\cdot depth}{f\cdot depth - n\cdot depth - f} \\\\
+linearDepth &= \frac{z+n}{n-f} \newline
+(n-f)\cdot linearDepth &= z+n \newline
+  &= \frac{nf}{(f-n)\cdot depth-f}+n \newline
+  &= \frac{nf}{(f-n)\cdot depth-f} + \frac{\{(f-n)\cdot depth-f\}\cdot n}{(f-n)\cdot depth-f} \newline
+  &= \frac{nf+n(f-n)\cdot depth-nf}{(f-n)\cdot depth-f} \newline
+  &= \frac{n(f-n)\cdot depth}{(f-n)\cdot depth-f} \newline
+-(f-n)\cdot linearDepth &= \frac{n(f-n)\cdot depth}{(f-n)\cdot depth-f} \newline
+linearDepth &= \frac{-n\cdot depth}{(f-n)\cdot depth-f} \newline
+  &= \frac{-n\cdot depth}{f\cdot depth - n\cdot depth - f} \newline
   &= \frac{-n\cdot depth}{f(depth-1) - n\cdot depth} 
 \end{aligned}
 $$
