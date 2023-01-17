@@ -1,3 +1,6 @@
+- name: 2023-01-17-notion-wbs
+  date: 2023-01-17
+  title: NotionでWBSを管理する
 - name: 2023-01-15-docusaurus-katex-client-side-rendering
   date: 2023-01-15
   title: Docusaurusで数式をクライアントサイドレンダリング(CSR)する
@@ -10,6 +13,3 @@
 - name: 2018-02-27-diary
   date: 2018-02-27
   title: 自前ライブラリの整備
-- name: 2018-02-23-packassistant-x64
-  date: 2018-02-23
-  title: PackAssistant 1.6.0 リリース
