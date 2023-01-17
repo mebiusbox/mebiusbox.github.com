@@ -37,3 +37,17 @@
   vertical-align: middle;
   margin-right: 5px;
 }
+
+.videoWrapper {
+  border: 1px solid #eee;
+  margin-bottom: 30px;
+}
+
+[data-theme='dark'] .videoWrapper {
+  border: 1px solid #444;
+}
+
+.videoPlayer {
+  margin: 0;
+  padding: 0;
+}

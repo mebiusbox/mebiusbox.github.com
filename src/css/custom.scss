@@ -159,6 +159,16 @@ article :not(pre) > code {
   font-weight: 600;
 }
 
+.markdown p img,
+article p img {
+  border: 1px solid #eee;
+}
+
+[data-theme='dark'] .markdown p img,
+[data-theme='dark'] article p img {
+  border: 1px solid #444;
+}
+
 .CookieConsent {
   font-family: var(--ifm-font-family-base);
   font-size: 0.75rem;
