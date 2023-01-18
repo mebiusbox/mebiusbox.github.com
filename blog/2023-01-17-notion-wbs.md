@@ -8,7 +8,8 @@ tags: [Notion]
 Notionのサブアイテム機能を使うことで単一のデータベースのみでWBS(Work Breakdown Structure)を構築できます．
 ここでは、次のようなWBSの構築方法を解説します．
 
-import {VideoPlayer} from '@site/src/components/Markdown/VideoPlayer.tsx'
+import VideoPlayer from '@site/src/components/Markdown/VideoPlayer.tsx'
+import HL from '@site/src/components/Markdown/Highlight.tsx'
 
 <VideoPlayer url='/img/post/2023-01-17-Notion-WBS.mp4' />
 
@@ -24,7 +25,7 @@ import {VideoPlayer} from '@site/src/components/Markdown/VideoPlayer.tsx'
 - 進捗(子): Select
 - 進捗(親): Formula
 
-「進捗(子)」のSelect項目は次のようにしました．
+<HL>進捗(子)</HL>のSelect項目は次のようにしました．
 
 - `0%` .. `100%` (10%刻み)
 - `自動`

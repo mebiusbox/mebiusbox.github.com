@@ -6,7 +6,7 @@ interface VideoPlayerProps {
   url: string;
 }
 
-export const VideoPlayer = ({url}: VideoPlayerProps) => {
+export default function VideoPlayer({url}: VideoPlayerProps): JSX.Element {
   return (
     <div className={styles.videoWrapper}>
       <ReactPlayer
