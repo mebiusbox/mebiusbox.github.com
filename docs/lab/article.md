@@ -4,7 +4,7 @@ description: 書いたものやソースコード、リンクなど
 
 # 研究したこと
 
-import {WebBookmarkMdx} from '@site/src/components/Markdown/WebBookmarkMdx.tsx'
+import Bookmark from '@site/src/components/Markdown/WebBookmark.tsx'
 
 export const Zenn = () => (
   <span style={{
@@ -40,7 +40,7 @@ export const Qiita = () => (
 
 PDF形式は以下からダウンロードできます。
 
-<WebBookmarkMdx name="docs - https://github.com/mebiusbox/docs" url="https://github.com/mebiusbox/docs" description="公開している文書置き場です．" />
+<Bookmark name="docs - https://github.com/mebiusbox/docs" url="https://github.com/mebiusbox/docs" description="公開している文書置き場です．" />
 
 ## Zenn, Qiita
 
@@ -105,7 +105,7 @@ PDF形式は以下からダウンロードできます。
 
 <p><img src="/img/lab/DiffuseBRDFPlotv1.png" width="50%" /></p>
 
-<WebBookmarkMdx name="brdf_plot (ソースコード)" url="https://github.com/mebiusbox/brdf_plot" description="plot DiffuseBRDF" /><br />
+<Bookmark name="brdf_plot (ソースコード)" url="https://github.com/mebiusbox/brdf_plot" description="plot DiffuseBRDF" /><br />
 
 
 ### 深度値の関係 (Three.js)
@@ -117,7 +117,7 @@ PDF形式は以下からダウンロードできます。
 
 「レイトレーシング入門」シリーズのソースコードです．
 
-<WebBookmarkMdx name="rayt - https://github.com/mebiusbox/rayt" url="https://github.com/mebiusbox/rayt" description="「レイトレーシング入門」シリーズのソースコード" /><br />
+<Bookmark name="rayt - https://github.com/mebiusbox/rayt" url="https://github.com/mebiusbox/rayt" description="「レイトレーシング入門」シリーズのソースコード" /><br />
 
 ![](/img/lab/rayt.png)
 
@@ -127,7 +127,7 @@ PDF形式は以下からダウンロードできます。
 学習用に作ったレイトレーシングレンダラーです．
 
 
-<WebBookmarkMdx name="pixyrt - https://github.com/mebiusbox/pixyrt" url="https://github.com/mebiusbox/pixyrt" description="学習用に作ったレイトレーシングレンダラ" /><br />
+<Bookmark name="pixyrt - https://github.com/mebiusbox/pixyrt" url="https://github.com/mebiusbox/pixyrt" description="学習用に作ったレイトレーシングレンダラ" /><br />
 
 
 
