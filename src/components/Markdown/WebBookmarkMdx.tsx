@@ -3,13 +3,13 @@ import React, {type ReactNode} from 'react';
 import isInternalUrl from '@docusaurus/isInternalUrl';
 import CardLayout from './CardLayout';
 
-interface WebBookmarkMbxProps {
+interface WebBookmarkMdxProps {
   name: string;
   url: string;
   description: string;
 }
 
-export const WebBookmarkMdx = ({name, url, description}: WebBookmarkMbxProps) => {
+export const WebBookmarkMdx = ({name, url, description}: WebBookmarkMdxProps) => {
   const icon = isInternalUrl(url) ? '📄️' : '🔗';
   return (
     <CardLayout
