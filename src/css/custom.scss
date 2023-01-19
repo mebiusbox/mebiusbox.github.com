@@ -173,3 +173,18 @@ article p img {
   font-family: var(--ifm-font-family-base);
   font-size: 0.75rem;
 }
+
+.theme-code-block .codeBlockTitle_node_modules-\@docusaurus-theme-classic-lib-theme-CodeBlock-Content-styles-module {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: var(--ifm-code-font-size);
+  margin: 0;
+  padding: 4px 10px;
+  background-color: rgb(0, 105, 146);
+  border-width: 0px;
+}
+[data-theme='dark'] pre.prism-code {
+  // border-width: 0px 2px 2px 2px;
+  // border-style: dashed;
+  // border-color: rgb(0, 105, 146);
+  border: 2px dashed rgb(0, 105, 146);
+}

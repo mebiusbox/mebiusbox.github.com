@@ -11,11 +11,27 @@ interface WebBookmarkProps {
 }
 
 export default function WebBookmark({name, url, description, image=""}: WebBookmarkProps): JSX.Element {
-  const icon = image === "" ? (isInternalUrl(url) ? '📄️' : '🔗') : <img style={{width:"32px"}} src={image} />;
+  let icon;
+  let awesomeicon = "";
+  if (image === "") {
+    if (isInternalUrl(url)) {
+      icon = '📄️';
+    } else if (url.startsWith('https://github.com')) {
+      icon = '';
+      awesomeicon = 'fab fa-github';
+    } else {
+      // icon = '🔗';
+      icon = '';
+      awesomeicon = 'fas fa-external-link-alt';
+    }
+  } else {
+    icon = <img style={{width:"32px"}} src={image} />;
+  }
   return (
     <CardLayout
       href={url}
       icon={icon}
+      awesomeicon={awesomeicon}
       title={name}
       description={description}
     />

@@ -178,8 +178,10 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} mebiusbox software.`,
       },
       prism: {
-        theme: lightCodeTheme,
+        // theme: lightCodeTheme,
+        theme: darkCodeTheme,
         darkTheme: darkCodeTheme,
+        additionalLanguages: ['powershell'],
       },
       zoom: {
         selector: '.markdown :not(em) > img',

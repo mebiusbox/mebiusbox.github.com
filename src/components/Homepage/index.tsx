@@ -63,7 +63,7 @@ function SoftwareItem({name, version, url, description}: SoftwareInfo) {
   const newUrl = isInternalUrl(url) ? "/docs/software" + url : url;
   const image = `/img/${name}.ico`;
   return (
-    <article className="col col--6 margin-bottom--sm">
+    <article className="col col--6">
       <WebBookmark name={name} url={newUrl} description={description} image={image} />
     </article>
   );

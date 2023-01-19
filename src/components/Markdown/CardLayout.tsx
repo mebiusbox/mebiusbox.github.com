@@ -14,7 +14,7 @@ function CardContainer({
   return (
     <Link
       href={href}
-      className={clsx('card padding--md', styles.cardContainer)}>
+      className={clsx('card padding--md margin-bottom--sm', styles.cardContainer)}>
       {children}
     </Link>
   );
@@ -23,18 +23,20 @@ function CardContainer({
 export default function CardLayout({
   href,
   icon,
+  awesomeicon,
   title,
   description,
 }: {
   href: string;
   icon: ReactNode;
+  awesomeicon: string;
   title: string;
   description?: string;
 }): JSX.Element {
   return (
     <CardContainer href={href}>
       <h2 className={clsx('text--truncate', styles.cardTitle)} title={title}>
-        <i className={styles.cardIcon}>{icon}</i> {title}
+        <i className={clsx(styles.cardIcon, awesomeicon)}>{icon}</i> {title}
       </h2>
       {description && (
         <p
