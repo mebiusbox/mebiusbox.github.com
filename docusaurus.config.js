@@ -3,6 +3,8 @@
 
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const rlc = require('remark-link-card');
+
 // const math = require('remark-math');
 // const katex = require('rehype-katex');
 
@@ -63,6 +65,7 @@ const config = {
           //   'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
           // remarkPlugins: [math],
           // rehypePlugins: [[katex, {strict: false}]],
+          remarkPlugins: [rlc],
         },
         blog: {
           showReadingTime: true,
