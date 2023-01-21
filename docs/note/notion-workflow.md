@@ -786,8 +786,6 @@ $$
 
 https://www.notion.so/help/keyboard-shortcuts
 
-https://www.notion.so/Learn-the-shortcuts-66e28cec810548c3a4061513126766b0
-
 https://cheatsheets.namaraii.com/notion.html
 
 https://imdave.notion.site/imdave/Notion-Shortcuts-dcb67fede8b24d6bb5fe2c0cae775d9a
