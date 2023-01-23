@@ -13,9 +13,9 @@ DocusaurusのマークダウンからHTMLにレンダリングする部分は [r
 今回は [katex](https://katex.org/) を使って数式処理をします．バージョンは `0.16.4` です．
 必要なファイルは以下の通りです．
 
-- https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css
-- https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js
-- https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js
+- [//cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css](https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css)
+- [//cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js](https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js)
+- [//cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js](https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js)
 
 Docusaurusでこれらを読み込むようにするには `docusaurus.config.js` の `scripts` および `stylesheets` で指定します．
 

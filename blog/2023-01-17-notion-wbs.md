@@ -10,6 +10,7 @@ Notionのサブアイテム機能を使うことで単一のデータベース�
 
 import VideoPlayer from '@site/src/components/Markdown/VideoPlayer.tsx'
 import HL from '@site/src/components/Markdown/Highlight.tsx'
+import Bookmark from '@site/src/components/Markdown/WebBookmark.tsx'
 
 <VideoPlayer url='/img/post/2023-01-17-Notion-WBS.mp4' />
 
@@ -161,4 +162,7 @@ if(length(prop("Sub-item")) > 0, floor(prop("_進捗R") / max(1, length(replaceA
 今回のようにロールアップを使って親、または子のプロパティを参照する場合、それがさらにその親、または子のプロパティを参照するといった循環参照をしてしまうとパフォーマンスに大きな影響があるため、制限されているとサポートから聞きました．階層が深くなってしまうとロールアップした値が異常な値になるため、階層レベルは3～4以下にしておくのが無難です．
 :::
 
+今回作成したWBSのテンプレートを公開しています．詳しくはテンプレートにある「はじめにお読みください」を参照してください．
+
+<Bookmark name="WBS | mebiusbox.notion.site" url="https://mebiusbox.notion.site/WBS-c33e10534921465d93f6604948302c81" description="Notion用 WBS (Work Breakdown Structure)のテンプレートです" />
 
