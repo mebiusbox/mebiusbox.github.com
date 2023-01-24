@@ -6,14 +6,14 @@ tags: [Notion, Shadertoy, つぶやきGLSL]
 
 Notionのギャラリービューを使うと、ページをサムネイル一覧で確認できます．
 
-![](../static/img/post/2023-01-14-02-11-47.png)
+![](..\static\img\post\2023-01-14-notion-shadertoy-gallery-230114021100.png)
 
 とはいえ、サムネイルを用意しなければなりません．
 ここではなるべく手間をかけずにサムネイルを作成する方法を紹介します．
 
 まずは、データベースを作成します．`Link(URL)`と`Description(Text)`プロパティを作成．ギャラリービューにして、プレビューをカバー、サイズを小にします
 
-![](../static/img/post/2023-01-14-03-05-00.png)
+![](..\static\img\post\2023-01-14-notion-shadertoy-gallery-230114030500.png)
 
 Shadertoyやツイートへのリンクをデータベースに保存します．Save to NotionやWebブックマークにしてからデータベースに移動すると Description をいい感じに埋めてくれます．
 
@@ -23,13 +23,13 @@ Shadertoyやツイートへのリンクをデータベースに保存します�
 
 Notionのページ上にツイートを埋め込みます．埋め込んだツイートの動画(画像)部分を右クリックして、「画像アドレスをコピー」します．次に、Notionのページ上部にある`Add Cover` がカバー画像を追加して、コピーしたアドレスを `Link` にペーストして送信します．
 
-![](../static/img/post/2023-01-14-03-21-51.png)
+![](..\static\img\post\2023-01-14-notion-shadertoy-gallery-230114032100.png)
 
 ## Shadertoy
 
 Shadertoyの画面に行きます．左上のレンダリングしている場所を右クリックして「画像をコピー」します．Notionのページにそのまま貼り付けます．
 
-![](../static/img/post/2023-01-14-03-25-38.png)
+![](..\static\img\post\2023-01-14-notion-shadertoy-gallery-230114032500.png)
 
 ちなみに、Shadertoyの場合はWebブックマークを作成するといい感じのサムネイルができます．
 
