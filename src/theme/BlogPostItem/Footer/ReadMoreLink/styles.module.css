@@ -1,0 +1,10 @@
+.readMoreButton {
+  border: 1px dashed var(--ifm-link-color);
+  border-radius: var(--ifm-global-radius);
+}
+.readMoreButton:hover {
+  border: 1px solid var(--ifm-link-color);
+  background-color: var(--ifm-link-color);
+  color: var(--ifm-color-emphasis-100);
+  text-decoration: none;
+}
