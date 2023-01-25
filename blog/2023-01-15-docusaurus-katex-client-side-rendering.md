@@ -8,6 +8,8 @@ Docusaurusは静的サイトジェネレータなので、すべてのページ�
 DocusaurusのマークダウンからHTMLにレンダリングする部分は [remark](https://remark.js.org/) と [rehype](https://github.com/rehypejs/rehype) が処理しています．数式を有効にするには、[Docusaurusのドキュメント](https://docusaurus.io/docs/markdown-features/math-equations) によれば、`remark-math` と `rehype-katex` (または `rehype-mathjax`）を使います．
 しかし、2,3個の数式ならともかく、それなりの数があるとビルドに時間がかかるようになり、生成されるhtmlやjsファイルが肥大化します．もちろん、数式も含めて事前にレンダリングするので、閲覧する場合はブラウザで数式の処理が入らず高速に表示できますが、個人的にはデメリットの方が大きいので、数式処理はクライアントサイドでしたいところです．ここでは、その方法を記録しておきます．
 
+<!-- truncate -->
+
 ## 必要なスクリプトやCSSファイルを読み込む
 
 今回は [katex](https://katex.org/) を使って数式処理をします．バージョンは `0.16.4` です．

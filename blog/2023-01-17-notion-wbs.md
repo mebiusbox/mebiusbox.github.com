@@ -8,6 +8,8 @@ tags: [Notion]
 Notionのサブアイテム機能を使うことで単一のデータベースのみでWBS(Work Breakdown Structure)を構築できます．
 ここでは、次のようなWBSの構築方法を解説します．
 
+<!-- truncate -->
+
 import VideoPlayer from '@site/src/components/Markdown/VideoPlayer.tsx'
 import HL from '@site/src/components/Markdown/Highlight.tsx'
 import Bookmark from '@site/src/components/Markdown/WebBookmark.tsx'

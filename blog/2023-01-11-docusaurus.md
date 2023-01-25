@@ -9,6 +9,8 @@ tags: [diary, docusaurus, MkDocs, mdBook, Notion, Jekyll]
 サイトをリニューアルしました．そして、数年振りのブログ更新です．
 自分のサイトを持つ意味があまりなくなってきている感じはしますが、もはや学習も含めて新しいフレームワークを使ってみるテストになりつつあります．
 
+<!-- truncate -->
+
 import HL from '@site/src/components/Markdown/Highlight.tsx'
 
 ## Docusaurus
