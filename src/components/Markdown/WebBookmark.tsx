@@ -28,12 +28,14 @@ export default function WebBookmark({name, url, description, image=""}: WebBookm
     icon = <img style={{width:"32px"}} src={image} />;
   }
   return (
-    <CardLayout
-      href={url}
-      icon={icon}
-      awesomeicon={awesomeicon}
-      title={name}
-      description={description}
-    />
+    <p>
+      <CardLayout
+        href={url}
+        icon={icon}
+        awesomeicon={awesomeicon}
+        title={name}
+        description={description}
+      />
+    </p>
   );
 }
