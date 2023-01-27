@@ -7,6 +7,8 @@ import EditThisPage from '@theme/EditThisPage';
 import TagsListInline from '@theme/TagsListInline';
 import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, HatenaShareButton, HatenaIcon } from "react-share";
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import useIsBrowser from '@docusaurus/useIsBrowser';
+import Giscus from '@site/src/components/GiscusComponent';
 import styles from './styles.module.css';
 function TagsRow(props) {
   return (
@@ -59,6 +61,12 @@ export default function DocItemFooter() {
   }
   const url = `${siteConfig.url}${metadata.permalink}`
   const shareTitle = `${title} | Mebiusbox`
+  const { disableComments } = metadata.frontMatter;
+  const isBrowser = useIsBrowser();
+  let isCurrentUrlDocs = false;
+  if (isBrowser) {
+    isCurrentUrlDocs = window.location.pathname === "/docs"
+  }
   return (
     <footer
       className={clsx(ThemeClassNames.docs.docFooter, 'docusaurus-mt-lg')}>
@@ -73,6 +81,9 @@ export default function DocItemFooter() {
           <HatenaIcon size={shareConfig.size} round />
         </HatenaShareButton>
       </div>
+      {(!disableComments && !isCurrentUrlDocs) && (
+        <Giscus />
+      )}
       {canDisplayTagsRow && <TagsRow tags={tags} />}
       {canDisplayEditMetaRow && (
         <EditMetaRow

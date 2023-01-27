@@ -6,6 +6,8 @@ import TagsListInline from '@theme/TagsListInline';
 import ReadMoreLink from '@theme/BlogPostItem/Footer/ReadMoreLink';
 import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, HatenaShareButton, HatenaIcon } from "react-share";
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import useIsBrowser from '@docusaurus/useIsBrowser';
+import Giscus from '@site/src/components/GiscusComponent';
 import styles from './styles.module.css';
 export default function BlogPostItemFooter() {
   const {metadata, isBlogPostPage} = useBlogPost();
@@ -23,6 +25,12 @@ export default function BlogPostItemFooter() {
   }
   const url = `${siteConfig.url}${metadata.permalink}`
   const shareTitle = `${title} | Mebiusbox`
+  const { disableComments } = metadata.frontMatter;
+  const isBrowser = useIsBrowser();
+  let isCurrentUrlBlog = false;
+  if (isBrowser) {
+    isCurrentUrlBlog = window.location.pathname === "/blog"
+  }
   return (
     <footer
       className={clsx(
@@ -41,6 +49,9 @@ export default function BlogPostItemFooter() {
             <HatenaIcon size={shareConfig.size} round />
           </HatenaShareButton>
         </div>
+      )}
+      {(!disableComments && !isCurrentUrlBlog && isBlogPostPage) && (
+        <Giscus />
       )}
 
       {tagsExists && (
