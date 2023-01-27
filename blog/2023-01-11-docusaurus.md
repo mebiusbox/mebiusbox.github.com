@@ -4,6 +4,7 @@ title: リニューアル：Docusaurusへ移行
 category: note
 authors: [mebiusbox]
 tags: [diary, docusaurus, MkDocs, mdBook, Notion, Jekyll]
+image: https://og-image-mebiusbox.vercel.app/api/og?title=%E3%83%AA%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%A2%E3%83%AB%EF%BC%9ADocusaurus%E3%81%B8%E7%A7%BB%E8%A1%8C&subtitle=%E3%82%B5%E3%82%A4%E3%83%88%E3%82%92%E3%83%AA%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%A2%E3%83%AB%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F&date=2023%2F01%2F11&tags=diary%2C%20docusaurus%2C%20MkDocs%2C%20mdBook%2C%20Notion%2C%20Jekyll
 ---
 
 サイトをリニューアルしました．そして、数年振りのブログ更新です．

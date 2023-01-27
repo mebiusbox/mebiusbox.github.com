@@ -3,10 +3,11 @@ layout: software
 title: ComicPicker
 pagination_next: null
 pagination_prev: null
+image: https://og-image-mebiusbox.vercel.app/api/og?title=ComicPicker&subtitle=ComicPicker%E3%81%AF%E7%94%BB%E5%83%8F%E3%82%92%E3%81%BE%E3%81%A8%E3%82%81%E3%81%9F%E6%9B%B8%E5%BA%AB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%80%81%E7%94%BB%E5%83%8F%E3%80%81PDF%20%E6%96%87%E6%9B%B8%E3%82%92%E9%96%B2%E8%A6%A7%E3%80%81%E6%95%B4%E7%90%86%E3%81%99%E3%82%8B%E3%83%84%E3%83%BC%E3%83%AB%E3%81%A7%E3%81%99
 ---
 
 # ComicPicker 0.6.5
-ComicPicker は画像をまとめた書庫ファイル、画像、PDF 文書を閲覧、整理するツールです。
+ComicPickerは画像をまとめた書庫ファイル、画像、PDF 文書を閲覧、整理するツールです。
 画像を確認し、Ｄ＆Ｄ処理でゴミ箱に入れたり、フォルダに移動することを簡単な操作で行うことが出来ます。
 書庫ファイルは lzh, zip, rar に対応しています。
 （それぞれ UNLHA32.DLL, UNZIP32.DLL, UNRAR32.DLL が必要です）

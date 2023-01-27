@@ -3,6 +3,10 @@ title: Keyhac
 description: Keyhac を使ってキーカスタマイズやクリップボード拡張を行う方法を解説します
 pagination_next: null
 pagination_prev: null
+image: https://og-image-mebiusbox.vercel.app/api/og?title=Keyhac&subtitle=Keyhac%20%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%82%AD%E3%83%BC%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%9E%E3%82%A4%E3%82%BA%E3%82%84%E3%82%AF%E3%83%AA%E3%83%83%E3%83%97%E3%83%9C%E3%83%BC%E3%83%89%E6%8B%A1%E5%BC%B5%E3%82%92%E8%A1%8C%E3%81%86%E6%96%B9%E6%B3%95%E3%82%92%E8%A7%A3%E8%AA%AC%E3%81%97%E3%81%BE%E3%81%99&date=2023%2F01%2F01
+last_update:
+  date: 2023-01-20
+  author: mebiusbox
 ---
 
 import Bookmark from '@site/src/components/Markdown/WebBookmark.tsx'

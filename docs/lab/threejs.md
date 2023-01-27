@@ -1,3 +1,11 @@
+---
+description: Three.jsで開発したもの
+image: https://og-image-mebiusbox.vercel.app/api/og?title=Three.js&subtitle=Three.js%E3%81%A7%E9%96%8B%E7%99%BA%E3%81%97%E3%81%9F%E3%82%82%E3%81%AE&date=2023%2F01%2F11
+last_update:
+  date: 2022-01-11
+  author: mebiusbox
+---
+
 # Three.js
 
 ## pixy.js

@@ -1,5 +1,9 @@
 ---
 description: 書いたものやソースコード、リンクなど
+image: https://og-image-mebiusbox.vercel.app/api/og?title=%E7%A0%94%E7%A9%B6%E3%81%97%E3%81%9F%E3%81%93%E3%81%A8&subtitle=%E6%9B%B8%E3%81%84%E3%81%9F%E3%82%82%E3%81%AE%E3%82%84%E3%82%BD%E3%83%BC%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%89%E3%80%81%E3%83%AA%E3%83%B3%E3%82%AF%E3%81%AA%E3%81%A9&date=2023%2F01%2F11
+last_update:
+  date: 2022-01-11
+  author: mebiusbox
 ---
 
 # 研究したこと

@@ -1,7 +1,11 @@
 ---
-description: 3次元座標変換について
+description: 3次元座標変換について解説します
 pagination_next: null
 pagination_prev: null
+image: https://og-image-mebiusbox.vercel.app/api/og?title=3%E6%AC%A1%E5%85%83%E5%BA%A7%E6%A8%99%E5%A4%89%E6%8F%9B%E3%81%AE%E3%83%A1%E3%83%A2%E6%9B%B8%E3%81%8D&subtitle=3%E6%AC%A1%E5%85%83%E5%BA%A7%E6%A8%99%E5%A4%89%E6%8F%9B%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E8%A7%A3%E8%AA%AC%E3%81%97%E3%81%BE%E3%81%99&date=2023%2F01%2F14
+last_update:
+  date: 2023-01-14
+  author: mebiusbox
 ---
 
 # 3次元座標変換のメモ書き
