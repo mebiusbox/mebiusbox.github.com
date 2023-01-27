@@ -3,6 +3,7 @@ title: NotionでWBSを管理する
 description: Notionのサブアイテムを使ってWBSを構築するやり方を解説します
 authors: [mebiusbox]
 tags: [Notion]
+image: https://og-image-mebiusbox.vercel.app/api/og?title=Notion%E3%81%A7WBS%E3%82%92%E7%AE%A1%E7%90%86%E3%81%99%E3%82%8B&subtitle=Notion%E3%81%AE%E3%82%B5%E3%83%96%E3%82%A2%E3%82%A4%E3%83%86%E3%83%A0%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6WBS%E3%82%92%E6%A7%8B%E7%AF%89%E3%81%99%E3%82%8B%E3%82%84%E3%82%8A%E6%96%B9%E3%82%92%E8%A7%A3%E8%AA%AC%E3%81%97%E3%81%BE%E3%81%99&date={2023%2F01%2F17}&tags={Notion}
 ---
 
 Notionのサブアイテム機能を使うことで単一のデータベースのみでWBS(Work Breakdown Structure)を構築できます．
