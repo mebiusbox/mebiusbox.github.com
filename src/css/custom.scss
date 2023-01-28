@@ -169,6 +169,16 @@ article p img {
   border: 1px solid #444;
 }
 
+.markdown p strong,
+article p strong {
+  color: var(--ifm-color-primary);
+}
+
+[data-theme='dark'] .markdown p strong,
+[data-theme='dark'] article p strong {
+  color: var(--ifm-color-primary);
+}
+
 .CookieConsent {
   font-family: var(--ifm-font-family-base);
   font-size: 0.75rem;
@@ -265,6 +275,7 @@ article p img {
 .rlc-image-container {
   position: relative;
   text-align: center;
+  border-left: 1px dashed var(--ifm-color-emphasis-300);
   flex: 1 1 50px;
 }
 
