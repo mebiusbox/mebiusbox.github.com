@@ -264,13 +264,14 @@ article p img {
 
 .rlc-image-container {
   position: relative;
+  text-align: center;
   flex: 1 1 50px;
 }
 
 .rlc-image {
   object-fit: cover;
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
   border-bottom-right-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
 }

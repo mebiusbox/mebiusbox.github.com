@@ -17,6 +17,8 @@ import Bookmark from '@site/src/components/Markdown/WebBookmark.tsx'
 
 Keyhac とは、Python を使ってキーカスタマイズが行えるアプリケーションです．
 
+https://sites.google.com/site/craftware/keyhac-ja
+
 <Bookmark name="craftware - Keyhac" url="https://sites.google.com/site/craftware/keyhac-ja" description="Keyhac - Pythonによる柔軟なキーカスタマイズツール" />
 
 定型文入力をスニペットのように入力できるツールとして、 [aText](https://www.trankynam.com/atext/) を使っています．無料でも単純な定型文は入力することができますが、フル機能を使うためにはProバージョンにしなければならず、有料です．そんなに頻繁に利用するわけでもないですし、とりあえず他の方法でできないかと探していたところ、Keyhacにたどり着きました．
