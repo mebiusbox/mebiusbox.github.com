@@ -1,5 +1,10 @@
 ---
 title: Docusaurusで数式をクライアントサイドレンダリング(CSR)する
+description: Docusaurusで数式処理をクライアントサイドで行う方法について解説します
+keywords:
+  - Docusaurus
+  - KaTeX
+category: note
 authors: [mebiusbox]
 tags: [Docusaurus,katex]
 image: https://og-image-mebiusbox.vercel.app/api/og?title=Docusaurus%E3%81%A7%E6%95%B0%E5%BC%8F%E3%82%92%E3%82%AF%E3%83%A9%E3%82%A4%E3%82%A2%E3%83%B3%E3%83%88%E3%82%B5%E3%82%A4%E3%83%89%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%28CSR%29%E3%81%99%E3%82%8B&date=2023%2F01%2F15&tags=Docusaurus%2Ckatex

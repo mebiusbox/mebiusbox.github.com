@@ -1,6 +1,10 @@
 ---
 layout: software
 title: PackAssistant
+description: ackAssistant は複数のファイルを指定の容量をもつパックに、効率良く収まるように振り分けます
+keywords:
+  - PackAssistant
+  - mebiusbox
 pagination_next: null
 pagination_prev: null
 image: https://og-image-mebiusbox.vercel.app/api/og?title=PackAssistant&subtitle=ackAssistant%20%E3%81%AF%E8%A4%87%E6%95%B0%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%AE%E5%AE%B9%E9%87%8F%E3%82%92%E3%82%82%E3%81%A4%E3%83%91%E3%83%83%E3%82%AF%E3%81%AB%E3%80%81%E5%8A%B9%E7%8E%87%E8%89%AF%E3%81%8F%E5%8F%8E%E3%81%BE%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E6%8C%AF%E3%82%8A%E5%88%86%E3%81%91%E3%81%BE%E3%81%99

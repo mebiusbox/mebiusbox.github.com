@@ -1,5 +1,11 @@
 ---
 title: NotionでShadertoyやつぶやき系のツイートをギャラリーにまとめる
+description: なるべく手間をかけずにサムネイルを作成する方法を紹介します
+keywords:
+  - Notion
+  - Shadertoy
+  - つぶやきGLSL
+category: note
 authors: [mebiusbox]
 tags: [Notion,Shadertoy,つぶやきGLSL]
 image: https://og-image-mebiusbox.vercel.app/api/og?title=Notion%E3%81%A7Shadertoy%E3%82%84%E3%81%A4%E3%81%B6%E3%82%84%E3%81%8D%E7%B3%BB%E3%81%AE%E3%83%84%E3%82%A4%E3%83%BC%E3%83%88%E3%82%92%E3%82%AE%E3%83%A3%E3%83%A9%E3%83%AA%E3%83%BC%E3%81%AB%E3%81%BE%E3%81%A8%E3%82%81%E3%82%8B&subtitle=%E3%81%AA%E3%82%8B%E3%81%B9%E3%81%8F%E6%89%8B%E9%96%93%E3%82%92%E3%81%8B%E3%81%91%E3%81%9A%E3%81%AB%E3%82%B5%E3%83%A0%E3%83%8D%E3%82%A4%E3%83%AB%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95%E3%82%92%E7%B4%B9%E4%BB%8B%E3%81%97%E3%81%BE%E3%81%99&date=2023%2F01%2F14&tags=Notion%2CShadertoy%2C%E3%81%A4%E3%81%B6%E3%82%84%E3%81%8DGLSL

@@ -1,6 +1,10 @@
 ---
 layout: software
 title: DiskCatalogManager
+description: DiskCatalogManagerは、ハードディスクなどに記録されているファイルやフォルダの情報を管理するソフトウェアです
+keywords:
+  - DiskCatalogManager
+  - mebiusbox
 pagination_next: null
 pagination_prev: null
 image: https://og-image-mebiusbox.vercel.app/api/og?title=DiskCatalogManager&subtitle=DiskCatalogManager%E3%81%AF%E3%80%81%E3%83%8F%E3%83%BC%E3%83%89%E3%83%87%E3%82%A3%E3%82%B9%E3%82%AF%E3%81%AA%E3%81%A9%E3%81%AB%E8%A8%98%E9%8C%B2%E3%81%95%E3%82%8C%E3%81%A6%E3%81%84%E3%82%8B%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%84%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80%E3%81%AE%E6%83%85%E5%A0%B1%E3%82%92%E7%AE%A1%E7%90%86%E3%81%99%E3%82%8B%E3%82%BD%E3%83%95%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A2%E3%81%A7%E3%81%99
