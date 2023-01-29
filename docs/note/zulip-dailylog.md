@@ -486,5 +486,57 @@ request = {"type": "stream", "to": stream, "subject": subject, "content": conten
 result = client.send_message(request)
 ```
 
+## PowerShellで使う
+
+この `zuweet.py` をPowerShellから使えるようにいくつか関数をプロファイルに追加すると便利です．ここでは `~/zuweet.py` にあるとします．
+
+```powershell
+function zurun() {
+    $args[0] | Invoke-Expression | Set-Clipboard
+    python "$env:userprofile\zuweet.py" -t "{date}" --clip --code=powershell -m ("``{0}``" -f $args[0])
+}
+function zuclip() {
+    python "$env:userprofile\zuweet.py" -t "{date}" --clip
+}
+function zucode() {
+    $lang = if ($args.Length -eq 0) { "powershell" } else { $args[0] }
+    python "$env:userprofile\zuweet.py" -t "{date}" --clip --code=$lang
+}
+function zulog() {
+    python "$env:userprofile\zuweet.py" -t "{date}" -m $args[0]
+}
+function zulog() {
+    python "$env:userprofile\zuweet.py" -t "{date}" -m ("> {0}" -f $args[0])
+}
+function zulogc() {
+    python "$env:userprofile\zuweet.py" -t "{date}" -m ("``{0}``" -f $args[0])
+}
+```
+
+#### `zurun`
+
+引数に渡したコマンドをインラインコードとして最初の行に送信します．その後、そのコマンドを実行した結果をコードとして送信します
+
+#### `zuclip`
+
+クリップボードの内容を送信します
+
+#### `zucode`
+
+クリップボードの内容をコードとして送信します．引数には言語を指定できます
+
+#### `zulog`
+
+引数のメッセージを送信します
+
+#### `zulogq`
+
+引数のメッセージを引用として送信します
+
+#### `zulogc`
+
+引数のメッセージをコードとして送信します
+
+
 以上です．参考になれば幸いです．
 
