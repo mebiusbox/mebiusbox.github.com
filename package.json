@@ -15,10 +15,10 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@docusaurus/core": "2.2.0",
-    "@docusaurus/plugin-google-gtag": "^2.2.0",
-    "@docusaurus/plugin-ideal-image": "^2.2.0",
-    "@docusaurus/preset-classic": "2.2.0",
+    "@docusaurus/core": "^2.3.0",
+    "@docusaurus/plugin-google-gtag": "^2.3.0",
+    "@docusaurus/plugin-ideal-image": "^2.3.0",
+    "@docusaurus/preset-classic": "^2.3.0",
     "@giscus/react": "^2.2.6",
     "@mdx-js/react": "^1.6.22",
     "clsx": "^1.2.1",
@@ -39,7 +39,7 @@
     "sass": "^1.57.1"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^2.2.0",
+    "@docusaurus/module-type-aliases": "^2.3.0",
     "@tsconfig/docusaurus": "^1.0.6",
     "front-matter": "^4.0.2",
     "sass-loader": "^13.2.0",
