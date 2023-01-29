@@ -505,7 +505,7 @@ function zucode() {
 function zulog() {
     python "$env:userprofile\zuweet.py" -t "{date}" -m $args[0]
 }
-function zulog() {
+function zulogq() {
     python "$env:userprofile\zuweet.py" -t "{date}" -m ("> {0}" -f $args[0])
 }
 function zulogc() {
