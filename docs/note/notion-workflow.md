@@ -791,8 +791,6 @@ https://covercons.vercel.app/
 
 Notion には絵文字がありますが，アイコンも文書の見栄えを良くするために利用できます．また，Notion 用に使いやすいアイコンが多く公開されています．
 
-https://pablom.io/resources/icons
-
 https://www.notion.vip/icons/
 
 https://super.so/icons
