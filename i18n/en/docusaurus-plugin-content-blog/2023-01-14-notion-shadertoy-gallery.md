@@ -1,5 +1,5 @@
 ---
-title: NotionでShadertoyやつぶやき系のツイートをギャラリーにまとめる
+title: Organize Shadertoy and tweets of Tsubuyaki into galleries on Notion
 description: なるべく手間をかけずにサムネイルを作成する方法を紹介します
 keywords:
   - Notion

@@ -9,6 +9,6 @@
       "es2021"
     ],
   },
-  "include": ["src/**/*", "plugins/**/*", "tools/**/*"],
+  "include": ["docusaurus-env.d.ts", "src/**/*", "plugins/**/*", "tools/**/*"],
   "exclude": ["static", "node_modules"]
 }

@@ -1,5 +1,5 @@
 ---
-title: NotionでWBSを管理する
+title: WBS with Notion
 description: Notionのサブアイテムを使ってWBSを構築するやり方を解説します
 keywords:
   - Notion

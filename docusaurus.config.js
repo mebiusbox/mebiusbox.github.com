@@ -48,7 +48,7 @@ const config = {
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'ja',
-    locales: ['ja'],
+    locales: ['ja', 'en'],
   },
 
   presets: [
@@ -60,10 +60,6 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           sidebarCollapsible: false,
           sidebarCollapsed: false,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          // editUrl:
-          //   'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
           // remarkPlugins: [math],
           // rehypePlugins: [[katex, {strict: false}]],
           remarkPlugins: [rlc],
@@ -73,10 +69,6 @@ const config = {
           postsPerPage: 5,
           blogSidebarTitle: 'All posts',
           blogSidebarCount: 'ALL',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          // editUrl:
-          //   'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
           remarkPlugins: [rlc],
         },
         theme: {
@@ -127,6 +119,7 @@ const config = {
           {to: '/docs/category/software', label: 'Software', position: 'left'},
           {to: '/blog', label: 'Blog', position: 'left'},
           {href: 'https://mebiusbox.github.io/contents/EffectTextureMaker', label: 'EffectTextureMaker', position: 'left'},
+          {type: 'localeDropdown', position: 'right'},
         ],
       },
       footer: {

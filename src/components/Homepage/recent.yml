@@ -1,15 +1,24 @@
 - name: 2023-01-17-notion-wbs
   date: 2023-01-17
-  title: NotionでWBSを管理する
+  title:
+    ja: NotionでWBSを管理する
+    en: WBS with Notion
 - name: 2023-01-15-docusaurus-katex-client-side-rendering
   date: 2023-01-15
-  title: Docusaurusで数式をクライアントサイドレンダリング(CSR)する
+  title:
+    ja: Docusaurusで数式をクライアントサイドレンダリング(CSR)する
+    en: Clien-side rendering of KaTeX in Docusaurus
 - name: 2023-01-14-notion-shadertoy-gallery
   date: 2023-01-14
-  title: NotionでShadertoyやつぶやき系のツイートをギャラリーにまとめる
+  title:
+    ja: NotionでShadertoyやつぶやき系のツイートをギャラリーにまとめる
+    en: Organize Shadertoy and tweets of Tsubuyaki into galleries on Notion
 - name: 2023-01-11-docusaurus
   date: 2023-01-11
-  title: リニューアル：Docusaurusへ移行
+  title:
+    ja: リニューアル：Docusaurusへ移行
+    en: Migration to Docusaurus
 - name: 2018-02-27-diary
   date: 2018-02-27
-  title: 自前ライブラリの整備
+  title:
+    ja: 自前ライブラリの整備

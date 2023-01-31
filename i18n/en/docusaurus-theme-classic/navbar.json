@@ -1,0 +1,26 @@
+{
+  "title": {
+    "message": "Mebiusbox software",
+    "description": "The title in the navbar"
+  },
+  "item.label.Lab": {
+    "message": "Lab",
+    "description": "Navbar item with label Lab"
+  },
+  "item.label.Note": {
+    "message": "Note",
+    "description": "Navbar item with label Note"
+  },
+  "item.label.Software": {
+    "message": "Software",
+    "description": "Navbar item with label Software"
+  },
+  "item.label.Blog": {
+    "message": "Blog",
+    "description": "Navbar item with label Blog"
+  },
+  "item.label.EffectTextureMaker": {
+    "message": "EffectTextureMaker",
+    "description": "Navbar item with label EffectTextureMaker"
+  }
+}

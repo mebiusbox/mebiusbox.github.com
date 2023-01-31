@@ -1,0 +1,22 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.main.category.Lab": {
+    "message": "Lab",
+    "description": "The label for category Lab in sidebar main"
+  },
+  "sidebar.main.category.Note": {
+    "message": "Note",
+    "description": "The label for category Note in sidebar main"
+  },
+  "sidebar.main.category.Software": {
+    "message": "Software",
+    "description": "The label for category Software in sidebar main"
+  },
+  "sidebar.main.link.TagLibUtil": {
+    "message": "TagLibUtil",
+    "description": "The label for link TagLibUtil in sidebar main, linking to https://github.com/mebiusbox/apps/releases/tag/first"
+  }
+}

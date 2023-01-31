@@ -1,0 +1,50 @@
+{
+  "link.title.Contents": {
+    "message": "Contents",
+    "description": "The title of the footer links column with title=Contents in the footer"
+  },
+  "link.title.Contact": {
+    "message": "Contact",
+    "description": "The title of the footer links column with title=Contact in the footer"
+  },
+  "link.title.More": {
+    "message": "More",
+    "description": "The title of the footer links column with title=More in the footer"
+  },
+  "link.item.label.Lab": {
+    "message": "Lab",
+    "description": "The label of footer link with label=Lab linking to /docs/category/lab"
+  },
+  "link.item.label.Note": {
+    "message": "Note",
+    "description": "The label of footer link with label=Note linking to /docs/category/note"
+  },
+  "link.item.label.Software": {
+    "message": "Software",
+    "description": "The label of footer link with label=Software linking to /docs/category/software"
+  },
+  "link.item.label.Blog": {
+    "message": "Blog",
+    "description": "The label of footer link with label=Blog linking to /blog"
+  },
+  "link.item.label.BOOTH": {
+    "message": "BOOTH",
+    "description": "The label of footer link with label=BOOTH linking to https://mebiusbox.booth.pm/"
+  },
+  "link.item.label.Twitter": {
+    "message": "Twitter",
+    "description": "The label of footer link with label=Twitter linking to https://twitter.com/mebiusbox2"
+  },
+  "link.item.label.GitHub": {
+    "message": "GitHub",
+    "description": "The label of footer link with label=GitHub linking to https://github.com/mebiusbox"
+  },
+  "link.item.label.Privacy Policy": {
+    "message": "Privacy Policy",
+    "description": "The label of footer link with label=Privacy Policy linking to /privacy"
+  },
+  "copyright": {
+    "message": "Copyright © 2023 mebiusbox software.",
+    "description": "The footer copyright"
+  }
+}
