@@ -1,0 +1,777 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+
+<meta name="Description" content="Information architecture, Web Design, Web Standards." />
+<meta name="Keywords" content="your, keywords" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Distribution" content="Global" />
+<meta name="Author" content="Erwin Aligam - ealigam@gmail.com" />
+<meta name="Robots" content="index,follow" />
+
+<link rel="stylesheet" href="images/Envision.css" type="text/css" />
+<link rel="stylesheet" href="mirage.css" type="text/css" />
+
+<title>Mirage</title>
+	
+</head>
+
+<body>
+<!-- wrap starts here -->
+<div id="wrap">
+		
+		<!--header -->
+		<div id="header">			
+				
+			<h1 id="logo-text"><a href="index.html">Mirage</a></h1>		
+			<p id="slogan" style="margin-top:8px;">エフェクト作成ツール</p>		
+			
+			<div id="header-links">
+			<p>
+				<a href="index.html">Home</a> | 
+				<a href="index.html">Contact</a> | 
+				<a href="index.html">Site Map</a>			
+			</p>		
+		</div>		
+						
+		</div>
+		
+		<!-- menu -->	
+		<div  id="menu">
+			<ul>
+				<li><a href="index.html">Home</a></li>
+				<li><a href="manual.html">Manual</a></li>
+				<li><a href="mirage_samples.html">Samples</a></li>
+				<li class="last"><a href="index.html">About</a></li>		
+			</ul>
+		</div>					
+			
+		<!-- content-wrap starts here -->
+		<div id="content-wrap">
+				
+			<div id="main">
+				<a href="index.html">Home</a>&nbsp;&gt;&nbsp;<a href="mirage_for_developer.html">開発者向け</a>&nbsp;&gt;&nbsp;Mirage ファイル(.mrg) 仕様<br />
+				
+				<h2>XML形式</h2>
+				<p>
+				Mirage ファイルは XML ファイルです。<br />
+				</p>
+				
+				<h2>スクリプト名</h2>
+				<p>
+				<a href="mirage_node_attributes.html">ノードのアトリビュート</a>を参照してください。<br />
+				</p>
+				
+				<h2>仕様</h2>
+				<p>
+				<img src="./images/mrg_spec.png" alt="mirage_spec" /><br />
+				</p>
+				
+				<h3 class="mirage_tag">Mirage</h3>
+				<p>
+				ルート。
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Mirage_Controls_Diagram_Document</h3>
+				<span class="scope">&lt;Mirage&gt;</span>
+				<p>
+				Mirage.Conttrols.Diagram 用ドキュメントのルート。<br />
+				<br />
+				<span>属性:</span><br />
+				<span class="attr">version</span>: バージョン情報<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Nodes</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;</span>
+				<p>
+				ノードコンテナ。<br />
+				<br />
+				<span>属性:</span><br />
+				<span class="attr">count</span>: ノード数<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Node</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;</span>
+				<p>
+				ノード。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Id</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				ノード ID。int 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">LocationX</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				X 座標値。int 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">LocationY</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				Y 座標値。int 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Text</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				ノード名。string 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">SubText</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				サブテキスト。string 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Label</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				ラベル名。string 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Expand</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				折り畳みフラグ。bool 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">ChildExpand</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				子ノード折り畳みフラグ。bool 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">DestinationExpand</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				出力ノード折り畳みフラグ。bool 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">BackColor</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				背景色。Color 型。書式は "R,G,B,A"。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">ForeColor</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				前景色。Color 型。書式は "R,G,B,A"。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">SeparateColor</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				分割線色。Color 型。書式は "R,G,B,A"。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">SubTextColor</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				サブテキスト色。Color型。書式は "R,G,B,A"。<br />
+				</p>
+
+				<br />
+				
+				<h3 class="mirage_tag">ParentPort</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				親ポート。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Text</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;ParentPort&gt;</span>
+				<p>
+				ポート名。string 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Type</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;ParentPort&gt;</span>
+				<p>
+				ポートのタイプ。int 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">PortStream</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;ParentPort&gt;</span>
+				<p>
+				入力か出力かどうか。int 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">PortAlignment</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;ParentPort&gt;</span>
+				<p>
+				ポートのアライメント。int 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">EnableMultiConnection</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;ParentPort&gt;</span>
+				<p>
+				複数のポートと接続できるかどうか。bool 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">ChildPort</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				子ポート。ParentPort と構造は同じ。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">SourcePortCount</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				入力ポートの数。値分、この後に SourcePort が続く。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">SourcePort-n</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				入力ポート。構造は ParentPort と同じ。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">DestinationPortCount</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				出力ポートの数。値分、この後に DestinationPort が続く。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">DestinationPort-n</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				出力ポート。構造は ParentPort と同じ。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">SourcePortCount</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				入力ポートの数。値分、この後に SourcePort が続く。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">HierarchyConnections</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;</span>
+				<p>
+				階層のノード接続情報。<br />
+				<br />
+				<span>属性:</span><br />
+				<span class="attr">count</span>: 接続数<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Connection</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;HierarchyConnections&gt;</span>
+				<p>
+				ノードの接続情報。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Node1</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;HierarchyConnections&gt;&lt;Connection&gt;</span>
+				<p>
+				接続元のノード ID。int 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Node2</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;HierarchyConnections&gt;&lt;Connection&gt;</span>
+				<p>
+				接続先のノード ID。int 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Connections</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;</span>
+				<p>
+				入力ポートと出力ポートとの接続情報。<br />
+				<br />
+				<span>属性:</span><br />
+				<span class="attr">count</span>: 接続数<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Connection</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Connections&gt;</span>
+				<p>
+				ノードの接続情報。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Node1</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Connections&gt;&lt;Connection&gt;</span>
+				<p>
+				接続元のノード ID。int 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Node2</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Connections&gt;&lt;Connection&gt;</span>
+				<p>
+				接続先のノード ID。int 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">NodePort1</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Connections&gt;&lt;Connection&gt;</span>
+				<p>
+				接続元のポート名。string 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">NodePort2</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Document&gt;&lt;Connections&gt;&lt;Connection&gt;</span>
+				<p>
+				接続先のポート名。string 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Mirage_Controls_Diagram_Canvas</h3>
+				<span class="scope">&lt;Mirage&gt;</span>
+				<p>
+				Mirage.Controls.Diagram の情報。<br />
+				<br />
+				<span>属性:</span><br />
+				<span class="attr">version</span>: バージョン情報<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">GridSize</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Canvas&gt;</span>
+				<p>
+				グリッドのサイズ。int 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">ShowGrid</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Canvas&gt;</span>
+				<p>
+				グリッドの表示。bool 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">SnapGrid</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Canvas&gt;</span>
+				<p>
+				グリッドにスナップするかどうか。bool 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">CanvasOrgX</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Canvas&gt;</span>
+				<p>
+				キャンバスの原点 X 座標値。int 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">CanvasOrgY</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Canvas&gt;</span>
+				<p>
+				キャンバスの原点 Y 座標値。int 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">CanvasScaleX</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Canvas&gt;</span>
+				<p>
+				キャンバスの X 軸スケール。float 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">CanvasOrgX</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Mirage_Controls_Diagram_Canvas&gt;</span>
+				<p>
+				キャンバスの Y 軸スケール。float 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Document</h3>
+				<span class="scope">&lt;Mirage&gt;</span>
+				<p>
+				ドキュメント情報。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Nodes</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;</span>
+				<p>
+				ノードコンテナ。<br />
+				<br />
+				<span>属性:</span><br />
+				<span class="attr">count</span>: ノード数<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Node</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;</span>
+				<p>
+				ノード。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">diagramNode</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				Mirage.Controls.Diagram のノード ID。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Attributes</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				アトリビュートコンテナ。<br />
+				<br />
+				<span>属性:</span><br />
+				<span class="attr">count</span>: アトリビュートの数<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Attribute</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;Attributes&gt;</span>
+				<p>
+				アトリビュート。アトリビュートは以下のものがあり、それぞれ子要素が変わります。<br />
+				</p>
+				<ul>
+				<li>Boolean</li>
+				<li>Integer</li>
+				<li>Float</li>
+				<li>String</li>
+				<li>Vector3</li>
+				<li>Color4</li>
+				<li>Matrix</li>
+				</ul>
+				<h3>Boolean</h3>
+				<p>
+				<span class="attr">value</span>: bool 型。<br />
+				</p>
+				<h3>Integer</h3>
+				<p>
+				<span class="attr">value</span>: int 型。<br />
+				</p>
+				<h3>Float</h3>
+				<p>
+				<span class="attr">value</span>: float 型。<br />
+				</p>
+				<h3>String</h3>
+				<p>
+				<span class="attr">value</span>: string 型。<br />
+				</p>
+				<h3>Vector3</h3>
+				<p>
+				<span class="attr">x</span>: x 座標値。float 型<br />
+				<span class="attr">y</span>: y 座標値。float 型<br />
+				<span class="attr">z</span>: z 座標値。float 型<br />
+				</p>
+				<h3>Color4</h3>
+				<p>
+				<span class="attr">r</span>: 赤成分。float 型<br />
+				<span class="attr">g</span>: 緑成分。float 型<br />
+				<span class="attr">b</span>: 青成分。float 型<br />
+				<span class="attr">a</span>: α成分。float 型<br />
+				</p>
+				<h3>Matrix</h3>
+				<p>
+				<span class="attr">m11</span>: float 型。<br />
+				<span class="attr">m12</span>: float 型。<br />
+				<span class="attr">m13</span>: float 型。<br />
+				<span class="attr">m14</span>: float 型。<br />
+				<span class="attr">m21</span>: float 型。<br />
+				<span class="attr">m22</span>: float 型。<br />
+				<span class="attr">m23</span>: float 型。<br />
+				<span class="attr">m24</span>: float 型。<br />
+				<span class="attr">m31</span>: float 型。<br />
+				<span class="attr">m32</span>: float 型。<br />
+				<span class="attr">m33</span>: float 型。<br />
+				<span class="attr">m34</span>: float 型。<br />
+				<span class="attr">m41</span>: float 型。<br />
+				<span class="attr">m42</span>: float 型。<br />
+				<span class="attr">m43</span>: float 型。<br />
+				<span class="attr">m44</span>: float 型。<br />
+				</p>
+				<p>
+				<br />
+				<span>属性:</span><br />
+				<span class="attr">name</span>: 属性名<br />
+				<span class="attr">scriptName</span>: スクリプト名<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Animations</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;&lt;Node&gt;</span>
+				<p>
+				アニメーションコンテナ。<br />
+				<br />
+				<span>属性:</span><br />
+				<span class="attr">count</span>: アニメーション数<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">FCurve</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;Animations&gt;</span>
+				<p>
+				アニメーション。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">script_name</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;Animations&gt;&lt;FCurve&gt;</span>
+				<p>
+				スクリプト名。string 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">interpolation</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;Animations&gt;&lt;FCurve&gt;</span>
+				<p>
+				内挿タイプ。int 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">extrapolation</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;Animations&gt;&lt;FCurve&gt;</span>
+				<p>
+				外挿タイプ。int 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">keys</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;Animations&gt;&lt;FCurve&gt;</span>
+				<p>
+				キーフレームコンテナ。<br />
+				<br />
+				<span>属性:</span><br />
+				<span class="attr">count</span>: キーフレーム数<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">key</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;Animations&gt;&lt;FCurve&gt;&lt;keys&gt;</span>
+				<p>
+				キーフレーム。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">script_name</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;Animations&gt;&lt;FCurve&gt;&lt;keys&gt;&lt;key&gt;</span>
+				<p>
+				スクリプト名。string 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">frame</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;Animations&gt;&lt;FCurve&gt;&lt;keys&gt;&lt;key&gt;</span>
+				<p>
+				フレーム。float 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">value</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;Animations&gt;&lt;FCurve&gt;&lt;keys&gt;&lt;key&gt;</span>
+				<p>
+				値。float 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">left_tan_x</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;Animations&gt;&lt;FCurve&gt;&lt;keys&gt;&lt;key&gt;</span>
+				<p>
+				左タンジェント X。float 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">left_tan_y</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;Animations&gt;&lt;FCurve&gt;&lt;keys&gt;&lt;key&gt;</span>
+				<p>
+				左タンジェント Y。float 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">right_tan_x</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;Animations&gt;&lt;FCurve&gt;&lt;keys&gt;&lt;key&gt;</span>
+				<p>
+				右タンジェント X。float 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">right_tan_y</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;Animations&gt;&lt;FCurve&gt;&lt;keys&gt;&lt;key&gt;</span>
+				<p>
+				右タンジェント Y。float 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">interpolation</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Nodes&gt;&lt;Node&gt;&lt;Animations&gt;&lt;FCurve&gt;&lt;keys&gt;&lt;key&gt;</span>
+				<p>
+				補間タイプ。int 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">PlayControl</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;</span>
+				<p>
+				プレイコントローラ情報。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Start</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;PlayControl&gt;</span>
+				<p>
+				シーン再生開始フレーム。int 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">End</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;PlayControl&gt;</span>
+				<p>
+				シーン再生終了フレーム。int 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Fps</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;PlayControl&gt;</span>
+				<p>
+				Fps。double 型。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">Scene</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;</span>
+				<p>
+				シーン情報。<br />
+				</p>
+				
+				<br />
+				
+				<h3 class="mirage_tag">GridSize</h3>
+				<span class="scope">&lt;Mirage&gt;&lt;Document&gt;&lt;Scene&gt;</span>
+				<p>
+				グリッドサイズ。float 型。<br />
+				</p>
+			
+			</div>
+		
+		<!-- content-wrap ends here -->	
+		</div>
+					
+		<!--footer starts here-->
+		<div id="footer">
+			
+			<p>
+			&copy; 2010 <strong>mebiusbox software</strong> | 
+			Design by: <a href="http://www.styleshout.com/">styleshout</a> | 
+			Valid <a href="http://validator.w3.org/check?uri=referer">XHTML</a> | 
+			<a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a>
+			
+   		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			
+			<a href="index.html">Home</a>&nbsp;|&nbsp;
+   		<a href="index.html">Sitemap</a>&nbsp;|&nbsp;
+	   	<a href="index.html">RSS Feed</a>
+   		</p>
+				
+		</div>	
+
+<!-- wrap ends here -->
+</div>
+
+</body>
+</html>

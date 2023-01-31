@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>three.js</title>
+    <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+      body {
+        color: #fff;
+        font-family: Monospace;
+        font-size: 13px;
+        text-align: center;
+        font-weight: bold;
+        
+        background-color: #000;
+        margin: 0px;
+        overflow: hidden;
+      }
+      
+      #info {
+        position: absolute;
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+        color: #fff;
+      }
+      
+      a { color: orange; }
+    </style>
+  </head>
+  <body>
+    <div id="info">
+      <a href="https://github.com/mebiusbox/pixy.js">pixy.js</a> + <a href="http://threejs.org" target="_blank">three.js</a> - texture
+    </div>
+    
+    <script src="js/three.min.js"></script>
+    <script src="js/WebGL.js"></script>
+    <script src="js/controls/OrbitControls.js"></script>
+    <script src="js/libs/dat.gui.min.js"></script>
+    <script src="js/libs/stats.min.js"></script>
+    <script src="js/geometries/TeapotBufferGeometry.js"></script>
+    <script src="js/utils/BufferGeometryUtils.js"></script>
+    <script src="../build/pixy.js"></script>
+    <script>
+      if (THREE.WEBGL.isWebGLAvailable() === false) {
+        document.body.appendChild(THREE.WEBGL.getWebGLErrorMessage());
+      }
+      
+      var camera, controls, scene, renderer;
+      var stats, clock = new THREE.Clock();
+      var lights = {};
+      var shader;
+      var gui, parameters;
+      var ready = false;
+      
+      init();
+      // render();
+      animate();
+      
+      function init() {
+        
+        initGraphics();
+        initScene();
+        initPost();
+        initGui();
+        
+        // EVENTS
+        
+        window.addEventListener('resize', onWindowResize, false);
+      }
+      
+      function initGraphics() {
+        container = document.createElement('div');
+        document.body.appendChild(container);
+        
+        // RENDERER
+        
+        renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer.setClearColor(0xAAAAAA);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        // renderer.gammaInput = false;
+        // renderer.gammaOutput = false;
+        // renderer.autoClear = false;
+        container.appendChild(renderer.domElement);
+        
+        // STATS
+        
+        stats = new Stats();
+				container.appendChild(stats.dom);
+      }
+      
+      function initScene() {
+        
+        // scene itself
+        scene = new THREE.Scene();
+        
+        // MARK: CAMERA
+        
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 8000);
+        camera.position.set(0, 0, 10);
+        
+        // MARK: CONTROLS
+        
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.target.set(0,0,0);
+        controls.addEventListener('change', render);
+        
+        // MARK: LIGHTS
+        
+        // lights.ambient = new THREE.AmbientLight(0x333333);
+        // scene.add(lights.ambient);
+        
+        lights.direct = new THREE.DirectionalLight(0xFFFFFF, 1.0);
+        scene.add(lights.direct);
+        lights.directHelper = new THREE.DirectionalLightHelper(lights.direct);
+        scene.add(lights.directHelper);
+        
+        // lights.spot = new THREE.SpotLight(0xffffff, 1.0);
+        // lights.spot.angle = Math.PI / 4;
+        // lights.spot.penumbra = 0.05;
+        // lights.spot.decay = 2;
+        // lights.spot.distance = 5;
+        // scene.add(lights.spot);
+        // lights.spotHelper = new THREE.SpotLightHelper(lights.spot);
+        // scene.add(lights.spotHelper);
+        
+        // MARK: MATERIALS
+        
+        shader = new PIXY.Shader();
+        // shader.enable("NOLIT");
+        shader.enable("DIRECTLIGHT", 1);
+        // shader.enable("POINTLIGHT", 1);
+        // shader.enable("SPOTLIGHT", 1);
+        shader.enable("PHONG");
+        shader.enable("REFLECTION");
+        shader.enable("FRESNEL");
+        // shader.enable("VELVET");
+        // shader.enable("AMBIENT");
+        // shader.enable("HEMISPHERE");
+        // shader.enable("INNERGLOW");
+        // shader.enable("INNERGLOWSUBTRACT");
+        // shader.enable("RIMLIGHT");
+        shader.enable("COLORMAP");
+        shader.enable("NORMALMAP");
+        // shader.enable("BUMPMAP");
+        shader.enable("SPECULARMAP");
+        shader.enable("AOMAP");
+        // shader.enable("PROJECTIONMAP");
+        // shader.enable("DISTORTION");
+        // shader.enable("UVSCROLL");
+        // shader.enable("GLASS");
+        shader.build();
+        // console.log(shader.uniforms);
+        // console.log(shader._generateVertexShader());
+        // console.log(shader._generateFragmentShader());
+        
+        // MARK: TEXTURES
+        
+        var textureLoader = new THREE.TextureLoader();
+        // shader.uniforms.tDiffuse.value = textureLoader.load('assets/textures/brick_diffuse.jpg');
+        // shader.uniforms.tNormal.value = textureLoader.load('assets/textures/brick_bump.jpg');
+        shader.uniforms.tDiffuse.value = textureLoader.load('assets/textures/SlateTiles/SlateTiles_col.png');
+        shader.uniforms.tNormal.value = textureLoader.load('assets/textures/SlateTiles/SlateTiles_nrm.png');
+        shader.uniforms.tSpecular.value = textureLoader.load('assets/textures/SlateTiles/SlateTiles_spec.png');
+        shader.uniforms.tAO.value = textureLoader.load('assets/textures/SlateTiles/SlateTiles_ao.png');
+        
+        // MARK: ENVIRONMENT MAP
+        
+        var path = 'assets/textures/cube/skybox/';
+        var urls = [
+          path + 'px.jpg', path + 'nx.jpg',
+          path + 'py.jpg', path + 'ny.jpg',
+          path + 'pz.jpg', path + 'nz.jpg'
+        ];
+        
+        shader.uniforms.tEnvMap.value = new THREE.CubeTextureLoader().load(urls, function(tex) {
+          scene.background = tex;
+          ready = true;
+          // render();
+        });
+        
+        // MARK: MODELS
+        
+        var geo = new THREE.TeapotBufferGeometry(
+          2.0, 15, true, true, true, false, true);
+        var teapot = new THREE.Mesh(geo, shader.material);
+        THREE.BufferGeometryUtils.computeTangents(teapot.geometry);
+        teapot.position.x = 7;
+        scene.add(teapot);
+        
+        geo = new THREE.BoxBufferGeometry(4,4,4);
+        var box = new THREE.Mesh(geo, shader.material);
+        THREE.BufferGeometryUtils.computeTangents(box.geometry);
+        box.position.x = -7;
+        scene.add(box);
+        
+        var sphereGeometry = new THREE.SphereBufferGeometry(2, 64, 64);
+				var sphere = new THREE.Mesh(sphereGeometry, shader.material);
+        THREE.BufferGeometryUtils.computeTangents(sphere.geometry);
+        scene.add(sphere);
+        
+        scene.add(new THREE.AxesHelper(10));
+        scene.add(new THREE.GridHelper(20,20));
+      }
+      
+      function initGui() {
+        
+        results = PIXY.ShaderUtils.GenerateShaderParametersGUI(shader);
+        gui = results.gui;
+        parameters = results.parameters;
+      }
+      
+      function initPost() {
+      }
+      
+      // EVENT HANDLERS
+      
+      function onWindowResize() {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        
+        render();
+      }
+      
+      function animate() {
+        // shaderParameters.time += clock.getDelta();
+        requestAnimationFrame(animate, renderer.domElement);
+        render();
+      }
+      
+      function render() {
+        
+        if (!ready) return;
+        
+        stats.update();
+        
+        camera.updateMatrixWorld();
+        
+        lights.direct.position.copy(shader.uniforms.directLights.value[0].direction);
+        lights.direct.position.transformDirection(camera.matrixWorld);
+        lights.direct.position.multiplyScalar(5.0);
+        lights.direct.color.copy(shader.uniforms.directLights.value[0].color);
+        lights.directHelper.update();
+        
+        // lights.direct.position.copy(shader.uniforms.pointLights.value[0].position);
+        // lights.direct.color.copy(shader.uniforms.pointLights.value[0].color);
+        
+        // lights.spot.position.copy(shader.uniforms.spotLights.value[0].position);
+        // lights.spot.color.copy(shader.uniforms.spotLights.value[0].color);
+        // lights.spot.distance = shader.uniforms.spotLights.value[0].distance;
+        // lights.spot.angle = Math.acos(shader.uniforms.spotLights.value[0].coneCos);
+        // lights.spot.penumbra = Math.acos(shader.uniforms.spotLights.value[0].penumbraCos);
+        // lights.spot.decay = shader.uniforms.spotLights.value[0].decay;
+        // lights.spotHelper.update();
+      
+        // lights.direct.position.set(effectController.lx, effectController.ly, effectController.lz).multiplyScalar(5.0);
+        // lights.direct.color.setHex(effectController.lightColor);
+        // lights.direct.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), lights.direct.position.clone().normalize());
+        // lights.ambient.color.setHex(0xffffff).multiplyScalar(effectController.ka);
+        // shader.setLightParameter(0, lights.direct);
+        // shader.setLightParameter(0, lights.ambient);
+        // shader.setDirectionalLightParameter(0, lightDir, lightColor);
+        // shader.setPointLightParameter(0, lightPos, lightColor, effectController.cutoffDistance, effectController.decayExponent);
+        // shader.setSpotLightParameter(0, lightPos, lightDir, lightColor, effectController.cutoffDistance, effectController.decayExponent, effectController.spotConeCos, effectController.spotPenumbraCos);
+        // shader.setParameters(shaderParameters);
+        PIXY.ShaderUtils.UpdateShaderParameters(shader, parameters, camera);
+        renderer.render(scene, camera);
+      }
+
+    </script>
+  </body>
+</html>

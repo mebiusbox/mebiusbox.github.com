@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="../mebiusbox.css" rel="stylesheet" type="text/css" />
+		<link href="../mebiusbox_guide.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="../mebiusbox.js"></script>
+		<!--[if lt IE 7]>
+        <script type="text/javascript" src="../lib/js/unitpngfix.js"></script>
+		<![endif]-->
+        <title>Mebiusbox software</title>
+    </head>
+    <body>
+
+<div id="container">
+<div id="header">
+	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+		<tr>
+			<th><a href="./index.html">mebiusbox software</a></th>
+			<td id="searchbox"><form method="get" action="http://www.google.com/search"><input class="input" type="hidden" name="as_sitesearch" id="as_sitesearch" value="mebiusbox.crap.jp/" />検索&nbsp; <input type="text" class="input" style="width:200px;" name="q" id="q" size="31" maxlength="255" value="" />&nbsp;<input type="submit" class="submit" name="sa" value="Go" /></form></td>
+		</tr>
+	</table>
+</div><!-- header -->
+<div id="content">
+<div id="breadcrumb">
+&nbsp;<a href="./index.html">Top</a>
+&nbsp;&gt;&nbsp;スコープとセレクタ
+&nbsp;
+</div><!-- breadcrumb -->
+
+<br class="clear" />
+<br />
+
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-4921759935398373";
+/* ad_top */
+google_ad_slot = "7667956147";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+
+<br />
+
+<h1>Mebiusbox 2.x ユーザーガイド</h1>
+<h2>スコープとセレクタ</h2>
+<div class="wrap"><p>
+Mebiusbox2 では、テーマ（配色）やフォントの設定の仕方が特殊です。<br />
+ここでは、<span>スコープ</span>と<span>セレクタ</span>という２つの重要な概念について説明します。<br />
+これらを理解すれば、テーマやフォントの設定を変更することができます。<br />
+そんなに難しくないので、１つずつゆっくり理解していきましょう。<br />
+</p></div>
+
+<h2>スコープとセレクタは文字列</h2>
+<div class="wrap"><p>
+です。
+</p></div>
+
+<h2>スコープとセレクタは１つ、または複数の要素名がドット(.)でつながっています。</h2>
+<div class="wrap"><p>
+<img class="frame" src="./img/scope.jpg" border="0" />
+</p></div>
+
+<h2>セレクタはスコープを選択する</h2>
+<div class="wrap"><p>
+セレクタは、スコープを指定するためのものです。<br />
+セレクタの最初の要素（左）から順番に全て一致したものが選択されます。<br />
+<br />
+例えば、<code>item<br />item.view<br />item.view.mix<br /></code>という３つのスコープがあります。<br />
+これに対して<code>item</code>というセレクタを指定すると…<br />
+<code><span style="color:red">item</span><br /><span style="color:red">item.view</span><br /><span style="color:red">item.view.mix</span><br /></code><br />
+全てのスコープが選択されます。<br />
+<br />
+それでは、<code>item.view</code>というセレクタを指定すると…<br />
+<code>item<br /><span style="color:red">item.view</span><br /><span style="color:red">item.view.mix</span><br /></code><br />
+item.view と item.view.mix の２つを選択します。<br />
+<br >
+そして<code>item.view.mix</code>というセレクタを指定すると…<br />
+<code>item<br />item.view<br /><span style="color:red">item.view.mix</span><br /></code><br />
+item.view.mix だけとなります。<br />
+<br >
+
+ここで<code>view</code>というセレクタを指定すると…<br />
+<code>item<br />item.view<br />item.view.mix<br /></code><br />
+どれも一致しません。セレクタの最初の要素と、スコープの最初の要素は一致しなければなりません。<br />
+<br />
+
+別の例を見てみましょう。<br />
+<code>item.view.detail<br />focus.item.view.detail</code>という２つのスコープがあります。<br />
+<br />
+これに対して<code>focus</code>というセレクタを指定すると…<br />
+<code>item.view.detail<br /><span style="color:red">focus.item.view.detail</span></code>
+<br />
+focus.item.view.detail が選択されます。<br />
+</p></div>
+
+<h2>一致する要素が多いセレクタが優先される</h2>
+<div class="wrap"><p>
+<code>item.view.detail</code>というスコープがあります。<br />
+これに対して、<code>item.view</code>と<code>item.view.detail</code>の２つのセレクタがあった場合、
+<code>item.view.detail</code>が優先されます。</code>
+</p></div>
+
+<div class="wrap"><p>
+これでスコープとセレクタの説明は終わりです。<br />
+</p></div>
+
+<br class="clear" />
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-4921759935398373";
+/* ad_page_bottom */
+google_ad_slot = "4223868627";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+			
+    </div><!-- content -->
+	
+	<br class="clear" />
+	<div id="footer">
+		&copy;&nbsp;2006-2011 mebiusbox software.<br />
+		Copyright (C) 2009 Yusuke Kamiyamane. All rights reserved.<br />
+		contact:webmaster[at]mebiusbox[dot]crap[dot]jp<br />
+	</div>
+
+</div><!-- container -->
+
+<script type="text/javascript" src="http://mebiusbox.crap.jp/report.js"></script>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-5766141-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+
+</body>
+</html>

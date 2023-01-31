@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmebiusbox_docusaurus=self.webpackChunkmebiusbox_docusaurus||[]).push([[4280],{599:e=>{e.exports=JSON.parse('{"title":"Note","slug":"/category/note","permalink":"/en/docs/category/note","navigation":{"previous":{"title":"Three.js","permalink":"/en/docs/lab/threejs"},"next":{"title":"Keyhac","permalink":"/en/docs/note/keyhac"}}}')}}]);

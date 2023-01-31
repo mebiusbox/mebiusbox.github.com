@@ -1,0 +1,100 @@
+
+span {
+  margin:0px 4px 0px 4px;
+  color:red;
+}
+
+span.option {
+  margin:0px 4px 0px 0px;
+  color:blue;
+}
+
+span.param {
+  margin:0px 4px 0px 4px;
+  color:red;
+  font-style:italic;
+}
+
+span.scope {
+  color:gray;
+  font-family:Tahoma;
+  font-size:8pt;
+  margin-left:8px;
+}
+
+span.attr {
+  color:blue;
+  margin-left:20px;
+}
+
+#main {
+  width:97%;
+}
+
+#main h2 {
+  border-bottom: 1px solid #dddddd;
+}
+
+h3.mirage {
+  color:blue;
+  border-bottom: 1px solid #eeeeee;
+  padding: 5px 5px 5px 20px;
+  background: url(images/point.gif) no-repeat left center;  
+}
+
+h3.mirage_tag {
+  font-family:Tahoma;
+  font-size:8pt;
+  color:blue;
+  padding: 0px 5px 0px 20px;
+  background: url(images/point.gif) no-repeat left center;  
+  border-bottom:1px solid #dddddd;
+}
+
+div.tuto {
+  margin: 5px 5px 5px 10px;
+}
+
+div.tuto a {
+  inline:block;
+  background-color:#9f2727;
+  color:white;
+  padding:5px;
+  border:1px solid black;
+}
+
+.mirage_table {
+	border:1px solid black;
+}
+
+.mirage_table th {
+	border-left	:1px solid #404040;
+    border-bottom:1px solid #404040;
+	background: #2480bf;
+	font-weight:normal;
+}
+
+.mirage_table td {
+    border-left:1px solid gray;
+    border-bottom:1px solid gray;
+}
+
+.w100 {
+	width:100px;
+}
+
+.w150 {
+	width:150px;
+}
+
+.w200 {
+	width:200px;
+}
+
+.right_align {
+	text-align:right;
+}
+
+.mgn0 {
+  margin:0;
+}

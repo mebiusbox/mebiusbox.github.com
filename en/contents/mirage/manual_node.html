@@ -1,0 +1,210 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+
+<meta name="Description" content="Information architecture, Web Design, Web Standards." />
+<meta name="Keywords" content="your, keywords" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Distribution" content="Global" />
+<meta name="Author" content="Erwin Aligam - ealigam@gmail.com" />
+<meta name="Robots" content="index,follow" />
+
+<link rel="stylesheet" href="images/Envision.css" type="text/css" />
+<link rel="stylesheet" href="mirage.css" type="text/css" />
+<link href="jquery/jquery.fancybox.css" rel="stylesheet" type="text/css" media="screen" />
+<script type="text/javascript" src="jquery/jquery.js"></script>
+<script type="text/javascript" src="jquery/jquery.fancybox.js"></script>
+<script type="text/javascript" src="mirage.fancybox.js"></script>
+
+<title>Mirage</title>
+	
+</head>
+
+<body>
+<!-- wrap starts here -->
+<div id="wrap">
+		
+		<!--header -->
+		<div id="header">			
+				
+			<h1 id="logo-text"><a href="index.html">Mirage</a></h1>		
+			<p id="slogan" style="margin-top:8px;">エフェクト作成ツール</p>		
+			
+			<div id="header-links">
+			<p>
+				<a href="index.html">Home</a> | 
+				<a href="index.html">Contact</a> | 
+				<a href="index.html">Site Map</a>			
+			</p>		
+		</div>		
+						
+		</div>
+		
+		<!-- menu -->	
+		<div  id="menu">
+			<ul>
+				<li><a href="index.html">Home</a></li>
+				<li><a href="manual.html">Manual</a></li>
+				<li><a href="mirage_samples.html">Samples</a></li>
+				<li class="last"><a href="index.html">About</a></li>		
+			</ul>
+		</div>					
+			
+		<!-- content-wrap starts here -->
+		<div id="content-wrap">
+				
+			<div id="main">
+			<a href="index.html">Home</a>&nbsp;&gt;&nbsp;<a href="manual.html">マニュアル</a>&nbsp;&gt;&nbsp;ノード<br />
+			
+			<h2>ノード</h2>
+			<p>
+			ノードはエフェクトを作成するために必要な基本的な要素です。
+			様々なノードを組み合わせてつなぎあわせることで、多様なエフェクトを作成することが出来ます。<br />
+			ノードとノードをつなげた状態のノード群を<span style="color:red">ノードツリー</span>と呼びます。<br />
+			<br />
+			<img src="./images/manual_node.png" alt="node" /><br />
+			<br />
+			</p>
+			
+			<h3 class="mirage">ポート</h3>
+			<p>
+			ノードには他のノードと接続するために<span style="color:red">ポート</span>を持っています。
+			ポートは１つ（単数）、もしくは複数のノードと接続することが出来、ポートの色によってどちらか確認出来ます。<br />
+			<br />
+			<img src="./images/manual_port.png" alt="port" /><br /><br />
+			<br />
+			ポートは親ポート、子ポート、出力ポートがあります。親ポートと子ポートはノードの階層構造を構築するためのものです。
+			出力ポートは、あるノードが他のノードツリーを必要なときに使用します。<br />
+			<br />
+			<img src="./images/manual_port_detail.png" alt="port_detail" /><br /><br />
+			<br />
+			</p>
+			
+			<h3 class="mirage">ノードの種類</h3>
+			<p>
+			<img src="./images/manual_node_name.png" alt="name" />
+			</p>
+			
+			<h3 class="mirage">UUID</h3>
+			<p>
+			ノード固有の値です。<br />
+			<br />
+			<img src="./images/manual_node_uuid.png" alt="uuid" />
+			</p>
+			
+			<h3 class="mirage">名前</h3>
+			<p>
+			任意にノードの名前を設定できます。<br />
+			<br />
+			<img src="./images/manual_node_label.png" alt="label" />
+			</p>
+			
+			<h3 class="mirage">折り畳み（出力ポート）</h3>
+			<p>
+			ノードを折り畳みます。折り畳むと出力ポートが表示されなくなります。<br />
+			<br />
+			<img src="./images/manual_node_collapse.png" alt="collapse" />
+			</p>
+
+			<h3 class="mirage">折り畳み（出力ノード）</h3>
+			<p>
+			出力ポートにつながっているノードを折り畳みます。<br />
+			<br />
+			<img src="./images/manual_node_collapse_dst.png" alt="collapse_dst" />
+			</p>
+			
+			<h3 class="mirage">折り畳まれたノード</h3>
+			<p>
+			<img src="./images/manual_node_compound.png" alt="name" />
+			</p>
+			
+			<h3 class="mirage">非表示</h3>
+			<p>
+			ノードが非表示のとき、そのノード以下がすべてシーンに表示されなくなります。<br />
+			<br />
+			<img src="./images/manual_node_visible.png" alt="name" />
+			</p>
+			
+			<h3 class="mirage">バイパス</h3>
+			<p>
+			ノードがバイパス状態のとき、そのノードは表示されず、また、そのノードの影響が子に反映されません。（ノードの親の影響を子が受けるようになります。）<br />
+			<br />
+			<img src="./images/manual_node_invalid.png" alt="name" />
+			</p>
+			
+			
+			<h2>ノードの種類</h2>
+			<p>
+			ノードには様々な種類がありますが、大きく分けて以下のようなノードがあります。<br />
+			</p>
+			<ul>
+			<li>ルートノード</li>
+			<li>エミッタノード</li>
+			<li>パーティクルノード</li>
+			<li>モディファイアノード</li>
+			<li>フィールドノード</li>
+			</ul>
+			
+			<h3 class="mirage">ルートノード</h3>
+			<p>
+			１つのエフェクトに、１つのルートノードが存在します。
+			エフェクトはルートノードから、ノードを辿って処理します。<br />
+			ルートノードにつながっていないノードは処理されません。<br />
+			</p>
+			
+			<h3 class="mirage">エミッタノード</h3>
+			<p>
+			パーティクルなどのプリミティブを生成するノードです。<br />
+			<br />
+			例) Emitter, Stripe
+			</p>
+			
+			<h3 class="mirage">パーティクルノード</h3>
+			<p>
+			パーティクルをシーンに表示するノードです。<br />
+			</p>
+			
+			<h3 class="mirage">モディファイアノード</h3>
+			<p>
+			他のノードに影響するノードです。<br />モディファイアノードの変化は蓄積され、子ノードに影響します。<br />
+			<br />
+			例) Transform, Translate, Rotate, Scale, Size, Color
+			</p>
+			
+			<h3 class="mirage">フィールドノード</h3>
+			<p>
+			他のノードに影響するノードです。フィールドノードはモディファイアの一種です。<br />
+			フィールドノードは、他のノードの位置情報にだけ影響します。<br />
+			<br />
+			例) Gravity, Wind, Radial
+			</p>
+			
+			</div>
+		
+		<!-- content-wrap ends here -->	
+		</div>
+					
+		<!--footer starts here-->
+		<div id="footer">
+			
+			<p>
+			&copy; 2010 <strong>mebiusbox software</strong> | 
+			Design by: <a href="http://www.styleshout.com/">styleshout</a> | 
+			Valid <a href="http://validator.w3.org/check?uri=referer">XHTML</a> | 
+			<a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a>
+			
+   		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			
+			<a href="index.html">Home</a>&nbsp;|&nbsp;
+   		<a href="index.html">Sitemap</a>&nbsp;|&nbsp;
+	   	<a href="index.html">RSS Feed</a>
+   		</p>
+				
+		</div>	
+
+<!-- wrap ends here -->
+</div>
+
+</body>
+</html>

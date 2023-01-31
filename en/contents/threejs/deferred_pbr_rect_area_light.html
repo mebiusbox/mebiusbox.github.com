@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>three.js</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <style>
+    body {
+      font-family: Monospace;
+      background-color: #000;
+      margin: 0px;
+      overflow: hidden;
+    }
+    
+    #info {
+      color: #fff;
+      position: absolute;
+      top: 10px;
+      width: 100%;
+      text-align: center;
+    }
+    
+    #info div {
+      color: #ff0;
+      text-shadow: black 1px 1px 0px, black -1px 1px 0px, black 1px -1px 0px, black -1px -1px 0px;
+    }
+    
+    a { color: skyblue }
+    .button { background: #999; color: #eee; padding: 0.2em 0.5em; cursor: pointer }
+    .highlight { background: orange; color: #fff; }
+    
+    span {
+      display: inline-block;
+      width: 60px;
+      float: left;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- <canvas id="canvas"></canvas> -->
+  <div id="info">
+    <a href="http://threejs.org" target="_blank">three.js</a>
+    <div>Deferred (PBR + Area Light)</div>
+  </div>
+  
+  <!-- <script src="js/three.min.js"></script> -->
+  <script src="js/three.min.r81dev.mrt.js"></script>
+  <script src="js/BufferGeometryUtils.js"></script>
+  <script src="js/libs/dat.gui.min.js"></script>
+  <script src="js/libs/stats.min.js"></script>
+  <script src="js/controls/OrbitControls.js"></script>
+  <script src="js/shaders/CopyShader.js"></script>
+  <script src="pixy/ScreenSprite.js"></script>
+  <script src="pixy/shaders/LuminosityShader.js"></script>
+  <script src="pixy/shaders/ToneMapShader.js"></script>
+  <script src="pixy/post/Composer.js"></script>
+  <script src="pixy/post/UnrealBloomPass.js"></script>
+  
+  <script id="viewVert" type="x-shader/x-vertex">
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+  </script>
+  <script id="viewFrag" type="x-shader/x-fragment">
+    #include <packing>
+    uniform sampler2D tDiffuse;
+    uniform int type;
+    uniform float cameraNear;
+    uniform float cameraFar;
+    varying vec2 vUv;
+    
+    float readDepth(sampler2D depthSampler, vec2 coord) {
+      float fragCoordZ = texture2D(depthSampler, coord).x;
+      float viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);
+      return viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
+    }
+    
+    void main() {
+      vec4 diffuse = texture2D(tDiffuse, vUv);
+      if (type == 0) {
+        gl_FragColor = vec4(diffuse.xyz, 1.0);
+      } else if (type == 1) {
+        gl_FragColor = vec4(diffuse.www, 1.0);
+      } else if (type == 2) {
+        gl_FragColor = vec4(diffuse.xxx, 1.0);
+      } else if (type == 3) {
+        gl_FragColor = vec4(diffuse.yyy, 1.0);
+      } else if (type == 4) {
+        gl_FragColor = vec4(diffuse.zzz, 1.0);
+      } else if (type == 5) {
+        gl_FragColor = vec4(diffuse.xyz*2.0-1.0, 1.0);
+      } else if (type == 6) {
+        float depth = unpackRGBAToDepth(diffuse);
+        gl_FragColor = vec4(depth, depth, depth, 1.0);
+      } else if (type == 7) {
+        float depth = readDepth(tDiffuse, vUv);
+        gl_FragColor = vec4(depth, depth, depth, 1.0);
+      } else {
+        gl_FragColor = diffuse;
+      }
+    }
+  </script>
+  
+  <script id="depthVert" type="x-shader/x-vertex">
+    varying vec4 vHPosition;
+    void main() {
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      vHPosition = gl_Position;
+    }
+  </script>
+  <script id="depthFrag" type="x-shader/x-fragment">
+    #include <packing>
+    varying vec4 vHPosition;
+    void main() {
+      float depth = vHPosition.z / vHPosition.w;
+      gl_FragColor = packDepthToRGBA(depth);
+    }
+  </script>
+  
+  <script id="geometryVert" type="x-shader/x-vertex">
+    #extension GL_EXT_draw_buffers : require
+    // http://en.wikibooks.org/wiki/GLSL_Programming/Applying_Matrix_Transformations
+    vec3 inverseTransformDirection(in vec3 dir, in mat4 matrix) {
+      return normalize((vec4(dir, 0.0) * matrix).xyz);
+    }
+    uniform mat4 projectionMatrix;
+    uniform mat4 modelViewMatrix;
+    uniform mat3 normalMatrix;
+    attribute vec3 position;
+    attribute vec3 normal;
+    attribute vec2 uv;
+    varying vec3 vViewPosition;
+    varying vec3 vNormal;
+    varying vec2 vUv;
+    void main() {
+      vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+      gl_Position = projectionMatrix * mvPosition;
+      vViewPosition = -mvPosition.xyz;
+      vNormal = normalize(normalMatrix * normal);
+      vUv = uv;
+    }
+  </script>
+  <script id="geometryFrag" type="x-shader/x-fragment">
+    #extension GL_EXT_draw_buffers : require
+    #extension GL_OES_standard_derivatives : enable
+    precision mediump float;
+    #include <packing>
+    uniform sampler2D tDiffuse;
+    uniform sampler2D tRoughness;
+    uniform sampler2D tNormal;
+    uniform float bumpiness;
+    varying vec3 vViewPosition;
+    varying vec3 vNormal;
+    varying vec2 vUv;
+    
+    vec2 dHdxy_fwd() {
+      vec2 dSTdx = dFdx(vUv);
+      vec2 dSTdy = dFdy(vUv);
+      float Hll = bumpiness * texture2D(tNormal, vUv).x;
+      float dBx = bumpiness * texture2D(tNormal, vUv + dSTdx).x - Hll;
+      float dBy = bumpiness * texture2D(tNormal, vUv + dSTdy).x - Hll;
+      return vec2(dBx, dBy);
+    }
+    
+    vec3 perturbNormalArb(vec3 surf_pos, vec3 surf_norm, vec2 dHdxy) {
+      vec3 vSigmaX = dFdx(surf_pos);
+      vec3 vSigmaY = dFdy(surf_pos);
+      vec3 vN = surf_norm; // normalized
+      vec3 R1 = cross(vSigmaY, vN);
+      vec3 R2 = cross(vN, vSigmaX);
+      float fDet = dot(vSigmaX, R1);
+      vec3 vGrad = sign(fDet) * (dHdxy.x * R1 + dHdxy.y * R2);
+      return normalize(abs(fDet) * surf_norm - vGrad);
+    }
+    
+    void main() {
+      vec4 diffuseRGBA = texture2D(tDiffuse, vUv);
+      vec4 roughnessRGBA = texture2D(tRoughness, vUv);
+      vec3 Nn = perturbNormalArb(-vViewPosition, normalize(vNormal), dHdxy_fwd());
+      gl_FragData[0] = vec4(Nn * 0.5 + 0.5, 0.0);
+      gl_FragData[1] = vec4(diffuseRGBA.xyz, roughnessRGBA.r);
+    }
+  </script>
+  
+  <script id="lightVert" type="x-shader/x-vertex">
+    #extension GL_EXT_draw_buffers : require
+    uniform mat4 projectionMatrix;
+    uniform mat4 modelViewMatrix;
+    attribute vec3 position;
+    attribute vec2 uv;
+    varying vec2 vUv;
+    void main() {
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      vUv = uv;
+    }
+  </script>
+  <script id="lightFrag" type="x-shader/x-fragment">
+    #extension GL_EXT_draw_buffers : require
+    #extension GL_EXT_shader_texture_lod : enable
+    precision mediump float;
+    #include <packing>
+    #define PI 3.14159265359
+    #define RECIPROCAL_PI 0.31830988618
+    #define saturate(x) clamp(x, 0.0, 1.0)
+    float pow2(const in float x) { return x*x; }
+    //------------------------------------------------------------
+    vec3 transformDirection(in vec3 dir, in mat4 matrix) {
+      return normalize((matrix * vec4(dir, 0.0)).xyz);
+    }
+    vec3 inverseTransformDirection(in vec3 dir, in mat4 matrix) {
+      return normalize((vec4(dir, 0.0) * matrix).xyz);
+    }
+    vec4 GammaToLinear(in vec4 value, in float gammaFactor) {
+      return vec4(pow(value.xyz, vec3(gammaFactor)), value.w);
+    }
+    vec4 LinearToGamma(in vec4 value, in float gammaFactor) {
+      return vec4(pow(value.xyz, vec3(1.0/gammaFactor)), value.w);
+    }
+    //------------------------------------------------------------
+    // http://stackoverflow.com/questions/17021264/improved-area-lighting-in-webgl-threejs
+    // https://www.gamedev.net/topic/552315-glsl-area-light-implementation/
+    vec3 projectOnPlane(in vec3 p , in vec3 pc, in vec3 pn) {
+      float distance = dot(pn, p-pc);
+      return p - distance*pn;
+    }
+    int sideOfPlane(in vec3 p, in vec3 pc, in vec3 pn) {
+      if (dot(p-pc,pn) >= 0.0) return 1; else return 0;
+    }
+    vec3 linePlaneIntersect(in vec3 lp, in vec3 lv, in vec3 pc, in vec3 pn) {
+      return lp + lv*(dot(pn,pc-lp) / dot(pn,lv));
+    }
+    //------------------------------------------------------------
+    // Real-time Collision Detection
+    vec3 closestPointPToRay(in vec3 p, in vec3 start, in vec3 dir) {
+      float t = max(dot(p-start, dir) / dot(dir,dir), 0.0);
+      return start + dir*t;
+    }
+    vec3 closestPointPToSegment(in vec3 p, in vec3 a, in vec3 b) {
+      vec3 ab = b-a;
+      float t = dot(p-a,ab);
+      if (t <= 0.0) {
+        return a;
+      }
+      else {
+        float denom = dot(ab,ab);
+        if (t >= denom) {
+          return b;
+        }
+        
+        return a + ab*(t/denom);
+      }
+      // vec3 ab = b-a;
+      // float t = clamp(dot(p-a, ab) / dot(ab,ab), 0.0, 1.0);
+      // return a + ab*t;
+    }
+    
+    vec3 closestPointPToTriangle(in vec3 p, in vec3 a, in vec3 b, in vec3 c) {
+      // Check if P in vertex region outside A
+      vec3 ap = p-a;
+      vec3 ab = b-a;
+      vec3 ac = c-a;
+      float d1 = dot(ab,ap);
+      float d2 = dot(ac,ap);
+      if (d1 <= 0.0 && d2 <= 0.0) {
+        return a; // voronoi=0. barycentric coordinates (1,0,0)
+      }
+      
+      vec3 bp = p-b;
+      
+      // Check if P in vertex region outside B
+      float d3 = dot(ab,bp);
+      float d4 = dot(ac,bp);
+      if (d3 >= 0.0 && d4 <= d3) {
+        return b; // voronoi=1. barycentric coordinates (0,1,0)
+      }
+      
+      // Check if P in edge region of AB,k if so return projection of P onto AB
+      float vc = d1*d4 - d3*d2;
+      if (vc <= 0.0 && d1 >= 0.0 && d3 <= 0.0) {
+        // float v = d1/(d1-d3)
+        return a + ab * (d1/(d1-d3)); // voronoi=2. barycentric coordinates (1-v,v,0)
+      }
+      
+      // Check if P in vertex region outside C
+      vec3 cp = p-c;
+      float d5 = dot(ab, cp);
+      float d6 = dot(ac, cp);
+      if (d6 >= 0.0 && d5 <= d6) {
+        return c; // voronoi=3. barycentric coordinates (0,0,1)
+      }
+      
+      // Check if P in edge region of AC, if so return projection of P onto AC
+      float vb = d5*d2 - d1*d6;
+      if (vb <= 0.0 && d2 >= 0.0 && d6 <= 0.0) {
+        // float w = d2/(d2-d6)
+        return a + ac * (d2/(d2-d6)); // voronoi=4. barycentric cooridnates (1-w,w,0)
+      }
+      
+      // Check if P in edge region of BC, if so return projection of P onto BC
+      float va = d3*d6 - d5*d4;
+      if (va <= 0.0 && (d4-d3) >= 0.0 && (d5-d6) >= 0.0) {
+        // float w = (d4-d3)/(d4-d3+d5-d6)
+        return b + (c-b) * ((d4-d3)/(d4-d3+d5-d6)); // voronoi=5. barycentric coordinates (0,1-w,w)
+      }
+      
+      // P inside face region. Compute Q through its barycentric coordinates (u,v,w)
+      float denom = 1.0 / (va+vb+vc);
+      float v = vb * denom;
+      float w = vc * denom;
+      return a + ab*v + ac*w; // voronoi=6
+    }
+    
+    int pointInTriangle(in vec3 p, in vec3 a, in vec3 b, in vec3 c) {
+      a -= p;
+      b -= p;
+      c -= p;
+      float ab = dot(a,b);
+      float ac = dot(a,c);
+      float bc = dot(b,c);
+      float cc = dot(c,c);
+      if (bc*ac - cc*ab < 0.0) return 0;
+      float bb = dot(b,b);
+      if (ab*bc - ac*bb < 0.0) return 0;
+      return 1;
+    }
+    //------------------------------------------------------------
+    // #define NUM_POINT_LIGHT 300
+    struct PointLight {
+      vec3 position;
+      vec3 color;
+    };
+    
+    uniform PointLight pointLights[NUM_POINT_LIGHT];
+    uniform int numPointLights;
+    uniform float cutoffDistance;
+    uniform float decayExponent;
+    uniform float metalness;
+    uniform float roughness;
+    uniform float reflectionStrength;
+    uniform vec3 viewPosition;
+    uniform mat4 viewInverse;
+    uniform mat4 viewProjectionInverse;
+    uniform mat4 cameraMatrix;
+    uniform vec3 lightColor;
+    uniform float lightIntensity;
+    uniform float lightWidth;
+    uniform float lightHeight;
+    #define NVERTS 4
+    uniform vec3 lightverts[NVERTS];
+    uniform mat4 lightMatrixWorld;
+    uniform int numVerts;
+    uniform sampler2D gbuf0; // [rgb-] normal [---w] depth
+    uniform sampler2D gbuf1; // [rgb-] albedo [---w] roughness
+    uniform sampler2D tDepth;
+    uniform samplerCube tEnvCube;
+    varying vec2 vUv;
+    
+    // area light
+    // http://jsfiddle.net/hh74z2ft/1/
+    
+    //--------------------------------------------------
+    vec3 DiffuseLambert(vec3 diffuseColor) {
+      return RECIPROCAL_PI * diffuseColor;
+    }
+    
+    float D_GGX(float a, float NoH) {
+      // Isotropic ggx
+      float a2 = a*a;
+      float NoH2 = NoH*NoH;
+      float d = NoH2 * (a2 - 1.0) + 1.0;
+      return a2 / (PI * d * d);
+    }
+    
+    float G_Smith_Schlick_GGX(float a, float NoV, float NoL) {
+      float k = a * a * 0.5;
+      float gl = NoL / (NoL * (1.0 - k) + k);
+      float gv = NoV / (NoV * (1.0 - k) + k);
+      return gl*gv;
+    }
+    
+    vec3 F_Schlick(vec3 specularColor, float VoH) {
+    
+      // Original approximation by Christophe Schlick '94
+      // "float fresnel = pow(1.0 - product, 5.0);",
+      
+      // Optimized variant (presented by Epic at SIGGRAPH '13)
+      float fresnel = exp2((-5.55473 * VoH - 6.98316) * VoH);
+      
+      return specularColor + (vec3(1.0) - specularColor) * fresnel;
+    }
+    
+    float Specular_D(float a, float NoH) {
+      return D_GGX(a, NoH);
+    }
+    
+    float Specular_G(float a, float NoV, float NoL, float NoH, float VoH, float LoV) {
+      return G_Smith_Schlick_GGX(a, NoV, NoL);
+    }
+    
+    vec3 Specular_F(vec3 specularColor, vec3 H, vec3 V) {
+      return F_Schlick(specularColor, saturate(dot(H,V)));
+    }
+    
+    vec3 Specular(vec3 specularColor, vec3 H, vec3 V, vec3 L, float a, float NoL, float NoV, float NoH, float VoH, float LoV) {
+      float D = Specular_D(a, NoH);
+      float G = Specular_G(a, NoV, NoL, NoH, VoH, LoV);
+      vec3 F = Specular_F(specularColor, V, H) / (4.0 * NoL * NoV + 1e-5);
+      return F * (G * D);
+    }
+    
+    vec3 ComputeLight(vec3 albedoColor, vec3 specularColor, vec3 N, float roughnessFactor, vec3 L, vec3 Lc, vec3 V) {
+      // Compute some useful values
+      float NoL = saturate(dot(N, L));
+      float NoV = saturate(dot(N, V));
+      vec3 H = normalize(L+V);
+      float NoH = saturate(dot(N, H));
+      float VoH = saturate(dot(V, H));
+      float LoV = saturate(dot(L, V));
+      
+      float a = pow2(roughnessFactor);
+      
+      vec3 cdiff = DiffuseLambert(albedoColor);
+      vec3 cspec = Specular(specularColor, H, V, L, a, NoL, NoV, NoH, VoH, LoV);
+      return Lc * NoL * (cdiff + cspec);
+    }
+    //--------------------------------------------------
+    vec3 Specular_AreaLight(vec3 specularColor, vec3 N, float roughnessFactor, vec3 L, vec3 Lc, vec3 V) {
+      // Compute some useful values
+      float NoL = saturate(dot(N, L));
+      float NoV = saturate(dot(N, V));
+      vec3 H = normalize(L+V);
+      float NoH = saturate(dot(N, H));
+      float VoH = saturate(dot(V, H));
+      float LoV = saturate(dot(L, V));
+      
+      float a = pow2(roughnessFactor);
+      
+      vec3 cspec = Specular(specularColor, H, V, L, a, NoL, NoV, NoH, VoH, LoV);
+      return Lc * NoL * cspec;
+    }
+    //--------------------------------------------------
+    vec3 ComputeAreaLight_Triangle(in vec3 albedoColor, in vec3 specularColor, in float roughnessFactor, in vec3 P, in vec3 N, in vec3 V) {
+      
+      vec3 finalColor = vec3(0);
+      vec4 lpos[3];
+      vec3 lvec[3];
+      
+      // direction vectors from point to area light corners
+      for (int i=0; i<3; ++i) {
+        lpos[i] = lightMatrixWorld * vec4(lightverts[i], 1.0); // in world space
+        lvec[i] = normalize(lpos[i].xyz - P); // dir from vertex to area light
+      }
+      
+      // bail if the point is on the wrong side of the light... there must be a better way...
+      float tmp = dot(lvec[0], cross((lpos[2]-lpos[0]).xyz, (lpos[1]-lpos[0]).xyz));
+      if (tmp > 0.0) return finalColor;
+      
+      // vector irradiance at point
+      vec3 lightVec = vec3(0.0);
+      for (int i=0; i<3; ++i) {
+        vec3 v0 = lvec[i];
+        vec3 v1 = lvec[int(mod(float(i+1), float(3)))];
+        // if (tmp > 0.0) { // double side
+        //   lightVec += acos(dot(v0,v1)) * normalize(cross(v1,v0));
+        // }
+        // else {
+          lightVec += acos(dot(v0,v1)) * normalize(cross(v0,v1));
+        // }
+      }
+      
+      // irradiance factor at point
+      float factor = max(dot(lightVec, N), 0.0) / (2.0 * PI);
+      
+      vec3 irradiance = lightColor * lightIntensity * factor;
+      irradiance *= PI; // punctual light
+      
+      
+      vec3 planePosition = (lpos[0].xyz + lpos[1].xyz + lpos[2].xyz) / 3.0;
+      vec3 planeNormal = (lightMatrixWorld * vec4(0,0,1,1)).xyz;
+      planeNormal = normalize(planeNormal - planePosition);
+      
+      // project onto plane and calculate direction from center to the projection
+      // vec3 projection = projectOnPlane(P, planePosition, planeNormal);
+      
+      // calculate distance from area
+      // vec3 nearestPointInside = closestPointPToTriangle(projection, lpos[0].xyz, lpos[1].xyz, lpos[2].xyz);
+      // float Ld = distance(P, nearestPointInside);
+      // if (cutoffDistance == 0.0 || Ld < cutoffDistance) {
+      //   float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), 2.0);
+        // float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), decayExponent);
+        float NoL = saturate(dot(N, lightVec));
+        finalColor += irradiance * NoL * DiffuseLambert(albedoColor);
+      //   finalColor += irradiance * NoL * Lc * DiffuseLambert(albedoColor);
+      // }
+      
+      /// SPECULAR
+      
+      // shoot a ray to calculate specular
+      vec3 R = reflect(-V, N);
+      vec3 E = linePlaneIntersect(P, -R, planePosition, planeNormal);
+      float specAngle = dot(-R, planeNormal);
+      if (specAngle > 0.0) {
+        
+        if (pointInTriangle(E, lpos[0].xyz, lpos[1].xyz, lpos[2].xyz) == 1) {
+          finalColor += Specular_AreaLight(specularColor, N, roughnessFactor, R, irradiance * specAngle, V);
+        }
+        else {
+          vec3 nearestPointInside = closestPointPToTriangle(E, lpos[0].xyz, lpos[1].xyz, lpos[2].xyz);
+          float Ld = length(nearestPointInside-E);
+          // vec3 cp1 = closestPointPToSegment(E, lpos[0].xyz, lpos[1].xyz);
+          // vec3 cp2 = closestPointPToSegment(E, lpos[1].xyz, lpos[2].xyz);
+          // vec3 cp3 = closestPointPToSegment(E, lpos[2].xyz, lpos[0].xyz);
+          // float cpd1 = length(cp1 - E);
+          // float cpd2 = length(cp2 - E);
+          // float cpd3 = length(cp3 - E);
+          // float Ld = min(cpd1, min(cpd2, cpd3));
+          // float Ld = cpd1;
+          // if (cpd2 < cpd1 && cpd2 < cpd3) {
+          //   Ld = cpd2;
+          // }
+          // else if (cpd3 < cpd1 && cpd3 < cpd2) {
+          //   Ld = cpd3;
+          // }
+          if (cutoffDistance == 0.0 || Ld < cutoffDistance) {
+            float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), decayExponent);
+            finalColor += Specular_AreaLight(specularColor, N, roughnessFactor, R, irradiance * Lc * specAngle, V);
+          }
+        }
+      }
+      return finalColor;
+    }
+    //--------------------------------------------------
+    vec3 ComputeAreaLight_Rectangle(in vec3 albedoColor, in vec3 specularColor, in float roughnessFactor, in vec3 P, in vec3 N, in vec3 V) {
+      vec3 finalColor = vec3(0);
+      vec4 lpos[NVERTS];
+      vec3 lvec[NVERTS];
+      
+      // direction vectors from point to area light corners
+      for (int i=0; i<NVERTS; ++i) {
+        lpos[i] = lightMatrixWorld * vec4(lightverts[i], 1.0); // in world space
+        lvec[i] = normalize(lpos[i].xyz - P); // dir from vertex to area light
+      }
+      
+      // bail if the point is on the wrong side of the light... there must be a better way...
+      float tmp = dot(lvec[0], cross((lpos[2]-lpos[0]).xyz, (lpos[1]-lpos[0]).xyz));
+      if (tmp > 0.0) return finalColor;
+      
+      // vector irradiance at point
+      vec3 lightVec = vec3(0.0);
+      for (int i=0; i<NVERTS; ++i) {
+        vec3 v0 = lvec[i];
+        vec3 v1 = lvec[int(mod(float(i+1), float(NVERTS)))];
+        // if (tmp > 0.0) { // double side
+        //   lightVec += acos(dot(v0,v1)) * normalize(cross(v1,v0));
+        // }
+        // else {
+          lightVec += acos(dot(v0,v1)) * normalize(cross(v0,v1));
+        // }
+      }
+      
+      // irradiance factor at point
+      float factor = max(dot(lightVec, N), 0.0) / (2.0 * PI);
+      
+      vec3 irradiance = lightColor * lightIntensity * factor;
+      irradiance *= PI; // punctual light
+      
+      
+      vec3 planePosition = (lpos[0].xyz + lpos[1].xyz + lpos[2].xyz + lpos[3].xyz) / 4.0;
+      float width = lightWidth;
+      float height = lightHeight;
+      vec3 planeNormal = (lightMatrixWorld * vec4(0,0,1,1)).xyz;
+      vec3 right = (lightMatrixWorld * vec4(1,0,0,1)).xyz;
+      planeNormal = normalize(planeNormal - planePosition);
+      right = normalize(right - planePosition);
+      vec3 up = normalize(cross(right, planeNormal));
+      
+      // project onto plane and calculate direction from center to the projection
+      // vec3 projection = projectOnPlane(P, planePosition, planeNormal);
+      // vec3 dir = projection - planePosition;
+      
+      // calculate distance from area
+      // vec2 diagonal = vec2(dot(dir,right), dot(dir,up));
+      // vec2 nearest2D = vec2(clamp(diagonal.x, -width, width), clamp(diagonal.y, -height, height));
+      // vec3 nearestPointInside = planePosition + (right*nearest2D.x + up*nearest2D.y);
+      
+      // float Ld = distance(P, nearestPointInside); // real distance to area rectangle
+      // if (cutoffDistance == 0.0 || Ld < cutoffDistance) {
+      //   float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), 2.0);
+        float NoL = saturate(dot(N, lightVec));
+        finalColor += irradiance * NoL * DiffuseLambert(albedoColor);
+      // }
+      
+      // shoot a ray to calculate specular
+      vec3 R = reflect(-V, N);
+      vec3 E = linePlaneIntersect(P, -R, planePosition, planeNormal);
+      float specAngle = dot(-R, planeNormal);
+      if (specAngle > 0.0) {
+        vec3 dirSpec = E - planePosition;
+        vec2 dirSpec2D = vec2(dot(dirSpec,right), dot(dirSpec,up));
+        vec2 nearestSpec2D = vec2(clamp(dirSpec2D.x,-width,width), clamp(dirSpec2D.y,-height,height));
+        
+        float Ld = length(nearestSpec2D-dirSpec2D);
+        if (cutoffDistance == 0.0 || Ld < cutoffDistance) {
+          float Lc = pow(saturate(-Ld / cutoffDistance + 1.0), decayExponent);
+          finalColor += Specular_AreaLight(specularColor, N, roughnessFactor, R, irradiance * Lc * specAngle, V);
+        }
+      }
+      
+      return finalColor;
+    }
+    //--------------------------------------------------
+    // [ Lazarov 2013 "Getting More Physical in Call of Duty: Black Ops II" ]
+    // Adaptation to fit our G term
+    // ref: https://www.unrealengine.com/blog/physically-based-shading-on-mobile - environmentBRDF for GGX on mobile
+    // BRDF_Specular_GGX_Environment
+    vec3 EnvBRDFApprox(vec3 specularColor, float roughnessFactor, float NoV) {
+      const vec4 c0 = vec4(-1, -0.0275, -0.572, 0.022);
+      const vec4 c1 = vec4(1, 0.0425, 1.04, -0.04 );
+      vec4 r = roughnessFactor * c0 + c1;
+      float a004 = min(r.x * r.x, exp2(-9.28 * NoV)) * r.x + r.y;
+      vec2 AB = vec2(-1.04, 1.04) * a004 + r.zw;
+      return specularColor * AB.x + AB.y;
+    }
+    
+    // three.js (bsdfs.glsl)
+    // source: http://simonstechblog.blogspot.ca/2011/12/microfacet-brdf.html
+    float GGXRoughnessToBlinnExponent(const in float ggxRoughness) {
+      return 2.0 / pow2(ggxRoughness + 0.0001) - 2.0;
+    }
+    
+    float BlinnExponentToGGXRoughness(const in float blinnExponent) {
+      return sqrt(2.0 / (blinnExponent + 2.0));
+    }
+    
+    // taken from here: http://casual-effects.blogspot.ca/2011/08/plausible-environment-lighting-in-two.html
+    float getSpecularMipLevel(const in float blinnShininessExponent, const in int maxMipLevel) {
+      float maxMipLevelScalar = float(maxMipLevel);
+      float desiredMipLevel = maxMipLevelScalar - 0.79248 - 0.5 * log2(pow2(blinnShininessExponent)+1.0);
+      
+      // clamp to allowable LOD ranges
+      return clamp(desiredMipLevel, 0.0, maxMipLevelScalar);
+    }
+    
+    vec3 getLightProbeIndirectIrradiance(const in vec3 N, const in float blinnShininessExponent, const in int maxMipLevel) {
+      return GammaToLinear(textureCubeLodEXT(tEnvCube, N, float(maxMipLevel)), 2.2).rgb * reflectionStrength;
+    }
+    
+    vec3 getLightProbeIndirectRadiance(const in vec3 V, const in vec3 N, const in float blinnShininessExponent, const in int maxMipLevel) {
+      vec3 reflectVec = reflect(-V, N);
+      float specMipLevel = getSpecularMipLevel(blinnShininessExponent, maxMipLevel);
+      return GammaToLinear(textureCubeLodEXT(tEnvCube, reflectVec, specMipLevel), 2.2).rgb * reflectionStrength;
+    }
+    
+    vec3 ComputeDiffuseIBL(in vec3 albedoColor, in float roughnessFactor, in vec3 N) {
+      vec3 irradiance = getLightProbeIndirectIrradiance(N, GGXRoughnessToBlinnExponent(roughnessFactor), 10) * PI;
+      return irradiance * DiffuseLambert(albedoColor);
+    }
+    
+    vec3 ComputeSpecularIBL(in vec3 specularColor, in float roughnessFactor, in vec3 N, in vec3 V) {
+      float NoV = saturate(dot(N, V));
+      vec3 radiance = getLightProbeIndirectRadiance(V, N, GGXRoughnessToBlinnExponent(roughnessFactor), 10);
+      return radiance * EnvBRDFApprox(specularColor, roughnessFactor, NoV);
+    }
+    //--------------------------------------------------
+    void main() {
+      vec4 normalDepth = texture2D(gbuf0, vUv);
+      if (normalDepth.x + normalDepth.y + normalDepth.z == 0.0) discard;
+      
+      vec4 diffuseRoughness = texture2D(gbuf1, vUv);
+      vec4 diffuse = GammaToLinear(diffuseRoughness, 2.2);
+      vec4 depthRGBA = texture2D(tDepth, vUv);
+      float depth = depthRGBA.x * 2.0 - 1.0;
+      vec4 HPos = viewProjectionInverse * vec4(vUv*2.0-1.0, depth, 1.0);
+      vec3 worldPosition = HPos.xyz / HPos.w;
+      vec3 Nn = normalDepth.xyz * 2.0 - 1.0;
+      Nn = transformDirection(Nn, viewInverse);
+      vec3 viewDir = normalize(viewPosition - worldPosition);
+      
+      float roughnessFactor = max(0.04, mix(diffuseRoughness.w, 1.0, roughness));
+      vec3 cdiff = mix(diffuse.xyz, vec3(0.0), metalness);
+      vec3 cspec = mix(vec3(0.04), diffuse.xyz, metalness);
+
+      vec3 finalColor = vec3(0.0);
+      
+      if (numVerts == 3) {
+        finalColor += ComputeAreaLight_Triangle(cdiff, cspec, roughnessFactor, worldPosition.xyz, Nn, viewDir);
+      }
+      else {
+        finalColor += ComputeAreaLight_Rectangle(cdiff, cspec, roughnessFactor, worldPosition.xyz, Nn, viewDir);
+      }
+      
+      finalColor += ComputeDiffuseIBL(cdiff, roughnessFactor, Nn);
+      finalColor += ComputeSpecularIBL(cspec, roughnessFactor, Nn, viewDir);
+      
+      gl_FragColor = LinearToGamma(vec4(finalColor, 1.0), 2.2);
+    }
+  </script>
+  <script>
+    var camera, scene, postScene, renderer, canvas;
+    var areaLight = {};
+    var parameters;
+    var numMaxLights = 300;
+    var lights = [];
+    var areaLight;
+    var deferred = {};
+    var post = {};
+    var stats;
+    var clock = new THREE.Clock();
+    var time = 0.0;
+    var delta = 0.004 * 4.0;
+    
+    init();
+    animate();
+    
+    function init() {
+      initGraphics();
+      initDeferred();
+      initScene();
+      initPost();
+      initGui();
+      window.addEventListener('resize', onWindowResize, false);
+    }
+    
+    function initGraphics() {
+      
+      renderer = new THREE.WebGLRenderer({antialias: true});
+      renderer.setClearColor(0x999999);
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      
+      if (!renderer.extensions.get( "OES_texture_float")) {
+	  	  alert('No OES_texture_float support for float textures.' );
+		    return;
+	    }
+  
+      if (!renderer.extensions.get('WEBGL_draw_buffers')) {
+        alert('not support WEBGL_draw_buffers.');
+        return;
+      }
+      
+      if (!renderer.extensions.get('EXT_shader_texture_lod')) {
+        alert('not support EXT_shader_texture_lod.');
+        return;
+      }
+      
+      container = document.createElement('div');
+      document.body.appendChild(container);
+      
+      canvas = renderer.domElement;
+      container.appendChild(canvas);
+      
+      stats = new Stats();
+      container.appendChild(stats.dom);
+    }
+    
+    function initScene() {
+      
+      scene = new THREE.Scene();
+      scene.add(new THREE.AmbientLight(0x999999));
+      
+      camera = new THREE.PerspectiveCamera(35, canvas.width / canvas.height, 1, 500);
+      camera.position.set(0.0, 34.74, 61.33);
+      camera.add(new THREE.PointLight(0xffffff, 0.8));
+      scene.add(camera);
+      
+      geometry = new THREE.PlaneBufferGeometry(50,50);
+      THREE.BufferGeometryUtils.computeTangents(geometry);
+      mesh = new THREE.Mesh(geometry, deferred.geometryMaterial);
+      mesh.rotation.x = -Math.PI * 0.5;
+      scene.add(mesh);
+      
+      mesh = new THREE.Mesh(geometry, deferred.geometryMaterial);
+      mesh.position.y = 25.0;
+      mesh.position.z = -25.0;
+      scene.add(mesh);
+      
+      mesh = new THREE.Mesh(geometry, deferred.geometryMaterial);
+      mesh.position.y = 25.0;
+      mesh.position.z = 25.0;
+      mesh.rotation.y = Math.PI;
+      scene.add(mesh);
+      
+      mesh = new THREE.Mesh(geometry, deferred.geometryMaterial);
+      mesh.position.x = -25.0;
+      mesh.position.y = 25.0;
+      mesh.rotation.y = Math.PI*0.5;
+      scene.add(mesh);
+      
+      mesh = new THREE.Mesh(geometry, deferred.geometryMaterial);
+      mesh.position.x = 25.0;
+      mesh.position.y = 25.0;
+      mesh.rotation.y = -Math.PI*0.5;
+      scene.add(mesh);
+      
+      geometry = new THREE.SphereBufferGeometry(8,32,32);
+      THREE.BufferGeometryUtils.computeTangents(geometry);
+      mesh = new THREE.Mesh(geometry, deferred.geometryMaterial);
+      mesh.position.y = 15;
+      scene.add(mesh);
+      
+      postScene = new THREE.Scene();
+      // postScene.add(new THREE.AxisHelper(20));
+      
+      geometry = new THREE.PlaneGeometry(1, 1);
+      var material = new THREE.MeshBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.7, side: THREE.FrontSide});
+      areaLight.rectMesh = new THREE.Mesh(geometry, material);
+      areaLight.rectMesh.position.set(0,25,-25);
+      areaLight.rectMesh.rotation.set(0,0,0);
+      areaLight.rectMesh.scale.set(1,1,1);
+      postScene.add(areaLight.rectMesh);
+      
+      // wireframe hack
+      areaLight.rectMesh.add(new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({wireframe: true})));
+      
+      var w = Math.sqrt(3);
+      geometry = new THREE.Geometry();
+      geometry.vertices.push(new THREE.Vector3(0,2,0));
+      geometry.vertices.push(new THREE.Vector3(-w,-1,0));
+      geometry.vertices.push(new THREE.Vector3(w,-1,0));
+      geometry.faces.push(new THREE.Face3(0,1,2));
+      areaLight.triMesh = new THREE.Mesh(geometry, material);
+      areaLight.triMesh.position.set(0,25,-25);
+      areaLight.triMesh.rotation.set(0,0,0);
+      areaLight.triMesh.scale.set(1,1,1);
+      postScene.add(areaLight.triMesh);
+      
+      // wireframe hack
+      areaLight.triMesh.add(new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({wireframe: true})));
+      areaLight.triMesh.visible = false;
+      
+      // areaLight.center = new THREE.Mesh(
+      //   new THREE.SphereGeometry(2,16,16),
+      //   new THREE.MeshBasicMaterial({color:0xff0000}));
+      // postScene.add(areaLight.center);
+      // 
+      // areaLight.projection = new THREE.Mesh(
+      //   new THREE.SphereGeometry(2,16,16),
+      //   new THREE.MeshBasicMaterial({color:0x00ff00}));
+      // postScene.add(areaLight.projection);
+      // 
+      // areaLight.nearest = new THREE.Mesh(
+      //   new THREE.SphereGeometry(2,16,16),
+      //   new THREE.MeshBasicMaterial({color:0x0000ff}));
+      // postScene.add(areaLight.nearest);
+      
+      // areaLight.up = new THREE.Mesh(
+      //   new THREE.SphereGeometry(2,16,16),
+      //   new THREE.MeshBasicMaterial({color:0xffff00}));
+      // postScene.add(areaLight.up);
+      
+      
+      // areaLight verts
+      var vertices = areaLight.rectMesh.geometry.vertices;
+      areaLight.verts = [];
+      areaLight.verts.push(vertices[0]);
+      areaLight.verts.push(vertices[1]);
+      areaLight.verts.push(vertices[3]); // swap 2 & 3; must be in clockwise order; they are not
+      areaLight.verts.push(vertices[2]);
+      deferred.lightMaterial.uniforms.lightverts.value = areaLight.verts;
+      deferred.lightMaterial.uniforms.lightMatrixWorld.value = areaLight.rectMesh.matrixWorld;
+      
+      // var geo = new THREE.SphereBufferGeometry(1.0, 8, 8);
+      // var numLights = 200;
+      // for (var i=0; i<numLights; ++i) {
+      //   var light = {};
+      //   light.position = new THREE.Vector3();
+      //   light.position.x = Math.random() * 50.0 - 25.0;
+      //   light.position.y = 10.0 + Math.random() * 10.0;
+      //   light.position.z = Math.random() * 50.0 - 25.0;
+      //   light.color = new THREE.Color();
+      //   light.color.setRGB(Math.random(), Math.random(), Math.random());
+      //   light.time = Math.random() * Math.PI;
+      //   light.mesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({color:light.color.getHex(), wireframe:true}));
+      //   light.mesh.position.copy(light.position);
+      //   postScene.add(light.mesh);
+      //   lights.push(light);
+      // }
+      
+      var controls = new THREE.OrbitControls(camera, renderer.domElement);
+      // controls.addEventListener('change', onCameraPositionChanged);
+      controls.target.set(0, 13.0, 0);
+      // controls.addEventListener('change', render);
+      // controls.target.set(0, 1.2, 2);
+      controls.update();
+    }
+    
+    function initDeferred() {
+      
+      deferred.depthTexture = new THREE.DepthTexture();
+      // deferred.depthTexture.type = THREE.UnsignedIntType;
+      
+      var pars = {
+        minFilter: THREE.NearestFilter,
+        magFilter: THREE.NearestFilter,
+        format: THREE.RGBAFormat,
+        // type: THREE.HalfFloatType,
+        generateMipmaps: false,
+        stencilBuffer: false,
+        // depthBuffer: false,
+        // depthBuffer: true,
+        depthTexture: deferred.depthTexture
+      };
+      
+      // gbuf
+      deferred.gbuf = new THREE.WebGLMultiRenderTarget(window.innerWidth, window.innerHeight, pars);
+      deferred.gbuf.attachments.push(deferred.gbuf.texture.clone());
+      deferred.gbuf.attachments[0].name = 'normal';
+      deferred.gbuf.attachments[1].name = 'albedo+roughness';
+      
+      var textureLoader = new THREE.TextureLoader();
+      var textureColor = textureLoader.load('assets/textures/brick_diffuse.jpg');
+      textureColor.wrapS = textureColor.wrapT = THREE.RepeatWrapping;
+      var textureNormal = textureLoader.load('assets/textures/brick_bump.jpg');
+      textureNormal.wrapS = textureNormal.wrapT = THREE.RepeatWrapping;
+      var textureRoughness = textureLoader.load('assets/textures/brick_roughness.jpg');
+      textureRoughness.wrapS = textureRoughness.wrapT = THREE.RepeatWrapping;
+      
+      var path = 'assets/textures/cube/skybox/';
+      var urls = [
+        path + 'px.jpg', path + 'nx.jpg',
+        path + 'py.jpg', path + 'ny.jpg',
+        path + 'pz.jpg', path + 'nz.jpg'
+      ];
+      textureCube = new THREE.CubeTextureLoader().load(urls, function(loadedCubeMap) {
+        loadedCubeMap.generateMipmaps = true;
+        loadedCubeMap.needsUpdate = true;
+      });
+      
+      deferred.geometryMaterial = new THREE.RawShaderMaterial({
+        uniforms: {
+           tDiffuse: { value: textureColor },
+           tRoughness: { value: textureRoughness },
+          //  tSpecular: { value: textureSpecular },
+           tNormal: { value: textureNormal },
+           bumpiness: { value: 1.0 },
+          //  tAO: { value: textureAO },
+          //  aoStrength: { value: 1.0 },
+          //  aoPower: { value: 1.0 },
+        },
+        vertexShader: document.getElementById("geometryVert").innerHTML,
+        fragmentShader: document.getElementById("geometryFrag").innerHTML,
+      });
+      
+      deferred.lightMaterial = new THREE.RawShaderMaterial({
+        defines: {
+          NUM_POINT_LIGHT: numMaxLights
+        },
+        uniforms: {
+          gbuf0: { value: null },
+          gbuf1: { value: null },
+          tDepth: { value: null },
+          tEnvCube: { value: textureCube },
+          metalness: { value: 1.0 },
+          roughness: { value: 1.0 },
+          reflectionStrength: { value: 1.0 },
+          pointLights: { value: [] },
+          numPointLights: { value: 0 },
+          viewInverse: { value: new THREE.Matrix4() },
+          viewProjectionInverse: { value: new THREE.Matrix4() },
+          viewPosition: { value: new THREE.Vector3() },
+          cameraMatrix: { value: new THREE.Matrix4() },
+          cutoffDistance: { value: 10.0 },
+          decayExponent: { value: 3.0 },
+          
+          lightColor: { value: new THREE.Color() },
+          lightIntensity: { value: 1.0 },
+          lightWidth: { value: 1.0 },
+          lightHeight: { value: 1.0 },
+          lightverts: { value: [] },
+          lightMatrixWorld: { value: new THREE.Matrix4() },
+          numVerts: { value: 4 },
+        },
+        vertexShader: document.getElementById("lightVert").innerHTML,
+        fragmentShader: document.getElementById("lightFrag").innerHTML,
+      });
+      for (var i=0; i<numMaxLights; ++i) {
+        deferred.lightMaterial.uniforms.pointLights.value.push(
+          {
+            position: new THREE.Vector3(),
+            color: new THREE.Color()
+          }
+        );
+      }
+      
+      deferred.scene = new THREE.Scene();
+      deferred.camera = new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+      deferred.scene.add(new THREE.Mesh(
+        new THREE.PlaneGeometry(2,2),
+        deferred.lightMaterial));
+        
+      // for debug
+      deferred.copyMaterial = new THREE.ShaderMaterial({
+        uniforms: THREE.UniformsUtils.clone(THREE.CopyShader.uniforms),
+        vertexShader: THREE.CopyShader.vertexShader,
+        fragmentShader: THREE.CopyShader.fragmentShader,
+        depthFunc: THREE.LessEqualDepth,
+        depthTest: true,
+        depthWrite: false
+      });
+      deferred.copySprite = new PixScreenSprite(deferred.copyMaterial, canvas);
+      deferred.copySprite.position.set(0,0);
+      deferred.copySprite.update();
+      
+      deferred.viewMaterial = new THREE.ShaderMaterial({
+        uniforms: {
+          tDiffuse: { value: null },
+          type: { value: 0 },
+          cameraNear: { value: 1.0 },
+          cameraFar: { value: 100.0 },
+        },
+        vertexShader: document.getElementById("viewVert").innerHTML,
+        fragmentShader: document.getElementById("viewFrag").innerHTML,
+        depthTest: false,
+        depthWrite: false
+      });
+      
+      deferred.views = [];
+      
+      function createView(x, y, texture, type) {
+        var sprite = new PixScreenSprite(deferred.viewMaterial, canvas);
+        sprite.position.set(x, y);
+        sprite.size.set(100,100);
+        sprite.update();
+        return { sprite: sprite, texture: texture, type: type };
+      }
+      
+      // deferred.views.push(createView(10, 10, deferred.gbuf.attachments[2], 6));
+      deferred.views.push(createView(10, 10, deferred.depthTexture, 7));
+      // deferred.views.push(createView(10, 10, deferred.gbuf.attachments[0], 1));
+      deferred.views.push(createView(10, 120, deferred.gbuf.attachments[0], 0));
+      deferred.views.push(createView(10, 230, deferred.gbuf.attachments[1], 1));
+      // deferred.views.push(createView(10, 340, deferred.gbuf.attachments[1], 0));
+      // deferred.views.push(createView(10, 450, deferred.gbuf.attachments[2], 0));
+      // deferred.views.push(createView(120, 10, deferred.lbuf.attachments[0], 0));
+      // deferred.views.push(createView(120, 120, deferred.lbuf.attachments[1], 0));
+    }
+    
+    function initPost() {
+      var pars = {
+        minFilter: THREE.LinearFilter,
+        magFilter: THREE.LinearFilter,
+        format: THREE.RGBFormat,
+        stencilBuffer: false
+      };
+      var parsF = {
+        minFilter: THREE.LinearFilter,
+        magFilter: THREE.LinearFilter,
+        format: THREE.RGBAFormat,
+        stencilBuffer: false,
+        type: THREE.FloatType,
+      };
+      var parsComposite = {
+        minFilter: THREE.LinearFilter,
+        magFilter: THREE.LinearFilter,
+        format: THREE.RGBFormat,
+        stencilBuffer: false,
+        depthTexture: deferred.depthTexture
+      };
+      
+      post.rtScene = new THREE.WebGLRenderTarget(canvas.width, canvas.height, parsF);
+      post.rtBloom = new THREE.WebGLRenderTarget(canvas.width, canvas.height, parsF);
+      post.rtComposite = new THREE.WebGLRenderTarget(canvas.width, canvas.height, parsComposite);
+      post.copyPass = new PixShaderPass(THREE.CopyShader);
+      post.copyPass.uniforms.tDiffuse.value = post.rtScene.texture;
+      post.bloomPass = new PixUnrealBloomPass(new THREE.Vector2(canvas.width, canvas.height), 1.5, 0.4, 0.85);
+      post.toneMapPass = new PixShaderPass(PixToneMapShader);
+      post.toneMapPass.uniforms.tDiffuse.value = post.rtScene.texture;
+      post.composer = new PixComposer(renderer);
+      post.composer.addPass(post.bloomPass, post.rtScene, post.rtScene, false, false);
+      post.composer.addPass(post.toneMapPass, post.rtScene, post.rtComposite, false, false);
+      post.composer.addPass(post.copyPass, post.rtScene, post.rtComposite, false, false);
+    }
+    
+    function initGui() {
+      parameters = {
+        metalness: 0.5,
+        roughness: 0.0,
+        cutoffDistance: 5.0,
+        decay: 2.0,
+        // numLights: 50,
+        bumpiness: 0.3,
+        reflectionStrength: 0.05,
+        bloom: false,
+        bloomStrength: 1.5, 
+        bloomRadius: 0.4,
+        bloomThreshold: 0.85,
+        toneMapping: false,
+        exposure: 3.0,
+        whitePoint: 5.0,
+        shape: "Rectangle",
+        intensity: 3.0,
+        width: 30.0,
+        height: 25.0,
+        size: 10.0,
+        rotation: 0.0,
+        debug: false,
+        pause: false,
+      };
+      
+      var gui = new dat.GUI();
+      gui.add(parameters, "metalness", 0.0, 1.0);
+      gui.add(parameters, "roughness", 0.0, 1.0);
+      gui.add(parameters, "cutoffDistance", 0.0, 100.0);
+      gui.add(parameters, "decay", 1.0, 50.0);
+      // gui.add(parameters, "numLights", 1, 200);
+      gui.add(parameters, "bumpiness", -1.0, 1.0);
+      gui.add(parameters, "reflectionStrength", 0.0, 2.0);
+      gui.add(parameters, "bloom");
+      gui.add(parameters, "bloomRadius", 0.0, 2.0);
+      gui.add(parameters, "bloomStrength", 0.0, 5.0);
+      gui.add(parameters, "bloomThreshold", 0.0, 1.0);
+      gui.add(parameters, "toneMapping");
+      gui.add(parameters, "exposure", 0.0, 10.0);
+      gui.add(parameters, "whitePoint", 0.0, 10.0);
+      gui.add(parameters, "shape", ["Rectangle","Triangle"]).onChange(function(value) {
+        if (value === "Rectangle") {
+          var vertices = areaLight.rectMesh.geometry.vertices;
+          areaLight.verts[0] = vertices[0];
+          areaLight.verts[1] = vertices[1];
+          areaLight.verts[2] = vertices[3];
+          areaLight.verts[3] = vertices[2];
+          // deferred.lightMaterial.uniforms.lightverts.value = areaLight.verts;
+          deferred.lightMaterial.uniforms.lightMatrixWorld.value = areaLight.rectMesh.matrixWorld;
+          deferred.lightMaterial.uniforms.numVerts.value = 4;
+          areaLight.rectMesh.visible = true;
+          areaLight.triMesh.visible = false;
+        }
+        else if (value === "Triangle") {
+          var vertices = areaLight.triMesh.geometry.vertices;
+          areaLight.verts[0] = vertices[0];
+          areaLight.verts[1] = vertices[2];
+          areaLight.verts[2] = vertices[1];
+          // deferred.lightMaterial.uniforms.lightverts.value = areaLight.verts;
+          deferred.lightMaterial.uniforms.lightMatrixWorld.value = areaLight.triMesh.matrixWorld;
+          deferred.lightMaterial.uniforms.numVerts.value = 3;
+          areaLight.rectMesh.visible = false;
+          areaLight.triMesh.visible = true;
+        }
+      });
+      gui.add(parameters, "intensity", 0.0, 10.0);
+      gui.add(parameters, "width", 1.0, 50.0).name("width(Rect)");
+      gui.add(parameters, "height", 1.0, 50.0).name("height(Rect)");
+      gui.add(parameters, "size", 1.0, 20.0).name("size(Triangle)");
+      gui.add(parameters, "rotation", 0.0, 360.0);
+      gui.add(parameters, "pause");
+      // gui.add(parameters, "debug");
+    }
+    
+    function onCameraPositionChanged() {
+      console.log(camera.position);
+    }
+    
+    function onWindowResize() {
+      camera.aspect = canvas.width / canvas.height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(canvas.width, canvas.height);
+      render();
+    }
+    
+    function animate() {
+      // time += clock.getDelta();
+      
+      areaLight.rectMesh.position.set(0,25+25*Math.sin(time), Math.min(-22*Math.cos(time),0));
+      areaLight.rectMesh.rotation.set(Math.min(time, Math.PI/2), 0, THREE.Math.degToRad(parameters.rotation));
+      areaLight.triMesh.position.set(0,25+25*Math.sin(time), Math.min(-22*Math.cos(time),0));
+      areaLight.triMesh.rotation.set(Math.min(time, Math.PI/2), 0, THREE.Math.degToRad(parameters.rotation));
+      areaLight.triMesh.scale.set(parameters.size, parameters.size, 1);
+      
+      // var vertices = areaLight.triMesh.geometry.vertices;
+      // areaLight.center.position.copy(vertices[0]).applyMatrix4(areaLight.triMesh.matrixWorld);
+      // areaLight.projection.position.copy(vertices[2]).applyMatrix4(areaLight.triMesh.matrixWorld);
+      // areaLight.nearest.position.copy(vertices[1]).applyMatrix4(areaLight.triMesh.matrixWorld);
+      // var planePosition = new THREE.Vector3(0);
+      // for (var i=0; i<3; ++i) {
+      //   planePosition.add(vertices[i]);
+      // }
+      // planePosition.multiplyScalar(1.0/3.0);
+      // planePosition.applyMatrix4(areaLight.triMesh.matrixWorld);
+      // areaLight.center.position.copy(planePosition);
+      // 
+      // var planeNormal = new THREE.Vector3(0,0,5);
+      // planeNormal.applyMatrix4(areaLight.triMesh.matrixWorld);
+      // areaLight.projection.position.copy(planeNormal);
+      
+      // var vertices = areaLight.rectMesh.geometry.vertices;
+      // var planePosition = new THREE.Vector3(0);
+      // for (var i=0; i<4; ++i) {
+      //   planePosition.add(vertices[i]);
+      // }
+      // planePosition.multiplyScalar(1.0/4.0);
+      // planePosition.applyMatrix4(areaLight.rectMesh.matrixWorld);
+      // areaLight.center.position.copy(planePosition);
+      // 
+      // var planeNormal = new THREE.Vector3(0,0,5);
+      // planeNormal.applyMatrix4(areaLight.rectMesh.matrixWorld);
+      // // areaLight.projection.position.copy(planeNormal);
+      // 
+      // var right = new THREE.Vector3(5,0,0);
+      // right.applyMatrix4(areaLight.rectMesh.matrixWorld);
+      // // areaLight.nearest.position.copy(right);
+      // 
+      // planeNormal.sub(planePosition).normalize();
+      // right.sub(planePosition).normalize();
+      // var up = new THREE.Vector3().crossVectors(right, planeNormal).normalize();
+      // up.multiplyScalar(5).add(planePosition);
+      // // areaLight.up.position.copy(up);
+      // 
+      // var p = new THREE.Vector3(10,15,0);
+      // var proj = p.clone();
+      // proj.sub(planePosition);
+      // var distance = proj.dot(planeNormal);
+      // proj.copy(planeNormal);
+      // proj.multiplyScalar(distance);
+      // proj.subVectors(p, proj);
+      // areaLight.projection.position.copy(proj);
+      // 
+      // var halfW = Math.abs(vertices[0].x);
+      // var halfH = Math.abs(vertices[0].h);
+      // var nearestOffset = new THREE.Vector3().subVectors(proj, planePosition);
+      // var nx = nearestOffset.dot(right);
+      // nx = Math.max(nx, -halfW);
+      // nx = Math.min(nx, halfW);
+      // var ny = nearestOffset.dot(up);
+      // ny = Math.max(ny, -halfH);
+      // ny = Math.min(ny, halfH);
+      // var nearest = planePosition.clone();
+      // nearest.add(nearestOffset.copy(right).multiplyScalar(nx));
+      // nearest.add(nearestOffset.copy(up).multiplyScalar(ny));
+      // areaLight.nearest.position.copy(nearest);
+      // 
+      // var viewDir = camera.getWorldDirection();
+      // var normal = new THREE.Vector3(0,1,0);
+      // var reflect = viewDir.clone().reflect(normal);
+      // var v = new THREE.Vector3();
+      // var d1 = v.subVectors(planePosition, new THREE.Vector3(0)).dot(planeNormal);
+      // var d2 = planeNormal.dot(reflect);
+      // var E = v.copy(reflect).multiplyScalar(d1/d2)
+      // // areaLight.up.position.copy(reflect).multiplyScalar(10).add(p);
+      // areaLight.up.position.copy(E);
+      
+      if (!parameters.pause) {
+        time += delta;
+        if (time > 4.4 || time < 0) delta = -delta;
+      }
+      
+      requestAnimationFrame(animate, renderer.domElement);
+      render();
+    }
+    
+    function render() {
+      
+      stats.update();
+      
+      deferred.geometryMaterial.uniforms.bumpiness.value = parameters.bumpiness;
+      
+      var viewProjection = new THREE.Matrix4();
+      camera.updateMatrix(); // update local matrix
+      camera.updateMatrixWorld(); // update world matrix
+      camera.updateProjectionMatrix();
+      camera.matrixWorldInverse.getInverse(camera.matrixWorld);
+      viewProjection.identity();
+      viewProjection.multiply(camera.projectionMatrix);
+      viewProjection.multiply(camera.matrixWorldInverse);
+      
+      deferred.lightMaterial.uniforms.gbuf0.value = deferred.gbuf.attachments[0];
+      deferred.lightMaterial.uniforms.gbuf1.value = deferred.gbuf.attachments[1];
+      deferred.lightMaterial.uniforms.tDepth.value = deferred.depthTexture;
+      
+      // var pos = new THREE.Vector3();
+      // for (var i=0; i<lights.length; ++i) {
+      //   pos.copy(lights[i].position);
+      //   pos.x += Math.sin(time + lights[i].time) * 5.0;
+      //   pos.y += Math.sin(time + lights[i].time * 2.0) * 10.0;
+      //   pos.z += Math.cos(time + lights[i].time) * 5.0;
+      //   deferred.lightMaterial.uniforms.pointLights.value[i].position.copy(pos);
+      //   deferred.lightMaterial.uniforms.pointLights.value[i].color.copy(lights[i].color);
+      //   lights[i].mesh.position.copy(pos);
+      //   
+      // if (parameters.debug) {
+      //     lights[i].mesh.scale.set(parameters.cutoffDistance, parameters.cutoffDistance, parameters.cutoffDistance);
+      //     lights[i].mesh.material.wireframe = true;
+      //   } else {
+      //     lights[i].mesh.scale.set(0.1,0.1,0.1);
+      //     lights[i].mesh.material.wireframe = false;
+      //   }
+      //   
+      //   if (i < parameters.numLights) {
+      //     lights[i].mesh.visible = true;
+      //   }
+      //   else {
+      //     lights[i].mesh.visible = false;
+      //   }
+      // }
+      
+      // deferred.lightMaterial.uniforms.numPointLights.value = lights.length;
+      // deferred.lightMaterial.uniforms.numPointLights.value = parameters.numLights;
+      deferred.lightMaterial.uniforms.cutoffDistance.value = parameters.cutoffDistance;
+      deferred.lightMaterial.uniforms.decayExponent.value = parameters.decay;
+      deferred.lightMaterial.uniforms.viewInverse.value.copy(camera.matrixWorld);
+      deferred.lightMaterial.uniforms.viewProjectionInverse.value.getInverse(viewProjection);
+      deferred.lightMaterial.uniforms.viewPosition.value.copy(camera.position);
+      deferred.lightMaterial.uniforms.cameraMatrix.value.getInverse(camera.matrixWorld);
+      deferred.lightMaterial.uniforms.metalness.value = parameters.metalness;
+      deferred.lightMaterial.uniforms.roughness.value = parameters.roughness;
+      deferred.lightMaterial.uniforms.reflectionStrength.value = parameters.reflectionStrength;
+      deferred.lightMaterial.uniforms.lightIntensity.value = parameters.intensity;
+      areaLight.rectMesh.scale.set(parameters.width, parameters.height, 1);
+      deferred.lightMaterial.uniforms.lightWidth.value = parameters.width*0.5; // half
+      deferred.lightMaterial.uniforms.lightHeight.value = parameters.height*0.5; // half
+
+
+      //// geometry pass
+      
+      renderer.setClearColor(0x000000);
+      renderer.setClearAlpha(0);
+      
+      scene.overrideMaterial = deferred.depthMaterial;
+      renderer.render(scene, camera, deferred.depthRenderTarget);
+      scene.overrideMaterial = null;
+      
+      renderer.render(scene, camera, deferred.gbuf);
+      
+      //// light pass
+      
+      renderer.render(deferred.scene, deferred.camera, post.rtScene);
+      
+      //// Bloom + Tone Mapping
+      
+      post.bloomPass.enabled = parameters.bloom;
+      post.bloomPass.strength = parameters.bloomStrength;
+      post.bloomPass.radius = parameters.bloomRadius;
+      post.bloomPass.threshold = parameters.bloomThreshold;
+      post.toneMapPass.enabled = parameters.toneMapping;
+      post.toneMapPass.uniforms.exposure.value = parameters.exposure;
+      post.toneMapPass.uniforms.whitePoint.value = parameters.whitePoint;
+      post.copyPass.enabled = !parameters.toneMapping;
+      post.composer.render();
+      
+      // view pass
+      
+      renderer.autoClear = false;
+      
+      renderer.render(postScene, camera, post.rtComposite);
+      deferred.copyMaterial.uniforms.tDiffuse.value = post.rtComposite.texture;
+      deferred.copySprite.render(renderer);
+      
+      for (var i=0; i<deferred.views.length; ++i) {
+        deferred.viewMaterial.uniforms.tDiffuse.value = deferred.views[i].texture;
+        deferred.viewMaterial.uniforms.type.value = deferred.views[i].type;
+        deferred.viewMaterial.uniforms.cameraNear.value = camera.near;
+        deferred.viewMaterial.uniforms.cameraFar.value = camera.far;
+        deferred.views[i].sprite.render(renderer);
+      }
+      
+      renderer.autoClear = true;
+    }
+  </script>
+</body>
+</html>

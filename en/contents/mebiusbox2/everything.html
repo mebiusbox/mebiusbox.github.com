@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="../mebiusbox.css" rel="stylesheet" type="text/css" />
+		<link href="../mebiusbox_guide.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="../mebiusbox.js"></script>
+		<!--[if lt IE 7]>
+        <script type="text/javascript" src="../lib/js/unitpngfix.js"></script>
+		<![endif]-->
+        <title>Mebiusbox software</title>
+    </head>
+    <body>
+
+<div id="container">
+<div id="header">
+	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+		<tr>
+			<th><a href="./index.html">mebiusbox software</a></th>
+			<td id="searchbox"><form method="get" action="http://www.google.com/search"><input class="input" type="hidden" name="as_sitesearch" id="as_sitesearch" value="mebiusbox.crap.jp/" />検索&nbsp; <input type="text" class="input" style="width:200px;" name="q" id="q" size="31" maxlength="255" value="" />&nbsp;<input type="submit" class="submit" name="sa" value="Go" /></form></td>
+		</tr>
+	</table>
+</div><!-- header -->
+<div id="content">
+<div id="breadcrumb">
+&nbsp;<a href="./index.html">Top</a>
+&nbsp;&gt;&nbsp;ファイル検索(Everything)
+&nbsp;
+</div><!-- breadcrumb -->
+
+<br class="clear" />
+<br />
+
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-4921759935398373";
+/* ad_top */
+google_ad_slot = "7667956147";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+
+<br />
+
+<h1>Mebiusbox 2.x ユーザーガイド</h1>
+<h2>ファイル検索(Everything)</h2>
+<div class="wrap">
+<p>
+ファイル検索ソフト <a href="http://www.voidtools.com/">Everything</a> を使ってファイル検索を行うことができます。<br />
+実際には、Everything のサーバー機能を使用し、ETP(Everything Transfer Protocol) 通信を行ってファイル検索をしています。<br />
+そのため、Everything 本体で検索を行うよりも遅くなりますが、総当りのファイル検索には Mebiusbox 本体の検索よりも十分高速です。<br />
+<br />
+この機能を使用するためには、Everything をインストールし、設定を行う必要があります。<br />
+以下では、既に Everything がインストールされ、常駐しているという状態になっているものとします。<br />
+<br />
+</p>
+</div>
+
+<h2>Everything 側の設定</h2><a name="everything_side">&nbsp;</a>
+<div class="wrap">
+<p>
+Everything の ETP/FTP サーバーを設定し、起動します。<br />
+この説明では Everything 1.2.1.371 を使用しています。<br />
+設定にはタスクバーの Everything を右クリック、もしくは Everything のメイン画面からメニューから「Option」を選択します。<br />
+<br />
+<img src="./img/tool_everything_option.jpg" border="1" /><br />
+<br />
+設定する必要があるのは「ETP/FTP」タブです。<br />
+<br />
+<img src="./img/tool_everything_setting.jpg" border="1" /><br />
+<br />
+設定する項目は「ETP/FTP Server Port」「ETP/FTP Server Username」「ETP/FTP Server Password」です。<br />
+良くわからない人はデフォルトのままで OK です。<br />
+<br />
+設定が終わったらサーバーを起動します。これは、タスクバーの Everything を右クリックか、Everything のメインメニュー「Tools」から、「Start ETP/FTP Server」を選択します。<br />
+<br />
+<img src="./img/tool_everything_start_server.jpg" border="1" /><br />
+<br />
+Everything が起動したときに、このサーバーを自動的に始めたい場合は、オプションの「Start ETP/FTP server on startup」をチェックしてください。<br />
+<br />
+<img src="./img/tool_everything_startup_server.jpg" border="1" /><br />
+<br />
+</p>
+</div>
+
+<h2>Mebiusbox2 側の設定</h2><a name="mebiusbox2_side">&nbsp;</a>
+<div class="wrap">
+<p>
+Mebiusbox2 側の設定をします。<br />
+「ツール > オプション」を選択して、「フォルダ > Etp」を選択します。<br />
+<br />
+<img src="./img/option_etp_page.jpg" border="1" /><br />
+<br />
+<br />
+<h3>host</h3>
+ETP/FTP サーバーのホスト名。IPアドレス (xxx.xxx.xxx.xxx) でも可能。<br />
+よくわからない場合はとりあえず「localhost」と入力してください。<br />
+
+<h3>port</h3>
+ETP/FTP サーバーのポート番号<br />
+
+<h3>username</h3>
+ETP/FTP サーバーに接続するユーザー名<br />
+
+<h3>password</h3>
+ETP/FTP サーバーに接続するユーザーのパスワード<br />
+
+<h3>timeout</h3>
+サーバーとの通信におけるタイムアウト時間<br />
+<br />
+設定は以上です。これで検索が利用できるはずです。<br />
+</p>
+</div>
+
+<h2>検索が出来ていないようだけど？</h2><a name="controlbar">&nbsp;</a>
+<div class="wrap">
+<p>
+設定が間違っている可能性があります。<br />
+現在、ユーザー名やパスワードが間違っていてもエラー画面が表示されません。<br />
+ログには出力されるので、確認してみてください。<br />
+</p>
+</div>
+
+<br class="clear" />
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-4921759935398373";
+/* ad_page_bottom */
+google_ad_slot = "4223868627";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+			
+    </div><!-- content -->
+	
+	<br class="clear" />
+	<div id="footer">
+		&copy;&nbsp;2006-2011 mebiusbox software.<br />
+		Copyright (C) 2009 Yusuke Kamiyamane. All rights reserved.<br />
+		contact:webmaster[at]mebiusbox[dot]crap[dot]jp<br />
+	</div>
+
+</div><!-- container -->
+
+<script type="text/javascript" src="http://mebiusbox.crap.jp/report.js"></script>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-5766141-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+
+</body>
+</html>

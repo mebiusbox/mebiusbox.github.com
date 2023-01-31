@@ -1,0 +1,15 @@
+{
+  "language": "ja",
+  "title": "GitBook Tutorial",
+  "description": "This is a gitbook example",
+  "styles": {
+      "website": "styles/website.css",
+      "pdf": "styles/pdf.css"
+  },
+  "plugins": ["theme-api"],
+  "pluginsConfig": {
+    "theme-api": {
+      "theme": "dark"
+    }
+  }
+}
