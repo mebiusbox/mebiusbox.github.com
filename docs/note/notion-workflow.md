@@ -403,20 +403,30 @@ Wikiのような階層型ではなく、データベース主体の管理方法�
 
 ここで紹介しているワークフローのテンプレートです．
 
-https://mebiusbox.notion.site/Workflow-d174512bebd14cf1997b8bfd150a4bb9
+<Bookmark name="Workflow | Notion" url="https://mebiusbox.notion.site/Workflow-d174512bebd14cf1997b8bfd150a4bb9" description="ワークフローのテンプレートです" />
+
 
 ### Structured Notebook
 
 1つのページが肥大化してしまったり、1つのトピックでドキュメントをまとめたい場合のために作りました．1つのトピック＝1つのデータベースで管理します．詳しくは、テンプレートの「はじめにお読みください」を参照してください．
 
-https://mebiusbox.notion.site/Structured-Notebook-294e2a7b7ee84d60b86ba19dba827345
+<Bookmark name="Structured Notebook | Notion" url="https://mebiusbox.notion.site/Structured-Notebook-294e2a7b7ee84d60b86ba19dba827345" description="構造化ノートブックのテンプレートです" />
 
 
 ### WBS
 
 サブアイテム機能を使って WBS (Work Breakdown Structure)を管理するテンプレートです．詳しくは、テンプレートの「はじめにお読みください」を参照してください．
 
-https://mebiusbox.notion.site/WBS-c33e10534921465d93f6604948302c81
+<Bookmark name="WBS | Notion" url="https://mebiusbox.notion.site/WBS-c33e10534921465d93f6604948302c81" description="WBSのテンプレートです" />
+
+
+### 家計簿
+
+家計簿のテンプレートです．詳しくは、テンプレートの「はじめにお読みください」を参照してください．
+
+<Bookmark name="家計簿 | Notion" url="https://mebiusbox.notion.site/038fe17bdf7c4fe2bb4302de82a1b983" description="家計簿のテンプレートです" />
+
+
 
 
 ## Notion デスクトップ
@@ -915,7 +925,9 @@ https://www.notion.so/help/keyboard-shortcuts
 
 https://cheatsheets.namaraii.com/notion.html
 
-https://imdave.notion.site/imdave/Notion-Shortcuts-dcb67fede8b24d6bb5fe2c0cae775d9a
+<Bookmark name="Notion Shortcuts" url="https://imdave.notion.site/imdave/Notion-Shortcuts-dcb67fede8b24d6bb5fe2c0cae775d9a" description="Notion Shortcuts" />
+
+
 
 
 ## Integrations
