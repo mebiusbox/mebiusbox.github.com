@@ -53,7 +53,7 @@ WSManStackVersion              3.0
 
 <Bookmark name="denisidoro / navi - GitHub" url="https://github.com/denisidoro/navi" description="An interactive cheatsheet tool for the command-line" />
 
-`navi`はRust製のコマンドライン入力支援ツールです．これを使いたかったのですが、Windows環境への対応はよろしくありません．実行は出来ますが、コマンドが bash だったりするのでそのままでは使えません．一応、カスタマイズでシェルを指定することが出来ますが、例えばPowerShellを指定すると毎回プロフィール読み込みが入ってレスポンスが悪いですし、そもそもカスタマイズがまだ実験的機能になっています．あとは、チートシートをダウンロードしても内部的にCドライブでしか反応しないというちょっとよくわからんことになっています．カスタマイズでパスを指定できるんですが、試した感じ上手くいきませんでした．まだまだWindowsでは使いづらいようです．公式のIssueでも進捗は無い感じです．
+`navi`はRust製のコマンドライン入力支援ツールです．これを使いたかったのですが、Windows環境への対応はよろしくありません．実行は出来ますが、コマンドが bash だったりするのでそのままでは使えません．一応、カスタマイズでシェルを指定することが出来ますが、例えばPowerShellを指定すると毎回プロファイルの読み込みが入ってレスポンスが悪いですし、そもそもカスタマイズがまだ実験的機能になっています．あとは、チートシートをダウンロードしても内部的にCドライブでしか反応しないというちょっとよくわからんことになっています．カスタマイズでパスを指定できるんですが、試した感じ上手くいきませんでした．まだまだWindowsでは使いづらいようです．公式のIssueでも進捗は無い感じです．
 
 <Bookmark name="Issues | denisidoro / navi - GitHub" url="https://github.com/denisidoro/navi/issues/40" description="Support Windows (cmd/Powershell) #40" />
 
