@@ -398,35 +398,23 @@ Wikiのような階層型ではなく、データベース主体の管理方法�
 
 テンプレートを公開しています．興味があれば活用してみてください．
 
+<Bookmark name="Notion研究室" url="https://mebiusbox-lab.notion.site/mebiusbox-lab/Notion-af0aa5c607584a38ac142c204f48d810" description="Notionユーザ向けの公開ページです" />
 
 ### Workflow
 
 ここで紹介しているワークフローのテンプレートです．
 
-<Bookmark name="Workflow | Notion" url="https://mebiusbox.notion.site/Workflow-d174512bebd14cf1997b8bfd150a4bb9" description="ワークフローのテンプレートです" />
-
-
 ### Structured Notebook
 
 1つのページが肥大化してしまったり、1つのトピックでドキュメントをまとめたい場合のために作りました．1つのトピック＝1つのデータベースで管理します．詳しくは、テンプレートの「はじめにお読みください」を参照してください．
-
-<Bookmark name="Structured Notebook | Notion" url="https://mebiusbox.notion.site/Structured-Notebook-294e2a7b7ee84d60b86ba19dba827345" description="構造化ノートブックのテンプレートです" />
-
 
 ### WBS
 
 サブアイテム機能を使って WBS (Work Breakdown Structure)を管理するテンプレートです．詳しくは、テンプレートの「はじめにお読みください」を参照してください．
 
-<Bookmark name="WBS | Notion" url="https://mebiusbox.notion.site/WBS-c33e10534921465d93f6604948302c81" description="WBSのテンプレートです" />
-
-
 ### 家計簿
 
 家計簿のテンプレートです．詳しくは、テンプレートの「はじめにお読みください」を参照してください．
-
-<Bookmark name="家計簿 | Notion" url="https://mebiusbox.notion.site/038fe17bdf7c4fe2bb4302de82a1b983" description="家計簿のテンプレートです" />
-
-
 
 
 ## Notion デスクトップ
@@ -443,19 +431,6 @@ Notion デスクトップにタブ機能が追加されて使いやすくなり�
 Notionの機能を知ってくるといろいろなことをNotionでやりたくなります．もちろん、それは決して悪いことではないのでどんどん挑戦してもらって構いません．ですが、慣れれば慣れるほどシンプルになっていく感じはします．あまり、こだわると後が大変ですのでほどほどに．
 
 Notionはいろいろな状況に対応できるほどポテンシャルを持っていますが、特に注意したいのが「Notionは必ずしもベストではない」ということです．例えば、最初デザインの資料などもNotionで管理しようと思っていたのですが、結局アップロード上限や画像、動画のブラウジング能力はそんなに高くないです．また、家計簿のようなものもNotionで作ることは可能ですが、Notion以外のアプリが既に洗練されているので、そちらを使った方が良いです．スプレッドシートもそうで、Notionのシンプルテーブルやサブアイテムによるセル参照といったこともある程度可能ですが、普通にGoogleスプレッドシートやExcelを使ったほうがいいです．
-
-
-## Notion以外のツール
-
-例えば、OneNote や Obsidian、EverNote などさまざまな類似ツールがあります．それぞれ良さがありますので、どれが一番というのは決まらないと思っています．Notion は「データベース」をいかに使いこなせるかにかかってくると思っています．なので、とくにデータベースが必要ないのであれば、Notionを使う理由もあまりない気がします．
-
-OneNoteは手軽ですし、今は無料で使えるし、手書きが標準でサポートされているのがいいかなと思っています．
-
-[Obsidian](https://obsidian.md/)はノートとノートをつないでネットワークを構築していくのが重要だと思っているのですが、正直面倒くさいです．あれはマメ、完璧主義といった人たちが使うといいのでは、と思っています．面倒くさがりな私はちょっと馴染みませんでした．
-
-[BoostNote](https://boostnote.io/)は使っていたんですが、有料化してしまったので今は使っていません．大分進化しているようで Notion のような感じになっていました．
-
-テキストベースで十分という場合、Notion を使うメリットがほぼないです．
 
 
 ## Notionの活用
