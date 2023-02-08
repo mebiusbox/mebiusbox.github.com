@@ -184,7 +184,7 @@ article p strong {
   font-size: 0.75rem;
 }
 
-.theme-code-block .codeBlockTitle_node_modules-\@docusaurus-theme-classic-lib-theme-CodeBlock-Content-styles-module {
+.theme-code-block div[class*="codeBlockTitle"] {
   font-family: var(--ifm-font-family-monospace);
   font-size: var(--ifm-code-font-size);
   margin: 0;
