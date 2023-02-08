@@ -176,7 +176,7 @@ Add-AppPackage -Path C:\users\WDAGUtilityAccount\Mount\Microsoft.WindowsTerminal
 ./install-terminal.ps1
 ```
 
-これとは別に日本語版に対応した環境構築スクリプト `setup-ja.ps` も用意します．内容は次の通りです．
+これとは別に日本語版に対応した環境構築スクリプト `setup-ja.ps1` も用意します．内容は次の通りです．
 
 ```powershell title=setup-ja.ps1
 Set-WinUserLanguageList -Force ja-JP
