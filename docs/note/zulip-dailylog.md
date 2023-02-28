@@ -51,19 +51,19 @@ Botを作るには、Zulipの設定から**個人設定**を選び、**ボット
 
 (Zulipの設定)
 
-![Zulipの設定](/img/post/zulip-dailylog-230128233800.png)
+![Zulipの設定_230128233800](/img/post/zulip-dailylog-230128233800.png)
 
 (個人設定)
 
-![個人設定](/img/post/zulip-dailylog-230128233845.png)
+![個人設定_230128233845](/img/post/zulip-dailylog-230128233845.png)
 
 (ボットの作成)
 
-![ボットの作成](/img/post/zulip-dailylog-230128233947.png)
+![ボットの作成_230128233947](/img/post/zulip-dailylog-230128233947.png)
 
 デイリーログが目的ですが、汎用的なボットを作成しますので、**zuweet**という名前にしました．tweetのzulip版です．アバターは任意で設定してください．
 
-![Zuweet](/img/post/zulip-dailylog-230129000448.png)
+![Zuweet-bot_23012900448](/img/post/zulip-dailylog-230129000448.png)
 
 これでボットが作成されました．
 
@@ -85,7 +85,7 @@ pip install zulip
 
 Zulipクライアントを使うには**API key**が必要です．APIキーなど必要な情報を記載した`zuliprc`ファイルをダウンロードできます．ボット画面から**Zuweet Bot**のダウンロードボタンを押します．
 
-![API key](/img/post/zulip-dailylog-230129001226.png)
+![API key_230129001226](/img/post/zulip-dailylog-230129001226.png)
 
 そのファイルをホームフォルダに保存します．ファイル名はそのままでも良いのですが、複数のボットを管理したいときのために、別名にしておきましょう．次のようにします．
 
@@ -367,7 +367,7 @@ result = client.send_message(request)
 
 Zuweetはこれで完成です．マークダウン記法も使えますし、自動リンクもしてくれます．また、ツイートのURLを送信すると、内容を埋め込んでくれます．
 
-![](/img/post/zulip-dailylog-230129010222.png)
+![Zuweet_230129010222](/img/post/zulip-dailylog-230129010222.png)
 
 
 Zuweetの使い方は次の通りです．
