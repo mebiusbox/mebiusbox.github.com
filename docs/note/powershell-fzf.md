@@ -65,7 +65,7 @@ WSManStackVersion              3.0
 
 次のようなものを作ります．
 
-![](https://storage.googleapis.com/zenn-user-upload/912131671973-20230103.gif)
+![powershell-fzf-912131671973](https://storage.googleapis.com/zenn-user-upload/912131671973-20230103.gif)
 
 ### チートシートデータ (YAML)
 
@@ -170,7 +170,7 @@ function navi() {
 
 `--reverse`は入力のすぐ下に表示するオプションです．デフォルトではターミナルの一番下に表示されます．これを実行すると次のようになります．
 
-![](https://storage.googleapis.com/zenn-user-upload/703950884fa7-20230103.png)
+![powershell-fzf-703950884fa7](https://storage.googleapis.com/zenn-user-upload/703950884fa7-20230103.png)
 
 これでは流石に使いづらいので調整します．fzfのプレビュー機能を使って選択中の説明やコマンドを見やすくします．
 
@@ -186,7 +186,7 @@ function navi() {
 
 実行すると次のようになります．
 
-![](https://storage.googleapis.com/zenn-user-upload/5dc603d959e6-20230103.png)
+![powershell-fzf-5dc603d959e6](https://storage.googleapis.com/zenn-user-upload/5dc603d959e6-20230103.png)
 
 どんどん調整していきましょう．fzf のpreviewオプションについては以下を参考にしました．
 
@@ -207,7 +207,7 @@ function navi() {
 
 実行すると次のようになります．
 
-![](https://storage.googleapis.com/zenn-user-upload/a47d40276ae1-20230103.png)
+![powershell-fzf-a47d40276ae1](https://storage.googleapis.com/zenn-user-upload/a47d40276ae1-20230103.png)
 
 ここでは、`up:40%` としましたが、環境に合わせて調整してください．プレビューが2行以上表示されればOKです．次に、プレビュー部分を調整します．まずは、表示される文字列を編集します．そのために、`sd`を使います．
 
@@ -233,7 +233,7 @@ function navi() {
 
 実行すると次のようになります．
 
-![](https://storage.googleapis.com/zenn-user-upload/536d4aa00fe9-20230103.png)
+![powershell-fzf-536d4aa00fe9](https://storage.googleapis.com/zenn-user-upload/536d4aa00fe9-20230103.png)
 
 fzfのプレビューオプションで `--ansi`を指定すると色コードを含めることができます．次のように調整します．
 
@@ -249,7 +249,7 @@ function navi() {
 
 実行すると次のようになります．
 
-![](https://storage.googleapis.com/zenn-user-upload/c83e96053aae-20230103.png)
+![powershell-fzf-c83e96053aae](https://storage.googleapis.com/zenn-user-upload/c83e96053aae-20230103.png)
 
 :::info
 色指定については以下を参考にしました．
@@ -275,7 +275,7 @@ function navi() {
 
 実行すると次のようになります．
 
-![](https://storage.googleapis.com/zenn-user-upload/148ee53474eb-20230103.png)
+![powershell-fzf-148ee53474eb](https://storage.googleapis.com/zenn-user-upload/148ee53474eb-20230103.png)
 
 コマンド部分は見切れてしまいますが、それはプレビューで確認するってことで．とりあえず、fzfのプレビュー調整はこんな感じです．
 
@@ -323,7 +323,7 @@ function navi() {
 
 実行すると、次のようになります．エイリアス名が赤色で表示されます．
 
-![](https://storage.googleapis.com/zenn-user-upload/c50be3cf7abd-20230104.png)
+![powershell-fzf-c50be3cf7abd](https://storage.googleapis.com/zenn-user-upload/c50be3cf7abd-20230104.png)
 :::
 
 
@@ -349,7 +349,7 @@ function navi() {
 
 実行すると次のようになります．
 
-![](https://storage.googleapis.com/zenn-user-upload/c4532899bdcc-20230103.png)
+![powershell-fzf-c4532899bdcc](https://storage.googleapis.com/zenn-user-upload/c4532899bdcc-20230103.png)
 
 :::info
 PowerShellのコマンド履歴がリスト形式ではない場合は次の設定をしてください．
@@ -391,7 +391,7 @@ function nav() {
 
 `nav`を実行すると次のようになります．
 
-![](https://storage.googleapis.com/zenn-user-upload/371b4fef4ffe-20230103.png)
+![powershell-fzf-371b4fef4ffe](https://storage.googleapis.com/zenn-user-upload/371b4fef4ffe-20230103.png)
 
 `navi` と `nav` の使いわけですが、チートシートのコマンドにはわかりやすくプレースホルダーを入れたいです．例えば、次のようなコマンドです．
 
@@ -401,15 +401,15 @@ git clone <repository>
 
 これを `nav` で直接実行してしまうと、もちろんエラーになります．その場合 `navi` でコマンド履歴に登録して、上記のコマンドを入力します．
 
-![](https://storage.googleapis.com/zenn-user-upload/26c8000bc789-20230103.png)
+![powershell-fzf-26c8000bc789](https://storage.googleapis.com/zenn-user-upload/26c8000bc789-20230103.png)
 
 (次図はnaviを実行してコマンド履歴からコマンドを入力した状態)
 
-![](https://storage.googleapis.com/zenn-user-upload/60c8049e3e4a-20230103.png)
+![powershell-fzf-60c8049e3e4a](https://storage.googleapis.com/zenn-user-upload/60c8049e3e4a-20230103.png)
 
 この状態で、`Ctrl+w`を押すと最後の引数を削除した状態になります．
 
-![](https://storage.googleapis.com/zenn-user-upload/faa3baaf397c-20230103.png)
+![powershell-fzf-faa3baaf397c](https://storage.googleapis.com/zenn-user-upload/faa3baaf397c-20230103.png)
 
 プレースホルダーが含まれているものは `navi` 、直接実行したい場合は `nav` という感じで使います．また、`nav` では実行するコマンドを `Write-Host` で出力しているのに対して、`navi`はコマンド履歴に登録すると同時に `Write-Output` で標準出力に出力しています．例えば、コマンドをクリップボードに設定したい場合は次のようにできます．
 
@@ -424,7 +424,7 @@ fzfの検索は標準であいまい検索です．入力した文字列がど�
 
 次に、`--inline-info` をつけると一致数/総数が入力プロンプトのところと同じ行に表示されコンパクトになります．
 
-![](https://storage.googleapis.com/zenn-user-upload/75dd66cf76ee-20230104.png)
+![powershell-fzf-75dd66cf76ee](https://storage.googleapis.com/zenn-user-upload/75dd66cf76ee-20230104.png)
 
 さらに、選択中の項目をハイライト表示したい場合、例えば `--color=fg+:11` を指定します．
 

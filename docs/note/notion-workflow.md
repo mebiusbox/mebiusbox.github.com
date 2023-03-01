@@ -35,12 +35,12 @@ Notion はすべてページであり、ページはブロックで構成され�
 
 Notionでは、まずページを作成します．ページの作成は **新規ページ** ボタンを押します．
 
-![](/img/post/notion-workflow-230125210747.png)
+![notion-workflow-230125210747](/img/post/notion-workflow-230125210747.png)
 
 
 Notionには2種類のページがあります．**通常ページ**と**データベースページ**です．新規ページを作成すると次の画面になります．
 
-![](/img/post/notion-workflow-230125213907.png)
+![notion-workflow-230125213907](/img/post/notion-workflow-230125213907.png)
 
 空のページ(アイコン付き)や、テンプレートからページを作成、データベースページを作成するショートカットが並んでいます．
 
@@ -61,20 +61,20 @@ Notion の特徴にこのブロックがあります．簡単にいうと1文が
 
 もちろん、ページの中にページを入れることができます．このようなページを**サブページ**といいます．サブページの作成は `/page` コマンドを使います．
 
-![](/img/post/notion-workflow-230125214853.png)
+![notion-workflow-230125214853](/img/post/notion-workflow-230125214853.png)
 
 また、`+` コマンド(または `[[` コマンド)を使って作成できます．この場合、コマンドの後ろにページ名を入力します．
 
-![](/img/post/notion-workflow-230125214938.png)
+![notion-workflow-230125214938](/img/post/notion-workflow-230125214938.png)
 
 サブページを作る方法はこの2種類ですが、実はそれぞれ少し違います．それは `/page` コマンドがブロック形式のページ、 `+` コマンドがインライン形式のページとなります．
 
-![](/img/post/notion-workflow-230125221232.png)
+![notion-workflow-230125221232](/img/post/notion-workflow-230125221232.png)
 
 見た目が若干違うことがわかりますか？<br />
 実際に作ってみると違いがわかります．以前はブロック形式のページしか作れませんでしたが、新たにインライン形式のページが追加されました．インライン形式のページであれば、ブロックの中にサブページを含めることができます．これにより、ページの説明などをその後ろに書くことができます．これはブロック形式のページではできません．
 
-![](/img/post/notion-workflow-230125221159.png)
+![notion-workflow-230125221159](/img/post/notion-workflow-230125221159.png)
 
 どちらもサブページであることには変わりません．インライン形式のページからブロック形式のページへの変換は可能ですが、ブロック形式のページからインライン形式のページへは（私が調べた限りでは）変換できません．その場合、インライン形式のページを作って、ブロック形式のページの中身をコピーや移動するしかありません．どちらの形式のページがいいかについては、特に決まりはないと思いますが、通常はインライン形式のページで問題ありません．
 
@@ -85,11 +85,11 @@ Notion の特徴にこのブロックがあります．簡単にいうと1文が
 
 データベースはページの集まりですが、それを表示するための機能として**ビュー**があります．新規ページでデータベース作成のショートカットは、このビューが並んでいることになります．ビューはデータベース固有のものと、**リンクドビュー**があります．リンクドビューは任意のデータベースを選んで、それに対してビューを作成できます．また、1つのリンクドビューにさまざまなデータベースのビューを作成できます．
 
-![](/img/post/notion-workflow-230125222434.png)
+![notion-workflow-230125222434](/img/post/notion-workflow-230125222434.png)
 
 データベースにもインライン形式のデータベースがあります．通常、データベースはページなので、サブページとして作られます．しかし、インライン形式のデータベースの場合、リンクドビューが作成され、その中にデータベースが作成されます．
 
-![](/img/post/notion-workflow-230125223114.png)
+![notion-workflow-230125223114](/img/post/notion-workflow-230125223114.png)
 
 :::info
 インライン形式のデータベースの場合、リンクドビューが作成され、データベースはそのリンクドビューのサブページとして作成されます．それに対して、インライン形式ではない（フルページ）データベースは、そのページのサブページとして作成されます．
@@ -107,32 +107,32 @@ Notionでは公式やコミュニティによって、ページの**テンプレ
 
 それでは一通り説明が終わったので，私なりのやり方を説明してみます．キーとなるのはデータベースページです．これを使って構築していきます．まずは空の通常ページを作成して，`DB` という名前をつけます．
 
-![](/img/post/notion-workflow-230125224253.png)
+![notion-workflow-230125224253](/img/post/notion-workflow-230125224253.png)
 
 
 その下に文書（メモ）用のドキュメントデータベースを作成します．サイドバーのDBページの右にある `+` アイコンをクリックすると，DBにページを作成できます．
 
-![](/img/post/notion-workflow-230125224330.png)
+![notion-workflow-230125224330](/img/post/notion-workflow-230125224330.png)
 
 ページを作成して名前を `Documents` とし，DATABASEの `テーブル` ページを作成します．
 
-![](/img/post/notion-workflow-230125224510.png)
+![notion-workflow-230125224510](/img/post/notion-workflow-230125224510.png)
 
 テーブルページを作成すると最初にビューの設定画面になります．まずはデータソースとなるデータベースを選択します．既存のデータベースを選ぶこともできますが，ここでは新規にデータベースを作成します．下の方にある `新規データベース` を選択します．
 
-![](/img/post/notion-workflow-230125224625.png)
+![notion-workflow-230125224625](/img/post/notion-workflow-230125224625.png)
 
 すると次のようにテーブルビューができます．
 
-![](/img/post/notion-workflow-230125224831.png)
+![notion-workflow-230125224831](/img/post/notion-workflow-230125224831.png)
 
 ドキュメントデータベース用にプロパティを作成します．カラム横にある `+` を選択して新規のプロパティを作成します．
 
-![](/img/post/notion-workflow-230125230312.png)
+![notion-workflow-230125230312](/img/post/notion-workflow-230125230312.png)
 
 まずは `フォルダ` を作成します． `種類` は `マルチセレクト` にします．
 
-![](/img/post/notion-workflow-230126134102.png)
+![notion-workflow-230126134102](/img/post/notion-workflow-230126134102.png)
 
 :::info
 `フォルダ`と`タグ`の使い訳ですが、フォルダは必ず1つ以上設定しなければいけないもので、タグは任意です．また、フォルダは複数設定しても構いません．もし、フォルダが不要であれば、フォルダとタグは1つにまとめても構いません．
@@ -149,39 +149,39 @@ Notionでは公式やコミュニティによって、ページの**テンプレ
 | 作成日時 | 作成日時 |
 | 最終更新日時 | 最終更新日時 |
 
-![](/img/post/notion-workflow-230126133912.png)
+![notion-workflow-230126133912](/img/post/notion-workflow-230126133912.png)
 
 プロパティが多いのでページに表示されるプロパティの設定をします．まずは Documents データベースにある適当なページを開きます．
 
-![](/img/post/notion-workflow-230126134145.png)
+![notion-workflow-230126134145](/img/post/notion-workflow-230126134145.png)
 
 ページを開いたら右上にある `…` から `ページをカスタマイズ` を選択します．
 
-![](/img/post/notion-workflow-230125232727.png)
+![notion-workflow-230125232727](/img/post/notion-workflow-230125232727.png)
 
 ここではページに表示されるコンテンツのカスタマイズができます．ページに表示されるプロパティの順番と，プロパティの表示条件を設定します．以下は私の設定です．ご自身でお好きなようにカスタマイズしてください．
 
-![](/img/post/notion-workflow-230126134406.png)
+![notion-workflow-230126134406](/img/post/notion-workflow-230126134406.png)
 
 これでドキュメントデータベースの設定は終わりです．
 
 
 ドキュメントデータベース以外のデータベースページを `DB` ページに追加していきます．例えば，Books とか，Bookmarks、Journal とか．
 
-![](/img/post/notion-workflow-230126134635.png)
+![notion-workflow-230126134635](/img/post/notion-workflow-230126134635.png)
 
 次に，メインページを作成します．ダッシュボードみたいなものです．ダッシュボードページもドキュメントデータベースに入れていきます．名前は `ダッシュボード` とし， `フォルダ` には `dashboard` に設定します．
 作成したページを開き，右上にある `★` を押すとお気に入りページに指定されます．
 
-![](/img/post/notion-workflow-230126134740.png)
+![notion-workflow-230126134740](/img/post/notion-workflow-230126134740.png)
 
 お気に入りページにするとサイドバーのお気に入りのところに追加されて便利です．
 
-![](/img/post/notion-workflow-230126000053.png)
+![notion-workflow-230126000053](/img/post/notion-workflow-230126000053.png)
 
 ダッシュボードページにブロックを追加していきますが，ここで追加するブロックはリンクドビューなります．リンクドビューは、各種ビュー形式を指定して作成することもできます．
 
-![](/img/post/notion-workflow-230126000338.png)
+![notion-workflow-230126000338](/img/post/notion-workflow-230126000338.png)
 
 これで Wiki のような階層構造ではなく，データベースによる管理方法になりました．
 
@@ -193,50 +193,50 @@ Notionでは公式やコミュニティによって、ページの**テンプレ
 
 次にリストビューを作成します．
 
-![](/img/post/notion-workflow-230126002005.png)
+![notion-workflow-230126002005](/img/post/notion-workflow-230126002005.png)
 
 データソースには作成したDocumentsデータベースを設定します．
 
-![](/img/post/notion-workflow-230126135255.png)
+![notion-workflow-230126135255](/img/post/notion-workflow-230126135255.png)
 
 データソースを設定したら次はビューの名前とビュータイプの指定です．データソースを選択すると、そのデータベース固有のビューからコピーする画面になります．ここでは新規にビューを作成するので、`新規の空のビュー`を選択します．
 
-![](/img/post/notion-workflow-230126135331.png)
+![notion-workflow-230126135331](/img/post/notion-workflow-230126135331.png)
 
 ここでは `ドラフト` という名前，ビューの形式は `リスト` になっていることを確認してください．
 
-![](/img/post/notion-workflow-230126135443.png)
+![notion-workflow-230126135443](/img/post/notion-workflow-230126135443.png)
 
 ビューの設定画面にある `データベース名の表示` は左上のデータベース名を表示するかしないかを設定できます．これは後からでも変更できます．
 
 これでビューが作成されます．ビューを作成したら、ビューのオプション設定をしましょう．ビューの右上にある`･･･`をクリックして、`プロパティ`を選択します．
 
-![](/img/post/notion-workflow-230126135734.png)
+![notion-workflow-230126135734](/img/post/notion-workflow-230126135734.png)
 
-![](/img/post/notion-workflow-230126135753.png)
+![notion-workflow-230126135753](/img/post/notion-workflow-230126135753.png)
 
 ダッシュボードに追加した Documents データベースのリストビューでフィルター設定を行います．
 ビューの右上にある `フィルター` を押して `フォルダ` を選択します．
 
-![](/img/post/notion-workflow-230126140053.png)
+![notion-workflow-230126140053](/img/post/notion-workflow-230126140053.png)
 
 そして `draft` のみ選択します．
 
-![](/img/post/notion-workflow-230126140026.png)
+![notion-workflow-230126140026](/img/post/notion-workflow-230126140026.png)
 
 これでタグに `draft` が含まれているものだけが表示されます．フィルター設定のとき，マルチセレクトタイプは既に存在するオプションがないと設定できないため，適当にドキュメントを作ってオプションを作成しておきます．
 
-![](/img/post/notion-workflow-230126003438.png)
+![notion-workflow-230126003438](/img/post/notion-workflow-230126003438.png)
 
 このように，フィルタリングされた状態になり，編集中のページを開きやすくなっています．
 
 後はデータベースを作成して、ダッシュボードに随時ビューを追加していくようにしていきます．新規ビューはビューの隣にある`+`で追加することができます．
 
-![](/img/post/notion-workflow-230126140222.png)
+![notion-workflow-230126140222](/img/post/notion-workflow-230126140222.png)
 
 画面サイズが小さい場合、ドロップダウンにまとめられてしまいます．その場合は次のようにビューを追加できます．
 
-![](/img/post/notion-workflow-230126140415.png)
+![notion-workflow-230126140415](/img/post/notion-workflow-230126140415.png)
 
 また、必要に応じてリンクドビュー自体を増やしても構いません．
 
@@ -245,53 +245,53 @@ Notionでは公式やコミュニティによって、ページの**テンプレ
 
 `Ctrl+P` で検索できます．また、サイドバーから`検索`でもできます．また、ビューのフィルターを使ってデータベースを絞り込み検索すると効果的です．そのために、タグやキーワードを上手く使います．また、特定のビュー内で検索する場合．右上にある虫眼鏡のアイコンをクリックすることで検索文字を入力することができます
 
-![](/img/post/notion-workflow-230126140531.png)
+![notion-workflow-230126140531](/img/post/notion-workflow-230126140531.png)
 
 
 ## タスク管理
 
 ダッシュボードにタスクを追加しましょう．まずはDBページに `ボード` のデータベースページを追加します．名前は `タスク` とします．
 
-![](/img/post/notion-workflow-230126005019.png)
+![notion-workflow-230126005019](/img/post/notion-workflow-230126005019.png)
 
 データベースは `新規データベース` を選択して新規に作成します．次のようなボードビューが作成されます．
 
-![](/img/post/notion-workflow-230126005325.png)
+![notion-workflow-230126005325](/img/post/notion-workflow-230126005325.png)
 
 ステータスは`ステータスプロパティ`というものになっています．ボードビューでドラッグ＆ドロップすることでステータスを簡単に変更することができます．
 
-![](/img/post/notion-workflow-230126005503.png)
+![notion-workflow-230126005503](/img/post/notion-workflow-230126005503.png)
 
 ダッシュボードにタスクデータベースのカレンダービューを設置したいのですが，そのまえにカレンダービューに対応するために `日付` プロパティを追加します．
 
-![](/img/post/notion-workflow-230126005609.png)
+![notion-workflow-230126005609](/img/post/notion-workflow-230126005609.png)
 
-![](/img/post/notion-workflow-230126005650.png)
+![notion-workflow-230126005650](/img/post/notion-workflow-230126005650.png)
 
 これで準備できました．早速ダッシュボードにまずはカレンダービューを作成します．データソースは作成した Task データベースを選択します．
 
-![](/img/post/notion-workflow-230126005800.png)
+![notion-workflow-230126005800](/img/post/notion-workflow-230126005800.png)
 
 カレンダービューの日付に対応するための設定 `カレンダーの表示基準` の項目が作成した `日付` プロパティであることを確認します．
 
-![](/img/post/notion-workflow-230126005912.png)
+![notion-workflow-230126005912](/img/post/notion-workflow-230126005912.png)
 
 適当にビューの名前をつけてビューを作成します．
 タスクの `日付` プロパティに日付を設定していればカレンダービューにも反映されます．
 
-![](/img/post/notion-workflow-230126010113.png)
+![notion-workflow-230126010113](/img/post/notion-workflow-230126010113.png)
 
 次にタスクのリストビューを作成します．
 
-![](/img/post/notion-workflow-230126010219.png)
+![notion-workflow-230126010219](/img/post/notion-workflow-230126010219.png)
 
 フィルターの設定をします．
 
-![](/img/post/notion-workflow-230126010305.png)
+![notion-workflow-230126010305](/img/post/notion-workflow-230126010305.png)
 
 日付順でソートするように設定します．
 
-![](/img/post/notion-workflow-230126010358.png)
+![notion-workflow-230126010358](/img/post/notion-workflow-230126010358.png)
 
 使いやすいように他のビューを作成してフィルターやソートの設定をしてみてください．
 
@@ -305,11 +305,11 @@ Notionでは公式やコミュニティによって、ページの**テンプレ
 
 Web Clipper や Twitter などのSNSからの共有にも Notion は使えます．そういったサービスからの入力は `Journal`データベースや`Bookmarks`データベースに入れます．この2つのデータベースは1つにまとめてもらっても構いません．使い方としては、Journalデータベースは日付に強く関係しているもの、例えばニュースなどその日に起きたことなどです．また、このデータベースに日記を書く使い方もできます．Bookmarksデータベースはそれ以外のものに使います．それでは、DBページにJournalデータベースとBookmarksデータベースのサブページを作成します．
 
-![](/img/post/notion-workflow-230126010837.png)
+![notion-workflow-230126010837](/img/post/notion-workflow-230126010837.png)
 
 ブラウザの拡張機能 `Notion Web Clipper` を使ってNotionに保存するときのデータベースに`Journal`や`Bookmarks`を選択します．
 
-![](/img/post/notion-workflow-230126011046.png)
+![notion-workflow-230126011046](/img/post/notion-workflow-230126011046.png)
 
 :::info
 `Notion Web Clipper` を使って保存するときにタグなどの情報を同時に設定できません．その場合は保存してから Notion でページを開いて設定します．
@@ -322,7 +322,7 @@ Chromeのブラウザ拡張機能 `SaveToNotion` を使うとクリップ時に�
 
 ということで，DB ページ以下に各データベースがあるだけの構成になります．各ページはいずれかのデータベースに含まれています．大分スッキリしていると思います．
 
-![](/img/post/notion-workflow-230126011305.png)
+![notion-workflow-230126011305](/img/post/notion-workflow-230126011305.png)
 
 
 ## アイコン
@@ -331,15 +331,17 @@ Chromeのブラウザ拡張機能 `SaveToNotion` を使うとクリップ時に�
 
 もともと、アイコンは絵文字とカスタムアイコンのみでしたが、標準で使えるアイコンが追加されました．さらに色もいくつか指定できます．
 
-![](/img/post/notion-workflow-230126012408.png)
+![notion-workflow-230126012408](/img/post/notion-workflow-230126012408.png)
 
 私は、このアイコンを使ってページを視覚的にわかりやすくしています．使っているのは基本4色です．
 
 (Lightテーマ)
-![](/img/post/notion-workflow-230126020415.png)
+
+![notion-workflow-230126020415](/img/post/notion-workflow-230126020415.png)
 
 (Darkテーマ)
-![](/img/post/notion-workflow-230126020435.png)
+
+![notion-workflow-230126020435](/img/post/notion-workflow-230126020435.png)
 
 マゼンタ色はダッシュボード、黄色はデータベース、青色はテンプレート、緑色は重要なページとして使っています．特にデータベースはリンクドビューや外部ツールで指定することも多く、検索でデータベースページかどうかがわかりやすくなるので、アイコンを設定することをオススメします．
 
@@ -351,11 +353,11 @@ Chromeのブラウザ拡張機能 `SaveToNotion` を使うとクリップ時に�
 リンクドビューにビューを多く作ってしまうと、画面に表示しきれずにドロップダウンにまとめられます．たとえ多く作らなくても画面サイズが小さいと、2つでもドロップダウンにまとめられます．個人的にそれは使いづらく感じました．
 そこで、ギャラリービューを使うとかなりマシになります．具体的にはギャラリビューで作成したデータベースの各ページがビュー1つに対応するようになります．この方法だとビューの切り替えがボタンになります．スマホなど画面が小さいものだとかなりストレスフリーになります．例えば、普通にリンクドビューにビューを作成すると次のようになります．
 
-![](/img/post/notion-workflow-230126014940.png)
+![notion-workflow-230126014940](/img/post/notion-workflow-230126014940.png)
 
 ギャラリビューにすると、次のようになります．
 
-![](/img/post/notion-workflow-230126015050.png)
+![notion-workflow-230126015050](/img/post/notion-workflow-230126015050.png)
 
 ただし、この方法にもデメリットがあります．まず、ビューを切り替えるごとにページも切り替わることになりますので、いくらか読み込みの時間が増えることになります．また、ビューを作るためにページを作らなければなりません．これはデータベースのテンプレート機能を使うことで軽減できます．
 あと、この方法では Center Peek にするといいです．ビューを切り替えるときに最初のリンクドビューの画面で操作できます．ただし、スマホやタブレットなどの場合はこれができません．あと、Center Peek の場合、前の画面に戻る場合はショートカット `Ctrl+[` を使うと1つ前のビューに戻ります．そうでないと最初のリンクドビュー画面まで戻ります．
@@ -390,7 +392,7 @@ Chromeのブラウザ拡張機能 `SaveToNotion` を使うとクリップ時に�
 
 Wikiのような階層型ではなく、データベース主体の管理方法では検索やビューの使い方が重要になってきます．といっても、最初は各ダッシュボードからそれぞれに対応したビューやページを辿っていくことになります．サブページであればその階層を辿ることができますが、データベースの子ページでは、親がデータベースになるので、ダッシュボードで子ページをリンクしている場合、データベースの子ページからそのダッシュボードに戻れるリンクがあると便利な場合があります．基本的にブラウザの戻るでいいのですが、バックリンクでもダッシュボードに行けるようにします．そんため、ダッシュボードにピン用のコールアウトを作成します．そこにバックリンクを貼るページをリンクします．これで、ピンしているページはダッシュボードからすぐにアクセスできるし、バックリンクで戻ることも可能になります．
 
-![](/img/post/notion-workflow-230126022422.png)
+![notion-workflow-230126022422](/img/post/notion-workflow-230126022422.png)
 
 
 
@@ -437,7 +439,7 @@ Notionはいろいろな状況に対応できるほどポテンシャルを持�
 
 私は次のような感じで Notion を使っています．
 
-![](https://storage.googleapis.com/zenn-user-upload/0ac95d93cbd3-20220714.png)
+![notion-workflow-0ac95d93cbd3](https://storage.googleapis.com/zenn-user-upload/0ac95d93cbd3-20220714.png)
 
 また，スマホやタブレットでは外部記憶装置として Notion を使っています．
 
@@ -451,7 +453,7 @@ Notionはいろいろな状況に対応できるほどポテンシャルを持�
 
 Notion では絵文字をサポートしています． `/emoji` と入力したり，Windows なら `Win+.` で簡単に入力することができます．あまり使いすぎると逆に見づらくなるかもしれませんが，上手く使うことで文書がとても見やすくなります．例：
 
-![](https://storage.googleapis.com/zenn-user-upload/adf639b9b1d3-20220301.png)
+![notion-workflow-adf639b9b1d3](https://storage.googleapis.com/zenn-user-upload/adf639b9b1d3-20220301.png)
 
 また，ページについては
 
@@ -460,7 +462,7 @@ Notion では絵文字をサポートしています． `/emoji` と入力した
 
 あと，データベースの新規ドキュメントでアイコンを指定しない場合は断片的なメモ
 
-![](https://storage.googleapis.com/zenn-user-upload/fbf2d226b59a-20220301.png)
+![notion-workflow-fbf2d226b59a](https://storage.googleapis.com/zenn-user-upload/fbf2d226b59a-20220301.png)
 
 という感じで，使っています．
 
@@ -471,31 +473,31 @@ Notion では，これらを使いこなすことでレイアウトやデザイ�
 
 まず，Toggle list は折り畳み可能なブロックです．
 
-![](https://storage.googleapis.com/zenn-user-upload/1435b993ee47-20220301.png)
+![notion-workflow-1435b993ee47](https://storage.googleapis.com/zenn-user-upload/1435b993ee47-20220301.png)
 
 Toggle list を並べる場合は，色をつけると視認性が少し良くなります．
 
-![](https://storage.googleapis.com/zenn-user-upload/14927869e5a6-20220304.png)
+![notion-workflow-14927869e5a6](https://storage.googleapis.com/zenn-user-upload/14927869e5a6-20220304.png)
 
 次に Callout はアノテーションなどに使います．
 
-![](https://storage.googleapis.com/zenn-user-upload/63d05c3873da-20220301.png)
+![notion-workflow-63d05c3873da](https://storage.googleapis.com/zenn-user-upload/63d05c3873da-20220301.png)
 
 この Toggle list と callout を組み合わせることでレイアウトを整えていきます．
 
-![](https://storage.googleapis.com/zenn-user-upload/7ee8cc812a8e-20220301.png)
+![notion-workflow-7ee8cc812a8e](https://storage.googleapis.com/zenn-user-upload/7ee8cc812a8e-20220301.png)
 
 このように Callout の背景色を設定して，中に Toggle list を入れていくといった感じで作成します．もちろん，さらに入れ子にもできるし，インラインデータベースだって入れることができます．
 
 これ以外に Database の Gallery ビューを使ってレイアウトする方法があります．
 
-![](https://storage.googleapis.com/zenn-user-upload/a991e9d830c5-20220301.png)
+![notion-workflow-a991e9d830c5](https://storage.googleapis.com/zenn-user-upload/a991e9d830c5-20220301.png)
 
 この場合は，データベースのオプションから `Properties` を選択， `Card preview` を `None` ， `Card size` を `Small` に設定します．
 
 また，データベースの Board ビューもページナビとして使いやすいです．
 
-![](https://storage.googleapis.com/zenn-user-upload/438a485c8036-20220304.png)
+![notion-workflow-438a485c8036](https://storage.googleapis.com/zenn-user-upload/438a485c8036-20220304.png)
 
 :::info
 データベースの背景色は直接設定することはできませんが，Toggle list や Callout の中にデータベースを含めることで，擬似的に背景色を設定することができます．この場合，背景色は Toggle list や Callout 側で指定します．
@@ -511,19 +513,19 @@ Toggle list を並べる場合は，色をつけると視認性が少し良く�
 
 データベースページとは異なるもっと単純な表を作成することができます．以前はデータベースを作らなければいけなかったのですが，こちらを使いましょう．
 
-![](https://storage.googleapis.com/zenn-user-upload/30a995cb2402-20220304.png)
+![notion-workflow-30a995cb2402](https://storage.googleapis.com/zenn-user-upload/30a995cb2402-20220304.png)
 
 テーブルは本当に単純にできているので，実際に使ってみると機能が足りないと感じることがあります．例えば，一括で行を削除できなかったり，セルの操作が微妙にやりづらかったりします．その場合は，一度データベースに変換してから編集してみてください．テーブルからデータベースに変換するコマンドが用意されています．
 
-![](https://storage.googleapis.com/zenn-user-upload/16c735fd08ef-20220306.png)
+![notion-workflow-16c735fd08ef](https://storage.googleapis.com/zenn-user-upload/16c735fd08ef-20220306.png)
 
 データベースに変換すると次のようになります：
 
-![](https://storage.googleapis.com/zenn-user-upload/e4ed4e37c2b1-20220306.png)
+![notion-workflow-e4ed4e37c2b1](https://storage.googleapis.com/zenn-user-upload/e4ed4e37c2b1-20220306.png)
 
 あとはデータベースの状態で編集してから，テーブルに戻します．
 
-![](https://storage.googleapis.com/zenn-user-upload/e7b0dc0dcc8e-20220306.png)
+![notion-workflow-e7b0dc0dcc8e](https://storage.googleapis.com/zenn-user-upload/e7b0dc0dcc8e-20220306.png)
 
 :::caution
 この方法の注意として，テーブルに行ヘッダーがなければ勝手に追加されてしまうことです．また，データベースの状態でフィルターやソートなどの指定をしても，テーブルに戻すとリセットされます．
@@ -534,11 +536,11 @@ Toggle list を並べる場合は，色をつけると視認性が少し良く�
 
 データベースのプロパティに `Date` タイプを追加すればリマインド機能を利用することができます．
 
-![](https://storage.googleapis.com/zenn-user-upload/595f3795f34e-20220716.png)
+![notion-workflow-595f3795f34e](https://storage.googleapis.com/zenn-user-upload/595f3795f34e-20220716.png)
 
 指定した日付からどれくらい前に通知するかを選択することができます．ブラウザやデスクトップでは `All Updates` のところで知らせてくれます．スマホアプリの場合だとプッシュ通知されます．
 
-![](https://storage.googleapis.com/zenn-user-upload/74f6bb2af22e-20220716.png)
+![notion-workflow-74f6bb2af22e](https://storage.googleapis.com/zenn-user-upload/74f6bb2af22e-20220716.png)
 
 
 ### 数式
@@ -571,7 +573,7 @@ $$
 
 また，インライン数式なので，データベースのプロパティに設定することができます．
 
-![](https://storage.googleapis.com/zenn-user-upload/fb822d86e296-20220301.png)
+![notion-workflow-fb822d86e296](https://storage.googleapis.com/zenn-user-upload/fb822d86e296-20220301.png)
 
 インライン数式やブロック数式は汎用性が高いです．他にも，本文で使われている次の区切りも数式ブロックです：
 
@@ -583,7 +585,7 @@ $$
 
 データベースには `Formula` という数式プロパティを利用することができます．これを使って進捗ゲージを自動で示すことができます．表現方法は様々なので色々探してみてください．例えば
 
-![](https://storage.googleapis.com/zenn-user-upload/d2726adc9f37-20220301.png)
+![notion-workflow-d2726adc9f37](https://storage.googleapis.com/zenn-user-upload/d2726adc9f37-20220301.png)
 
 上記の Formula は下記の通りです：
 
@@ -599,7 +601,7 @@ https://www.redgregory.com/notion/2021/6/4/17-progress-bar-designs-in-notion
 :::info
 数式や値のプロパティで進捗ゲージを表示できるようになりました．
 
-![](/img/post/notion-workflow-230126140833.png)
+![notion-workflow-230126140833](/img/post/notion-workflow-230126140833.png)
 :::
 
 
@@ -607,48 +609,48 @@ https://www.redgregory.com/notion/2021/6/4/17-progress-bar-designs-in-notion
 
 データベースのデータ数が増えてくると，最初に表示される数が制限されることがあります．最初に表示される最大数はデータベースのプロパティで選択することができます．データベースで一括管理しているデータ数が多くなってくるので最初に制限された状態で表示されることも多くなってくることがあります．その場合はフィルターなどで調整するのですが，それとは別に常に特定の項は先頭に表示することができると便利です．ここではその方法を紹介します．例えば次のようなデータベースを作成します．このデータベースにはデータ数が 10 個以上あり，プロパティで最大 10 個表示に設定しています．
 
-![](https://storage.googleapis.com/zenn-user-upload/823c7a047342-20220301.png)
+![notion-workflow-823c7a047342](https://storage.googleapis.com/zenn-user-upload/823c7a047342-20220301.png)
 
 初期状態だと最大 10 個しか表示されておらず， `Load 50 more` をクリックすると表示されるデータ数が増えていきます．このデータベースがすべて表示された状態は次のとおりです．
 
-![](https://storage.googleapis.com/zenn-user-upload/971f28f1fcd3-20220301.png)
+![notion-workflow-971f28f1fcd3](https://storage.googleapis.com/zenn-user-upload/971f28f1fcd3-20220301.png)
 
 ここで `Game` は初期だと非表示状態ですが，これを常に先頭の方に位置するようにしてみます．
 
 まず，新規に `Pin` という項目を `Checkbox` で作成します．
 
-![](https://storage.googleapis.com/zenn-user-upload/22147e9e47c8-20220301.png)
+![notion-workflow-22147e9e47c8](https://storage.googleapis.com/zenn-user-upload/22147e9e47c8-20220301.png)
 
 作成したら `Game` の `Pin` にチェックをつけます．
 
-![](https://storage.googleapis.com/zenn-user-upload/23db119d66ed-20220301.png)
+![notion-workflow-23db119d66ed](https://storage.googleapis.com/zenn-user-upload/23db119d66ed-20220301.png)
 
 次にソートを追加します． 対象を `Pin` ，順番を `Descending` に設定します．
 
-![](https://storage.googleapis.com/zenn-user-upload/eab1f40c1570-20220301.png)
+![notion-workflow-eab1f40c1570](https://storage.googleapis.com/zenn-user-upload/eab1f40c1570-20220301.png)
 
 これで， `Game` が先頭に来ます．
 
-![](https://storage.googleapis.com/zenn-user-upload/74e309e71d15-20220301.png)
+![notion-workflow-74e309e71d15](https://storage.googleapis.com/zenn-user-upload/74e309e71d15-20220301.png)
 
 あとは， プロパティから `Pin` を非表示にして完了です．
 
-![](https://storage.googleapis.com/zenn-user-upload/5926d6aaf263-20220301.png)
+![notion-workflow-5926d6aaf263](https://storage.googleapis.com/zenn-user-upload/5926d6aaf263-20220301.png)
 
 もし，ソート条件を追加する場合は `Pin` の条件が一番上になるようにしてください．
 
-![](https://storage.googleapis.com/zenn-user-upload/2afa9f69a71b-20220301.png)
+![notion-workflow-2afa9f69a71b](https://storage.googleapis.com/zenn-user-upload/2afa9f69a71b-20220301.png)
 
 ピン留めしていることをわかりやすくするために絵文字を入れるのもありだと思います．
 
-![](https://storage.googleapis.com/zenn-user-upload/ce5ac380bbc1-20220301.png)
+![notion-workflow-ce5ac380bbc1](https://storage.googleapis.com/zenn-user-upload/ce5ac380bbc1-20220301.png)
 
 
 ### データベースの項目を一気に全画面表示で開く
 
 Notion のデータベースはページの集まりです．各データはページとして開くことができます．普通はデータの `Name` プロパティにカーソルを合わせて `OPEN` (開く) をクリックします．
 
-![](https://storage.googleapis.com/zenn-user-upload/72e68ea00be3-20220723.png)
+![notion-workflow-72e68ea00be3](https://storage.googleapis.com/zenn-user-upload/72e68ea00be3-20220723.png)
 
 :::info
 2022年７月のアップデートで「開く」にサイドピークおよびフルページで開くオプションが追加されました．詳しくは[こちら](https://www.notion.so/help/views-filters-and-sorts#open-pages-as)．
@@ -656,11 +658,11 @@ Notion のデータベースはページの集まりです．各データはペ�
 
 デフォルトではサイドピークになっています．これは画面の右側にプレビューが表示されます．全画面表示するには，プレビューモードから左上にある `Open as full page` をクリックする必要があります．
 
-![](https://storage.googleapis.com/zenn-user-upload/cef921afb315-20220723.png)
+![notion-workflow-cef921afb315](https://storage.googleapis.com/zenn-user-upload/cef921afb315-20220723.png)
 
 `Open` ボタンをサイドピークではなくフルページで開くように設定することができます．
 
-![](https://storage.googleapis.com/zenn-user-upload/75ceda872758-20220723.png)
+![notion-workflow-75ceda872758](https://storage.googleapis.com/zenn-user-upload/75ceda872758-20220723.png)
 
 サイドピークも便利なため場合によって使い分けられると便利です．残念ながら現在はどちらかしか選べません．ちなみに `Ctrl` キーを押しながら開くと新しいウィンドウで開きます．
 
@@ -668,7 +670,7 @@ Notion のデータベースはページの集まりです．各データはペ�
 
 まず `URL` プロパティを使ってページのリンクを設定する方法が考えられます．これはページのリンクをコピーして貼り付けるだけなのでとても簡単です．ただし，ブラウザ上で作業している人ならこれで十分なのですが，Desktop版を使用している場合はこれではできません．プロパティにはブロックを含めることはできませんが，インラインなら使えるものがあります．まずはテキスト形式のプロパティを作成します．ここでは `Full Mode` としました．そこに `@` や `[[` を使って対応する項目へのリンクを作成します．
 
-![](https://storage.googleapis.com/zenn-user-upload/f8b959ae00ae-20220301.png)
+![notion-workflow-f8b959ae00ae](https://storage.googleapis.com/zenn-user-upload/f8b959ae00ae-20220301.png)
 
 あとはリンクをクリックすれば一気に全画面表示で開くことができます．ただし，この方法は Table ビューでしか使えないので注意してください．とはいえ，開くページのコンテンツが大きいほど，プレビューモードを経由して全画面表示すると無駄な処理が増えるので，あらかじめ全画面表示するつもりなら，こちらのほうが手っ取り早いとは思います．
 
@@ -701,7 +703,7 @@ Notion のデータベースはページの集まりです．各データはペ�
 
 例えば Table ビューなどの下部には集計値といった値を表示する機能があります．フィルターでカウントしたいタグを設定して，ここの集計値で確認します．
 
-![](https://storage.googleapis.com/zenn-user-upload/210d8e0cb9e5-20220719.png)
+![notion-workflow-210d8e0cb9e5](https://storage.googleapis.com/zenn-user-upload/210d8e0cb9e5-20220719.png)
 
 これがお手軽ですが，一度に１つのカウントしか確認できないため，ビューを作成したり，毎回フィルターを設定したりする必要があります．なにより一度に複数のカウントを確認することができません．（ビューブロックそのものを複数配置というのもありえなくはないですが…）
 
@@ -720,11 +722,11 @@ Notion のデータベースはページの集まりです．各データはペ�
 
 `※1`: `SampleDB` と `SampleDBCount` のリレーション
 
-![](https://storage.googleapis.com/zenn-user-upload/adce0275cb96-20220719.png)
+![notion-workflow-adce0275cb96](https://storage.googleapis.com/zenn-user-upload/adce0275cb96-20220719.png)
 
 結果は次のようになります：
 
-![](https://storage.googleapis.com/zenn-user-upload/04bdb4207e94-20220719.png)
+![notion-workflow-04bdb4207e94](https://storage.googleapis.com/zenn-user-upload/04bdb4207e94-20220719.png)
 
 何をしているかというと，ロールアップによって対象のページの全てのタグが１つにまとめられます．重要なのは，ロールアップの計算を「オリジナルを表示」に設定することで，設定されているタグが重複関係なくすべて１つにまとめられます．それは Formula から１つの文字列として参照できます．そこで，数式では文字列からカウントしたいタグの文字列を置換して削除し，削除前と削除後の文字数の差分を使ってカウントを求めています．これでカウントしたいタグ（マルチセレクト）ごとにプロパティを作成して数式を設定すれば一度に複数のカウントを確認することができます．ただし，この方法の欠点として次のようなものがあります：
 
@@ -744,7 +746,7 @@ Notion のデータベースはページの集まりです．各データはペ�
 
 マルチカラムブロックの作成が一気にできるようになったみたいです．
 
-![](https://storage.googleapis.com/zenn-user-upload/3a6451f510ae-20220714.png)
+![notion-workflow-3a6451f510ae](https://storage.googleapis.com/zenn-user-upload/3a6451f510ae-20220714.png)
 
 
 ### テンプレートボタン
@@ -756,13 +758,13 @@ Notion のデータベースはページの集まりです．各データはペ�
 
 ### カラーサンプル
 
-![](https://storage.googleapis.com/zenn-user-upload/c8cf90d21dc1-20220301.png)
+![notion-workflow-c8cf90d21dc1](https://storage.googleapis.com/zenn-user-upload/c8cf90d21dc1-20220301.png)
 
-![](https://storage.googleapis.com/zenn-user-upload/77312c092af2-20220301.png)
+![notion-workflow-77312c092af2](https://storage.googleapis.com/zenn-user-upload/77312c092af2-20220301.png)
 
-![](https://storage.googleapis.com/zenn-user-upload/ca875c543972-20220301.png)
-    
-![](https://storage.googleapis.com/zenn-user-upload/66b5db0060ce-20220301.png)
+![notion-workflow-ca875c543972](https://storage.googleapis.com/zenn-user-upload/ca875c543972-20220301.png)
+
+![notion-workflow-66b5db0060ce](https://storage.googleapis.com/zenn-user-upload/66b5db0060ce-20220301.png)
 
 
 ### カバー
@@ -785,7 +787,7 @@ https://notionv5.vyshnav.xyz/
 
 これらを使うとこんな感じで調整できます：
 
-![](https://storage.googleapis.com/zenn-user-upload/b867794e703c-20220301.png)
+![notion-workflow-b867794e703c](https://storage.googleapis.com/zenn-user-upload/b867794e703c-20220301.png)
 
 :::caution
 このようなアイコンは，ライトテーマ用とダークテーマ用にそれぞれ用意されている事も多いです．個人用途だったら特に問題はないと思いますが，多人数で共有している場合は，人によって使用しているテーマが違うことがあるので注意が必要です．
@@ -846,25 +848,25 @@ div.notion-darkt-theme .notion-scorll::-webkit-scrollbar {
 下記の４種類があるので、お好みのものをコピペして埋め込みブロックを作成してください．
 ただし、Windowsでしか確認していないので、MacOSでは見た目が大きく違うと思います．
 
-![](https://storage.googleapis.com/zenn-user-upload/c088bf74e443-20221001.png)
+![notion-workflow-c088bf74e443](https://storage.googleapis.com/zenn-user-upload/c088bf74e443-20221001.png)
 
 ```
 https://mebiusbox.github.io/notion_widget/
 ```
 
-![](https://storage.googleapis.com/zenn-user-upload/929eb78f5bd3-20221001.png)
+![notion-workflow-929eb78f5bd3](https://storage.googleapis.com/zenn-user-upload/929eb78f5bd3-20221001.png)
 
 ```
 https://mebiusbox.github.io/notion_widget/mmdd.html
 ```
 
-![](https://storage.googleapis.com/zenn-user-upload/668542c62d97-20221001.png)
+![notion-workflow-668542c62d97](https://storage.googleapis.com/zenn-user-upload/668542c62d97-20221001.png)
 
 ```
 https://mebiusbox.github.io/notion_widget/ja.html
 ```
 
-![](https://storage.googleapis.com/zenn-user-upload/f69cbe7db533-20221001.png)
+![notion-workflow-f69cbe7db533](https://storage.googleapis.com/zenn-user-upload/f69cbe7db533-20221001.png)
 
 ```
 https://mebiusbox.github.io/notion_widget/mmdd_ja.html
