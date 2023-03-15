@@ -1,5 +1,5 @@
 ---
-title: 研究したこと
+title: 研究
 description: 書いたものやソースコード、リンクなど
 keywords:
   - 物理ベースレンダリング
@@ -15,7 +15,7 @@ last_update:
   author: mebiusbox
 ---
 
-# 研究したこと
+# 研究
 
 import Bookmark from '@site/src/components/Markdown/WebBookmark.tsx'
 
