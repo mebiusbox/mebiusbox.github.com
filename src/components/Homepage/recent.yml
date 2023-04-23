@@ -1,3 +1,7 @@
+- name: 2023-04-23-rust-book
+  date: 2023-04-23
+  title:
+    ja: 「動かして学ぶ！Rust入門」の執筆
 - name: 2023-01-17-notion-wbs
   date: 2023-01-17
   title:
@@ -18,7 +22,3 @@
   title:
     ja: リニューアル：Docusaurusへ移行
     en: Migration to Docusaurus
-- name: 2018-02-27-diary
-  date: 2018-02-27
-  title:
-    ja: 自前ライブラリの整備
