@@ -64,17 +64,19 @@ Windows10 64bit
 `items.json` ファイルは JSON 形式です。
 例えば、`C:\images\背景` のフォルダへ移動するボタンを追加する場合、
 
-	[
-		{
-			"Name":"カテゴリ１",
-			”Items":[
-				{
-					"Name":"背景",
-					"Path":"C:\\images\\背景"
-				}
-			]
-		}
-	]
+```
+[
+    {
+        "Name":"カテゴリ１",
+        ”Items":[
+            {
+                "Name":"背景",
+                "Path":"C:\\images\\背景"
+            }
+        ]
+    }
+]
+```
 
 となります。最初の `Name` はカテゴリです。`Items` はカテゴリに属するボタンの集まりです
 `Items` には `Name` と `Path` をセットで指定します。
@@ -84,34 +86,38 @@ Windows10 64bit
 あるフォルダに入っているサブフォルダをすべて登録することが出来ます。
 例えば `C:\images\背景`, `C:\images\人物` があったとき、`C:\images` を登録する場合は
 
-	[
-		{
-			"Name":"images",
-			"Path":"C:\\images"
-		}
-	]
+```
+[
+    {
+        "Name":"images",
+        "Path":"C:\\images"
+    }
+]
+```
 
 となります。カテゴリ `images` に `背景`, `人物` のフォルダボタンが追加されます。
 また、この方法で登録したカテゴリには `New Folder...` ボタンが表示され、新規フォルダをすぐに作成することが出来ます。
 
 例えば `items.json` は次のようになります。
 
-	[
-		{
-			"Name":"カテゴリ１",
-			"Items":[
-				{
-					"Name":"背景",
-					"Path":"C:\\images\\背景"
-				}
-			]
-		},
+```
+[
+    {
+        "Name":"カテゴリ１",
+        "Items":[
+            {
+                "Name":"背景",
+                "Path":"C:\\images\\背景"
+            }
+        ]
+    },
 
-		{
-			"Name":"images",
-			"Path":"C:\\images"
-		}
-	]
+    {
+        "Name":"images",
+        "Path":"C:\\images"
+    }
+]
+```
 
 
 

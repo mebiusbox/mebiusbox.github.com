@@ -74,7 +74,7 @@ if __name__ == '__main__':
 ---|---
 Name | AddBom
 Location | ruby.exe のパス
-Arguments | \<AddBom.rbのパス\> ${resource_loc}
+Arguments | `<AddBom.rbのパス\> ${resource_loc}`
 
 ### AddBom.py の場合
 
@@ -82,7 +82,7 @@ Arguments | \<AddBom.rbのパス\> ${resource_loc}
 ---|---
 Name | AddBom
 Location | python.exe のパス
-Arguments | \<AddBom.pyのパス\> ${resource_loc}
+Arguments | `<AddBom.pyのパス\> ${resource_loc}`
 
 ## 使い方
 
