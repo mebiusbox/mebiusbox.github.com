@@ -57,24 +57,23 @@
 	</head>
 	<body>
 		<div id="info">
-			<a href="https://github.com/mebiusbox/pixy.js">pixy.js</a> + <a href="http://threejs.org" target="_blank">three.js</a> - Area Light
+			<a href="https://github.com/mebiusbox/pixy.js">pixy.js</a> + <a href="http://threejs.org" target="_blank">three.js</a><br />PBR (based on UE4, the sphere in frame is Oren-Nayer model)
 		</div>
 		<div id="progress">
 			<span id="message">Loading...</span>
 			<center>
 				<div id="progressbar" class="shadow"><div id="bar" class="shadow"></div></div>
 			</center>
-		</center>
-		
+		</div>
 		<script type="importmap">
 			{
 				"imports": {
-					"three": "https://unpkg.com/three@0.158.0/build/three.module.js",
-					"three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/",
+					"three": "../node_modules/three/build/three.module.js",
+					"three/addons/": "../node_modules/three/examples/jsm/",
 					"pixy": "../build/pixy.module.min.js"
 				}
 			}
 		</script>
-		<script type="module" src="shader_area_light.js"></script>
+		<script type="module" src="shader_simple.js"></script>
 	</body>
 </html>

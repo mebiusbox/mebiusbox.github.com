@@ -1,116 +1,74 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<style>
+			body {
+				font-family: 'Merriweather', 'UD デジタル 教科書体 NK-R', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', Meiryo,
+					Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
+				padding: 16px;
+				color: #4f5155;
+				background-color: #eee;
+			}
+			div#wrap li {
+				line-height: 1.6em;
+			}
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<link href="../../mebiusbox.css" rel="stylesheet" type="text/css" />
-		<link href="../../mebiusbox_guide.css" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="../../mebiusbox.js"></script>
-		<!--[if lt IE 7]>
-        <script type="text/javascript" src="../lib/js/unitpngfix.js"></script>
-		<![endif]-->
-        <title>Mebiusbox software</title>
-    </head>
-    <body>
+			#footer {
+				background-color: transparent;
+				font-size: 0.89em;
+				padding: 16px 0 15px 0;
+				margin: 20px 0 0 0;
+				text-align: center;
+			}
+		</style>
+		<title>Samples - Pixy.js</title>
+	</head>
+	<body>
+		<div id="container">
+			<h1>Pixy.js</h1>
 
-<div id="container">
-<div id="header">
-	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
-		<tr>
-			<th><a href="./index.html">mebiusbox software</a></th>
-			<td id="searchbox"><form method="get" action="http://www.google.com/search"><input class="input" type="hidden" name="as_sitesearch" id="as_sitesearch" value="mebiusbox.crap.jp/" />検索&nbsp; <input type="text" class="input" style="width:200px;" name="q" id="q" size="31" maxlength="255" value="" />&nbsp;<input type="submit" class="submit" name="sa" value="Go" /></form></td>
-		</tr>
-	</table>
-</div><!-- header -->
-<div id="content">
-<br class="clear" />
-<br />
+			<div id="wrap">
+				<ul>
+					<li><a href="shader_simple.html">Simple Sphere</a></li>
+					<li><a href="shader_phong.html">Phong Shading</a></li>
+					<li>
+						<a href="shader_texture.html"
+							>Texture Mapping (Color, Normal, Specular, Ambient Occlusion, Reflection, Fresnel)</a
+						>
+					</li>
+					<li><a href="shader_glass.html">Glass</a></li>
+					<li><a href="shader_fog.html">Fog, Rim Light, Light Map</a></li>
+					<li><a href="shader_displacement.html">Displacemnt Map, Inner Glow, Line Glow</a></li>
+					<li><a href="shader_innerglow.html">Inner Glow</a></li>
+					<li><a href="shader_projection.html">UV Projection</a></li>
+					<li><a href="shader_velvet.html">Velvet, Distortion, UV Scroll</a></li>
+					<li><a href="shader_sky.html">Scattering, Ocean</a></li>
+					<li><a href="shader_standard.html">PBR (based on UE4, Oren-Nayar)</a></li>
+					<li><a href="shader_overlay.html">Overlay</a></li>
+					<li><a href="shader_grass.html">Grass, Shadow, Instance</a></li>
+					<li><a href="shader_deferred.html">Deferred, Bloom, Tone Mapping</a></li>
+					<li><a href="shader_area_light_hack.html">Sphere Area Light (roughness hack)</a></li>
+					<li><a href="shader_tube_light_hack.html">Tube Area Light (roughness hack)</a></li>
+					<li><a href="shader_area_light.html">Area Light</a></li>
+					<li><a href="shader_parallax.html">Parallax, Distortion</a></li>
+					<li><a href="shader_parallax_occlusion.html">Parallax Occlusion Mapping, Relief Mapping</a></li>
+					<li><a href="shader_dither.html">Dithering</a></li>
+					<li><a href="softparticle.html">GPU particle</a></li>
+					<li><a href="shader_colorbalance.html">Color Balance</a></li>
+					<li><a href="shader_tonemap.html">Tone Mapping</a></li>
+					<li><a href="fxgen.html">EffectTextureMaker</a></li>
+				</ul>
+			</div>
 
-<script type="text/javascript"><!--
-google_ad_client = "ca-pub-4921759935398373";
-/* ad_top */
-google_ad_slot = "7667956147";
-google_ad_width = 728;
-google_ad_height = 90;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
+			<h2>ソースコード</h2>
+			<div class="wrap">
+				<a href="https://github.com/mebiusbox/pixy.js">github</a>
+			</div>
 
-<br />
-
-<h1>Pixy.js</h1>
-<h2>デモ</h2>
-
-<div class="wrap">
-<ul>
-<li><a href="shader_phong.html">Phong Shading</a></li>
-<li><a href="shader_texture.html">Texture Mapping (Color, Normal, Specular, Ambient Occlusion, Reflection, Fresnel)</a></li>
-<li><a href="shader_glass.html">Glass</a></li>
-<li><a href="shader_fog.html">Fog, Rim Light, Light Map</a></li>
-<li><a href="shader_displacement.html">Displacemnt Map, Inner Glow, Line Glow</a></li>
-<li><a href="shader_innerglow.html">Inner Glow</a></li>
-<li><a href="shader_projection.html">UV Projection</a></li>
-<li><a href="shader_velvet.html">Velvet, Distortion, UV Scroll</a></li>
-<li><a href="shader_sky.html">Scattering, Ocean</a></li>
-<li><a href="shader_standard.html">PBR (based on UE4, Oren-Nayar)</a></li>
-<li><a href="shader_overlay.html">Overlay</a></li>
-<li><a href="shader_grass.html">Grass, Shadow, Instance</a></li>
-<li><a href="shader_deferred.html">Deferred, Bloom, Tone Mapping</a></li>
-<li><a href="shader_area_light_hack.html">Sphere Area Light (roughness hack)</a></li>
-<li><a href="shader_tube_light_hack.html">Tube Area Light (roughness hack)</a></li>
-<li><a href="shader_area_light.html">Area Light</a></li>
-<li><a href="shader_parallax.html">Parallax, Distortion</a></li>
-<li><a href="shader_parallax_occlusion.html">Parallax Occlusion Mapping, Relief Mapping</a></li>
-<li><a href="shader_dither.html">Dithering</a></li>
-<li><a href="softparticle.html">Soft, GPU particle</a></li>
-<li><a href="shader_colorbalance.html">Color Balance</a></li>
-<li><a href="shader_tonemap.html">Tone Mapping</a></li>
-<li><a href="fxgen.html">EffectTextureMaker</a></li>
-</ul>
-</div>
-
-<h2>ソースコード</h2>
-<div class="wrap">
-  <a href="https://github.com/mebiusbox/pixy.js">github</a>
-</div>
-
-<br class="clear" />
-<script type="text/javascript"><!--
-google_ad_client = "ca-pub-4921759935398373";
-/* ad_page_bottom */
-google_ad_slot = "4223868627";
-google_ad_width = 728;
-google_ad_height = 90;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
-			
-    </div><!-- content -->
-	
-	<br class="clear" />
-	<div id="footer">
-		&copy;&nbsp;2006-2019 mebiusbox software.<br />
-		Copyright (C) 2009 Yusuke Kamiyamane. All rights reserved.<br />
-		contact:mebiusbox[at]gmail[dot]com<br />
-	</div>
-
-</div><!-- container -->
-
-<script type="text/javascript" src="http://mebiusbox.crap.jp/report.js"></script>
-<script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-try {
-var pageTracker = _gat._getTracker("UA-5766141-1");
-pageTracker._trackPageview();
-} catch(err) {}</script>
-
-
-</body>
+			<br class="clear" />
+			<div id="footer">&copy;&nbsp;2006-2023 mebiusbox</div>
+		</div>
+		<!-- container -->
+	</body>
 </html>
