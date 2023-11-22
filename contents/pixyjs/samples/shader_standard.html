@@ -1,349 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>three.js</title>
-    <meta charset="utf-8">
+	<head>
+		<title>three.js</title>
+		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <style>
-      body {
-        color: #fff;
-        font-family: Monospace;
-        font-size: 13px;
-        text-align: center;
-        font-weight: bold;
-        
-        background-color: #000;
-        margin: 0px;
-        overflow: hidden;
-      }
-      
-      #info {
-        position: absolute;
-        padding: 10px;
-        width: 100%;
-        text-align: center;
-        color: #fff;
-      }
-      
-      #progress { 
-        color: red,
-        top: 7em;
-        width: 100px;
-        font-size: 3em;
-        font-variant: samll-caps;
-        font-weight: bold;
-        position: absolute;
-        z-index: 100;
-        text-align: center;
-        text-shadow: #000 0px 0px 10px;
-        display: none;
-      }
-      
-      #progressbar {
-        text-align: center;
-        background: white;
-        width: 250px;
-        height: 10px;
-      }
-      
-      #bar {
-        background: #d00;
-        width: 50px;
-        height: 10px;
-      }
-      
-      a { color: orange; }
-    </style>
-  </head>
-  <body>
-    <div id="info">
-      <a href="https://github.com/mebiusbox/pixy.js">pixy.js</a> + <a href="http://threejs.org" target="_blank">three.js</a><br />PBR (based on UE4, the sphere in frame is Oren-Nayer model)
-    </div>
-    <div id="progress">
-      <span id="message">Loading...</span>
-      <center>
-        <div id="progressbar" class="shadow"><div id="bar" class="shadow"></div></div>
-      </center>
-    </center>
-    
-    <script src="js/three.min.js"></script>
-    <script src="js/WebGL.js"></script>
-    <script src="js/controls/OrbitControls.js"></script>
-    <script src="js/libs/dat.gui.min.js"></script>
-    <script src="js/libs/stats.min.js"></script>
-    <script src="js/utils/BufferGeometryUtils.js"></script>
-    <script src="../build/pixy.js"></script>
-    <script>
-      if (THREE.WEBGL.isWebGLAvailable() === false) {
-        document.body.appendChild(THREE.WEBGL.getWebGLErrorMessage());
-      }
-      
-      var camera, controls, scene, renderer;
-      var stats, clock = new THREE.Clock();
-      var lights = {};
-      var textures = {};
-      var shader, orenNayarShader;
-      var gui, parameters;
-      var ready = false;
-      
-      init();
-      // render();
-      animate();
-      
-      function init() {
-        
-        initGraphics();
-        initScene();
-        initPost();
-        initGui();
-        
-        // EVENTS
-        
-        window.addEventListener('resize', onWindowResize, false);
-        
-        THREE.DefaultLoadingManager.onProgress = function(item, loaded, total) {
-          var bar = 250;
-          bar = Math.floor(bar * loaded / total);
-          document.getElementById("bar").style.width = bar + "px";
-          
-          console.log(item, loaded, total);
-          
-          if (loaded == total) {
-            ready = true;
-            document.getElementById("message").style.display = "none";
-            document.getElementById("progressbar").style.display = "none";
-            document.getElementById("progress").style.display = "none";
-            console.log("ready");
-          }
-        };
-      }
-      
-      function initGraphics() {
-        container = document.createElement('div');
-        document.body.appendChild(container);
-        
-        // RENDERER
-        
-        renderer = new THREE.WebGLRenderer({antialias: true});
-        renderer.setClearColor(0xAAAAAA);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        // renderer.gammaInput = false;
-        // renderer.gammaOutput = false;
-        // renderer.autoClear = false;
-        container.appendChild(renderer.domElement);
-        
-        // STATS
-        
-        stats = new Stats();
-				container.appendChild(stats.dom);
-      }
-      
-      function initScene() {
-        
-        // scene itself
-        scene = new THREE.Scene();
-        
-        // MARK: CAMERA
-        
-        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 8000);
-        camera.position.set(0, 0, 10);
-        
-        // MARK: CONTROLS
-        
-        controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.target.set(0,0,0);
-        controls.addEventListener('change', render);
-        
-        // MARK: LIGHTS
-        
-        // lights.ambient = new THREE.AmbientLight(0x333333);
-        // scene.add(lights.ambient);
-        
-        lights.direct = new THREE.DirectionalLight(0xFFFFFF, 1.0);
-        scene.add(lights.direct);
-        lights.directHelper = new THREE.DirectionalLightHelper(lights.direct, 0.5);
-        scene.add(lights.directHelper);
-        
-        // MARK: MATERIALS
-        
-        shader = new PIXY.Shader();
-        // shader.enable("NOLIT");
-        shader.enable("DIRECTLIGHT", 1);
-        // shader.enable("POINTLIGHT", 1);
-        // shader.enable("SPOTLIGHT", 1);
-        // shader.enable("PHONG");
-        shader.enable("STANDARD");
-        // shader.enable("ORENNAYER");
-        shader.enable("ROUGHNESSMAP");
-        // shader.enable("METALNESSMAP");
-        shader.enable("REFLECTION");
-        // shader.enable("FRESNEL");
-        // shader.enable("VELVET");
-        // shader.enable("AMBIENT");
-        // shader.enable("HEMISPHERE");
-        // shader.enable("INNERGLOW");
-        // shader.enable("INNERGLOWSUBTRACT");
-        // shader.enable("RIMLIGHT");
-        shader.enable("COLORMAP");
-        // shader.enable("NORMALMAP");
-        shader.enable("BUMPMAP");
-        // shader.enable("SPECULARMAP");
-        // shader.enable("AOMAP");
-        // shader.enable("PROJECTIONMAP");
-        // shader.enable("DISTORTION");
-        // shader.enable("UVSCROLL");
-        // shader.enable("UVPROJECTION");
-        // shader.enable("GLASS");
-        shader.build();
-        // console.log(shader.uniforms);
-        // console.log(shader._generateVertexShader());
-        // console.log(shader._generateFragmentShader());
-        
-        orenNayarShader = new PIXY.Shader();
-        orenNayarShader.enable("DIRECTLIGHT", 1);
-        orenNayarShader.enable("STANDARD");
-        orenNayarShader.enable("ORENNAYAR");
-        orenNayarShader.enable("ROUGHNESSMAP");
-        orenNayarShader.enable("REFLECTION");
-        orenNayarShader.enable("COLORMAP");
-        orenNayarShader.enable("BUMPMAP");
-        orenNayarShader.build();
-        
-        // MARK: TEXTURES
-        
-        var loadTexture = function(loader, path) {
-          return loader.load(path, function(texture) {
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-          });
-        };
-        var textureLoader = new THREE.TextureLoader();
-        textures.color = loadTexture(textureLoader, 'assets/textures/brick_diffuse.jpg');
-        textures.normal = loadTexture(textureLoader, 'assets/textures/brick_bump.jpg');
-        textures.roughness = loadTexture(textureLoader, 'assets/textures/brick_roughness.jpg');
-        textures.white = loadTexture(textureLoader, 'assets/textures/white.png');
-        textures.black = loadTexture(textureLoader, 'assets/textures/black.png');
-        shader.uniforms.tDiffuse.value = textures.color;
-        shader.uniforms.tNormal.value = textures.normal;
-        shader.uniforms.tRoughness.value = textures.roughness;
-        
-        // shader.uniforms.tDiffuse.value = textureLoader.load('assets/textures/SlateTiles/SlateTiles_col.png');
-        // shader.uniforms.tNormal.value = textureLoader.load('assets/textures/SlateTiles/SlateTiles_nrm.png');
-        // shader.uniforms.tSpecular.value = textureLoader.load('assets/textures/SlateTiles/SlateTiles_spec.png');
-        // shader.uniforms.tAO.value = textureLoader.load('assets/textures/SlateTiles/SlateTiles_ao.png');
-        
-        // MARK: ENVIRONMENT MAP
-        
-        var path = 'assets/textures/cube/skybox/';
-        var urls = [
-          path + 'px.jpg', path + 'nx.jpg',
-          path + 'py.jpg', path + 'ny.jpg',
-          path + 'pz.jpg', path + 'nz.jpg'
-        ];
-        
-        shader.uniforms.tEnvMap.value = new THREE.CubeTextureLoader().load(urls, function(texture) {
-          texture.generateMipmaps = true;
-          texture.needsUpdate = true;
-          scene.background = texture; 
-        });
-        
-        // MARK: MODELS
-        
-        var sphereGeometry = new THREE.SphereBufferGeometry(2, 64, 64);
-				var sphere = new THREE.Mesh(sphereGeometry, shader.material);
-        THREE.BufferGeometryUtils.computeTangents(sphere.geometry);
-        sphere.position.x = -2.5;
-        scene.add(sphere);
-        
-				sphere = new THREE.Mesh(sphereGeometry, orenNayarShader.material);
-        THREE.BufferGeometryUtils.computeTangents(sphere.geometry);
-        sphere.position.x = 2.5;
-        scene.add(sphere);
-        
-        var geo = new THREE.PlaneGeometry(4,4);
-        var plane = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({color: 0xffffff, wireframe: true}));
-        plane.position.x = 2.5;
-        scene.add(plane);
-        
-        // scene.add(new THREE.AxisHelper(10));
-        // scene.add(new THREE.GridHelper(20,20));
-      }
-      
-      function initGui() {
-        
-        shader.uniforms.diffuseColor.value.setHex(0xff0000);
-        shader.uniforms.directLights.value[0].direction.set(-1,1,1).normalize();
-        shader.uniforms.bumpiness.value = 0.01;
-        shader.uniforms.roughness.value = 0.0;
-        shader.uniforms.metalness.value = 0.5;
-        
-        results = PIXY.ShaderUtils.GenerateShaderParametersGUI(shader);
-        gui = results.gui;
-        parameters = results.parameters;
-        
-        gui.__folders.Base.__controllers[2].__max = 2.0;
-        
-        h = gui.addFolder("Texture");
-        parameters.color = true;
-        parameters.normal = true;
-        parameters.roughness = true;
-        h.add(parameters, "color").onChange(function(value) {
-          shader.uniforms.tDiffuse.value = value ? textures.color : textures.white;
-        });
-        h.add(parameters, "normal").onChange(function(value) {
-          shader.uniforms.tNormal.value = value ? textures.normal : textures.black;
-        });
-        h.add(parameters, "roughness").onChange(function(value) {
-          shader.uniforms.tRoughness.value = value ? textures.roughness : textures.white;
-        });
-      }
-      
-      function initPost() {
-      }
-      
-      // EVENT HANDLERS
-      
-      function onWindowResize() {
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        
-        render();
-      }
-      
-      function animate() {
-        // shaderParameters.time += clock.getDelta();
-        requestAnimationFrame(animate, renderer.domElement);
-        render();
-      }
-      
-      function render() {
-        
-        if (!ready) return;
-        
-        stats.update();
-        
-        camera.updateMatrixWorld();
-        
-        lights.direct.position.copy(shader.uniforms.directLights.value[0].direction).normalize();
-        lights.direct.position.transformDirection(camera.matrixWorld);
-        lights.direct.position.multiplyScalar(5.0);
-        lights.direct.target.position.copy(lights.direct.position).multiplyScalar(0.9);
-        lights.direct.target.updateMatrixWorld();
-        lights.direct.color.copy(shader.uniforms.directLights.value[0].color);
-        lights.directHelper.update();
-
-        PIXY.ShaderUtils.UpdateShaderParameters(shader, parameters, camera);
-        
-        for (i in orenNayarShader.uniforms) {
-          orenNayarShader.uniforms[i].value = shader.uniforms[i].value;
-        }
-        
-        renderer.render(scene, camera);
-      }
-
-    </script>
-  </body>
+		<style>
+			body {
+				color: #fff;
+				font-family: Monospace;
+				font-size: 13px;
+				text-align: center;
+				font-weight: bold;
+				
+				background-color: #000;
+				margin: 0px;
+				overflow: hidden;
+			}
+			
+			#info {
+				position: absolute;
+				padding: 10px;
+				width: 100%;
+				text-align: center;
+				color: #fff;
+			}
+			
+			#progress { 
+				color: red;
+				top: 7em;
+				width: 100px;
+				font-size: 3em;
+				font-variant: samll-caps;
+				font-weight: bold;
+				position: absolute;
+				z-index: 100;
+				text-align: center;
+				text-shadow: #000 0px 0px 10px;
+				display: none;
+			}
+			
+			#progressbar {
+				text-align: center;
+				background: white;
+				width: 250px;
+				height: 10px;
+			}
+			
+			#bar {
+				background: #d00;
+				width: 50px;
+				height: 10px;
+			}
+			
+			a { color: orange; }
+		</style>
+	</head>
+	<body>
+		<div id="info">
+			<a href="https://github.com/mebiusbox/pixy.js">pixy.js</a> + <a href="http://threejs.org" target="_blank">three.js</a><br />PBR (based on UE4, the sphere in frame is Oren-Nayer model)
+		</div>
+		<div id="progress">
+			<span id="message">Loading...</span>
+			<center>
+				<div id="progressbar" class="shadow"><div id="bar" class="shadow"></div></div>
+			</center>
+		</div>
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+					"three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/",
+					"pixy": "../build/pixy.module.min.js"
+				}
+			}
+		</script>
+		<script type="module" src="shader_standard.js"></script>
+	</body>
 </html>
