@@ -74,9 +74,8 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.scss'),
         },
-        gtag: {
-          trackingID: 'G-DXXWEQB56E',
-          anonymizeIP: true,
+        googleTagManager: {
+          containerId: 'GTM-5WZWRT7N',
         },
       }),
     ],
