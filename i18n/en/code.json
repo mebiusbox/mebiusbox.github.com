@@ -17,7 +17,7 @@
   },
   "theme.ErrorPageContent.tryAgain": {
     "message": "Try again",
-    "description": "The label of the button to try again when the page crashed"
+    "description": "The label of the button to try again rendering when the React error boundary captures an error"
   },
   "theme.NotFound.title": {
     "message": "Page Not Found",
@@ -447,5 +447,9 @@
   },
   "homepage.donation": {
     "message": "For amazon gift, please send to {highlight}."
+  },
+  "mebiusbox.NotFound.p2": {
+    "message": "By any chance, are you looking for this page?",
+    "description": "The 2nd paragraph of the 404 page"
   }
 }
