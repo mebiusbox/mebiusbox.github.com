@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmebiusbox_docusaurus=self.webpackChunkmebiusbox_docusaurus||[]).push([[6576],{3079:s=>{s.exports=JSON.parse('{"label":"gitbook","permalink":"/en/blog/tags/gitbook","allTagsPath":"/en/blog/tags","count":2,"unlisted":false}')}}]);

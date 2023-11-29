@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmebiusbox_docusaurus=self.webpackChunkmebiusbox_docusaurus||[]).push([[590],{13888:s=>{s.exports=JSON.parse('{"label":"blender","permalink":"/blog/tags/blender","allTagsPath":"/blog/tags","count":2,"unlisted":false}')}}]);

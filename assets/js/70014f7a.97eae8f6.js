@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmebiusbox_docusaurus=self.webpackChunkmebiusbox_docusaurus||[]).push([[3573],{56323:s=>{s.exports=JSON.parse('{"label":"MkDocs","permalink":"/blog/tags/mk-docs","allTagsPath":"/blog/tags","count":1,"unlisted":false}')}}]);

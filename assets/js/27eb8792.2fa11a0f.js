@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmebiusbox_docusaurus=self.webpackChunkmebiusbox_docusaurus||[]).push([[6407],{35282:s=>{s.exports=JSON.parse('{"label":"Jekyll","permalink":"/blog/tags/jekyll","allTagsPath":"/blog/tags","count":5,"unlisted":false}')}}]);
