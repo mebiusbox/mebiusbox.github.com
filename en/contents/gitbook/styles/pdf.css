@@ -1,5 +1,0 @@
-h1 { border-bottom: 1px solid #000; padding-bottom: 3px; }
-h1:before, h2:before, h3:before, h4:before, h5:before {
-  color: #c30;
-  width: 50px;
-}
