@@ -1,6 +1,6 @@
 ---
-title: EffectTetureMaker
-description: EffectTetureMakerはブラウザで主にエフェクト用のテクスチャを作成することができるものです
+title: EffectTextureMaker
+description: EffectTextureMakerはブラウザで主にエフェクト用のテクスチャを作成することができるものです
 keywords:
   - EffectTextureMaker
   - Three.js

@@ -1,6 +1,6 @@
 ---
-title: EffectTetureMaker
-description: EffectTetureMaker is generating texture tool on the web browser
+title: EffectTextureMaker
+description: EffectTextureMaker is generating texture tool on the web browser
 keywords:
   - EffectTextureMaker
   - Three.js
