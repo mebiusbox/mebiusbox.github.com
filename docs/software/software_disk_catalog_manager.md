@@ -14,19 +14,21 @@ image: https://og-image-mebiusbox.vercel.app/api/og?title=DiskCatalogManager&sub
 DiskCatalogManagerは、ハードディスクやＣＤ－ＲＯＭ，ＤＶＤ－ＲＯＭ、ＵＳＢメモリなどの `メディア` に記録されているファイルやフォルダの情報を `カタログ` というデータに保存して管理するソフトウェアです。
 カタログを作成することで、あるファイルやフォルダがどのメディアに存在するかを、簡単に検索することができます。検索するときはメディアは不要ですので、ＣＤ－ＲＯＭの取替えやＵＳＢメモリなどの取り外しといった手間がかかりません。
 
-<table class="mbx-dl" cellPadding="0" cellSpacing="0" border="0">
+<table className="mbx-dl" cellPadding="0" cellSpacing="0" border="0">
+<tbody>
 	<tr>
 		<td>
-			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/DiskCatalogManagerSetup','Title':'DiskCatalogManagerSetup'});">
+			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank">
 				<em><img src="/img/download_exe.jpg" /></em>
 			</a>
 		</td>
 		<td>
-			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/DiskCatalogManager','Title':'DiskCatalogManager'});">
+			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank">
 				<em><img src="/img/download_zip.jpg" /></em>
 			</a>
 		</td>
 	</tr>
+</tbody>
 </table>
 
 
@@ -51,10 +53,10 @@ DiskCatalogManagerは、ハードディスクやＣＤ－ＲＯＭ，ＤＶＤ�
 動画のサムネイル作成にはその動画形式に対応した `DirectShowフィルタ` が必要です。
 
 ## スクリーンショット
-<div class="mbx-snap">
+<div className="mbx-snap">
 	<img src="/img/DiskCatalogManager_snap01.jpg" width="240" height="180" alt="snap01" border="0" />
 	<img src="/img/DiskCatalogManager_snap02.jpg" width="240" height="180" alt="snap02" border="0" />
-	<br class="mbx-clear" />
+	<br className="mbx-clear" />
 </div>
 
 ## 動作環境

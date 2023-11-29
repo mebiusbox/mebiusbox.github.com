@@ -12,7 +12,7 @@ Gitbook は Markdown 形式で書かれた文書から HTML や PDF, EPUB, MOBI 
 ## Node.js のインストール
 まず、Node.js が必要です。以下のサイトから LTS 版をダウンロードします。
 
-<i class="fa fa-external-link"></i>
+<i className="fa fa-external-link"></i>
 [Node.js](https://nodejs.org/)
 
 ダウンロードしたファイルを実行してインストールします。
@@ -32,7 +32,7 @@ gitbook の機能を使うときに自動でインストールされます。そ
 ## テストしてみる
 サンプルとして以下の文書をビルドしてみます。
 
-<i class="fa fa-external-link"></i>
+<i className="fa fa-external-link"></i>
 [Learn Javascript](https://github.com/GitbookIO/javascript)
 
 適当なフォルダを作成します。
@@ -74,7 +74,7 @@ mathjax を使う場合は以下のようになります。
 mathjax を使うためにはビルド環境が必要です。
 VisualStudio の最新版である 2015 を入れます。
 
-<i class="fa fa-external-link"></i>
+<i className="fa fa-external-link"></i>
 [VisualStudio 2015](https://www.microsoft.com/ja-jp/dev/products/visual-studio-2015.aspx)
 
 上記のサイトから Community 版をダウンロードしてインストールします。
@@ -90,7 +90,7 @@ VisualStudio の最新版である 2015 を入れます。
 次に python が必要になります。python には 2.x 系と 3.x 系がありますが 2.x 系をインストールします。
 以下のサイトから 2.7.x 系の最新版をダウンロードしてインストールします。
 
-<i class="fa fa-external-link"></i>
+<i className="fa fa-external-link"></i>
 [python](http://www.python.jp/)
 
 インストール先はデフォルトのままで構いません。
@@ -141,7 +141,7 @@ PDF などで数式を文書に含めるには `SVGexport` が必要です。
 PDF などの文書を作成するには `ebook-convert` が必要です。
 以下のサイトから `calibre` をダウンロードしてインストールします。
 
-<i class="fa fa-external-link"></i>
+<i className="fa fa-external-link"></i>
 [calibre](https://calibre-ebook.com/)
 
 ### pdf, epub, mobi 形式の作成

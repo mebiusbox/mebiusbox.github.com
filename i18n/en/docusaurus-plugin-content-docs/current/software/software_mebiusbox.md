@@ -16,19 +16,21 @@ Mebiusbox はファイル管理ソフト（ファイラ）です。
 基本的なファイル処理に加え、一括リネームでは正規表現が利用可能です。  
 基本的にキーボードで操作することを前提に作られていますが、マウスでも問題なく使えるように対応しています。
 
-<table class="mbx-dl" cellPadding="0" cellSpacing="0" border="0">
+<table className="mbx-dl" cellPadding="0" cellSpacing="0" border="0">
+<tbody>
 	<tr>
 		<td>
-			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/MebiusboxSetup','Title':'MebiusboxSetup'});">
+			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank">
 				<em><img src="/img/download_exe.jpg" /></em>
 			</a>
 		</td>
 		<td>
-			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/Mebiusbox','Title':'Mebiusbox'});">
+			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank">
 				<em><img src="/img/download_zip.jpg" /></em>
 			</a>
 		</td>
 	</tr>
+</tbody>
 </table>
 
 
@@ -59,14 +61,14 @@ Mebiusbox はファイル管理ソフト（ファイラ）です。
 * 細かい配色指定が可能
 
 ## スクリーンショット
-<div class="mbx-snap">
+<div className="mbx-snap">
     <img src="/img/Mebiusbox_snap01.jpg" width="240" height="180" alt="snap01" border="0" />
     <img src="/img/Mebiusbox_snap02.jpg" width="240" height="180" alt="snap02" border="0" />
 	<img src="/img/Mebiusbox_snap03.jpg" width="240" height="180" alt="snap03" border="0" />
 	<img src="/img/Mebiusbox_snap04.jpg" width="240" height="180" alt="snap04" border="0" />
 	<img src="/img/Mebiusbox_snap05.jpg" width="240" height="180" alt="snap05" border="0" />
 	<img src="/img/Mebiusbox_snap06.jpg" width="240" height="180" alt="snap06" border="0" />
-	<br class="mbx-clear" />
+	<br className="mbx-clear" />
 </div>
 
 ## 動作環境

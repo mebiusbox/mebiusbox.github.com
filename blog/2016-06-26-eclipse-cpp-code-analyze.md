@@ -27,7 +27,7 @@ Eclipse の C++ 開発環境に静的コード解析をいくつか追加しま�
 まずは cpplint を登録します。
 cpplint は以下の場所からダウンロードできます。
 
-<i class="fa fa-external-link"></i>
+<i className="fa fa-external-link"></i>
 [cpplint](https://github.com/google/styleguide/tree/gh-pages/cpplint)
 
 cpplint を実行するには python が必要です。
@@ -57,7 +57,7 @@ Arguments：`E:\cpplint.py ${resource_loc}`
 同じような手順で、cppcheck を登録します。
 cppcheck は以下の場所からダウンロードできます。
 
-<i class="fa fa-external-link"></i>
+<i className="fa fa-external-link"></i>
 [cppcheck](http://cppcheck.sourceforge.net/)
 
 ここでは 1.74 (64bit) をデフォルト設定のままインストールしました。
@@ -73,7 +73,7 @@ cppcheck はインクルードしたファイルが検索できないとエラ�
 
 SourceMonitor はメトリクス解析をやってくれます。以下の場所からダウンロードできます。
 
-<i class="fa fa-external-link"></i>
+<i className="fa fa-external-link"></i>
 [SourceMonitor](http://www.campwoodsw.com/sourcemonitor.html)
 
 ここではデフォルト設定のままインストールしました。こちらは次のように設定します。

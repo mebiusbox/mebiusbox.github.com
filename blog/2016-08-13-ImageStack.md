@@ -13,7 +13,7 @@ ImageStack というソフトを公開しました。
 
 ダウンロードは以下から。
 
-<a href="http://bit.ly/2bfP6oA" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/ImageStock','Title':'ImageStock'});">
+<a href="http://bit.ly/2bfP6oA" target="_blank">
 <img src="/assets/img/download_zip.jpg" />
 </a>
 

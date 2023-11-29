@@ -15,19 +15,21 @@ FileHammerはファイル削除ツールです。
 複数のルール（条件）を設定し、削除する対象を絞り込める機能が特徴です。
 また、空のフォルダを削除する機能もあります。
 
-<table class="mbx-dl" cellPadding="0" cellSpacing="0" border="0">
+<table className="mbx-dl" cellPadding="0" cellSpacing="0" border="0">
+<tbody>
 	<tr>
 		<td>
-			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileHammerSetupX64','Title':'FileHammerSetupX64'});">
+			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank">
 				<em><img src="/img/download_exe.jpg" /></em>
 			</a>
 		</td>
 		<td>
-			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileHammerX64','Title':'FileHammerX64'});">
+			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank">
 				<em><img src="/img/download_zip.jpg" /></em>
 			</a>
 		</td>
 	</tr>
+</tbody>
 </table>
 
 ## ルール
@@ -49,9 +51,9 @@ FileHammerはファイル削除ツールです。
 * 動画
 
 ## スクリーンショット
-<div class="mbx-snap">
+<div className="mbx-snap">
     <img src="/img/FileHammer_snap01.jpg" width="240" height="180" alt="snap01" border="0" />
-	<br class="mbx-clear" />
+	<br className="mbx-clear" />
 </div>
 
 ## 動作環境

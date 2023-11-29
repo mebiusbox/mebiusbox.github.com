@@ -13,15 +13,15 @@ image: https://og-image-mebiusbox.vercel.app/api/og?title=PackAssistant&subtitle
 # PackAssistant 1.6.0
 PackAssistant は複数のファイルを指定の容量をもつパックに、効率良く収まるように振り分けます。
 
-<table class="mbx-dl" cellPadding="0" cellSpacing="0" border="0">
+<table className="mbx-dl" cellPadding="0" cellSpacing="0" border="0">
 	<tr>
 		<td>
-			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PackAssitantSetupX64','Title':'PackAssistantSetupX64'});">
+			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank">
 				<em><img src="/img/download_exe.jpg" /></em>
 			</a>
 		</td>
 		<td>
-			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PackAssistantX64','Title':'PackAssistantX64'});">
+			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank">
 				<em><img src="/img/download_zip.jpg" /></em>
 			</a>
 		</td>
@@ -35,10 +35,10 @@ PackAssistant は複数のファイルを指定の容量をもつパックに、
 ライティングソフトのファイル登録時にＤ＆Ｄを利用することによって、簡単に登録することができます。
 
 ## スクリーンショット
-<div class="mbx-snap">
+<div className="mbx-snap">
 	<img src="/img/PackAssistant_snap01.jpg" width="240" height="180" alt="snap01" border="0" />
 	<img src="/img/PackAssistant_snap02.jpg" width="240" height="180" alt="snap02" border="0" />
-	<br class="mbx-clear" />
+	<br className="mbx-clear" />
 </div>
 
 ## 動作環境
