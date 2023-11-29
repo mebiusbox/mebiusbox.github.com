@@ -8,6 +8,7 @@
     "lib": [
       "es2021"
     ],
+    "jsx": "react-jsx",
   },
   "include": ["docusaurus-env.d.ts", "src/**/*", "plugins/**/*", "tools/**/*"],
   "exclude": ["static", "node_modules"]
