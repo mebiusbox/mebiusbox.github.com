@@ -12,8 +12,6 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 type SoftwareDescription = {
   [index: string]: string;
-  ja: string;
-  en: string;
 }
 
 type SoftwareInfo = {
@@ -30,11 +28,13 @@ type BlogInfo = {
 }
 
 function BlogItem({name, date, title}: BlogInfo) {
-  const dateStr = name.slice(0,11).replaceAll("-", "/");
-  const url = "/blog/" + dateStr + name.slice(11);
+  const { i18n } = useDocusaurusContext();
+  const dateStr = i18n.currentLocale === 'ja' ? date.toLocaleDateString('ja-JP') : date.toLocaleDateString('en-US');
+  const dateUrl = name.slice(0,11).replaceAll("-", "/");
+  const url = "/blog/" + dateUrl + name.slice(11);
   return (
     <li>
-      {date.toLocaleDateString()} : <Link to={url}> {title}</Link>
+      {dateStr} : <Link to={url}> {title}</Link>
     </li>
   );
 }
