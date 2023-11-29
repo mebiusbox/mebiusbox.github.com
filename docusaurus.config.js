@@ -1,9 +1,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/okaidia');
-const rlc = require('remark-link-card');
+import {themes as prismThemes} from 'prism-react-renderer';
 
 // const math = require('remark-math');
 // const katex = require('rehype-katex');
@@ -62,14 +60,12 @@ const config = {
           sidebarCollapsed: false,
           // remarkPlugins: [math],
           // rehypePlugins: [[katex, {strict: false}]],
-          remarkPlugins: [rlc],
         },
         blog: {
           showReadingTime: true,
           postsPerPage: 5,
           blogSidebarTitle: 'All posts',
           blogSidebarCount: 'ALL',
-          remarkPlugins: [rlc],
         },
         theme: {
           customCss: require.resolve('./src/css/custom.scss'),
@@ -153,7 +149,7 @@ const config = {
                 href: 'https://mebiusbox.booth.pm/',
               },
               {
-                label: 'Twitter',
+                label: 'X (Twitter)',
                 href: 'https://twitter.com/mebiusbox2',
               },
               {
@@ -175,9 +171,9 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} mebiusbox software.`,
       },
       prism: {
-        // theme: lightCodeTheme,
-        theme: darkCodeTheme,
-        darkTheme: darkCodeTheme,
+        // theme: prismThemes.github,
+        theme: prismThemes.okaidia,
+        darkTheme: prismThemes.okaidia,
         additionalLanguages: ['powershell'],
       },
       zoom: {
@@ -217,4 +213,4 @@ const config = {
     }),
 };
 
-module.exports = config;
+export default config;

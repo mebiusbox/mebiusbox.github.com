@@ -16,7 +16,7 @@ Mebiusbox はファイル管理ソフト（ファイラ）です。
 基本的なファイル処理に加え、一括リネームでは正規表現が利用可能です。  
 基本的にキーボードで操作することを前提に作られていますが、マウスでも問題なく使えるように対応しています。
 
-<table class="mbx-dl" cellpadding="0" cellspacing="0" border="0">
+<table class="mbx-dl" cellPadding="0" cellSpacing="0" border="0">
 	<tr>
 		<td>
 			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/MebiusboxSetup','Title':'MebiusboxSetup'});">

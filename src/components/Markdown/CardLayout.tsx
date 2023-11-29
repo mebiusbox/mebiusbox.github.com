@@ -35,15 +35,15 @@ export default function CardLayout({
 }): JSX.Element {
   return (
     <CardContainer href={href}>
-      <h2 className={clsx('text--truncate', styles.cardTitle)} title={title}>
+      <span className={clsx('text--truncate', styles.cardTitle)} title={title}>
         <i className={clsx(styles.cardIcon, awesomeicon)}>{icon}</i> {title}
-      </h2>
+      </span>
       {description && (
-        <p
+        <span
           className={clsx('text--truncate', styles.cardDescription)}
           title={description}>
           {description}
-        </p>
+        </span>
       )}
     </CardContainer>
   );

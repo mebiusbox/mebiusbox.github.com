@@ -15,7 +15,7 @@ FileHammerはファイル削除ツールです。
 複数のルール（条件）を設定し、削除する対象を絞り込める機能が特徴です。
 また、空のフォルダを削除する機能もあります。
 
-<table class="mbx-dl" cellpadding="0" cellspacing="0" border="0">
+<table class="mbx-dl" cellPadding="0" cellSpacing="0" border="0">
 	<tr>
 		<td>
 			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/FileHammerSetupX64','Title':'FileHammerSetupX64'});">

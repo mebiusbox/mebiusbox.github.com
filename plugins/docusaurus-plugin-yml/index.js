@@ -1,4 +1,4 @@
-module.exports = function (context, options) {
+export default function (context, options) {
   return {
     name: 'docusaurus-plugin-yml',
     configureWebpack(config, isServer, utils) {

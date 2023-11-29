@@ -4,7 +4,7 @@ import {useBlogPost} from '@docusaurus/theme-common/internal';
 import EditThisPage from '@theme/EditThisPage';
 import TagsListInline from '@theme/TagsListInline';
 import ReadMoreLink from '@theme/BlogPostItem/Footer/ReadMoreLink';
-import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, HatenaShareButton, HatenaIcon } from "react-share";
+import { FacebookShareButton, FacebookIcon, TwitterShareButton, XIcon, HatenaShareButton, HatenaIcon } from "react-share";
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useIsBrowser from '@docusaurus/useIsBrowser';
 import Giscus from '@site/src/components/GiscusComponent';
@@ -43,7 +43,7 @@ export default function BlogPostItemFooter() {
             <FacebookIcon size={shareConfig.size} round />
           </FacebookShareButton>
           <TwitterShareButton url={url} title={shareTitle} className={styles.shareButton}>
-            <TwitterIcon size={shareConfig.size} round />
+            <XIcon size={shareConfig.size} round />
           </TwitterShareButton>
           <HatenaShareButton url={url} title={shareTitle} className={styles.shareButton}>
             <HatenaIcon size={shareConfig.size} round />

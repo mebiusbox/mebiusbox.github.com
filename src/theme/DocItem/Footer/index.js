@@ -5,7 +5,7 @@ import {useDoc} from '@docusaurus/theme-common/internal';
 import LastUpdated from '@theme/LastUpdated';
 import EditThisPage from '@theme/EditThisPage';
 import TagsListInline from '@theme/TagsListInline';
-import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, HatenaShareButton, HatenaIcon } from "react-share";
+import { FacebookShareButton, FacebookIcon, TwitterShareButton, XIcon, HatenaShareButton, HatenaIcon } from "react-share";
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useIsBrowser from '@docusaurus/useIsBrowser';
 import Giscus from '@site/src/components/GiscusComponent';
@@ -75,7 +75,7 @@ export default function DocItemFooter() {
           <FacebookIcon size={shareConfig.size} round />
         </FacebookShareButton>
         <TwitterShareButton url={url} title={shareTitle} className={styles.shareButton}>
-          <TwitterIcon size={shareConfig.size} round />
+          <XIcon size={shareConfig.size} round />
         </TwitterShareButton>
         <HatenaShareButton url={url} title={shareTitle} className={styles.shareButton}>
           <HatenaIcon size={shareConfig.size} round />

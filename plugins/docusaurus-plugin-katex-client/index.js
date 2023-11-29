@@ -1,5 +1,5 @@
-const path = require("path");
-module.exports = function (context, options) {
+import path from "path";
+export default function (context, options) {
   return {
     name: 'docusaurus-plugin-katex-client',
     getClientModules() {

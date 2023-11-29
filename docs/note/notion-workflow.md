@@ -548,11 +548,11 @@ Toggle list を並べる場合は，色をつけると視認性が少し良く�
 今では，ブロックおよびインラインでの数式がサポートされています．実は数式は `TeX` で入力するのですが，これを使ってレイアウトに生かすことができます．
 
 $$
-\LARGE\textbf{\textsf{Header}} \\ \large\textsf{Sub Heading}
+\LARGE\textbf\{\textsf\{Header\}\} \\ \large\textsf\{Sub Heading\}
 $$
 
 ```latex
-\LARGE\textbf{\textsf{Header}} \\ \large\textsf{Sub Heading}
+\LARGE\textbf\{\textsf\{Header\}\} \\ \large\textsf\{Sub Heading\}
 ```
 
 また，このページの先頭にある `CONTENTS` の部分にも使っています．
@@ -565,7 +565,7 @@ $$
 
 今度はインライン数式を使ったちょっとしたテクニックを紹介します．これを使うと文書内にマーカーっぽい表現を行うことができます．ただし，本来のインライン数式の使い方ではないので，多用は禁物ですし，将来的に使えなくなる可能性も否定できません．
 
-本来，Notion 上でのテキストの色や背景色は特定の種類しか設定することができません．ですが，インライン数式を使うことで $\color{#FFF}\colorbox{#DD4A48}{\textsf{こんにちは！}}$ というようにユーザーが指定した色の背景色を設定することができます．Notion の標準の赤背景ですと こんにちは！  (この部分は Notion だと背景色が変わっています）というようになります．これを使うことで， $\color{#191919}\colorbox{#FFE162}{\textsf{黄色}}$ ， $\color{#191919}\colorbox{#86C6F4}{\textsf{青色}}$ といったことが可能です．これは次のような数式になっています：
+本来，Notion 上でのテキストの色や背景色は特定の種類しか設定することができません．ですが，インライン数式を使うことで $\color\{#FFF\}\colorbox\{#DD4A48\}\{\textsf\{こんにちは！\}\}$ というようにユーザーが指定した色の背景色を設定することができます．Notion の標準の赤背景ですと こんにちは！  (この部分は Notion だと背景色が変わっています）というようになります．これを使うことで， $\color\{#191919\}\colorbox\{#FFE162\}\{\textsf\{黄色\}\}$ ， $\color\{#191919\}\colorbox\{#86C6F4\}\{\textsf\{青色\}\}$ といったことが可能です．これは次のような数式になっています：
 
 ```latex
 \color{#FFF}\colorbox{#DD4A48}{\textsf{こんにちは！}}

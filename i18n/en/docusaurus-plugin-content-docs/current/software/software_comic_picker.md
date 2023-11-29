@@ -20,7 +20,7 @@ ComicPickerは画像をまとめた書庫ファイル、画像、PDF 文書を�
 書庫ファイル以外に、画像ファイルも整理することができます。
 その他に、ファイル名の変更や書庫ファイルから画像ファイルを抽出して、新しい書庫ファイルや、PDF文書を作成することもできます。
 
-<table class="mbx-dl" cellpadding="0" cellspacing="0" border="0">
+<table class="mbx-dl" cellPadding="0" cellSpacing="0" border="0">
 	<tr>
 		<td>
 			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/ComicPickerSetup','Title':'ComicPickerSetup'});">

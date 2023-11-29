@@ -14,7 +14,7 @@ image: https://og-image-mebiusbox.vercel.app/api/og?title=DiskCatalogManager&sub
 DiskCatalogManagerは、ハードディスクやＣＤ－ＲＯＭ，ＤＶＤ－ＲＯＭ、ＵＳＢメモリなどの `メディア` に記録されているファイルやフォルダの情報を `カタログ` というデータに保存して管理するソフトウェアです。
 カタログを作成することで、あるファイルやフォルダがどのメディアに存在するかを、簡単に検索することができます。検索するときはメディアは不要ですので、ＣＤ－ＲＯＭの取替えやＵＳＢメモリなどの取り外しといった手間がかかりません。
 
-<table class="mbx-dl" cellpadding="0" cellspacing="0" border="0">
+<table class="mbx-dl" cellPadding="0" cellSpacing="0" border="0">
 	<tr>
 		<td>
 			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/DiskCatalogManagerSetup','Title':'DiskCatalogManagerSetup'});">

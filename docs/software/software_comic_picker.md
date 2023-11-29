@@ -20,19 +20,21 @@ ComicPickerは画像をまとめた書庫ファイル、画像、PDF 文書を�
 書庫ファイル以外に、画像ファイルも整理することができます。
 その他に、ファイル名の変更や書庫ファイルから画像ファイルを抽出して、新しい書庫ファイルや、PDF文書を作成することもできます。
 
-<table class="mbx-dl" cellpadding="0" cellspacing="0" border="0">
+<table className="mbx-dl" cellPadding="0" cellSpacing="0" border="0">
+<tbody>
 	<tr>
 		<td>
-			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/ComicPickerSetup','Title':'ComicPickerSetup'});">
+			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank">
 				<em><img src="/img/download_exe.jpg" /></em>
 			</a>
 		</td>
 		<td>
-			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/ComicPicker','Title':'ComicPicker'});">
+			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank">
 				<em><img src="/img/download_zip.jpg" /></em>
 			</a>
 		</td>
 	</tr>
+</tbody>
 </table>
 
 
@@ -42,9 +44,9 @@ ComicPickerは画像をまとめた書庫ファイル、画像、PDF 文書を�
 
 
 ## スクリーンショット
-<div class="mbx-snap">
+<div className="mbx-snap">
 	<img src="/img/ComicPicker_snap01.jpg" width="240" height="180" alt="snap01" border="0" />
-	<br class="mbx-clear" />
+	<br className="mbx-clear" />
 </div>
 
 ## 動作環境

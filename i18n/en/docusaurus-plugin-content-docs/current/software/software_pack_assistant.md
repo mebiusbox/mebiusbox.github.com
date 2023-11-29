@@ -13,7 +13,7 @@ image: https://og-image-mebiusbox.vercel.app/api/og?title=PackAssistant&subtitle
 # PackAssistant 1.6.0
 PackAssistant は複数のファイルを指定の容量をもつパックに、効率良く収まるように振り分けます。
 
-<table class="mbx-dl" cellpadding="0" cellspacing="0" border="0">
+<table class="mbx-dl" cellPadding="0" cellSpacing="0" border="0">
 	<tr>
 		<td>
 			<a href="https://github.com/mebiusbox/apps/releases/tag/first" target="_blank" onclick="ga('send','pageview',{'page':'/downloads/PackAssitantSetupX64','Title':'PackAssistantSetupX64'});">
