@@ -37,7 +37,8 @@ export default function NotFound() {
                   もしかして、以下のページをお探しですか？
                 </Translate>
                 <ul>
-                  <li><Link to="/blog/2017/01/06/EffectTextureMaker">EffectTextureMaker というのを作りました</Link></li>
+                  <li><Link to="https://mebiusbox.github.io/contents/EffectTextureMaker">EffectTextureMaker</Link></li>
+                  <li><Link to="/blog/2017/01/06/EffectTextureMaker">[Blog] EffectTextureMaker というのを作りました</Link></li>
                 </ul>
               </p>
             </div>
