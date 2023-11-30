@@ -7,7 +7,6 @@
 @import url(https://use.fontawesome.com/releases/v5.6.1/css/all.css);
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
 
-
 /* You can override the default Infima variables here. */
 :root {
   // red
@@ -94,10 +93,10 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
-table.mbx-dl tr {
+table.mbx-dl tbody tr {
   border-width: 0px;
 }
-table.mbx-dl tr td {
+table.mbx-dl tbody tr td {
 	padding:4px;
   border-width: 0px;
 }
@@ -106,6 +105,8 @@ div.mbx-snap img {
 	padding:8px;
 }
 .mbx-clear { clear:both; }
+.mbx-half { zoom:0.5; }
+.mbx-center { text-align: center; }
 
 .markdown > h1,
 article > h1 {
@@ -197,94 +198,6 @@ article p strong {
   // border-style: dashed;
   // border-color: rgb(0, 105, 146);
   border: 2px dashed rgb(0, 105, 146);
-}
-
-.rlc-container {
-  width: 100%;
-  max-width: 800px;
-  max-height: 120px;
-  margin: 0 auto 2rem;
-
-  color: var(--ifm-color-emphasis-800);
-  background-color: var(--ifm-card-background-color);
-  text-decoration: none;
-
-  border: 1px solid var(--ifm-color-emphasis-200);
-  border-radius: 0.25rem;
-  display: flex;
-  align-items: stretch;
-
-  // transition: background 200ms ease-in-out 0s, box-shadow 200ms ease-in-out 0s;
-  --ifm-link-color: var(--ifm-color-emphasis-800);
-  --ifm-link-hover-color: var(--ifm-color-emphasis-700);
-  --ifm-link-hover-decoration: none;
-
-  box-shadow: 0 1.5px 3px 0 rgb(0 0 0 / 15%);
-  transition: all var(--ifm-transition-fast) ease;
-  transition-property: border, box-shadow;
-}
-
-.rlc-container:hover{
-  border-color: var(--ifm-color-primary);
-  text-decoration: none;
-  box-shadow: 0 3px 6px 0 rgb(0 0 0 / 20%);
-}
-
-.rlc-info {
-  overflow: hidden;
-  padding: 0.5rem;
-  flex: 4 1 100px;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.rlc-title {
-  font-size: 1.125rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.rlc-description {
-  font-size: 0.75rem;
-  overflow: hidden;
-  line-height:1rem;
-  height: 1rem;
-}
-
-.rlc-url-container {
-  display: flex;
-  align-items: center;
-}
-
-.rlc-favicon {
-  margin-right: 4px;
-  width: 16px;
-  height: 16px;
-}
-
-.rlc-url {
-  font-size: 0.75rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.rlc-image-container {
-  position: relative;
-  text-align: center;
-  border-left: 1px dashed var(--ifm-color-emphasis-300);
-  flex: 1 1 50px;
-}
-
-.rlc-image {
-  object-fit: cover;
-  width: 100% !important;
-  height: 100% !important;
-  border-bottom-right-radius: 0.25rem;
-  border-top-right-radius: 0.25rem;
 }
 
 [data-theme='dark'] .DocSearch {
