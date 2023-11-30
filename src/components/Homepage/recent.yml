@@ -1,3 +1,7 @@
+- name: 2023-11-30-docusaurus-v3
+  date: 2023-11-30
+  title:
+    ja: Docusaurus v3 にアップグレードしました
 - name: 2023-04-23-rust-book
   date: 2023-04-23
   title:
@@ -17,8 +21,3 @@
   title:
     ja: NotionでShadertoyやつぶやき系のツイートをギャラリーにまとめる
     en: Organize Shadertoy and tweets of Tsubuyaki into galleries on Notion
-- name: 2023-01-11-docusaurus
-  date: 2023-01-11
-  title:
-    ja: リニューアル：Docusaurusへ移行
-    en: Migration to Docusaurus
