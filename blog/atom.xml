@@ -2,11 +2,35 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://mebiusbox.github.io/blog</id>
     <title>Mebiusbox software Blog</title>
-    <updated>2023-04-23T00:00:00.000Z</updated>
+    <updated>2023-11-30T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://mebiusbox.github.io/blog"/>
     <subtitle>Mebiusbox software Blog</subtitle>
     <icon>https://mebiusbox.github.io/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Docusaurus v3 にアップグレードしました]]></title>
+        <id>https://mebiusbox.github.io/blog/2023/11/30/docusaurus-v3</id>
+        <link href="https://mebiusbox.github.io/blog/2023/11/30/docusaurus-v3"/>
+        <updated>2023-11-30T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[このサイトに使っているDocusaurusをv2からv3にアップグレードしました]]></summary>
+        <content type="html"><![CDATA[<p>このサイトを生成するのに使っている <a href="https://docusaurus.io/" target="_blank" rel="noopener noreferrer">Docusaurus</a> を <a href="https://docusaurus.io/blog/2022/08/01/announcing-docusaurus-2.0" target="_blank" rel="noopener noreferrer">v2</a> から <a href="https://docusaurus.io/blog/releases/3.0" target="_blank" rel="noopener noreferrer">v3</a> にアップグレードしました．</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="動機">動機<a href="https://mebiusbox.github.io/blog/2023/11/30/docusaurus-v3#%E5%8B%95%E6%A9%9F" class="hash-link" aria-label="動機 への直接リンク" title="動機 への直接リンク">​</a></h2>
+<p>単純に最新にしたかっただけです．古いままだとやはりメンテしづらいですから．
+あまり独自でいじってしまうとアップグレードしづらくなって、結局面倒なことになりかねないので、なるべく用意されている機能で拡張していくのがいいですね．私もプラグインを自作して使っていますが、大したことはしていないですし、補助的なものです．</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="アップグレード時の問題">アップグレード時の問題<a href="https://mebiusbox.github.io/blog/2023/11/30/docusaurus-v3#%E3%82%A2%E3%83%83%E3%83%97%E3%82%B0%E3%83%AC%E3%83%BC%E3%83%89%E6%99%82%E3%81%AE%E5%95%8F%E9%A1%8C" class="hash-link" aria-label="アップグレード時の問題 への直接リンク" title="アップグレード時の問題 への直接リンク">​</a></h2>
+<p><a href="https://mdxjs.com/" target="_blank" rel="noopener noreferrer">MDX</a> のバージョンが上がって v1 から一気に v3 に上がったみたいです．Markdown ファイルの制限が厳しくなり、より厳密なチェックがされるようになりました．特に影響の大きかったのは<a href="https://mebiusbox.github.io/blog/2023/01/15/docusaurus-katex-client-side-rendering">数式処理の部分をCSRにしているところ</a>で、<code>{}</code>がJavaScriptとして認識されてしまい、数式内のコマンドがエラーになってしまいました．これに関してはエスケープをすることで対応しましたが、数式すべてで<code>{}</code>をエスケープするのは置換で対応できるとはいえ面倒なので、普通に<code>remark-math</code>、<code>rehype-katex</code>プラグインを使うのが一番だと思います．この処理をしたのは数式が多いとDocusaurusのビルド時間が増えることやバンドル時の容量も増えてしまうためでした．これに関しては何らかの方法でHTMLにしたものを静的コンテンツとして扱うのがいいかなと思います．</p>
+<p>あとは、カード形式のリンクを作成するために <code>react-link-card</code> を使っていたのですが、これがエラーを出すようになりました．また、このプラグインはメンテもされていないため、使わないことにしました．</p>
+<p>もう1つ、最新のブログ投稿をトップページに表示するところで、デプロイするとエラーが表示されるものがありました．これは開発環境では発生しません．エラーは <a href="https://docusaurus.io/blog/releases/3.0#debug-builds" target="_blank" rel="noopener noreferrer">React 18 による hydration エラー</a>で結局原因はよくわからなかったのですが、<a href="https://github.com/mebiusbox/mebiusbox.github.com/commit/b01ed25abf87a41ac40c810648be1d1a7642e713" target="_blank" rel="noopener noreferrer">問題箇所は特定できたので対応</a>しました．</p>
+<p>他は特に苦労したところはありません．Node を v18 に、React も v18、TypeScript を v5 にしたことや、コンフィグファイルでESMの文法に変更したことぐらいです．</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="静的コンテンツの扱い">静的コンテンツの扱い<a href="https://mebiusbox.github.io/blog/2023/11/30/docusaurus-v3#%E9%9D%99%E7%9A%84%E3%82%B3%E3%83%B3%E3%83%86%E3%83%B3%E3%83%84%E3%81%AE%E6%89%B1%E3%81%84" class="hash-link" aria-label="静的コンテンツの扱い への直接リンク" title="静的コンテンツの扱い への直接リンク">​</a></h2>
+<p>これは Docusaurus v3 でのお話ではありませんが、 デフォルトだと <code>static</code> フォルダに入っているものはビルド時にコピーされます．多言語（私は<code>ja</code>と<code>en</code>）をサポートしていると、その言語ごとに静的コンテンツがコピーされることを今更ながら知りました．ちょっと静的コンテンツに入れているものが大きかったのでビルドやデプロイに時間が余計に時間がかかってました．とりあえず、<code>static</code>から別のフォルダに移動してビルド時にコピーするようにして対応しました．</p>
+<p>以上です．</p>]]></content>
+        <author>
+            <name>mebiusbox</name>
+            <uri>https://github.com/mebiusbox</uri>
+        </author>
+        <category label="Docusaurus" term="Docusaurus"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[「動かして学ぶ！Rust入門」の執筆]]></title>
         <id>https://mebiusbox.github.io/blog/2023/04/23/rust-book</id>
@@ -251,13 +275,13 @@ DocusaurusのマークダウンからHTMLにレンダリングする部分は <a
 <p>実際のページは<a href="http://mebiusbox.github.io/docs/note/math-3dtransformation" target="_blank" rel="noopener noreferrer">こちら</a>です．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="注意点">注意点<a href="https://mebiusbox.github.io/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E6%B3%A8%E6%84%8F%E7%82%B9" class="hash-link" aria-label="注意点 への直接リンク" title="注意点 への直接リンク">​</a></h2>
 <p><code>katex-client</code>プラグインにしたことによる注意点です．</p>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="クライア�ント側の負荷">クライアント側の負荷<a href="https://mebiusbox.github.io/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E3%82%AF%E3%83%A9%E3%82%A4%E3%82%A2%E3%83%B3%E3%83%88%E5%81%B4%E3%81%AE%E8%B2%A0%E8%8D%B7" class="hash-link" aria-label="クライアント側の負荷 への直接リンク" title="クライアント側の負荷 への直接リンク">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="クライアント側の負荷">クライアント側の負荷<a href="https://mebiusbox.github.io/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E3%82%AF%E3%83%A9%E3%82%A4%E3%82%A2%E3%83%B3%E3%83%88%E5%81%B4%E3%81%AE%E8%B2%A0%E8%8D%B7" class="hash-link" aria-label="クライアント側の負荷 への直接リンク" title="クライアント側の負荷 への直接リンク">​</a></h3>
 <p>もちろん、クライアント側で数式処理をするのでページを開いたときに負荷がかかってしまいます．</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="マークダウンでエスケープが必要">マークダウンでエスケープが必要<a href="https://mebiusbox.github.io/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E3%83%9E%E3%83%BC%E3%82%AF%E3%83%80%E3%82%A6%E3%83%B3%E3%81%A7%E3%82%A8%E3%82%B9%E3%82%B1%E3%83%BC%E3%83%97%E3%81%8C%E5%BF%85%E8%A6%81" class="hash-link" aria-label="マークダウンでエスケープが必要 への直接リンク" title="マークダウンでエスケープが必要 への直接リンク">​</a></h3>
 <p>マークダウンの数式をそのまま remark や rehype に通すので、エスケープする必要があります．これは手間ではありますが、置換で対応できるので許容範囲としています．</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="remark-math--rehype-katexor-rehype-mathjax-と併用できない">remark-math + rehype-katex(or rehype-mathjax) と併用できない<a href="https://mebiusbox.github.io/blog/2023/01/15/docusaurus-katex-client-side-rendering#remark-math--rehype-katexor-rehype-mathjax-%E3%81%A8%E4%BD%B5%E7%94%A8%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%84" class="hash-link" aria-label="remark-math + rehype-katex(or rehype-mathjax) と併用できない への直接リンク" title="remark-math + rehype-katex(or rehype-mathjax) と併用できない への直接リンク">​</a></h3>
 <p>現状は併用できないです．<code>katex-client</code>プラグインを正常に動かすには <code>remark-math</code> を有効にできません．</p>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ページをリロードすると一部の数式処理に失敗する">ページをリロードすると一部の数式処理に失敗する<a href="https://mebiusbox.github.io/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E3%83%9A%E3%83%BC%E3%82%B8%E3%82%92%E3%83%AA%E3%83%AD%E3%83%BC%E3%83%89%E3%81%99%E3%82%8B%E3%81%A8%E4%B8%80%E9%83%A8%E3%81%AE%E6%95%B0%E5%BC%8F%E5%87%A6%E7%90%86%E3%81%AB%E5%A4%B1%E6%95%97%E3%81%99%E3%82%8B" class="hash-link" aria-label="ページをリロードすると一部の数式処理に失敗する ��への直接リンク" title="ページをリロードすると一部の数式処理に失敗する への直接リンク">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ページをリロードすると一部の数式処理に失敗する">ページをリロードすると一部の数式処理に失敗する<a href="https://mebiusbox.github.io/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E3%83%9A%E3%83%BC%E3%82%B8%E3%82%92%E3%83%AA%E3%83%AD%E3%83%BC%E3%83%89%E3%81%99%E3%82%8B%E3%81%A8%E4%B8%80%E9%83%A8%E3%81%AE%E6%95%B0%E5%BC%8F%E5%87%A6%E7%90%86%E3%81%AB%E5%A4%B1%E6%95%97%E3%81%99%E3%82%8B" class="hash-link" aria-label="ページをリロードすると一部の数式処理に失敗する への直接リンク" title="ページをリロードすると一部の数式処理に失敗する への直接リンク">​</a></h3>
 <p>原因不明．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="余談">余談<a href="https://mebiusbox.github.io/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E4%BD%99%E8%AB%87" class="hash-link" aria-label="余談 への直接リンク" title="余談 への直接リンク">​</a></h2>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="rehypeプラグイン">rehypeプラグイン<a href="https://mebiusbox.github.io/blog/2023/01/15/docusaurus-katex-client-side-rendering#rehype%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3" class="hash-link" aria-label="rehypeプラグイン への直接リンク" title="rehypeプラグイン への直接リンク">​</a></h3>
@@ -336,7 +360,7 @@ DocusaurusのマークダウンからHTMLにレンダリングする部分は <a
 <li><a href="http://jekyllrb-ja.github.io/" target="_blank" rel="noopener noreferrer">Jekyll</a></li>
 <li><a href="https://www.notion.so/" target="_blank" rel="noopener noreferrer">Notion</a></li>
 </ul>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="単にブログを書きたいなら">単にブログを書きたいなら<a href="https://mebiusbox.github.io/blog/2023/01/11/docusaurus#%E5%8D%98%E3%81%AB%E3%83%96%E3%83%AD%E3%82%B0%E3%82%92%E6%9B%B8%EF%BF%BD%EF%BF%BD%E3%81%8D%E3%81%9F%E3%81%84%E3%81%AA%E3%82%89" class="hash-link" aria-label="単にブログを書きたいなら への直接リンク" title="単にブログを書きたいなら への直接リンク">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="単にブログを書きたいなら">単にブログを書きたいなら<a href="https://mebiusbox.github.io/blog/2023/01/11/docusaurus#%E5%8D%98%E3%81%AB%E3%83%96%E3%83%AD%E3%82%B0%E3%82%92%E6%9B%B8%E3%81%8D%E3%81%9F%E3%81%84%E3%81%AA%E3%82%89" class="hash-link" aria-label="単にブログを書きたいなら への直接リンク" title="単にブログを書きたいなら への直接リンク">​</a></h3>
 <p>ブログサービスを使いましょう．静的サイトを使う理由がとくにないです．</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="ブログをマークダウンで書きたいけどgithubで管理したい">ブログをマークダウンで書きたいけど、githubで管理したい<a href="https://mebiusbox.github.io/blog/2023/01/11/docusaurus#%E3%83%96%E3%83%AD%E3%82%B0%E3%82%92%E3%83%9E%E3%83%BC%E3%82%AF%E3%83%80%E3%82%A6%E3%83%B3%E3%81%A7%E6%9B%B8%E3%81%8D%E3%81%9F%E3%81%84%E3%81%91%E3%81%A9github%E3%81%A7%E7%AE%A1%E7%90%86%E3%81%97%E3%81%9F%E3%81%84" class="hash-link" aria-label="ブログをマークダウンで書きたいけど、githubで管理したい への直接リンク" title="ブログをマークダウンで書きたいけど、githubで管理したい への直接リンク">​</a></h3>
 <p><span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">Jekyll</span>を使いましょう．GitHubが標準でサポートしています．お手軽ですし、こだわりたいならテンプレートを使ってレイアウトを自分で構築してカスタマイズできます．</p>
@@ -713,37 +737,6 @@ https://www.microsoft.com/ja-jp/download/details.aspx?id=48145</a></li>
 </ul>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="最後に">最後に<a href="https://mebiusbox.github.io/blog/2017/01/06/EffectTextureMaker#%E6%9C%80%E5%BE%8C%E3%81%AB" class="hash-link" aria-label="最後に への直接リンク" title="最後に への直接リンク">​</a></h2>
 <p>何か要望があればご連絡ください。</p>]]></content>
-        <author>
-            <name>mebiusbox</name>
-            <uri>https://github.com/mebiusbox</uri>
-        </author>
-        <category label="software" term="software"/>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[ComicPicker 0.6.5 リリース]]></title>
-        <id>https://mebiusbox.github.io/blog/2016/08/14/ComicPicker</id>
-        <link href="https://mebiusbox.github.io/blog/2016/08/14/ComicPicker"/>
-        <updated>2016-08-14T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[実は以前からダウンロードファイルが 0.6.5 になっていたんですが、正式にアナウンスしていませんでした。]]></summary>
-        <content type="html"><![CDATA[<p>実は以前からダウンロードファイルが 0.6.5 になっていたんですが、正式にアナウンスしていませんでした。</p>
-<p>ダウンロードはこちらから。</p>
-<ul>
-<li><a href="http://mebiusbox.github.io/software_comic_picker.html" target="_blank" rel="noopener noreferrer">ComicPicker</a></li>
-</ul>
-<p>以下、更新内容です。</p>
-<hr>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="065">0.6.5<a href="https://mebiusbox.github.io/blog/2016/08/14/ComicPicker#065" class="hash-link" aria-label="0.6.5 への直接リンク" title="0.6.5 への直接リンク">​</a></h3>
-<ul>
-<li>New: 抽出時のファイル名のパターンを選択できるようにしました。</li>
-<li>「書庫ファイル名＋ページ番号」</li>
-<li>「日付＋ページ番号」</li>
-<li>「オリジナルのファイル名」</li>
-</ul>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="064">0.6.4<a href="https://mebiusbox.github.io/blog/2016/08/14/ComicPicker#064" class="hash-link" aria-label="0.6.4 への直接リンク" title="0.6.4 への直接リンク">​</a></h3>
-<ul>
-<li>Fixed: 画像ファイルが大きいサイズだと応答しなくなる不具合を修正.</li>
-<li>New: 「次のファイルへ」「前のファイルへ」を追加</li>
-</ul>]]></content>
         <author>
             <name>mebiusbox</name>
             <uri>https://github.com/mebiusbox</uri>
