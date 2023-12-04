@@ -203,7 +203,7 @@ mdbookの追加機能として<code>mdbook-admonition</code>を使っていま�
             <category>Notion</category>
         </item>
         <item>
-            <title><![CDATA[Clien-side rendering of KaTeX in Docusaurus]]></title>
+            <title><![CDATA[Client-side rendering of KaTeX in Docusaurus]]></title>
             <link>https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering</link>
             <guid>https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering</guid>
             <pubDate>Sun, 15 Jan 2023 00:00:00 GMT</pubDate>

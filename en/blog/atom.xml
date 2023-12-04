@@ -214,7 +214,7 @@ mdbookの追加機能として<code>mdbook-admonition</code>を使っていま�
         <category label="Notion" term="Notion"/>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Clien-side rendering of KaTeX in Docusaurus]]></title>
+        <title type="html"><![CDATA[Client-side rendering of KaTeX in Docusaurus]]></title>
         <id>https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering</id>
         <link href="https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering"/>
         <updated>2023-01-15T00:00:00.000Z</updated>
