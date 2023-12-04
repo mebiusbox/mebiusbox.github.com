@@ -1,5 +1,5 @@
 ---
-title: Clien-side rendering of KaTeX in Docusaurus
+title: Client-side rendering of KaTeX in Docusaurus
 description: Docusaurusで数式処理をクライアントサイドで行う方法について解説します
 keywords:
   - Docusaurus
