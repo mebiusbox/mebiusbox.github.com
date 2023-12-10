@@ -15,7 +15,7 @@
   date: 2023-01-15
   title:
     ja: Docusaurusで数式をクライアントサイドレンダリング(CSR)する
-    en: Clien-side rendering of KaTeX in Docusaurus
+    en: Client-side rendering of KaTeX in Docusaurus
 - name: 2023-01-14-notion-shadertoy-gallery
   date: 2023-01-14
   title:
