@@ -460,7 +460,7 @@ You can save and load the data in JSON format. Press the `save` and `load` butto
 
 ## Tips
 
-This parameters can be used to create the follwing image.
+This parameters can be used to create the following image.
 
 <div className="container">
   <div className="row">
