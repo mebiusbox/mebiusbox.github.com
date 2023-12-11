@@ -495,4 +495,5 @@ Copyright (C) 2017-2023 mebiusbox software.
 
 ## Changes
 
-- 2023-11-23: [Add] An generated image can be saved in Png image with alpha channel (Experimental). 'Save (PNG)' and 'Download (PNG)' have the same function. They are provided for browser compatibility. This feature is not support for saving the image as spritesheet.
+- 2023-12-12: [Add] SpriteSheets can be saved as Png image with alpha channel.
+- 2023-11-23: [Add] An generated image can be saved in Png image with alpha channel (Experimental). 'Save (PNG)' and 'Download (PNG)' have the same function. They are provided for browser compatibility.
