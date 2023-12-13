@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmebiusbox_docusaurus=self.webpackChunkmebiusbox_docusaurus||[]).push([[4407],{44455:s=>{s.exports=JSON.parse('{"label":"Atom","permalink":"/en/blog/tags/atom","allTagsPath":"/en/blog/tags","count":1,"unlisted":false}')}}]);

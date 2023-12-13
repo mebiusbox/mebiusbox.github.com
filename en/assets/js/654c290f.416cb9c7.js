@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmebiusbox_docusaurus=self.webpackChunkmebiusbox_docusaurus||[]).push([[6023],{18279:s=>{s.exports=JSON.parse('{"label":"katex","permalink":"/en/blog/tags/katex","allTagsPath":"/en/blog/tags","count":1,"unlisted":false}')}}]);

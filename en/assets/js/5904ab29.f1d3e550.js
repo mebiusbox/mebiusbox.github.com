@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmebiusbox_docusaurus=self.webpackChunkmebiusbox_docusaurus||[]).push([[3901],{39968:s=>{s.exports=JSON.parse('{"label":"mdBook","permalink":"/en/blog/tags/md-book","allTagsPath":"/en/blog/tags","count":1,"unlisted":false}')}}]);

@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmebiusbox_docusaurus=self.webpackChunkmebiusbox_docusaurus||[]).push([[7301],{1687:e=>{e.exports=JSON.parse('{"title":"Lab","slug":"/category/lab","permalink":"/en/docs/category/lab","navigation":{"next":{"title":"Publication","permalink":"/en/docs/lab/article"}}}')}}]);
