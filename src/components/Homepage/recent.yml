@@ -1,3 +1,7 @@
+- name: 2023-12-13-vscode-pixy-notion
+  date: 2023-12-13
+  title:
+    ja: 自分用にVSCodeのアウトライン拡張を作ってみました
 - name: 2023-11-30-docusaurus-v3
   date: 2023-11-30
   title:
@@ -16,8 +20,3 @@
   title:
     ja: Docusaurusで数式をクライアントサイドレンダリング(CSR)する
     en: Client-side rendering of KaTeX in Docusaurus
-- name: 2023-01-14-notion-shadertoy-gallery
-  date: 2023-01-14
-  title:
-    ja: NotionでShadertoyやつぶやき系のツイートをギャラリーにまとめる
-    en: Organize Shadertoy and tweets of Tsubuyaki into galleries on Notion
