@@ -108,7 +108,9 @@ const funcSearchPatterns = [
 ];
 ```
 
-一応、`async` やアロー関数も対応していますが、まだまだ調整は必要だと思います．随時更新していけばいいかなと．
+一応、`async` やアロー関数も対応していますが、まだまだ調整は必要だと思います．
+また、JavaScript(+TypeScript)にしか対応していません．これは随時更新していけばいいかなと．
+
 
 
 ### DocumentSymbol
@@ -161,7 +163,7 @@ vscodeSymbols.push(funcGroup);
 npx vsce package
 ```
 
-拡張子が `.vsix` ファイルが生成されます．VSCode上ならこのファイルを右クリックからインストールできます．
+拡張子が `.vsix` のファイルが生成されます．VSCode上ならこのファイルを右クリックからインストールできます．
 
 
 ### 役に立ったサイト
@@ -173,7 +175,7 @@ npx vsce package
 
 ## 合わせて使いたい拡張機能
 
-おまけで、`TODO Highlight` という拡張機能を使うと、目印のコードをハイライトすることができます．
+おまけで `TODO Highlight` という拡張機能を使うと、目印のコードをハイライトすることができます．
 
 <Bookmark name="TODO Highlight" url="https://marketplace.visualstudio.com/items?itemName=wayou.vscode-todo-highlight" description="highlight TODOs, FIXMEs, and any keywords, annotations..." />
 
