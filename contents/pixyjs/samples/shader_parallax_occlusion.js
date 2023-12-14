@@ -5,9 +5,7 @@ import Stats from 'three/addons/libs/stats.module.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 if ( WebGL.isWebGLAvailable() === false ) {
-
 	document.body.appendChild( WebGL.getWebGLErrorMessage() );
-
 }
 
 const app = {
@@ -27,53 +25,44 @@ const app = {
 	ready: false,
 
 	init() {
-
 		this.initGraphics();
 		this.initScene();
 		this.initGui();
-
 	},
 
 	initGraphics() {
-
 		const container = document.createElement( 'div' );
 		document.body.appendChild( container );
 
-		// RENDERER
+		//! RENDERER
 
 		this.renderer = new THREE.WebGLRenderer( { antialias: true } );
 		this.renderer.setClearColor( 0xaaaaaa );
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
-		// this.renderer.gammaInput = false;
-		// this.renderer.gammaOutput = false;
-		// this.renderer.autoClear = false;
 		container.appendChild( this.renderer.domElement );
 
-		// STATS
+		//! STATS
 
 		this.stats = new Stats();
 		container.appendChild( this.stats.dom );
-
 	},
 
 	initScene() {
-
-		// scene itself
 		this.scene = new THREE.Scene();
 
-		// MARK: CAMERA
+		//! CAMERA
 
 		this.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 8000 );
 		this.camera.position.set( 0, 0, 10 );
 
-		// MARK: CONTROLS
+		//! CONTROLS
 
 		this.controls = new OrbitControls( this.camera, this.renderer.domElement );
 		this.controls.target.set( 0, 0, 0 );
 		this.controls.addEventListener( 'change', this.render );
 
-		// MARK: LIGHTS
+		//! LIGHTS
 
 		// this.lights.ambient = new THREE.AmbientLight(0x333333);
 		// this.scene.add(this.lights.ambient);
@@ -83,7 +72,7 @@ const app = {
 		// this.lights.directHelper = new THREE.DirectionalLightHelper(this.lights.direct);
 		// this.scene.add(this.lights.directHelper);
 
-		// MARK: MATERIALS
+		//! MATERIALS
 
 		this.shader = new PIXY.Shader();
 		this.shader.enable( 'NOLIT' );
@@ -100,7 +89,7 @@ const app = {
 		this.reliefShader.enable( 'RELIEFMAP' );
 		this.reliefShader.build();
 
-		// MARK: TEXTURES
+		//! TEXTURES
 
 		const textureLoader = new THREE.TextureLoader();
 		this.shader.uniforms.tDiffuse.value = textureLoader.load( 'assets/textures/ue4/T_CobbleStone_Pebble_D.png' );
@@ -115,23 +104,19 @@ const app = {
 		this.reliefShader.uniforms.tDiffuse.value = this.shader.uniforms.tDiffuse.value;
 		this.reliefShader.uniforms.tHeightMap.value = this.shader.uniforms.tHeightMap.value;
 
-		// MARK: MODELS
-		let slice = 10;
-		let planeGeometry = new THREE.PlaneGeometry( 5, 5, slice, slice );
-		let num = slice + 1;
-		let tangents = new Float32Array( num * num * 4 );
+		//! MODELS
+		const slice = 10;
+		const planeGeometry = new THREE.PlaneGeometry( 5, 5, slice, slice );
+		const num = slice + 1;
+		const tangents = new Float32Array( num * num * 4 );
 		let tidx = 0;
 		for ( let i = 0; i < num; i++ ) {
-
 			for ( let j = 0; j < num; j++ ) {
-
 				tangents[ tidx++ ] = 1;
 				tangents[ tidx++ ] = 0;
 				tangents[ tidx++ ] = 0;
 				tangents[ tidx++ ] = 1;
-
 			}
-
 		}
 
 		planeGeometry.setAttribute( 'tangent', new THREE.BufferAttribute( tangents, 4 ) );
@@ -143,15 +128,12 @@ const app = {
 		// this.scene.add(new THREE.GridHelper(20,20));
 
 		this.ready = true;
-
 	},
 
 	initGui() {
-
 		this.shader.uniforms.diffuseColor.value.setHex( 0xffffff );
 		this.shader.uniforms.parallaxScale.value = 0.1;
 
-		const context = this;
 		const results = PIXY.ShaderUtils.GenerateShaderParametersGUI( this.shader );
 		this.gui = results.gui;
 		this.parameters = results.parameters;
@@ -159,23 +141,17 @@ const app = {
 		this.gui
 			.add( this.parameters, 'reliefMap' )
 			.name( 'Use Relief Mapping' )
-			.onChange( function ( value ) {
-
-				context.currentShader = value ? context.reliefShader : context.shader;
-
+			.onChange( ( value ) => {
+				this.currentShader = value ? this.reliefShader : this.shader;
 			} );
-
 	},
 
 	animate() {
-
-		requestAnimationFrame( this.animate.bind( this ) );
 		this.render();
-
+		requestAnimationFrame( this.animate.bind( this ) );
 	},
 
 	render() {
-
 		if ( !this.ready ) return;
 
 		this.stats.update();
@@ -190,35 +166,28 @@ const app = {
 
 		PIXY.ShaderUtils.UpdateShaderParameters( this.shader, this.parameters, this.camera );
 		if ( this.parameters.reliefMap ) {
-
 			this.reliefShader.uniforms.parallaxScale.value = this.shader.uniforms.parallaxScale.value;
 			this.scene.overrideMaterial = this.reliefShader.material;
 			this.renderer.render( this.scene, this.camera );
 			this.scene.overrideMaterial = null;
-
 		} else {
-
 			this.renderer.render( this.scene, this.camera );
-
 		}
-
 	},
 };
 
 app.init();
 app.animate();
 
-// EVENTS
+//! EVENTS
 
 window.addEventListener( 'resize', onWindowResize, false );
 
 function onWindowResize() {
-
 	app.renderer.setSize( window.innerWidth, window.innerHeight );
 
 	app.camera.aspect = window.innerWidth / window.innerHeight;
 	app.camera.updateProjectionMatrix();
 
 	app.render();
-
 }

@@ -5,9 +5,7 @@ import Stats from 'three/addons/libs/stats.module.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 if ( WebGL.isWebGLAvailable() === false ) {
-
 	document.body.appendChild( WebGL.getWebGLErrorMessage() );
-
 }
 
 const app = {
@@ -29,18 +27,15 @@ const app = {
 	ready: false,
 
 	init() {
-
 		this.initGraphics();
 		this.initScene();
-
 	},
 
 	initGraphics() {
-
 		const container = document.createElement( 'div' );
 		document.body.appendChild( container );
 
-		// RENDERER
+		//! RENDERER
 
 		this.renderer = new THREE.WebGLRenderer( { antialias: true } );
 		this.renderer.setClearColor( 0x999999 );
@@ -48,47 +43,40 @@ const app = {
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
 		container.appendChild( this.renderer.domElement );
 
-		// STATS
+		//! STATS
 
 		this.stats = new Stats();
 		container.appendChild( this.stats.dom );
-
 	},
 
 	initScene() {
-
-		// scene itself
 		this.scene = new THREE.Scene();
 
-		// MARK: CAMERA
+		//! CAMERA
 
 		this.camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 500 );
-		// this.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 8000 );
-		// this.camera.position.set( 0, 0, 10 );
 		this.camera.up.set( 0, 0, 1 );
 		this.camera.position.set( 18.35, -69.41, 7.25 );
-		// this.camera.add(new THREE.PointLight(0xffff, 0.8));
 		this.scene.add( this.camera );
 
-		// MARK: RENDER TARGET
+		//! RENDER TARGET
 
-		this.renderTarget = new THREE.WebGLRenderTarget( window.innerWidth, window.innerHeight );
-		// this.renderTarget.texture.format = THREE.RGBFormat;
-		( this.renderTarget.texture.minFilter = THREE.NearestFilter ),
-		( this.renderTarget.texture.magFilter = THREE.NearestFilter ),
-		( this.renderTarget.texture.generateMipmaps = false );
-		this.renderTarget.stencilBuffer = false;
-		this.renderTarget.depthBuffer = true;
-		this.renderTarget.depthTexture = new THREE.DepthTexture();
-		// this.renderTarget.depthTexture.type = THREE.UnsignedShortType;
+		this.renderTarget = new THREE.WebGLRenderTarget( window.innerWidth, window.innerHeight, {
+			minFilter: THREE.NearestFilter,
+			magFilter: THREE.NearestFilter,
+			generateMipmaps: false,
+			stencilBuffer: false,
+			depthBuffer: true,
+			depthTexture: new THREE.DepthTexture()
+		} );
 
-		// MARK: CONTROLS
+		//! CONTROLS
 
 		this.controls = new OrbitControls( this.camera, this.renderer.domElement );
 		this.controls.target.set( 0, 0, 0 );
 		// this.controls.addEventListener('change', this.render.bind(this));
 
-		// MARK: LIGHTS
+		//! LIGHTS
 
 		// this.lights.ambient = new THREE.AmbientLight(0x333333);
 		// this.scene.add(lights.ambient);
@@ -98,41 +86,18 @@ const app = {
 		// this.lights.directHelper = new THREE.DirectionalLightHelper(this.lights.direct, 0.5);
 		// this.scene.add(this.lights.directHelper);
 
-		// MARK: MATERIALS
+		//! MATERIALS
 
-		// MARK: TEXTURES
-
-		const loadTexture = function ( loader, path ) {
-
-			return loader.load( path, function ( _texture ) {
-				// texture.wrapS = THREE.RepeatWrapping;
-				// texture.wrapT = THREE.RepeatWrapping;
-			} );
-
-		};
+		//! TEXTURES
 
 		const textureLoader = new THREE.TextureLoader();
-		const snowFlakeTexture = loadTexture( textureLoader, 'assets/textures/sprites/snowflake2.png' );
+		const snowFlakeTexture = textureLoader.load( 'assets/textures/sprites/snowflake2.png' );
 
-		// MARK: ENVIRONMENT MAP
+		//! ENVIRONMENT MAP
 
-		// const path = 'assets/textures/cube/skybox/';
-		// const urls = [
-		//   path + 'px.jpg', path + 'nx.jpg',
-		//   path + 'py.jpg', path + 'ny.jpg',
-		//   path + 'pz.jpg', path + 'nz.jpg'
-		// ];
-		//
-		// this.shader.uniforms.tEnvMap.value = new THREE.CubeTextureLoader().load(urls, function(texture) {
-		//   texture.generateMipmaps = true;
-		//   texture.needsUpdate = true;
-		//   scene.background = texture;
-		// });
-
-		// MARK: MODELS
+		//! MODELS
 
 		this.particles = new PIXY.GPUParticle( 10000, function ( index, pars ) {
-
 			pars.position.set( ( Math.random() - 0.5 ) * 100.0, ( Math.random() - 0.5 ) * 100.0, 40.0 );
 			pars.velocity.set( Math.random() * -10, Math.random() * -10, -10.0 + Math.random() );
 			pars.acceleration.set( 0, 0, 0 );
@@ -142,7 +107,6 @@ const app = {
 			pars.endSize = 0.0;
 			pars.startTime = 2.0 + Math.random() * 10.0;
 			pars.lifeTime = 5.0;
-
 		} );
 
 		this.particles.material.uniforms.tDiffuse.value = snowFlakeTexture;
@@ -159,19 +123,15 @@ const app = {
 
 		// this.scene.add(new THREE.AxisHelper(10));
 		// this.scene.add(new THREE.GridHelper(20,20));
-
 	},
 
 	animate() {
-
 		this.time += this.clock.getDelta();
-		requestAnimationFrame( this.animate.bind( this ) );
 		this.render();
-
+		requestAnimationFrame( this.animate.bind( this ) );
 	},
 
 	render() {
-
 		if ( !this.ready ) return;
 
 		this.stats.update();
@@ -192,35 +152,28 @@ const app = {
 		this.renderer.render( this.scene, this.camera );
 		this.renderer.render( this.effectScene, this.camera );
 		this.renderer.autoClear = true;
-
-		// this.renderer.render( this.effectScene, this.camera );
-		// this.renderer.render( this.scene, this.camera );
-
 	},
 };
 
 app.init();
 app.animate();
 
-// EVENTS
+//! EVENTS
 
 window.addEventListener( 'resize', onWindowResize, false );
 
-// EVENT HANDLERS
+//! EVENT HANDLERS
 
 function onWindowResize() {
-
 	app.renderer.setSize( window.innerWidth, window.innerHeight );
 
 	app.camera.aspect = window.innerWidth / window.innerHeight;
 	app.camera.updateProjectionMatrix();
 
 	app.render();
-
 }
 
 THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
-
 	let bar = 250;
 	bar = Math.floor( ( bar * loaded ) / total );
 	document.getElementById( 'bar' ).style.width = bar + 'px';
@@ -228,13 +181,10 @@ THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
 	console.log( item, loaded, total );
 
 	if ( loaded == total ) {
-
 		app.ready = true;
 		document.getElementById( 'message' ).style.display = 'none';
 		document.getElementById( 'progressbar' ).style.display = 'none';
 		document.getElementById( 'progress' ).style.display = 'none';
 		console.log( 'ready' );
-
 	}
-
 };

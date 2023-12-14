@@ -7,9 +7,7 @@ import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
 
 
 if ( WebGL.isWebGLAvailable() === false ) {
-
 	document.body.appendChild( WebGL.getWebGLErrorMessage() );
-
 }
 
 const app = {
@@ -31,54 +29,44 @@ const app = {
 	lensFlare: undefined,
 
 	init() {
-
 		this.initGraphics();
 		this.initScene();
 		this.initGui();
-
 	},
 
 	initGraphics() {
-
 		const container = document.createElement( 'div' );
 		document.body.appendChild( container );
 
-		// RENDERER
+		//! RENDERER
 
 		this.renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true } );
 		this.renderer.setClearColor( 0xaaaaaa );
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
-		// this.renderer.gammaInput = true;
-		// this.renderer.gammaOutput = true;
-		// this.renderer.toneMapping = THREE.Uncharted2ToneMapping;
-		// this.renderer.autoClear = false;
 		container.appendChild( this.renderer.domElement );
 
-		// STATS
+		//! STATS
 
 		this.stats = new Stats();
 		container.appendChild( this.stats.dom );
-
 	},
 
 	initScene() {
-
-		// scene itself
 		this.scene = new THREE.Scene();
 
-		// MARK: CAMERA
+		//! CAMERA
 
 		this.camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 2000000 );
 		this.camera.position.set( 580, 208, 1100 );
 
-		// MARK: CONTROLS
+		//! CONTROLS
 
 		this.controls = new OrbitControls( this.camera, this.renderer.domElement );
 		this.controls.target.set( 0, 500, 0 );
 		this.controls.addEventListener( 'change', this.render );
 
-		// MARK: LIGHTS
+		//! LIGHTS
 
 		// this.lights.ambient = new THREE.AmbientLight(0x333333);
 		// this.scene.add(this.lights.ambient);
@@ -88,7 +76,7 @@ const app = {
 		// this.lights.directHelper = new THREE.DirectionalLightHelper(this.lights.direct);
 		// this.scene.add(this.lights.directHelper);
 
-		// MARK: MATERIALS
+		//! MATERIALS
 
 		this.shader = new PIXY.Shader();
 		this.shader.enable( 'SKY' );
@@ -98,7 +86,7 @@ const app = {
 		// console.log(this.shader._generateVertexShader());
 		// console.log(this.shader._generateFragmentShader());
 
-		// MARK: TEXTURES
+		//! TEXTURES
 
 		const textureLoader = new THREE.TextureLoader();
 		this.shader.uniforms.tClouds.value = textureLoader.load( 'assets/textures/pic0209.png' );
@@ -108,18 +96,14 @@ const app = {
 		this.shader.uniforms.tCloudsPerturb.value.wrapS = THREE.RepeatWrapping;
 		this.shader.uniforms.tCloudsPerturb.value.wrapT = THREE.RepeatWrapping;
 
-		// MARK: ENVIRONMENT MAP
-
-		const context = this;
+		//! ENVIRONMENT MAP
 
 		const cubeMap = new THREE.CubeTexture( [] );
 		cubeMap.format = THREE.RGBFormat;
 
 		const loader = new THREE.ImageLoader();
-		loader.load( 'assets/textures/skyboxsun25degtest.png', function ( image ) {
-
+		loader.load( 'assets/textures/skyboxsun25degtest.png', ( image ) => {
 			const getSide = function ( x, y ) {
-
 				const size = 1024;
 				const canvas = document.createElement( 'canvas' );
 				canvas.width = size;
@@ -127,7 +111,6 @@ const app = {
 				const context = canvas.getContext( '2d' );
 				context.drawImage( image, -x * size, -y * size );
 				return canvas;
-
 			};
 
 			cubeMap.images[ 0 ] = getSide( 2, 1 );
@@ -137,11 +120,10 @@ const app = {
 			cubeMap.images[ 4 ] = getSide( 1, 1 );
 			cubeMap.images[ 5 ] = getSide( 3, 1 );
 			cubeMap.needsUpdate = true;
-			context.ready = true;
-
+			this.ready = true;
 		} );
 
-		// MARK: MODELS
+		//! MODELS
 
 		const sphereGeometry = new THREE.SphereGeometry( 450000, 32, 15 );
 		// sphereGeometry.computeTangents();
@@ -190,11 +172,9 @@ const app = {
 		this.lensFlare.addElement( new LensflareElement( textureFlare3, 120, 0.3 ) );
 		this.lensFlare.addElement( new LensflareElement( textureFlare3, 70, 0.4 ) );
 		this.scene.add( this.lensFlare );
-
 	},
 
 	initGui() {
-
 		this.shader.uniforms.cloudsScale.value = 0.3;
 		this.shader.uniforms.cloudsBrightness.value = 0.5;
 
@@ -207,24 +187,18 @@ const app = {
 
 		this.parameters.pause = false;
 		this.gui.add( this.parameters, 'pause' );
-
 	},
 
 	animate() {
-
 		if ( !this.parameters.pause ) {
-
 			this.time += this.clock.getDelta();
-
 		}
 
-		requestAnimationFrame( this.animate.bind( this ) );
 		this.render();
-
+		requestAnimationFrame( this.animate.bind( this ) );
 	},
 
 	render() {
-
 		if ( !this.ready ) return;
 
 		this.stats.update();
@@ -295,37 +269,30 @@ const app = {
 		}
 
 		if ( solarAltitude < 0 ) {
-
 			this.lensFlare.visible = false;
-
 		} else {
-
 			this.lensFlare.position.set( x, y, z );
 			this.lensFlare.visible = true;
-
 		}
 
 		PIXY.ShaderUtils.UpdateShaderParameters( this.shader, this.parameters, this.camera );
 		this.renderer.render( this.scene, this.camera );
-
 	},
 };
 app.init();
 app.animate();
 
-// EVENTS
+//! EVENTS
 
 window.addEventListener( 'resize', onWindowResize, false );
 
-// EVENT HANDLERS
+//! EVENT HANDLERS
 
 function onWindowResize() {
-
 	app.renderer.setSize( window.innerWidth, window.innerHeight );
 
 	app.camera.aspect = window.innerWidth / window.innerHeight;
 	app.camera.updateProjectionMatrix();
 
 	app.render();
-
 }

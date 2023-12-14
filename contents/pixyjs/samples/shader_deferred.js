@@ -6,9 +6,7 @@ import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 if ( WebGL.isWebGLAvailable() === false ) {
-
 	document.body.appendChild( WebGL.getWebGLErrorMessage() );
-
 }
 
 const app = {
@@ -32,47 +30,20 @@ const app = {
 	time: 0.0,
 
 	init() {
-
 		this.initGraphics();
 		this.initDeferred();
 		this.initScene();
 		this.initPost();
 		this.initGui();
-
 	},
 
 	initGraphics() {
-
-		// RENDERER
+		//! RENDERER
 
 		this.renderer = new THREE.WebGLRenderer( { antialias: true } );
 		this.renderer.setClearColor( 0x999999 );
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
-
-		// if ( !renderer.extensions.get( 'OES_texture_float' ) ) {
-
-		// 	alert( 'No OES_texture_float support for float textures.' );
-		// 	return;
-
-		// }
-
-		// if ( !renderer.extensions.get( 'WEBGL_draw_buffers' ) ) {
-
-		// 	alert( 'not support WEBGL_draw_buffers.' );
-		// 	return;
-
-		// }
-
-		// if ( !renderer.extensions.get( 'EXT_shader_texture_lod' ) ) {
-
-		// 	alert( 'not support EXT_shader_texture_lod.' );
-		// 	return;
-
-		// }
-
-		// renderer.gammaInput = false;
-		// renderer.gammaOutput = false;
 
 		const container = document.createElement( 'div' );
 		document.body.appendChild( container );
@@ -80,44 +51,29 @@ const app = {
 		this.canvas = this.renderer.domElement;
 		container.appendChild( this.canvas );
 
-		// STATS
+		//! STATS
 
 		this.stats = new Stats();
 		container.appendChild( this.stats.dom );
-
 	},
 
 	initScene() {
-
-		// scene itself
 		this.scene = new THREE.Scene();
 
-		// MARK: CAMERA
+		//! CAMERA
 
 		this.camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 500 );
 		this.camera.position.set( 0.0, 34.74, 61.33 );
 		this.scene.add( this.camera );
 
-		// MARK: RENDER TARGET
-
-		// this.renderTarget = new THREE.WebGLRenderTarget( window.innerWidth, window.innerHeight );
-		// this.renderTarget.texture.format = THREE.RGBFormat;
-		// this.renderTarget.texture.minFilter = THREE.NearestFilte,
-		// this.renderTarget.texture.magFilter = THREE.NearestFilte,
-		// this.renderTarget.texture.generateMipmaps = false;
-		// this.renderTarget.stencilBuffer = false;
-		// this.renderTarget.depthBuffer = true;
-		// this.renderTarget.depthTexture = new THREE.DepthTexture();
-		// renderTarget.depthTexture.type = THREE.UnsignedShortType;
-
-		// MARK: CONTROLS
+		//! CONTROLS
 
 		this.controls = new OrbitControls( this.camera, this.renderer.domElement );
 		this.controls.target.set( 0, 13, 0 );
 		this.controls.update();
 		// controls.addEventListener('change', render);
 
-		// MARK: LIGHTS
+		//! LIGHTS
 
 		// lights.ambient = new THREE.AmbientLight(0x333333);
 		// scene.add(lights.ambient);
@@ -127,19 +83,15 @@ const app = {
 		// lights.directHelper = new THREE.DirectionalLightHelper(lights.direct, 0.5);
 		// scene.add(lights.directHelper);
 
-		// MARK: MATERIALS
+		//! MATERIALS
 
-		// MARK: TEXTURES
+		//! TEXTURES
 
 		const loadTexture = function ( loader, path ) {
-
 			return loader.load( path, function ( texture ) {
-
 				texture.wrapS = THREE.RepeatWrapping;
 				texture.wrapT = THREE.RepeatWrapping;
-
 			} );
-
 		};
 
 		const textureLoader = new THREE.TextureLoader();
@@ -147,17 +99,14 @@ const app = {
 		this.textures.normal = loadTexture( textureLoader, 'assets/textures/brick_bump.jpg' );
 		this.textures.roughness = loadTexture( textureLoader, 'assets/textures/brick_roughness.jpg' );
 
-		// MARK: ENVIRONMENT MAP
+		//! ENVIRONMENT MAP
 
 		const path = 'assets/textures/cube/skybox/';
 		const urls = [ path + 'px.jpg', path + 'nx.jpg', path + 'py.jpg', path + 'ny.jpg', path + 'pz.jpg', path + 'nz.jpg' ];
 
-		this.textures.envMap = new THREE.CubeTextureLoader().load( urls, function ( texture ) {
-
+		this.textures.envMap = new THREE.CubeTextureLoader().load( urls, ( texture ) => {
 			texture.generateMipmaps = true;
 			texture.needsUpdate = true;
-			// scene.background = texture;
-
 		} );
 
 		this.deferred.geometryShader.uniforms.tDiffuse.value = this.textures.diffuse;
@@ -166,7 +115,7 @@ const app = {
 		this.deferred.geometryShader.uniforms.bumpiness.value = 0.01;
 		this.deferred.lightShader.uniforms.tEnvMap.value = this.textures.envMap;
 
-		// MARK: MODELS
+		//! MODELS
 
 		let geometry = new THREE.PlaneGeometry( 50, 50 );
 		geometry.computeTangents();
@@ -209,7 +158,6 @@ const app = {
 		const geo = new THREE.SphereGeometry( 1.0, 8, 8 );
 		const numLights = 200;
 		for ( let i = 0; i < numLights; ++i ) {
-
 			const light = {};
 			light.position = new THREE.Vector3();
 			light.position.x = Math.random() * 50.0 - 25.0;
@@ -223,16 +171,13 @@ const app = {
 			light.mesh.scale.multiplyScalar( 0.1 );
 			this.post.scene.add( light.mesh );
 			this.lights.push( light );
-
 		}
 
 		// scene.add(new THREE.AxisHelper(10));
 		// scene.add(new THREE.GridHelper(20,20));
-
 	},
 
 	initDeferred() {
-
 		this.deferred.depthTexture = new THREE.DepthTexture();
 
 		const pars = {
@@ -245,26 +190,15 @@ const app = {
 		};
 
 		// gbuf
-		// deferred.gbuf = new THREE.WebGLMultiRenderTarget( window.innerWidth, window.innerHeight, pars );
-		// deferred.gbuf.attachments.push( deferred.gbuf.texture.clone() );
-		// deferred.gbuf.attachments[ 0 ].name = 'normal';
-		// deferred.gbuf.attachments[ 1 ].name = 'albedo+roughness';
 		this.deferred.gbuf = new THREE.WebGLMultipleRenderTargets(
 			window.innerWidth * window.devicePixelRatio,
 			window.innerHeight * window.devicePixelRatio,
 			2,
 			pars
 		);
-		// for ( let i = 0, il = this.deferred.gbuf.texture.length; i < il; i++ ) {
-
-		// 	this.deferred.gbuf.texture[ i ].minFilter = THREE.NearestFilter;
-		// 	this.deferred.gbuf.texture[ i ].magFilter = THREE.NearestFilter;
-
-		// }
 
 		this.deferred.gbuf.texture[ 0 ].name = 'normal';
 		this.deferred.gbuf.texture[ 1 ].name = 'albedo+roughness';
-
 
 		this.deferred.geometryShader = new PIXY.Shader();
 		this.deferred.geometryShader.enable( 'DEFERRED_GEOMETRY' );
@@ -286,12 +220,10 @@ const app = {
 		// console.log(deferred.lightShader._generateFragmentShader());
 
 		for ( let i = 0; i < this.numMaxLights; ++i ) {
-
 			this.deferred.lightShader.uniforms.pointLights.value.push( {
 				position: new THREE.Vector3(),
 				color: new THREE.Color(),
 			} );
-
 		}
 
 		this.deferred.scene = new THREE.Scene();
@@ -309,13 +241,11 @@ const app = {
 		this.deferred.views = [];
 
 		const createView = ( x, y, texture, type ) => {
-
 			const sprite = new PIXY.ScreenSprite( this.deferred.viewShader.material, this.canvas );
 			sprite.position.set( x, y );
 			sprite.size.set( 100, 100 );
 			sprite.update();
 			return { sprite: sprite, texture: texture, type: type };
-
 		};
 
 		// this.deferred.views.push(createView(10, 10, this.deferred.gbuf.texture[2], 6));
@@ -327,11 +257,9 @@ const app = {
 		// this.deferred.views.push(createView(10, 450, this.deferred.gbuf.texture[2], 0));
 		// this.deferred.views.push(createView(120, 10, this.deferred.lbuf.texture[0], 0));
 		// this.deferred.views.push(createView(120, 120, this.deferred.lbuf.texture[1], 0));
-
 	},
 
 	initGui() {
-
 		const parameters = {
 			metalness: 0.5,
 			cutoffDistance: 25.0,
@@ -367,23 +295,11 @@ const app = {
 		gui.add( parameters, 'whitePoint', 0.0, 10.0 );
 		gui.add( parameters, 'debug' );
 
-		// results = PIXY.ShaderUtils.GenerateShaderParametersGUI(shader);
-		// gui = results.gui;
-		// parameters = results.parameters;
-
 		this.gui = gui;
 		this.parameters = parameters;
-
 	},
 
 	initPost() {
-
-		// var pars = {
-		// 	minFilter: THREE.LinearFilter,
-		// 	magFilter: THREE.LinearFilter,
-		// 	stencilBuffer: false,
-		// };
-
 		const parsF = {
 			minFilter: THREE.LinearFilter,
 			magFilter: THREE.LinearFilter,
@@ -403,19 +319,15 @@ const app = {
 		this.post.composer.addPass( this.post.bloomPass, this.post.rtScene, this.post.rtScene );
 		this.post.composer.addPass( this.post.toneMapPass, this.post.rtScene, null );
 		this.post.composer.addPass( this.post.copyPass, this.post.rtScene, null );
-
 	},
 
 	animate() {
-
 		this.time += this.clock.getDelta();
-		requestAnimationFrame( this.animate.bind( this ) );
 		this.render();
-
+		requestAnimationFrame( this.animate.bind( this ) );
 	},
 
 	render() {
-
 		if ( !this.ready ) return;
 
 		this.stats.update();
@@ -432,7 +344,6 @@ const app = {
 
 		const pos = new THREE.Vector3();
 		for ( var i = 0; i < this.lights.length; ++i ) {
-
 			pos.copy( this.lights[ i ].position );
 			pos.x += Math.sin( this.time + this.lights[ i ].time ) * 5.0;
 			pos.y += Math.sin( this.time + this.lights[ i ].time * 2.0 ) * 10.0;
@@ -441,16 +352,11 @@ const app = {
 			this.deferred.lightShader.uniforms.pointLights.value[ i ].color.copy( this.lights[ i ].color );
 
 			if ( i < this.parameters.numLights ) {
-
 				this.lights[ i ].mesh.position.copy( pos );
 				this.lights[ i ].mesh.visible = true;
-
 			} else {
-
 				this.lights[ i ].mesh.visible = false;
-
 			}
-
 		}
 
 		this.deferred.geometryShader.uniforms.bumpiness.value = this.parameters.bumpiness;
@@ -463,14 +369,14 @@ const app = {
 		this.deferred.lightShader.uniforms.metalness.value = this.parameters.metalness;
 		this.deferred.lightShader.uniforms.reflectionStrength.value = this.parameters.reflectionStrength;
 
-		/// GEOMETRY PASS
+		//! GEOMETRY PASS
 
 		this.renderer.setRenderTarget( this.deferred.gbuf );
 		this.renderer.setClearColor( 0x0 );
 		this.renderer.setClearAlpha( 0 );
 		this.renderer.render( this.scene, this.camera );
 
-		/// LIGHT PASS
+		//! LIGHT PASS
 
 		// renderer.autoClear = false;
 		// renderer.render(deferred.scene, deferred.camera);
@@ -478,7 +384,7 @@ const app = {
 		this.renderer.render( this.deferred.scene, this.deferred.camera );
 		this.renderer.setRenderTarget( null );
 
-		/// BLOOM + TONE MAPPING
+		//! BLOOM + TONE MAPPING
 
 		this.post.bloomPass.enabled = this.parameters.bloom;
 		this.post.bloomPass.strength = this.parameters.bloomStrength;
@@ -490,57 +396,49 @@ const app = {
 		this.post.copyPass.enabled = !this.parameters.toneMapping;
 		this.post.composer.render();
 
-		/// POST PASS
+		//! POST PASS
 
 		this.renderer.autoClear = false;
 		this.renderer.clearDepth();
 		this.renderer.render( this.post.scene, this.camera );
 
-		/// DEBUG VIEW PASS
+		//! DEBUG VIEW PASS
 
 		if ( this.parameters.debug ) {
-
 			this.renderer.clearDepth();
 			for ( let i = 0; i < this.deferred.views.length; ++i ) {
-
 				this.deferred.viewShader.uniforms.tDiffuse.value = this.deferred.views[ i ].texture;
 				this.deferred.viewShader.uniforms.type.value = this.deferred.views[ i ].type;
 				this.deferred.viewShader.uniforms.cameraNear.value = this.camera.near;
 				this.deferred.viewShader.uniforms.cameraFar.value = this.camera.far;
 				this.deferred.views[ i ].sprite.render( this.renderer );
-
 			}
-
 		}
 
 		this.renderer.autoClear = true;
-
 	}
 
 };
 
-// EVENT HANDLERS
+app.init();
+app.animate();
+
+//! EVENTS
+
+window.addEventListener( 'resize', onWindowResize, false );
+
+//! EVENT HANDLERS
 
 function onWindowResize() {
-
 	app.renderer.setSize( window.innerWidth, window.innerHeight );
 
 	app.camera.aspect = window.innerWidth / window.innerHeight;
 	app.camera.updateProjectionMatrix();
 
 	app.render();
-
 }
 
-app.init();
-app.animate();
-
-// EVENTS
-
-window.addEventListener( 'resize', onWindowResize, false );
-
 THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
-
 	let bar = 250;
 	bar = Math.floor( ( bar * loaded ) / total );
 	document.getElementById( 'bar' ).style.width = bar + 'px';
@@ -548,13 +446,10 @@ THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
 	console.log( item, loaded, total );
 
 	if ( loaded == total ) {
-
 		app.ready = true;
 		document.getElementById( 'message' ).style.display = 'none';
 		document.getElementById( 'progressbar' ).style.display = 'none';
 		document.getElementById( 'progress' ).style.display = 'none';
 		console.log( 'ready' );
-
 	}
-
 };
