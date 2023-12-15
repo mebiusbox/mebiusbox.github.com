@@ -6,9 +6,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TeapotGeometry } from 'three/addons/geometries/TeapotGeometry.js';
 
 if ( WebGL.isWebGLAvailable() === false ) {
-
 	document.body.appendChild( WebGL.getWebGLErrorMessage() );
-
 }
 
 const app = {
@@ -23,53 +21,44 @@ const app = {
 	parameters: undefined,
 
 	init() {
-
 		this.initGraphics();
 		this.initScene();
 		this.initGui();
-
 	},
 
 	initGraphics() {
-
 		const container = document.createElement( 'div' );
 		document.body.appendChild( container );
 
-		// RENDERER
+		//! RENDERER
 
 		this.renderer = new THREE.WebGLRenderer( { antialias: true } );
 		this.renderer.setClearColor( 0xaaaaaa );
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
-		// this.renderer.gammaInput = false;
-		// this.renderer.gammaOutput = false;
-		// this.renderer.autoClear = false;
 		container.appendChild( this.renderer.domElement );
 
-		// STATS
+		//! STATS
 
 		this.stats = new Stats();
 		container.appendChild( this.stats.dom );
-
 	},
 
 	initScene() {
-
-		// scene itself
 		this.scene = new THREE.Scene();
 
-		// MARK: CAMERA
+		//! CAMERA
 
 		this.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 8000 );
 		this.camera.position.set( 0, 0, 10 );
 
-		// MARK: CONTROLS
+		//! CONTROLS
 
 		this.controls = new OrbitControls( this.camera, this.renderer.domElement );
 		this.controls.target.set( 0, 0, 0 );
 		this.controls.addEventListener( 'change', this.render.bind( this ) );
 
-		// MARK: LIGHTS
+		//! LIGHTS
 
 		// this.lights.ambient = new THREE.AmbientLight(0x333333);
 		// this.scene.add(this.lights.ambient);
@@ -88,7 +77,7 @@ const app = {
 		// this.lights.spotHelper = new THREE.SpotLightHelper(this.lights.spot);
 		// this.scene.add(this.lights.spotHelper);
 
-		// MARK: MATERIALS
+		//! MATERIALS
 
 		this.shader = new PIXY.Shader();
 		// this.shader.enable("NOLIT");
@@ -115,7 +104,7 @@ const app = {
 		// console.log(this.shader._generateVertexthis.shader());
 		// console.log(this.shader._generateFragmentthis.shader());
 
-		// MARK: MODELS
+		//! MODELS
 
 		const teapotGeometry = new TeapotGeometry( 2.0, 15, true, true, true, false, true );
 		const teapot = new THREE.Mesh( teapotGeometry, this.shader.material );
@@ -133,26 +122,20 @@ const app = {
 
 		this.scene.add( new THREE.AxesHelper( 10 ) );
 		this.scene.add( new THREE.GridHelper( 20, 20 ) );
-
 	},
 
 	initGui() {
-
 		const results = PIXY.ShaderUtils.GenerateShaderParametersGUI( this.shader );
 		this.gui = results.gui;
 		this.parameters = results.parameters;
-
 	},
 
 	animate() {
-
-		requestAnimationFrame( this.animate.bind( this ) );
 		this.render();
-
+		requestAnimationFrame( this.animate.bind( this ) );
 	},
 
 	render() {
-
 		this.stats.update();
 
 		this.camera.updateMatrixWorld();
@@ -186,7 +169,6 @@ const app = {
 		// shader.setParameters(shaderParameters);
 		PIXY.ShaderUtils.UpdateShaderParameters( this.shader, this.parameters, this.camera );
 		this.renderer.render( this.scene, this.camera );
-
 	},
 };
 
@@ -196,14 +178,12 @@ app.animate();
 window.addEventListener(
 	'resize',
 	() => {
-
 		app.renderer.setSize( window.innerWidth, window.innerHeight );
 
 		app.camera.aspect = window.innerWidth / window.innerHeight;
 		app.camera.updateProjectionMatrix();
 
 		app.render();
-
 	},
 	false,
 );

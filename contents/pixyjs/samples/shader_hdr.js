@@ -70,7 +70,7 @@ const app = {
 		this.canvas = this.renderer.domElement;
 		container.appendChild( this.canvas );
 
-		// STATS
+		//! STATS
 
 		this.stats = new Stats();
 		container.appendChild( this.stats.dom );
@@ -82,7 +82,7 @@ const app = {
 		// scene itself
 		this.scene = new THREE.Scene();
 
-		// MARK: CAMERA
+		//! CAMERA
 
 		this.camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 500 );
 		this.camera.position.set( 0.0, 34.74, 61.33 );
@@ -90,14 +90,14 @@ const app = {
 
 		// MARK: RENDER TARGET
 
-		// MARK: CONTROLS
+		//! CONTROLS
 
 		this.controls = new OrbitControls( this.camera, this.renderer.domElement );
 		this.controls.target.set( 0, 13, 0 );
 		this.controls.update();
 		// this.controls.addEventListener('change', this.render);
 
-		// MARK: LIGHTS
+		//! LIGHTS
 
 		// this.lights.ambient = new THREE.AmbientLight(0x333333);
 		// this.scene.add(lights.ambient);
@@ -107,7 +107,7 @@ const app = {
 		this.lights.directHelper = new THREE.DirectionalLightHelper( this.lights.direct, 0.5 );
 		this.scene.add( this.lights.directHelper );
 
-		// MARK: MATERIALS
+		//! MATERIALS
 
 		this.shader = new PIXY.Shader();
 		// this.shader.enable("DIRECTLIGHT", 1);
@@ -125,7 +125,7 @@ const app = {
 		// console.log(this.shader._generateVertexShader());
 		// console.log(this.shader._generateFragmentShader());
 
-		// MARK: TEXTURES
+		//! TEXTURES
 
 		const loadTexture = function ( loader, path ) {
 
@@ -145,7 +145,7 @@ const app = {
 		// this.textures.normal = loadTexture(textureLoader, 'assets/textures/brick_bump.jpg');
 		// this.textures.roughness = loadTexture(textureLoader, 'assets/textures/brick_roughness.jpg');
 		//
-		// // MARK: ENVIRONMENT MAP
+		// //! ENVIRONMENT MAP
 		//
 		// const path = 'assets/textures/cube/skybox/';
 		// const urls = [
@@ -167,7 +167,7 @@ const app = {
 		// this.shader.uniforms.tEnvMap.value = this.textures.envMap;
 		this.shader.uniforms.tEmissive.value = this.textures.emissive;
 
-		// MARK: MODELS
+		//! MODELS
 
 		let geometry = new THREE.PlaneGeometry( 50, 50 );
 		geometry.computeTangents();
@@ -382,7 +382,7 @@ const app = {
 app.init();
 app.animate();
 
-// EVENTS
+//! EVENTS
 
 window.addEventListener( 'resize', onWindowResize, false );
 
@@ -406,7 +406,7 @@ THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
 
 };
 
-// EVENT HANDLERS
+//! EVENT HANDLERS
 
 function onWindowResize() {
 

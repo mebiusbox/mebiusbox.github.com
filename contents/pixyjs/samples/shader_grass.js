@@ -6,9 +6,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TGALoader } from 'three/addons/loaders/TGALoader.js';
 
 if ( WebGL.isWebGLAvailable() === false ) {
-
 	document.body.appendChild( WebGL.getWebGLErrorMessage() );
-
 }
 
 const SHADOWBUFSIZE = 1024;
@@ -32,55 +30,47 @@ const app = {
 	ready: false,
 
 	init() {
-
 		this.initGraphics();
 		this.initScene();
 		this.initShadow();
 		this.initGui();
-
 	},
 
 	initGraphics() {
-
 		const container = document.createElement( 'div' );
 		document.body.appendChild( container );
 
-		// RENDERER
+		//! RENDERER
 
 		this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
 		this.renderer.setClearColor( 0xaaaaaa );
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
 		this.renderer.shadowMap.enabled = true;
-		// this.renderer.gammaInput = false;
-		// this.renderer.gammaOutput = false;
 		this.renderer.autoClear = false;
 		container.appendChild( this.renderer.domElement );
 
-		// STATS
+		//! STATS
 
 		this.stats = new Stats();
 		container.appendChild( this.stats.dom );
-
 	},
 
 	initScene() {
-
-		// scene itself
 		this.scene = new THREE.Scene();
 
-		// MARK: CAMERA
+		//! CAMERA
 
 		this.camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 2000000 );
 		this.camera.position.set( 0, 3, -5 );
 
-		// MARK: CONTROLS
+		//! CONTROLS
 
 		this.controls = new OrbitControls( this.camera, this.renderer.domElement );
 		this.controls.target.set( 0, 0, 0 );
 		this.controls.addEventListener( 'change', this.render );
 
-		// MARK: LIGHTS
+		//! LIGHTS
 
 		// this.lights.ambient = new THREE.AmbientLight(0x333333);
 		// this.scene.add(this.lights.ambient);
@@ -90,7 +80,7 @@ const app = {
 		this.lights.directHelper = new THREE.DirectionalLightHelper( this.lights.direct, 0.5 );
 		this.scene.add( this.lights.directHelper );
 
-		// MARK: MATERIALS
+		//! MATERIALS
 
 		this.shader = new PIXY.Shader();
 		this.shader.enable( 'DIRECTLIGHT', 1 );
@@ -116,17 +106,13 @@ const app = {
 		// console.log(this.groundShader._generateVertexShader());
 		// console.log(this.groundShader._generateFragmentShader());
 
-		// MARK: TEXTURES
+		//! TEXTURES
 
-		const loadTexture = function ( loader, path ) {
-
-			return loader.load( path, function ( texture ) {
-
+		const loadTexture = ( loader, path ) => {
+			return loader.load( path, ( texture ) => {
 				texture.wrapS = THREE.RepeatWrapping;
 				texture.wrapT = THREE.RepeatWrapping;
-
 			} );
-
 		};
 
 		const textureLoader = new THREE.TextureLoader();
@@ -154,7 +140,7 @@ const app = {
 		// this.shader.uniforms.tSpecular.value = textureLoader.load('assets/textures/SlateTiles/SlateTiles_spec.png');
 		// this.shader.uniforms.tAO.value = textureLoader.load('assets/textures/SlateTiles/SlateTiles_ao.png');
 
-		// MARK: ENVIRONMENT MAP
+		//! ENVIRONMENT MAP
 
 		// const path = 'assets/textures/cube/skybox/';
 		// const urls = [
@@ -162,14 +148,14 @@ const app = {
 		//   path + 'py.jpg', path + 'ny.jpg',
 		//   path + 'pz.jpg', path + 'nz.jpg'
 		// ];
-		//
-		// this.shader.uniforms.tEnvMap.value = new THREE.CubeTextureLoader().load(urls, function(texture) {
+
+		// this.shader.uniforms.tEnvMap.value = new THREE.CubeTextureLoader().load( urls, ( texture ) => {
 		//   texture.generateMipmaps = true;
 		//   texture.needsUpdate = true;
-		//   scene.background = texture;
-		// });
+		//   this.scene.background = texture;
+		// } );
 
-		// MARK: MODELS
+		//! MODELS
 
 		const instances = 500;
 		const instanceGeometry = new THREE.InstancedBufferGeometry();
@@ -178,20 +164,16 @@ const app = {
 
 		const offsets = new THREE.InstancedBufferAttribute( new Float32Array( instances * 3 ), 3, true );
 		for ( let i = 0, ul = offsets.count; i < ul; i++ ) {
-
 			const xyz = new THREE.Vector3( Math.random() - 0.5, 0.0, Math.random() - 0.5 );
 			xyz.multiplyScalar( 5.0 );
 			offsets.setXYZ( i, xyz.x, xyz.y, xyz.z );
-
 		}
 
 		instanceGeometry.setAttribute( 'offsets', offsets );
 
 		const colors = new THREE.InstancedBufferAttribute( new Float32Array( instances * 4 ), 4, true );
 		for ( var i = 0, ul = offsets.count; i < ul; i++ ) {
-
 			colors.setXYZW( i, Math.random(), Math.random(), Math.random(), Math.random() );
-
 		}
 
 		instanceGeometry.setAttribute( 'color', colors );
@@ -209,18 +191,10 @@ const app = {
 
 		// this.scene.add(new THREE.AxisHelper(10));
 		// this.scene.add(new THREE.GridHelper(20,20));
-
 	},
 
 	initShadow() {
-
-		const pars = {
-			minFilter: THREE.LinearFilter,
-			magFilter: THREE.LinearFilter,
-			format: THREE.RGBAFormat,
-		};
-
-		this.shadow.rtDepth = new THREE.WebGLRenderTarget( SHADOWBUFSIZE, SHADOWBUFSIZE, pars );
+		this.shadow.rtDepth = new THREE.WebGLRenderTarget( SHADOWBUFSIZE, SHADOWBUFSIZE );
 		this.shadow.shader = new PIXY.Shader();
 		this.shadow.shader.enable( 'CASTSHADOW' );
 		this.shadow.shader.build();
@@ -256,11 +230,9 @@ const app = {
 		// this.shadow.view.position.set(10, 250);
 		// this.shadow.view.size.set(250,250);
 		// this.shadow.view.update();
-
 	},
 
 	initGui() {
-
 		// this.shader.uniforms.diffuseColor.value.setHex(0xff0000);
 		this.shader.uniforms.directLights.value[ 0 ].direction.set( 0, 0.5, -1 ).normalize();
 		this.shader.uniforms.shadowDensity.value = 0.2;
@@ -286,19 +258,15 @@ const app = {
 		// h.add(this.parameters, "roughness").onChange(function(value) {
 		//   shader.uniforms.tRoughness.value = value ? textures.roughness : textures.white;
 		// });
-
 	},
 
 	animate() {
-
 		this.time += this.clock.getDelta();
-		requestAnimationFrame( this.animate.bind( this ) );
 		this.render();
-
+		requestAnimationFrame( this.animate.bind( this ) );
 	},
 
 	render() {
-
 		if ( !this.ready ) return;
 
 		this.stats.update();
@@ -324,16 +292,16 @@ const app = {
 		this.shadow.camera.updateProjectionMatrix();
 		this.shadow.camera.matrixWorldInverse.copy( this.shadow.camera.matrixWorld ).invert();
 
-		var matrix = new THREE.Matrix4();
+		const matrix = new THREE.Matrix4();
 		matrix.identity();
 		matrix.multiply( this.shadow.camera.projectionMatrix );
 		matrix.multiply( this.shadow.camera.matrixWorldInverse );
 		this.shader.uniforms.lightViewProjectionMatrix.value = matrix;
 		this.shadow.instanceShader.uniforms.tDiffuse.value = this.textures.grass;
 
-		var offsetX = 0.5 + 0.5 / SHADOWBUFSIZE;
-		var offsetY = 0.5 + 0.5 / SHADOWBUFSIZE;
-		var scaleBiasMatrix = new THREE.Matrix4();
+		const offsetX = 0.5 + 0.5 / SHADOWBUFSIZE;
+		const offsetY = 0.5 + 0.5 / SHADOWBUFSIZE;
+		const scaleBiasMatrix = new THREE.Matrix4();
 		scaleBiasMatrix.set( 0.5, 0.0, 0.0, offsetX, 0.0, 0.5, 0.0, offsetY, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 );
 		this.shadow.matrix = new THREE.Matrix4();
 		this.shadow.matrix.identity();
@@ -346,26 +314,20 @@ const app = {
 		this.shader.uniforms.tShadow.value = this.shadow.rtDepth.texture;
 		PIXY.ShaderUtils.UpdateShaderParameters( this.shader, this.parameters, this.camera );
 
-		var copyParameter = function ( shader, key, value ) {
-
+		const copyParameter = ( shader, key, value ) => {
 			if ( key in shader.uniforms ) {
-
 				shader.uniforms[ key ].value = value;
-
 			}
-
 		};
 
 		for ( let i in this.shader.uniforms ) {
-
 			if ( i === 'tDiffuse' ) continue;
 			copyParameter( this.groundShader, i, this.shader.uniforms[ i ].value );
 			copyParameter( this.shadow.shader, i, this.shader.uniforms[ i ].value );
 			copyParameter( this.shadow.instanceShader, i, this.shader.uniforms[ i ].value );
-
 		}
 
-		// SHADOW DEPTH PASS
+		//! SHADOW DEPTH PASS
 
 		// this.shadow.cameraHelper.visible = false;
 		this.objects.instanceMesh.material = this.shadow.instanceShader.material;
@@ -376,7 +338,7 @@ const app = {
 		this.renderer.render( this.scene, this.shadow.camera );
 		this.renderer.setRenderTarget( null );
 
-		// SCENE PASS
+		//! SCENE PASS
 
 		// shadow.cameraHelper.visible = true;
 		this.objects.instanceMesh.material = this.shader.material;
@@ -388,23 +350,21 @@ const app = {
 		// this.objects.ground.material = this.shadow.shader.material;
 		// this.renderer.render(this.scene, this.shadow.camera);
 
-		// SHADOW DEPTH VIEW
+		//! SHADOW DEPTH VIEW
 
 		// this.shadow.viewShader.uniforms.tShadow.value = this.shadow.rtDepth.texture;
 		// this.shadow.view.render(renderer);
-
 	},
 };
 
 app.init();
 app.animate();
 
-// EVENTS
+//! EVENTS
 
 window.addEventListener( 'resize', onWindowResize, false );
 
 THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
-
 	let bar = 250;
 	bar = Math.floor( ( bar * loaded ) / total );
 	document.getElementById( 'bar' ).style.width = bar + 'px';
@@ -412,26 +372,21 @@ THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
 	console.log( item, loaded, total );
 
 	if ( loaded == total ) {
-
 		app.ready = true;
 		document.getElementById( 'message' ).style.display = 'none';
 		document.getElementById( 'progressbar' ).style.display = 'none';
 		document.getElementById( 'progress' ).style.display = 'none';
 		console.log( 'ready' );
-
 	}
-
 };
 
-// EVENT HANDLERS
+//! EVENT HANDLERS
 
 function onWindowResize() {
-
 	app.renderer.setSize( window.innerWidth, window.innerHeight );
 
 	app.camera.aspect = window.innerWidth / window.innerHeight;
 	app.camera.updateProjectionMatrix();
 
 	app.render();
-
 }

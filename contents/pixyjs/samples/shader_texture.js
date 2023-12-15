@@ -6,9 +6,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TeapotGeometry } from 'three/addons/geometries/TeapotGeometry.js';
 
 if ( WebGL.isWebGLAvailable() === false ) {
-
 	document.body.appendChild( WebGL.getWebGLErrorMessage() );
-
 }
 
 const app = {
@@ -25,19 +23,16 @@ const app = {
 	ready: false,
 
 	init() {
-
 		this.initGraphics();
 		this.initScene();
 		this.initGui();
-
 	},
 
 	initGraphics() {
-
 		const container = document.createElement( 'div' );
 		document.body.appendChild( container );
 
-		// RENDERER
+		//! RENDERER
 
 		this.renderer = new THREE.WebGLRenderer( { antialias: true } );
 		this.renderer.setClearColor( 0xaaaaaa );
@@ -48,30 +43,27 @@ const app = {
 		// this.renderer.autoClear = false;
 		container.appendChild( this.renderer.domElement );
 
-		// STATS
+		//! STATS
 
 		this.stats = new Stats();
 		container.appendChild( this.stats.dom );
-
 	},
 
 	initScene() {
-
-		// scene itself
 		this.scene = new THREE.Scene();
 
-		// MARK: CAMERA
+		//! CAMERA
 
 		this.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 8000 );
 		this.camera.position.set( 0, 0, 10 );
 
-		// MARK: CONTROLS
+		//! CONTROLS
 
 		this.controls = new OrbitControls( this.camera, this.renderer.domElement );
 		this.controls.target.set( 0, 0, 0 );
 		this.controls.addEventListener( 'change', this.render );
 
-		// MARK: LIGHTS
+		//! LIGHTS
 
 		// this.lights.ambient = new THREE.AmbientLight(0x333333);
 		// this.scene.add(lights.ambient);
@@ -90,7 +82,7 @@ const app = {
 		// this.lights.spotHelper = new THREE.SpotLightHelper(lights.spot);
 		// this.scene.add(this.lights.spotHelper);
 
-		// MARK: MATERIALS
+		//! MATERIALS
 
 		this.shader = new PIXY.Shader();
 		// this.shader.enable("NOLIT");
@@ -130,7 +122,7 @@ const app = {
 		// console.log(this.shader._generateVertexShader());
 		// console.log(this.shader._generateFragmentShader());
 
-		// MARK: TEXTURES
+		//! TEXTURES
 
 		const textureLoader = new THREE.TextureLoader();
 		// this.shader.uniforms.tDiffuse.value = textureLoader.load('assets/textures/brick_diffuse.jpg');
@@ -140,21 +132,17 @@ const app = {
 		this.shader.uniforms.tSpecular.value = textureLoader.load( 'assets/textures/SlateTiles/SlateTiles_spec.png' );
 		this.shader.uniforms.tAO.value = textureLoader.load( 'assets/textures/SlateTiles/SlateTiles_ao.png' );
 
-		// MARK: ENVIRONMENT MAP
+		//! ENVIRONMENT MAP
 
 		const path = 'assets/textures/cube/skybox/';
 		const urls = [ path + 'px.jpg', path + 'nx.jpg', path + 'py.jpg', path + 'ny.jpg', path + 'pz.jpg', path + 'nz.jpg' ];
 
-		const context = this;
-		this.shader.uniforms.tEnvMap.value = new THREE.CubeTextureLoader().load( urls, function ( tex ) {
-
-			context.scene.background = tex;
-			context.ready = true;
-			// render();
-
+		this.shader.uniforms.tEnvMap.value = new THREE.CubeTextureLoader().load( urls, ( tex ) => {
+			this.scene.background = tex;
+			this.ready = true;
 		} );
 
-		// MARK: MODELS
+		//! MODELS
 
 		let geo = new TeapotGeometry( 2.0, 15, true, true, true, false, true );
 		geo.computeTangents();
@@ -176,27 +164,20 @@ const app = {
 
 		this.scene.add( new THREE.AxesHelper( 10 ) );
 		this.scene.add( new THREE.GridHelper( 20, 20 ) );
-
 	},
 
 	initGui() {
-
 		const results = PIXY.ShaderUtils.GenerateShaderParametersGUI( this.shader );
 		this.gui = results.gui;
 		this.parameters = results.parameters;
-
 	},
 
 	animate() {
-
-		// this.shaderParameters.time += this.clock.getDelta();
-		requestAnimationFrame( this.animate.bind( this ) );
 		this.render();
-
+		requestAnimationFrame( this.animate.bind( this ) );
 	},
 
 	render() {
-
 		if ( !this.ready ) return;
 
 		this.stats.update();
@@ -232,26 +213,23 @@ const app = {
 		// this.shader.setParameters(shaderParameters);
 		PIXY.ShaderUtils.UpdateShaderParameters( this.shader, this.parameters, this.camera );
 		this.renderer.render( this.scene, this.camera );
-
 	},
 };
 
 app.init();
 app.animate();
 
-// EVENTS
+//! EVENTS
 
 window.addEventListener( 'resize', onWindowResize, false );
 
-// EVENT HANDLERS
+//! EVENT HANDLERS
 
 function onWindowResize() {
-
 	app.renderer.setSize( window.innerWidth, window.innerHeight );
 
 	app.camera.aspect = window.innerWidth / window.innerHeight;
 	app.camera.updateProjectionMatrix();
 
 	app.render();
-
 }
