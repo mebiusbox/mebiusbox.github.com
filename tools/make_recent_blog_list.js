@@ -5,7 +5,7 @@ const BLOG_BASE_PATH = './blog';
 const I18N_BASE_PATH = './i18n';
 const locales = ['en'];
 const OUT_PATH = './src/components/Homepage/recent.yml';
-const files = fs.readdirSync(BLOG_BASE_PATH).reverse();
+const files = fs.readdirSync(BLOG_BASE_PATH, { recursive: true }).reverse();
 const stream = fs.createWriteStream(OUT_PATH, {encoding: "utf8"});
 let count = 0;
 for (const file of files) {
@@ -14,8 +14,8 @@ for (const file of files) {
   }
   
   const article = frontmatter(fs.readFileSync(BLOG_BASE_PATH + "/" + file, 'utf8'));
-  const date = file.replace(/(.{10})(.+)/, '$1');
-  const slug = file.replace(/(.+)(\.md)$/, '$1');
+  const date = file.replace(/(.{4}).(.{5})(.+)/, '$1-$2');
+  const slug = file.replace(/(.{4}).(.+)(\.md)$/, '$1-$2');
   stream.write(`- name: ${slug}\n`);
   stream.write(`  date: ${date}\n`);
   stream.write(`  title:\n`);

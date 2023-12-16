@@ -6,7 +6,7 @@ tags: [Jekyll]
 authors: [mebiusbox]
 ---
 
-[こちらの記事](/2016-06-18-jekyll-archives.md) では `jekyll-archives` を使った方法を紹介しました。
+[こちらの記事](/2016/06-18-jekyll-archives.md) では `jekyll-archives` を使った方法を紹介しました。
 ですが、GitHub Pages では動作しません。
 ここでは GitHub Pages で使える機能でアーカイブページを作成します。
 

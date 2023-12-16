@@ -36,4 +36,4 @@ authors: [mebiusbox]
 レイアウトについては [こちら](https://github.com/jekyll/jekyll-archives/blob/master/docs/layouts.md) を参照してください。
 
 各アーカイブページへのリンクは自分で作成する必要があります。
-それについては [こちらの記事](/2016-06-18-jekyll-create-archives.md) を参照してください。
+それについては [こちらの記事](/2016/06-18-jekyll-create-archives.md) を参照してください。
