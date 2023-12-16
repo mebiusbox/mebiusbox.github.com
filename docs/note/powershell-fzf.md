@@ -28,7 +28,7 @@ fzf                 0.33.0 (e03ac31)
 
 また PowerShell のバージョンは次のようになっています．
 
-```powershell title=powershell
+```powershell title="powershell"
 > $PSVersionTable
 
 Name                           Value
@@ -79,7 +79,7 @@ $env:userprofile\navi.yaml
 
 中身は次のような感じになります．
 
-```yaml title=navi.yaml
+```yaml title="navi.yaml"
 items:
 # general
   - echo_hello:
@@ -109,13 +109,13 @@ Install-Module powershell-yaml
 
 そして `navi.yaml` を読み込んでハッシュテーブルに変換します．
 
-```powershell title=powershell
+```powershell title="powershell"
 $data = ConvertFrom-Yaml (Get-Content -raw $env:USERPROFILE\navi.yaml)
 ```
 
 これでチートシートデータをPowerShellで扱えます．例えば次のように参照します．
 
-```powershell title=powershell
+```powershell title="powershell"
 function navi() {
     $data = ConvertFrom-Yaml (Get-Content -raw $env:USERPROFILE\navi.yaml)
     $data.items.keys | ForEach-Object {
@@ -137,7 +137,7 @@ git_fetch       Fetch a git repository  git fetch
 :::tip
 Visual Studio Codeのスニペットを使うと登録が楽になります．例えば次のようになります．
 
-```json title=yaml.json
+```json title="yaml.json"
 {
     "navi": {
         "prefix": "navi",
@@ -158,7 +158,7 @@ Visual Studio Codeのスニペットを使うと登録が楽になります．�
 
 まずは、普通に処理すると次のようになります．
 
-```powershell title=powershell
+```powershell title="powershell"
 function navi() {
     $data = ConvertFrom-Yaml (Get-Content -raw $env:USERPROFILE\navi.yaml)
     $data.items.keys | ForEach-Object {
@@ -174,7 +174,7 @@ function navi() {
 
 これでは流石に使いづらいので調整します．fzfのプレビュー機能を使って選択中の説明やコマンドを見やすくします．
 
-```powershell title=powershell
+```powershell title="powershell"
 function navi() {
     $data = ConvertFrom-Yaml (Get-Content -raw $env:USERPROFILE\navi.yaml)
     $data.items.keys | ForEach-Object {
@@ -195,7 +195,7 @@ function navi() {
 
 まず、プレビューは右側ではなく上側に表示します．`--preview-window` で指定します．
 
-```powershell title=powershell
+```powershell title="powershell"
 function navi() {
     $data = ConvertFrom-Yaml (Get-Content -raw $env:USERPROFILE\navi.yaml)
     $data.items.keys | ForEach-Object {
@@ -221,7 +221,7 @@ cargo install sd
 
 sdを使っていい感じに調整します．
 
-```powershell title=powershell
+```powershell title="powershell"
 function navi() {
     $data = ConvertFrom-Yaml (Get-Content -raw $env:USERPROFILE\navi.yaml)
     $data.items.keys | ForEach-Object {
@@ -237,7 +237,7 @@ function navi() {
 
 fzfのプレビューオプションで `--ansi`を指定すると色コードを含めることができます．次のように調整します．
 
-```powershell title=powershell
+```powershell title="powershell"
 function navi() {
     $data = ConvertFrom-Yaml (Get-Content -raw $env:USERPROFILE\navi.yaml)
     $data.items.keys | ForEach-Object {
@@ -263,7 +263,7 @@ Windows Terminalでは色コードに対応したテーマの色が反映され�
 
 キー名の部分が長くなるとfzfの候補が見づらくなるので調整します．タブで区切っていますので、`--tabstop`オプションで調整できます．
 
-```powershell title=powershell
+```powershell title="powershell"
 function navi() {
     $data = ConvertFrom-Yaml (Get-Content -raw $env:USERPROFILE\navi.yaml)
     $data.items.keys | ForEach-Object {
@@ -284,7 +284,7 @@ function navi() {
 
 PowerShellのエイリアス（または関数）、gitのエイリアスなどの情報も確認できるように追加してみました．`description` の末尾に `[<alias>]` という形でエイリアス名を記述し、それをプレビューに表示します．
 
-```yaml title=navi.yaml
+```yaml title="navi.yaml"
 # Docker
   - docker:
       description: Docker command [dk]
@@ -301,7 +301,7 @@ PowerShellのエイリアス（または関数）、gitのエイリアスなど�
 ...
 ```
 
-```powershell title=powershell
+```powershell title="powershell"
 function navi() {
     $data = ConvertFrom-Yaml (Get-Content -raw $env:USERPROFILE\navi.yaml)
     $command = $data.items.keys | ForEach-Object {
@@ -331,7 +331,7 @@ function navi() {
 
 fzfで選択したコマンドを2種類の方法で使います．まず、PSReadLineの履歴に登録する方法です．これでコマンド履歴からコマンドを使用することができます．次のようになります．
 
-```powershell title=powershell
+```powershell title="powershell"
 function navi() {
     $data = ConvertFrom-Yaml (Get-Content -raw $env:USERPROFILE\navi.yaml)
     $command = $data.items.keys | ForEach-Object {
@@ -365,7 +365,7 @@ Set-PSReadLineOption -PredictionViewStyle ListView
 
 もう1つの方法は`navi`から直接実行する方法です．ここでは `navi` 関数の引数にオプションを指定して切り替えるようにし、`nav`という別の関数でオプション指定版を作成します．`nav` という名前は適当で末尾の`i`を除いただけです．
 
-```powershell title=powershell
+```powershell title="powershell"
 function navi() {
     $data = ConvertFrom-Yaml (Get-Content -raw $env:USERPROFILE\navi.yaml)
     $command = $data.items.keys | ForEach-Object {

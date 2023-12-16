@@ -1379,7 +1379,7 @@ def configure(keymap):
 
 `{user}`は、Windowsのユーザー名に置き換えてください．また、絵文字を変換するPowerShellスクリプトは次のようになっています．
 
-```powershell title=convert_to_emoji.ps1
+```powershell title="convert_to_emoji.ps1"
 $emoji = @{
     "0"= "0️⃣"
     "1"= "1️⃣"

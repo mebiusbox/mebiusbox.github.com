@@ -418,7 +418,7 @@ Zulip API configuration:
 
 コードは次の通りです．
 
-```python title=zuweet.py
+```python title="zuweet.py"
 import argparse
 import os
 import datetime
