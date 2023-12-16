@@ -1,3 +1,11 @@
+- name: 2023-12-16-threejs-colorspace
+  date: 2023-12-16
+  title:
+    ja: Three.jsのカラー管理
+- name: 2023-12-15-bump-threejs-from-r116-to-r159
+  date: 2023-12-15
+  title:
+    ja: Three.js を r116 から r159 にアップデートしたこと
 - name: 2023-12-13-vscode-pixy-outline
   date: 2023-12-13
   title:
@@ -10,13 +18,3 @@
   date: 2023-04-23
   title:
     ja: 「動かして学ぶ！Rust入門」の執筆
-- name: 2023-01-17-notion-wbs
-  date: 2023-01-17
-  title:
-    ja: NotionでWBSを管理する
-    en: WBS with Notion
-- name: 2023-01-15-docusaurus-katex-client-side-rendering
-  date: 2023-01-15
-  title:
-    ja: Docusaurusで数式をクライアントサイドレンダリング(CSR)する
-    en: Client-side rendering of KaTeX in Docusaurus
