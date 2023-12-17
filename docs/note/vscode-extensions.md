@@ -1,11 +1,12 @@
 ---
 title: Visual Studio Codeの拡張機能
-description: 私が使っているVisual Studio Codeの拡張機能についてまとめています
+description: 私が使っているVisual Studio Codeの拡張機能について
 keywords:
   - VSCode
   - Visual Studio Code
 pagination_next: null
 pagination_prev: null
+image: https://og-image-mebiusbox.vercel.app/api/og?title=Visual%20Studio%20Code%E3%81%AE%E6%8B%A1%E5%BC%B5%E6%A9%9F%E8%83%BD&subtitle=Visual%2520Studio%2520Code%25E3%2581%25AE%25E6%258B%25A1%25E5%25BC%25B5%25E6%25A9%259F%25E8%2583%25BD&date=2023%2F12%2F17&tags=VSCode
 last_update:
   date: 2023-12-17
   author: mebiusbox
