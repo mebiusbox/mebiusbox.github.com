@@ -6,6 +6,7 @@ keywords:
 category: note
 authors: [mebiusbox]
 tags: [Espanso]
+image: https://og-image-mebiusbox.vercel.app/api/og?title=Espanso%20%E3%81%AE%20force_clipboard%20%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6&subtitle=Espanso%20%E3%81%A7%E7%BD%AE%E6%8F%9B%E6%96%87%E5%AD%97%E3%81%AB%E6%94%B9%E8%A1%8C%E3%81%8C%E5%90%AB%E3%81%BE%E3%82%8C%E3%82%8B%E6%99%82%E3%81%AE%E5%95%8F%E9%A1%8C&date=2023%2F12%2F23&tags=Espanso
 ---
 
 [Espanso](https://espanso.org/) というテキスト入力支援ソフトで置換文字が改行を含んでいる場合に起こる問題とその対応方法についてまとめました．
