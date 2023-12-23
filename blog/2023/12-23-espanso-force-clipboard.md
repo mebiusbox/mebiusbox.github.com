@@ -15,7 +15,7 @@ image: https://og-image-mebiusbox.vercel.app/api/og?title=Espanso%20%E3%81%AE%20
 
 ## Espanso とは
 
-[Espanso](https://espanso.org/) はテキスト入力支援ソフトです．WindowsやMacOSでも使えます．あらかじめトリガー文字と置換文字を指定しておくと、トリガー文字が入力されると同時に置換文字に置き換わります．Espanso では置換文字にクリップボードの内容やスクリプトの実行結果など様々な機能があります．テキスト入力支援ソフトは他にも様々なものがあります．例えば、[aText](https://www.trankynam.com/atext/) があります．また、[keyhac](https://sites.google.com/site/craftware/keyhac-ja) を使って同様のことも出来るでしょう．
+[Espanso](https://espanso.org/) はテキスト入力支援ソフトです．WindowsやMacOSでも使えます．あらかじめトリガー文字と置換文字を指定しておくと、トリガー文字が入力されると同時に置換文字に置き換わります．Espanso では置換文字にクリップボードの内容やスクリプトの実行結果など様々な機能が利用できます．テキスト入力支援ソフトは他にも様々なものがあります．例えば、[aText](https://www.trankynam.com/atext/) があります．また、[keyhac](https://sites.google.com/site/craftware/keyhac-ja) を使って同様のことも出来るでしょう．
 
 
 ## 改行を含んでいる場合の問題となるケース
