@@ -447,6 +447,8 @@ JSON形式で保存したり読み込んだりすることができます．そ�
       <div className="mbx-center margin-bottom--sm">Trabeculum</div>
     </div>
     <div className="col">
+      <img src="/img/lab/fxgen_binarymatrix.gif" alt="BinaryMatrix" />
+      <div className="mbx-center margin-bottom--sm">BinaryMatrix</div>
     </div>
     <div className="col">
     </div>

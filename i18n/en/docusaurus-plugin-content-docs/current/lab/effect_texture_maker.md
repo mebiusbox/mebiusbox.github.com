@@ -447,6 +447,8 @@ You can save and load the data in JSON format. Press the `save` and `load` butto
       <div className="mbx-center margin-bottom--sm">Trabeculum</div>
     </div>
     <div className="col">
+      <img src="/img/lab/fxgen_binarymatrix.gif" alt="BinaryMatrix" />
+      <div className="mbx-center margin-bottom--sm">BinaryMatrix</div>
     </div>
     <div className="col">
     </div>
