@@ -20,17 +20,18 @@ Notionのギャラリービューを使うと、ページをサムネイル一�
 
 <!-- truncate -->
 
-まずは、データベースを作成します．`Link(URL)`と`Description(Text)`プロパティを作成．ギャラリービューにして、プレビューをカバー、サイズを小にします
+まずは、データベースを作成します．`Link(URL)`と`Description(Text)`プロパティを作成します．
+そして、ギャラリービューにして、プレビューをカバー、サイズを小にします
 
 ![](/img/post/2023-01-14-notion-shadertoy-gallery-230114030500.png)
 
-Shadertoyやツイートへのリンクをデータベースに保存します．Save to NotionやWebブックマークにしてからデータベースに移動すると Description をいい感じに埋めてくれます．
+Shadertoyやツイートへのリンクをデータベースに保存します．[Save to Notion](https://chromewebstore.google.com/detail/save-to-notion/ldmmifpegigmeammaeckplhnjbbpccmm?hl=ja)やWebブックマークにしてからデータベースに移動すると Description をいい感じに埋めてくれます．
 
 ここから、リンク元によって処理が変わります．
 
 ## つぶやき系
 
-Notionのページ上にツイートを埋め込みます．埋め込んだツイートの動画(画像)部分を右クリックして、「画像アドレスをコピー」します．次に、Notionのページ上部にある`Add Cover` がカバー画像を追加して、コピーしたアドレスを `Link` にペーストして送信します．
+Notionのページ上にツイートを埋め込みます．埋め込んだツイートの動画(画像)部分を右クリックして、「画像アドレスをコピー」します．次に、Notionのページ上部にある`Add Cover` を選択してカバー画像を追加し、コピーしたアドレスを `Link` にペーストして送信します．
 
 ![](/img/post/2023-01-14-notion-shadertoy-gallery-230114032100.png)
 
@@ -63,3 +64,28 @@ canvas {
 ```
 
 そして、DevToolsでcanvasを選択した状態で、コマンドパレット(`Ctrl+Shift+P`)から`Run> Capture node screenshot`を選択するとサムネイルが保存されるので、それをページに貼り付けます．
+
+
+## Save To Notion
+
+[Save to Notion](https://chromewebstore.google.com/detail/save-to-notion/ldmmifpegigmeammaeckplhnjbbpccmm?hl=ja)を使うと、GLSLSandboxやShadertoyをもっと簡単に保存できます．
+
+### Shadertoy
+
+`Name`, `Cover`, `Description` を次のように設定します．タグは任意に設定してください．
+
+![Save To Notion for Shadertoy](/img/post/2024-01-14-notion-shadertoy-gallery-240118-142658.png)
+
+Save To Notion はコンテンツをCSSセレクタを使って指定することができます．
+Shadertoyでは名前や詳細をCSSセレクタを使って取得する必要があります．
+
+それぞれ、`Data on Webpage` を指定してピックします．
+
+### GLSLSandbox
+
+`Name`, `Content`, `Cover` を次のように設定します．タグは任意に設定してください．
+
+![Save To Notion for GLSLSandbox](/img/post/2024-01-14-notion-shadertoy-gallery-240118-142315.png)
+
+
+以上です．
