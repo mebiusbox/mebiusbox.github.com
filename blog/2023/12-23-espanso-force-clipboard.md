@@ -65,6 +65,14 @@ clipboard_threshold: 20
 この `force_clipboard` は公式ドキュメントには見当たらず、ソースコードを見るか、Issues で見つけることができます．
 もしかすると将来的に無くなるかもしれません．
 
+また、`force_mode` でも指定することができます．これはドキュメントにも[記載](https://espanso.org/docs/matches/basics/#injection-mechanism)があるのでこちらを使った方がいいかもしれません．`force_mode` で指定する場合は `clipboard` または `keys` を指定します．
+
+```yml
+- trigger: "Hello"
+  replace: "Hello, World"
+  force_mode: clipboard
+```
+
 
 ## さいごに
 
