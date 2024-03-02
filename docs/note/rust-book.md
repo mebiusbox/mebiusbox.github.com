@@ -13,6 +13,11 @@ last_update:
 
 import Bookmark from '@site/src/components/Markdown/WebBookmark.tsx'
 
+:::warning
+[正誤表](https://www.shoeisha.co.jp/book/detail/9784798177236#errata)を公開しています．
+また、最新のサンプルコードは以下の場所は[ここ](https://github.com/mebiusbox/rust-book)にあります．
+:::
+
 Zennで公開している「[Rust入門](https://zenn.dev/mebiusbox/books/22d4c1ed9b0003)」が「動かして学ぶ！Rust入門」として書籍化されました．書籍化にともなって大幅な加筆を行っています．
 
 もともと「[Rustではじめるレイトレーシング入門](https://github.com/mebiusbox/docs/blob/master/Rust%E3%81%A7%E3%81%AF%E3%81%98%E3%82%81%E3%82%8B%E3%83%AC%E3%82%A4%E3%83%88%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%B3%E3%82%B0%E5%85%A5%E9%96%80.pdf)」という文書を書いたのですが、その中からRustの解説部分のみをZennの本「Rust入門」として無料公開していました．その後、翔泳社より執筆依頼を頂きまして書籍化に至ります．詳しいことはブログの記事 [「動かして学ぶ！Rust入門」の執筆](/blog/2023/04/23/rust-book)に書きましたので興味がある方はそちらをお読みください．
