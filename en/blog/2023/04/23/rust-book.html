@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous" defer="defer"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" defer="defer"></script><link rel="stylesheet" href="/en/assets/css/styles.b83ef36c.css">
-<script src="/en/assets/js/runtime~main.f0362321.js" defer="defer"></script>
+<script src="/en/assets/js/runtime~main.4c713ccf.js" defer="defer"></script>
 <script src="/en/assets/js/main.78fe9a44.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -63,28 +63,29 @@
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="対象読者">対象読者<a href="#対象読者" class="hash-link" aria-label="Direct link to 対象読者" title="Direct link to 対象読者">​</a></h2>
 <p>本書の冒頭にも書いてあるとおり、ある程度プログラミング言語を学んでいる人を対象としています．ですから、変数とは何かとか、関数とは何かを詳しく説明していません．これはそういったプログラミングの基本的な内容よりもRustの機能説明に重点を置いているからです．とくに所有権を中心に書いていますが、他の内容もなるべく多く入れたつもりです．ただ、A5版であることやページ数の増加のため、あまり詰め込むわけにはいきませんでした．並列処理のと ころなど説明が簡潔になっている部分もありますが、それはアプリケーション開発をするところで、実際に使用して理解してもらうようになっています．</p>
 <p>また、プログラミング初学者でも読めるようにしていると書いていますが、それは理解できるかどうかは別として本書を最初から最後までやり遂げられるという意味です．もちろん、理解できることに越したことはありませんが、Rust言語はそう簡単ではありません．ですから、コード例を多く入れています．最低限のコーディングスキルとターミナル操作（この2つができる人をプログラミング初学者と想定）が出来れば動かしながら覚えることは可能だと思います．少なくとも最初から最後まで一通りこなすことで CUI, GUI, そして並列処理を使ったアプリケーション開発を体験できるはずです．あとはわからなかったところを見直したりしてみてください．各節は見直しやすいように機能ごとになるべく分けています．私も公式ドキュメントや参考書を読んで1回で理解できた訳ではありません．公式ドキュメントを読んだ後に本書を読んでもいいし、本書を読んでから公式ドキュメントや他の参考書を読んでみるとより理解しやすくなると思っていますし、そうなれば大変嬉しく思います．</p>
+<p>本書はすでに述べているとおり Zenn で公開している「<a href="https://zenn.dev/mebiusbox/books/22d4c1ed9b0003" target="_blank" rel="noopener noreferrer">Rust入門</a>（無料）」を加筆したものになっています．本書に興味を持たれた方は、先に Zenn の「Rust入門」を読んでから購入を検討することも可能です．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="レイトレーシング">レイトレーシング<a href="#レイトレーシング" class="hash-link" aria-label="Direct link to レイトレーシング" title="Direct link to レイトレーシング">​</a></h2>
-<p>はい、「アプリケーションの開発」にレイトレーシングのサンプルがあります．まさかのRust入門にいきなり数式が沢山でてきます．ですが、そんなことは気にし  ない．興味があればやってみてください．</p>
+<p>はい、「アプリケーションの開発」にレイトレーシングのサンプルがあります．まさかのRust入門にいきなり数式が沢山でてきます．ですが、そんなことは気にしない．興味があればやってみてください．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="印税について">印税について<a href="#印税について" class="hash-link" aria-label="Direct link to 印税について" title="Direct link to 印税について">​</a></h2>
 <p>詳しい事はお話できませんが、技術書が高い理由がわかった気がします．また、発売までの作業を考えると厳しいと思いました．ただ、原稿の執筆期間だけを考えれば悪くもないと思います．初回は原稿以外の部分でも大変と感じてしまいますが、そこを乗り切ればあとは原稿の執筆期間だけと考えると、なるほどという感じ．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="モチベーション">モチベーション<a href="#モチベーション" class="hash-link" aria-label="Direct link to モチベーション" title="Direct link to モチベーション">​</a></h2>
 <p>今回の執筆については、最初にも書いているある通り書籍を執筆することが夢の1つだったので、モチベが下がることはありませんでした．普段から文書を書くときにあまりモチベが下がることはありません．というのも、資料を集めて一気に書き上げるスタイルなので、書き始めてたらそのまま最後まで書き終えます．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="足りない部分">足りない部分<a href="#足りない部分" class="hash-link" aria-label="Direct link to 足りない部分" title="Direct link to 足りない部分">​</a></h2>
-<p>基本的に本書を読むために必要なことは順番に書いてあるつもりですが、1つだけ、<code>pin</code>について書けませんでした．これは非同期処理のところでコードとしてさらっと出てきて一切説明していません．他にもいくつか説明が足らないところが多いです．ただ、あ  まりに細かく説明してしまうとページ数が多くなってしまうので、分かってはいても追加はしませんでした．そういった部分はZennのRust入門に追加しようと思っています．</p>
+<p>基本的に本書を読むために必要なことは順番に書いてあるつもりですが、1つだけ、<code>pin</code>について書けませんでした．これは非同期処理のところでコードとしてさらっと出てきて一切説明していません．他にもいくつか説明が足らないところが多いです．ただ、あまりに細かく説明してしまうとページ数が多くなってしまうので、分かってはいても追加はしませんでした．そういった部分はZennのRust入門に追加しようと思っています．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="本を書くために">本を書くために<a href="#本を書くために" class="hash-link" aria-label="Direct link to 本を書くために" title="Direct link to 本を書くために">​</a></h2>
 <p>私なりに思うことです．もともとPDFとして技術的な解説書を書いてきました．これは本を執筆したかったからであり、その練習でもあります．なので、原稿はTeXで書き、PDFとして出力していました．そのまま印刷できるように、かつ、そのまま本としても問題ないようにです．そのような文書を20近く書いてきました．その経験を十分に活かせたと思っています．今回の執筆では Zenn の「Rust入門」が始まりではありますが、その記事は「Rustではじめるレイトレーシング入門」の一部であり、さらに「レイトレーシング入門」という文書をRustに書き直したものです．これは2018年末に書いたものなので、4年ぐらい前になります．資料を集めて、原稿を実際に書いた期間は1カ月ほどですが、それまで積み上げてきたものがあってこそだと思います．</p>
 <p>また、初回の構成案や計画書などはかなり正確にできました．これは見積もりに関係してきます．これについては WBS（Work Breakdown Structure）の考え方が大きいです．これにより正確な見積もりが出来るようになりました．</p>
-<p>あと、情報の整理のやり方も大事です．Notion でも Markdown でも好きなものを使えばいいと思います．書くための情報をどのように書いておくか．基本的には箇条書きになります．  十分に、そして漏らさずに．</p>
+<p>あと、情報の整理のやり方も大事です．Notion でも Markdown でも好きなものを使えばいいと思います．書くための情報をどのように書いておくか．基本的には箇条書きになります．十分に、そして漏らさずに．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="執筆環境">執筆環境<a href="#執筆環境" class="hash-link" aria-label="Direct link to 執筆環境" title="Direct link to 執筆環境">​</a></h2>
 <p>WindowsでVSCodeを使いました．形式は Markdown で mdbook を使っています．プロジェクトは git で管理しています．
 mdbookの追加機能として<code>mdbook-admonition</code>を使っています．これは注釈を入れるものです．VSCodeの拡張機能として「テキスト校正くん」を使いました．これは表記揺れ対応に使っています．他には、Windowsツールとして <code>keyhac</code>, <code>espanso</code> を使っています．それぞれテキストを処理するためのツールです．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="執筆校正ルール">執筆（校正）ルール<a href="#執筆校正ルール" class="hash-link" aria-label="Direct link to 執筆（校正）ルール" title="Direct link to 執筆（校正）ルール">​</a></h2>
 <p>執筆するときに、最初に自分用の執筆ルールを作成しました．これは表記揺れ対応にもつながります．主に、英語と日本語の扱い、空白の入れ方などをまとめています．また、校正時にはさらに校正ルールを作成して対応しました．これも表記揺れ対応です．一部を抜粋すると次のようなものです．</p>
 <ul>
-<li>日本語の句点には <code>、</code>, <code>．</code> (全角)を使用します． <code>,</code> (半角)は列挙の意味になります： <code>i32, u32, s32</code> や <code>赤, 青, 黄</code>．また、日本語の中点は半角の <code>･</code> を使います．</li>
+<li>日本語の句点には <code>、</code>, <code>．</code> (全角)を使用します． <code>,</code> (半角)は列挙の意味になり  ます： <code>i32, u32, s32</code> や <code>赤, 青, 黄</code>．また、日本語の中点は半角の <code>･</code> を使います．</li>
 <li><code>()</code>は半角．()内の内側に空白は入れません</li>
 <li>数字は全角ではなく半角を使用．数字の前後には空白を入れません</li>
-<li>用語の英語表記について、それが英  単語のみであれば前後に半角空白を入れて <code>Rust</code> とし、英語+日本語の場合には空白を入れません(<code>Rust言語</code>)．これは会社名なども同じで <code>Google</code> または<code>Google社</code>とします．ただし、全角 <code>、</code> や <code>．</code> の直後には空白を入れません：<code>たとえば、Rust では...</code></li>
+<li>用語の英語表記について、それが英単語のみであれば前後に半角空白を入れて <code>Rust</code> とし、英語+日本語の場合には空白を入れません(<code>Rust言語</code>)．これは会社名なども同じで <code>Google</code> または<code>Google社</code>とします．ただし、全角 <code>、</code> や <code>．</code> の直後には空白を入れません：<code>たとえば、Rust では...</code></li>
 <li>バージョンや 英単語+数字のような場合は前後に半角空白を入れます： <code>1.3.0</code>, <code>Rust 2018</code></li>
 <li>数式の前後に空白を入れます</li>
 <li>ファイル名の前後には空白を入れます</li>
@@ -96,11 +97,11 @@ mdbookの追加機能として<code>mdbook-admonition</code>を使っていま�
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="ツール">ツール<a href="#ツール" class="hash-link" aria-label="Direct link to ツール" title="Direct link to ツール">​</a></h2>
 <p>今回キャプションが多かったので、原稿にあるキャプションを一括で抜き出すツールを作りました．抜けなどのチェックに利用しました．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="コード">コード<a href="#コード" class="hash-link" aria-label="Direct link to コード" title="Direct link to コード">​</a></h2>
-<p>原稿にある動かせるコードは、すべてすぐに確認できるようにプロジェクトを作成  しています．mdbookでは動作確認はできますが、細かいビルドチェックなどができません．なので、別途作っています．これは原稿が出来たあとに作っています．</p>
+<p>原稿にある動かせるコードは、すべてすぐに確認できるようにプロジェクトを作成しています．mdbookでは動作確認はできますが、細かいビルドチェックなどができません．なので、別途作っています．これは原稿が出来たあとに作っています．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="厄介なこと">厄介なこと<a href="#厄介なこと" class="hash-link" aria-label="Direct link to 厄介なこと" title="Direct link to 厄介なこと">​</a></h2>
 <p>Rustは定期的にアップデートしています．エディションは変わりませんでしたが、執筆時点で 1.64、発売時には 1.69 になっていました．その間にビルドは問題なかったのですが、いくつか表示されるエラーが変わったり、Rust Playground の環境が更新されていたり、Rustのビルドの設定が変わっていたりと細かい更新がありました．これはどうしようもないので、特に発売までの間はバージョンに気を付けなければなりません．書籍で採用しているバージョンがあるとはいえ、実際に手に取って読み進めるときは最新にするでしょうから．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="zenn">Zenn<a href="#zenn" class="hash-link" aria-label="Direct link to Zenn" title="Direct link to Zenn">​</a></h2>
-<p>Zennで公開している「Rust入門」は「Rustではじめるレイトレーシング入門」の一部です．これをZennで書いた理由というのはいくつかあるのですが、その1つとして、多くの人に読んでもらえるというのがあります．これは GitHub で公開しているだけでは出来ません．Zennを利用する前はQiitaに書いていましたが、不満があってやめました．Zennの本形式で書いていますが、特に難しくありません．アウトプットは大事ですが、どこにアウトプットするかも大事です．私はDocusaurusやGitHubで文書を公開していますが、同時にZennにも公開 しています．それはやはり多くの人に見てもらえるからです．とはいえ、複数のアウトプット先があると面倒です．微妙にMarkdownの書き方が違います．そこは、ZennのMarkdown形式に変換するツールを作って対応しました．これでかなり楽になっています．</p>
+<p>Zennで公開している「Rust入門」は「Rustではじめるレイトレーシング入門」の一部です．これをZennで書いた理由というのはいくつかあるのですが、その1つとして、多くの人に読んでもらえるというのがあります．これは GitHub で公開しているだけでは出来ません．Zennを利用する前はQiitaに書いていましたが、不満があってやめました．Zennの本形式で書いていますが、特に難しくありません．アウトプットは大事ですが、どこにアウトプットするかも大事です．私はDocusaurusやGitHubで文書を公開していますが、同時にZennにも公開しています．それはやはり多くの人に見てもらえるからです．とはいえ、複数のアウトプット先があると面倒です．微妙にMarkdownの書き方が違います．そこは、ZennのMarkdown形式に変換するツールを作って対応しました．これでかなり楽になっています．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="gpt">GPT<a href="#gpt" class="hash-link" aria-label="Direct link to GPT" title="Direct link to GPT">​</a></h2>
 <p>これは執筆がほぼ終わった後に検証したのですが、OpenAIのAPIを使って原稿の校正チェッカを作って試しました．かなり有用だと思います．VSCodeの拡張機能「テキスト校正くん」では簡単な表記揺れなどの対応はできますが、誤字･脱字、スペルチェック、そしてなにより適切な言い回しの候補を教えてくれるので便利です．今回は利用出来ませんでしたが、執筆の機会があれば間違いなく利用すると思います．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="最後に">最後に<a href="#最後に" class="hash-link" aria-label="Direct link to 最後に" title="Direct link to 最後に">​</a></h2>
