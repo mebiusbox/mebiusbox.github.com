@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmebiusbox_docusaurus=self.webpackChunkmebiusbox_docusaurus||[]).push([[1020],{62563:s=>{s.exports=JSON.parse('{"label":"gitui","permalink":"/en/blog/tags/gitui","allTagsPath":"/en/blog/tags","count":1,"unlisted":false}')}}]);
