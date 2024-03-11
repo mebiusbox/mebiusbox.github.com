@@ -8,7 +8,7 @@ pagination_next: null
 pagination_prev: null
 image: https://og-image-mebiusbox.vercel.app/api/og?title=Visual%20Studio%20Code%E3%81%AE%E6%8B%A1%E5%BC%B5%E6%A9%9F%E8%83%BD&subtitle=Visual%2520Studio%2520Code%25E3%2581%25AE%25E6%258B%25A1%25E5%25BC%25B5%25E6%25A9%259F%25E8%2583%25BD&date=2023%2F12%2F17&tags=VSCode
 last_update:
-  date: 2023-12-17
+  date: 2024-03-11
   author: mebiusbox
 ---
 
@@ -50,13 +50,6 @@ VSCode本体のフォントを変更するために使用．
 - [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens)
 
 エラーや警告をエディタ内に表示する拡張機能．警告やエラーをしっかり対応しないと画面がひどいことになる．
-
-
-## File Template
-
-- [File Template](https://marketplace.visualstudio.com/items?itemName=rhangai.file-template)
-
-コードスニペットでも同じことが出来ますが、ファイルのテンプレートとなるとコードも大きく、それをスニペットにするとメンテナンスしづらいので素直にテンプレート機能を利用．テンプレートファイルを `.vscode/templates` フォルダに入れます．
 
 
 ## Fix JSON
@@ -216,7 +209,7 @@ JSONオブジェクトのキーを整列する拡張機能．
 
 ## Subtitles Editor
 
-- [Subtites Editor](https://marketplace.visualstudio.com/items?itemName=pepri.subtitles-editor)
+- [Subtitles Editor](https://marketplace.visualstudio.com/items?itemName=pepri.subtitles-editor)
 
 字幕編集の拡張機能．SRT形式の編集や翻訳の機能があって便利．
 
@@ -247,6 +240,19 @@ TODO や FIXME などをハイライト表示してくれる拡張機能．カ�
 
 全角の空白をわかりやすくするための拡張機能．
 
+## Control Snippets
+
+- [Control Snippets](https://marketplace.visualstudio.com/items?itemName=svipas.control-snippets)
+
+各スニペットの有効・無効を設定できる拡張機能です．ビルトインのスニペットや、特定の拡張機能のスニペットを個別に設定できます．
+余計なスニペットを無効にしたいときに使います．
+
+## Snippets Manager
+
+- [Snippets Manager](https://marketplace.visualstudio.com/items?itemName=zjffun.snippetsmanager)
+
+スニペット管理の拡張機能です．複数行のスニペットを作成する場合はこのような拡張機能を使ったほうが管理しやすいです．
+スニペットの追加・削除・編集や、現在のスニペットの確認もわかりやすいです．
 
 ## その他
 
