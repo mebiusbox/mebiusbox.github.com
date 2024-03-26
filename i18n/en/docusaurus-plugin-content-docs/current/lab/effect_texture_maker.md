@@ -9,7 +9,7 @@ keywords:
   - Vfx
 image: https://og-image-mebiusbox.vercel.app/api/og?title=EffectTextureMaker&subtitle=EffectTetureMaker%E3%81%AF%E3%83%96%E3%83%A9%E3%82%A6%E3%82%B6%E3%81%A7%E4%B8%BB%E3%81%AB%E3%82%A8%E3%83%95%E3%82%A7%E3%82%AF%E3%83%88%E7%94%A8%E3%81%AE%E3%83%86%E3%82%AF%E3%82%B9%E3%83%81%E3%83%A3%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B%E3%81%93%E3%81%A8%E3%81%8C%E3%81%A7%E3%81%8D%E3%82%8B%E3%82%82%E3%81%AE%E3%81%A7%E3%81%99&date=2023%2F01%2F11
 last_update:
-  date: 2023-12-31
+  date: 2024-03-26
   author: mebiusbox
 ---
 
@@ -451,6 +451,8 @@ You can save and load the data in JSON format. Press the `save` and `load` butto
       <div className="mbx-center margin-bottom--sm">BinaryMatrix</div>
     </div>
     <div className="col">
+      <img src="/img/lab/fxgen_coherentnoise.gif" alt="CoherentNoise" />
+      <div className="mbx-center margin-bottom--sm">CoherentNoise</div>
     </div>
     <div className="col">
     </div>
@@ -492,11 +494,15 @@ mebiusbox[at]gmail[dot].com
 
 ## Copyright
 
-Copyright (C) 2017-2023 mebiusbox software.
+Copyright (C) 2017-2024 mebiusbox software.
 
 
 ## Changes
 
+- 2024-03-26: 
+  - [Add] CoherentNoise template type.
+  - [Add] Add a button to reset effect parameters.
+  - [Fix] Noise sphere cannot be rendered.
 - 2023-12-31: [Add] BinaryMatrix template type.
 - 2023-12-12: [Add] SpriteSheets can be saved as Png image with alpha channel.
 - 2023-11-23: [Add] An generated image can be saved in Png image with alpha channel (Experimental). 'Save (PNG)' and 'Download (PNG)' have the same function. They are provided for browser compatibility.
