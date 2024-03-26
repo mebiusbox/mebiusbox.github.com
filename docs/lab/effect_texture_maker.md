@@ -461,6 +461,18 @@ JSON形式で保存したり読み込んだりすることができます．そ�
   </div>
 </div>
 
+## CoherentNoise
+
+シームレスなノイズテクスチャを生成します．
+
+- `NoiseFrequency` の値は `Repeat` の数で割り切れる値にしてください
+- `Gain` を最大にすると、2値化することができます．また、`Bias` パラメータで調整することができます．
+- `VoronoiCell` は `VoronoiNoise` が有効でないと効果がありません．
+- `RidgeOffset` は `Ridge` が有効でないと効果がありません．
+- `ScaleShift` は値を [-1,1] から [0,1] にマッピングする効果です．
+- `GradientNoise` は Perlin Noise です．
+- `Bias` はノイズの平均をシフトする効果です．
+- `Gain` はノイズの鋭さを調整します．
 
 ## Tips
 

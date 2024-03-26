@@ -461,6 +461,16 @@ You can save and load the data in JSON format. Press the `save` and `load` butto
   </div>
 </div>
 
+## CoherentNoise
+
+- `NoiseFrequency` should be divisible by `Repeat`.
+- Maximzing `Gain` can allow to binarize a noise value. It can also be adjusted with the `Bias`.
+- `VoronoiCell` has effect when `VoronoiNoise` is enabled.
+- `RidgeOffset` has effect when `Ridge` is enabled.
+- `ScaleShift` maps noise values from [-1,1] to [0,1].
+- `GradientNoise` is Perlin Noise．
+- `Bias` is used to shift noise mean value.
+- `Gain` is used to "sharpen" noise.
 
 ## Tips
 
