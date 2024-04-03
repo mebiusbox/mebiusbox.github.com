@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-note/math-3dtransformation" data-has-hydrated="false">
 <head>
 <meta charset="UTF-8">
-<meta name="generator" content="Docusaurus v3.1.0">
+<meta name="generator" content="Docusaurus v3.2.0">
 <title data-rh="true">3次元座標変換のメモ書き | Mebiusbox software</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://mebiusbox.github.io/en/docs/note/math-3dtransformation"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" property="og:locale:alternate" content="ja"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="3次元座標変換のメモ書き | Mebiusbox software"><meta data-rh="true" name="description" content="3次元座標変換について解説します"><meta data-rh="true" property="og:description" content="3次元座標変換について解説します"><meta data-rh="true" name="keywords" content="3次元座標変換,Three.js"><meta data-rh="true" property="og:image" content="https://og-image-mebiusbox.vercel.app/api/og?title=3%E6%AC%A1%E5%85%83%E5%BA%A7%E6%A8%99%E5%A4%89%E6%8F%9B%E3%81%AE%E3%83%A1%E3%83%A2%E6%9B%B8%E3%81%8D&amp;subtitle=3%E6%AC%A1%E5%85%83%E5%BA%A7%E6%A8%99%E5%A4%89%E6%8F%9B%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E8%A7%A3%E8%AA%AC%E3%81%97%E3%81%BE%E3%81%99&amp;date=2023%2F01%2F14"><meta data-rh="true" name="twitter:image" content="https://og-image-mebiusbox.vercel.app/api/og?title=3%E6%AC%A1%E5%85%83%E5%BA%A7%E6%A8%99%E5%A4%89%E6%8F%9B%E3%81%AE%E3%83%A1%E3%83%A2%E6%9B%B8%E3%81%8D&amp;subtitle=3%E6%AC%A1%E5%85%83%E5%BA%A7%E6%A8%99%E5%A4%89%E6%8F%9B%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E8%A7%A3%E8%AA%AC%E3%81%97%E3%81%BE%E3%81%99&amp;date=2023%2F01%2F14"><link data-rh="true" rel="icon" href="/en/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://mebiusbox.github.io/en/docs/note/math-3dtransformation"><link data-rh="true" rel="alternate" href="https://mebiusbox.github.io/docs/note/math-3dtransformation" hreflang="ja"><link data-rh="true" rel="alternate" href="https://mebiusbox.github.io/en/docs/note/math-3dtransformation" hreflang="en"><link data-rh="true" rel="alternate" href="https://mebiusbox.github.io/docs/note/math-3dtransformation" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://T4PENXHNV7-dsn.algolia.net" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" href="/en/blog/rss.xml" title="Mebiusbox software RSS Feed">
 <link rel="alternate" type="application/atom+xml" href="/en/blog/atom.xml" title="Mebiusbox software Atom Feed">
 
@@ -20,8 +20,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous" defer="defer"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" defer="defer"></script><link rel="stylesheet" href="/en/assets/css/styles.b83ef36c.css">
-<script src="/en/assets/js/runtime~main.01daf028.js" defer="defer"></script>
-<script src="/en/assets/js/main.66ae8197.js" defer="defer"></script>
+<script src="/en/assets/js/runtime~main.1b5b2137.js" defer="defer"></script>
+<script src="/en/assets/js/main.7fbaa048.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5WZWRT7N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -108,12 +108,12 @@ $$</p>
 <p>$$
 \sin\theta = \frac{a}{c}, \quad \cos\theta = \frac{b}{c}, \quad \tan\theta = \frac{a}{b}
 $$</p>
-<p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/wqu7p1d41zdhp0nlewl7xt2l70yf" alt="1554578765757_resize" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/wqu7p1d41zdhp0nlewl7xt2l70yf" alt="1554578765757_resize" class="img_ev3q"></p>
 <p>単位円で三角関数を見てみると</p>
 <p>$$
 x = \cos\theta, \quad y = \sin\theta
 $$</p>
-<p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/b2aftsjvnmvgl0bmgzdsh5b5hbtm" alt="1554578820354_resize" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/b2aftsjvnmvgl0bmgzdsh5b5hbtm" alt="1554578820354_resize" class="img_ev3q"></p>
 <p>となります．また，ピタゴラスの定理から</p>
 <p>$$
 \sin\theta^2 + \cos\theta^2 = 1
@@ -127,7 +127,7 @@ $$</p>
 \end{aligned}
 $$</p>
 <p>となります．次に加法定理です．次の図を見てください．</p>
-<p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/k4icxxiktalgyjqcm9x4xetbbtlu" alt="1554578863249" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/k4icxxiktalgyjqcm9x4xetbbtlu" alt="1554578863249" class="img_ev3q"></p>
 <p>$\Delta abc$において，斜辺の長さが$1$から</p>
 <p>$$
 \overline{ac} = \sin(A+B), \quad
@@ -155,7 +155,7 @@ $$</p>
 $$</p>
 <p>となります．</p>
 <p>それでは回転を見ていきましょう．次の図のように点$p$を点$p&#x27;$に回転する場合を考えます．ここでは$z=0$とします．</p>
-<p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/r9fszm4o15wgisb7abxea2qrv5ce" alt="1554580093216" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/r9fszm4o15wgisb7abxea2qrv5ce" alt="1554580093216" class="img_ev3q"></p>
 <p>すると点$p$の各成分は</p>
 <p>$$
 x = r\cos\phi, \quad y = r\sin\phi
@@ -194,8 +194,8 @@ $$</p>
 \left(\begin{matrix}x \newline y \newline z\end{matrix}\right)
 $$</p>
 <p>となります．この行列の基底ベクトルに注目してみると，回転させたい方向とは逆の方向に回転したベクトルになっています．つまり，反対方向に回転させた基底を使って変換を行うと，回転した座標になるということになります．</p>
-<p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/lw23oeaav3nlgs3z7rsszi90o4qx" alt="1554580132600" class="img_ev3q"></p>
-<p>この回 転行列はZ軸を基準に回転を表していることになります．このZ軸回転の行列を$R_z$とおくと</p>
+<p><img decoding="async" loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/lw23oeaav3nlgs3z7rsszi90o4qx" alt="1554580132600" class="img_ev3q"></p>
+<p>この回転行列はZ軸を基準に回転を表していることになります．このZ軸回転の行列を$R_z$とおくと</p>
 <p>$$
 R_z =
 \left(\begin{matrix}
@@ -230,7 +230,7 @@ R _ {xyz} = R_z R_y R_x
 $$</p>
 <p>となります．ここでは取り上げませんが，任意の軸を基準に回転する行列の式も簡単に見つかると思います．これらの回転行列を組み合わせて基底変換の行列をつくることが出来ます．</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="剛体変換rigid-body-transformation">剛体変換（rigid-body transformation）<a href="#剛体変換rigid-body-transformation" class="hash-link" aria-label="Direct link to 剛体変換（rigid-body transformation）" title="Direct link to 剛体変換（rigid-body transformation）">​</a></h3>
-<p>基底変換では座標系のうち，向きしか変換できませんでした．ここで，原点を平行移動させる変換を考えます．このような大きさが変わらず，向きと位置が変わる変換を<strong>剛体変 換</strong>といいます．剛体（rigid body）は力を加えても形状を変えない物体のことで物理シミュレーションでよく使います．
+<p>基底変換では座標系のうち，向きしか変換できませんでした．ここで，原点を平行移動させる変換を考えます．このような大きさが変わらず，向きと位置が変わる変換を<strong>剛体変換</strong>といいます．剛体（rigid body）は力を加えても形状を変えない物体のことで物理シミュレーションでよく使います．
 基底変換では向きしか変換できなかったので，これに加えて平行移動する変換をしなければなりません．基底変換ではある点$p$を点$p&#x27;$に変換する行列$M$から</p>
 <p>$$
 \vec{p}&#x27; = M\vec{p}
@@ -250,7 +250,7 @@ $$</p>
 \left(\begin{matrix}x \newline y \newline z \newline 1\end{matrix}\right)
 $$</p>
 <p>とします．ちなみに$w=0$とすると，無限遠点となり大きさが無限となります．ただし，無限遠点でも向きは存在しているので，$w=0$の場合は向きだけを表しているとも考えることができます．</p>
-<p>４次元の同次座標系を使うことで４行４列の行列を扱えるようになりました．平行移動を行列で表記すると</p>
+<p>４次元の同次座標系を使うことで４行４列の行列を扱えるようになりました．平行移動を行列で表  記すると</p>
 <p>$$
 T =
 \left(\begin{matrix}
@@ -617,7 +617,7 @@ $$</p>
 <p>クリップ空間の座標で$x,y,z$を$w$で除算することを<strong>透視除算</strong>といい，$x/w,y/w,z/w$となります．この透視除算した座標を<strong>正規化デバイス座標</strong>（normalized device coordinate）といいます．</p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="透視投影変換">透視投影変換<a href="#透視投影変換" class="hash-link" aria-label="Direct link to 透視投影変換" title="Direct link to 透視投影変換">​</a></h6>
 <p>まずは透視投影変換から見ていきましょう．透視投影では近いほど大きく，遠いほど小さく見えます．次の図を見てください．</p>
-<p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/bcit5ohu7r2dxxg3wpg0e209kcao" alt="1554621898018_half" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/bcit5ohu7r2dxxg3wpg0e209kcao" alt="1554621898018_half" class="img_ev3q"></p>
 <p>原点$O$の位置から点$P$を見たとき，点$P$を$z&#x27;=-1$の平面に投影すると，三角形$xoz$と$x&#x27;oz&#x27;$は相似の関係なので</p>
 <p>$$
 x&#x27;<!-- -->:x<!-- --> = z&#x27;<!-- -->:z<!-- --> = -1<!-- -->:z<!-- -->, \quad \therefore x&#x27; = \frac{x}{-z}
@@ -627,10 +627,10 @@ $$</p>
 x&#x27; = x/-z, \quad y&#x27; = y/-z
 $$</p>
 <p>となります．次に投影面というのを考えます．これは先程の投影される平面のことで，$z&#x27;=-1$です．</p>
-<p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/z1evy3ejqfpxzlhcu2awpmzi1gyp" alt="1554623777860_half" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/z1evy3ejqfpxzlhcu2awpmzi1gyp" alt="1554623777860_half" class="img_ev3q"></p>
 <p>また視野角を$90^{\circ}$とします．そうすると$z&#x27;$におけるXとYは$[-1,1]$になります．</p>
-<p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/4y7bc8hpduj1gq53peoff18032wk" alt="1554628026091_half" class="img_ev3q"></p>
-<p>ここで，最初の透視変換の式と，投影面を考慮して行列で表すと 次のようになります．</p>
+<p><img decoding="async" loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/4y7bc8hpduj1gq53peoff18032wk" alt="1554628026091_half" class="img_ev3q"></p>
+<p>ここで，最初の透視変換の 式と，投影面を考慮して行列で表すと次のようになります．</p>
 <p>$$
 M_p = \left(\begin{matrix}
 1 &amp; 0 &amp; 0 &amp; 0 \newline
@@ -676,8 +676,8 @@ $$</p>
 <p>$$
 z _ {ndc} = \frac{p _ {z}&#x27;}{p _ {w}&#x27;} = \frac{-a\cdot p _ {w}&#x27;+b}{p _ {w}&#x27;} = -a+\frac{b}{p _ {w}&#x27;} = -a+\frac{b}{-z}
 $$</p>
-<p>となります．ここで，前方クリッピング面と後方クリッピング面を導入します．</p>
-<p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/5ccc1j6slu80pe9et8fot2rk1q5m" alt="1554629530337_half" class="img_ev3q"></p>
+<p>となります．ここで，前方クリッピング面と後方クリッピング面を 導入します．</p>
+<p><img decoding="async" loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/5ccc1j6slu80pe9et8fot2rk1q5m" alt="1554629530337_half" class="img_ev3q"></p>
 <p>この前方クリッピング面（$z=n$）のとき$z _ {ndc}=-1$，後方クリッピング面（$z=f$）のとき$z _ {ndc}=1$となるように，$a$と$b$を求めます．</p>
 <p>$$
 -a+\frac{b}{-n} = -1, \quad -a+\frac{b}{-f} = 1, \quad \therefore b = -f(1+a)
@@ -722,8 +722,8 @@ M_w \left(\begin{matrix}x \newline y \newline z \newline 1\end{matrix}\right) =
 \left(\begin{matrix}x \newline y \newline z\frac{n+f}{n-f}+\frac{-2nf}{n-f} \newline -z\end{matrix}\right)
 $$</p>
 <p>となります．ここで，$n=-1, f=-5$としたときの図を以下に示します．</p>
-<p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/47h8ky78l55xbyttnebzwf9oje26" alt="1554748535650_resize" class="img_ev3q"></p>
-<p>この図では横軸が$z$，縦軸が$z _ {ndc}$です．$z=-1$のとき$z _ {ndc}=-1$，$z=-5$のとき$z _ {ndc}=1$になっているのがわかります．</p>
+<p><img decoding="async" loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/47h8ky78l55xbyttnebzwf9oje26" alt="1554748535650_resize" class="img_ev3q"></p>
+<p>この図では横軸が$z$，縦軸が$z _ {ndc}$です．$z=-1$のとき$z _ {ndc}=-1$，$z=-5$のとき$z _ {ndc}=1$になっているのがわかります  ．</p>
 <p>次に$l,r,t,b$を$[-1,1]$に収まるように拡大・縮小します．$z=-1$のとき$-1,1$，$z=-n$のとき$l,r$または$t,b$ですから，相似の関係から</p>
 <p>$$
 \frac{1-(-1)}{-1}/\frac{r-l}{n} = \frac{-2n}{r-l}, \quad
@@ -836,7 +836,7 @@ M_o = M_s M_t &amp;=
 \end{aligned}
 $$</p>
 <p>となります．次の図は正投影変換において$n=-1,f=-5$のときのグラフです．</p>
-<p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/eyt3mgh0t247bmc635mjowqvd8h6" alt="1554826933051_resize" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/eyt3mgh0t247bmc635mjowqvd8h6" alt="1554826933051_resize" class="img_ev3q"></p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="openglの投影関数">OpenGLの投影関数<a href="#openglの投影関数" class="hash-link" aria-label="Direct link to OpenGLの投影関数" title="Direct link to OpenGLの投影関数">​</a></h3>
 <p>OpenGLには投影変換行列を設定してくれる関数があります．<code>glFrustum</code>関数は前方クリッピング面の左右上下の座標$l,r,t,b$とZ軸の距離$n$，および遠方クリッピング面のZ軸の距離$f$を指定して，透視投影変換行列を設定します．<code>gluPerspective</code>関数は視野角(fovy)とアスペクト比(aspect)，前方・後方クリッピング面のZ軸の距離$n,f$を指定して，透視投影変換行列を設定します．<code>glOrtho</code>関数はクリッピング面の左右上下の座標$l,r,t,b$と前方・後方クリッピング面のZ軸の距離$n,f$を指定して正投影行列を設定します．これらの関数のドキュメントには行列の各要素が記載されています．その行列と，これまで導出してきた行列と比較してみるといくつか符号が違っているところがあります．これは，OpenGLの関数では$n,f$を正の値，導出した行列の$n,f$は負の値だからです．そのため，導出した行列をOpenGLの関数の行列と同じにするには$n,f$の符号を反転すればよいことになります．よって，それぞれの行列は</p>
 <p>$$
@@ -907,7 +907,7 @@ $$</p>
 <p>となります．$Y$が反転しているのは正規化デバイス座標系ではY軸の上が正に対して，スクリーンでは左上が原点でありY軸は下が正だからです．$Z$は$[n,f]$の間になるようにしています．通  常は$n=0,f=1$です．</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="一般的な頂点データのパイプライン">一般的な頂点データのパイプライン<a href="#一般的な頂点データのパイプライン" class="hash-link" aria-label="Direct link to 一般的な頂点データのパイプライン" title="Direct link to 一般的な頂点データのパイプライン">​</a></h3>
 <p>レンダリングパイプラインの主要な座標変換を一通り見てきました．一般的に頂点データがどのような座標変換が適用されて画面に表示されるかを図にしてみました．</p>
-<p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/3yhvqigxx4oyb3rghqd525t7r3rr" alt="1554646680440" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/3yhvqigxx4oyb3rghqd525t7r3rr" alt="1554646680440" class="img_ev3q"></p>
 <p>実際は環境によって変わる場合があると思いますので，この辺り触れる機会があれば，その環境のドキュメントを確認してください．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="おわりに">おわりに<a href="#おわりに" class="hash-link" aria-label="Direct link to おわりに" title="Direct link to おわりに">​</a></h2>
 <p>簡単にまとめるつもりが，なんか思っていた以上に長くなってしまった気がしますね．また，説明がまだ上手く出来ていないところが多々あるので反省．意見や感想，間違いの指摘など受け付けていますので，なにかあればよろしくおねがいします．また，少しでも参考になれば幸いです．</p>
@@ -926,7 +926,7 @@ $$</p>
 viewZ = \frac{nf}{(f-n)\times invClipZ-f}
 \tag{1}
 $$</p>
-<p>となります．まず，これらの関数の<strong>n</strong>と<strong>f</strong>は正の値を指定します．よって，透 視投影の式は</p>
+<p>となります．まず，これらの関数の<strong>n</strong>と<strong>f</strong>は正の値を指定します  ．よって，透視投影の式は</p>
 <p>$$
 \begin{aligned}
 p _ {z}&#x27; &amp;= az+b = \frac{n+f}{n-f}z + \frac{-2nf}{f-n} \newline
@@ -1017,9 +1017,9 @@ $$</p>
 <p>となります．</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="線形リニア深度">線形（リニア）深度<a href="#線形リニア深度" class="hash-link" aria-label="Direct link to 線形（リニア）深度" title="Direct link to 線形（リニア）深度">​</a></h3>
 <p>一般的に透視投影の深度は線形ではありません．これだと扱いづらいので，線形深度に変換して使用します．透視投影では深度が線形ではありませんが，正投影では線形深度になっています．</p>
-<p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/2gwgrizz07hnzji81xerox4zcu0f" alt="1559404608_half" class="img_ev3q">
+<p><img decoding="async" loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/2gwgrizz07hnzji81xerox4zcu0f" alt="1559404608_half" class="img_ev3q">
 図：透視投影の深度</p>
-<p><img loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/28pffrspdpvgqe2d5gvzgp736m0h" alt="1559404642_half" class="img_ev3q">
+<p><img decoding="async" loading="lazy" src="https://storage.googleapis.com/zenn-user-upload/28pffrspdpvgqe2d5gvzgp736m0h" alt="1559404642_half" class="img_ev3q">
 図：正投影の深度</p>
 <p>Three.jsでは<strong>perspectiveDepthToViewZ</strong>と<strong>viewZToOrthographicDepth</strong>を使って次のように線形深度に変換することができます．</p>
 <div class="language-glsl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#f8f8f2;--prism-background-color:#272822"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-glsl codeBlock_bY9V thin-scrollbar" style="color:#f8f8f2;background-color:#272822"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#f8f8f2"><span class="token plain">float getLinearDepth(float invClipZ, float near, float far)</span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">{</span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">  float viewZ = perspectiveDepthToViewZ(invClipZ, near, far);</span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">  return viewZToOrthographicDepth(viewZ);</span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>

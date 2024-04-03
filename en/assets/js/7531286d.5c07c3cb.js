@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmebiusbox_docusaurus=self.webpackChunkmebiusbox_docusaurus||[]).push([[7980],{37997:s=>{s.exports=JSON.parse('{"label":"zoxide","permalink":"/en/blog/tags/zoxide","allTagsPath":"/en/blog/tags","count":1,"unlisted":false}')}}]);
