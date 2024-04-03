@@ -1,0 +1,25 @@
+{
+	"blog": {
+		"prefix": "blog",
+		"description": "blog",
+		"scope": "markdown",
+		"body": [
+			"---\r",
+			"title: <title>\r",
+			"description: description here.\r",
+			"keywords:\r",
+			"  - keywords\r",
+			"category: note\r",
+			"authors: [mebiusbox]\r",
+			"tags: [tags]\r",
+			"image: \r",
+			"---\r",
+			"\r",
+			"summery here.\r",
+			"\r",
+			"<!-- truncate -->\r",
+			"\r",
+			""
+		]
+	}
+}
