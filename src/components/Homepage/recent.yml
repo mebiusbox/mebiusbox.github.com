@@ -1,3 +1,7 @@
+- name: 2024-04-03-zoxide-database-prune
+  date: 2024-04-03
+  title:
+    ja: zoxideのデータベースを整理する
 - name: 2024-03-11-gitui-pending-other
   date: 2024-03-11
   title:
@@ -14,7 +18,3 @@
   date: 2023-12-15
   title:
     ja: Three.js を r116 から r159 にアップデートしたこと
-- name: 2023-12-13-vscode-pixy-outline
-  date: 2023-12-13
-  title:
-    ja: 自分用にVSCodeのアウトライン拡張を作ってみました
