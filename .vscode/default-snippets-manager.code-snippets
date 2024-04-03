@@ -1,4 +1,64 @@
 {
+	"admonition(tip)": {
+		"prefix": "admonition(tip)",
+		"description": "admonition(tip)",
+		"scope": "markdown",
+		"body": [
+			":::tip",
+			"$0",
+			":::"
+		]
+	},
+	"admonition(note)": {
+		"prefix": "admonition(note)",
+		"description": "admonition(note)",
+		"scope": "markdown",
+		"body": [
+			":::note\r",
+			"$0\r",
+			":::"
+		]
+	},
+	"admonition(warn)": {
+		"prefix": "admonition(warn)",
+		"description": "admonition(warn)",
+		"scope": "markdown",
+		"body": [
+			":::warning\r",
+			"$0\r",
+			":::"
+		]
+	},
+	"admonition(info)": {
+		"prefix": "admonition(info)",
+		"description": "admonition(info)",
+		"scope": "markdown",
+		"body": [
+			":::info\r",
+			"$0\r",
+			":::"
+		]
+	},
+	"admonition(caution)": {
+		"prefix": "admonition(caution)",
+		"description": "admonition(caution)",
+		"scope": "markdown",
+		"body": [
+			":::caution\r",
+			"$0\r",
+			":::"
+		]
+	},
+	"code": {
+		"prefix": "code",
+		"description": "code",
+		"scope": "markdown",
+		"body": [
+			"```${1:lang} title=\"${2:title}\"\r",
+			"$0\r",
+			"```"
+		]
+	},
 	"blog": {
 		"prefix": "blog",
 		"description": "blog",
