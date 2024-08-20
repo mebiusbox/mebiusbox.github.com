@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmebiusbox_docusaurus=self.webpackChunkmebiusbox_docusaurus||[]).push([[9424],{90314:s=>{s.exports=JSON.parse('{"label":"JavaScript","permalink":"/blog/tags/java-script","allTagsPath":"/blog/tags","count":2,"unlisted":false}')}}]);

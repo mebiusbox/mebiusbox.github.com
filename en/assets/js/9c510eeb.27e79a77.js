@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmebiusbox_docusaurus=self.webpackChunkmebiusbox_docusaurus||[]).push([[4094],{47452:s=>{s.exports=JSON.parse('{"label":"WordPress","permalink":"/en/blog/tags/word-press","allTagsPath":"/en/blog/tags","count":1,"unlisted":false}')}}]);

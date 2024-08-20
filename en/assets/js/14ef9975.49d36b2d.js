@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmebiusbox_docusaurus=self.webpackChunkmebiusbox_docusaurus||[]).push([[5753],{58251:e=>{e.exports=JSON.parse('{"permalink":"/en/blog/tags/three-js","page":1,"postsPerPage":5,"totalPages":1,"totalCount":2,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);

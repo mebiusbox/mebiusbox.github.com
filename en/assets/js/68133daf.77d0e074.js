@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmebiusbox_docusaurus=self.webpackChunkmebiusbox_docusaurus||[]).push([[8893],{49682:s=>{s.exports=JSON.parse('{"label":"Espanso","permalink":"/en/blog/tags/espanso","allTagsPath":"/en/blog/tags","count":1,"unlisted":false}')}}]);

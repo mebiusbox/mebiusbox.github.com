@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmebiusbox_docusaurus=self.webpackChunkmebiusbox_docusaurus||[]).push([[3301],{6368:s=>{s.exports=JSON.parse('{"permalink":"/en/blog/tags/software","page":1,"postsPerPage":5,"totalPages":1,"totalCount":3,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);
