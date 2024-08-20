@@ -16,9 +16,9 @@
     "contents:preview": "npx servez ./contents/"
   },
   "dependencies": {
-    "@docusaurus/core": "^3.2.0",
-    "@docusaurus/plugin-ideal-image": "^3.2.0",
-    "@docusaurus/preset-classic": "^3.2.0",
+    "@docusaurus/core": "3.4.0",
+    "@docusaurus/plugin-ideal-image": "3.4.0",
+    "@docusaurus/preset-classic": "3.4.0",
     "@giscus/react": "^2.2.6",
     "@mdx-js/react": "^3.0.0",
     "clsx": "^1.2.1",
@@ -39,9 +39,9 @@
     "sass": "^1.57.1"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.2.0",
-    "@docusaurus/tsconfig": "^3.2.0",
-    "@docusaurus/types": "^3.2.0",
+    "@docusaurus/module-type-aliases": "3.4.0",
+    "@docusaurus/tsconfig": "3.4.0",
+    "@docusaurus/types": "3.4.0",
     "@types/js-yaml": "^4.0.5",
     "@types/react": "^18.2.45",
     "front-matter": "^4.0.2",
