@@ -11,7 +11,8 @@ keywords:
   - uv
 category: note
 authors: [mebiusbox]
-tags: [python]
+tags: [windows,python]
+image: https://og-image-mebiusbox.vercel.app/api/og?title=Windows%e3%81%a7%e3%81%aePython%e7%92%b0%e5%a2%83%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6&subtitle=Anaconda%e3%81%8b%e3%82%89%e5%88%a5%e3%81%ae%e7%92%b0%e5%a2%83%e3%81%ab%e7%a7%bb%e8%a1%8c%e3%81%a7%e3%81%8d%e3%82%8b%e3%81%ae%e3%81%8b&date=2024%2F08%2F27&tags=windows,python
 ---
 
 WindowsでのPython環境はこれまでMiniconda(Anaconda)を利用してきました．個人的利用では正直なところ、とくに問題ありません．ただ、現在Minicondaを利用する理由がPythonとNodejsのバージョン管理にしか使っておらず、そろそろ別のに乗り換えるいい機会かなと思いました．そこで、いくつか試してみた結果を記録しておきます．
