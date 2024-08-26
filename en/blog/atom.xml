@@ -36,6 +36,7 @@
             <name>mebiusbox</name>
             <uri>https://github.com/mebiusbox</uri>
         </author>
+        <category label="windows" term="windows"/>
         <category label="python" term="python"/>
     </entry>
     <entry>

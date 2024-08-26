@@ -33,6 +33,7 @@
 <p>ということで、最終的に py + winget で python のバージョン管理を、pip/uv でパッケージ管理をするようになりました．とりあえず、ローカルにある環境はほとんど Miniconda から移行できました．ちなみに基本的に pyproject.toml に依存関係をまとめて uv を使ったり、pip を使う場合は uv で pyproject.toml から requirements.txt を生成して使うという形になります．あと、パッケージの依存関係を調べるのに <code>uv pip tree</code> コマンドが使えるので便利です．また、poetry も使ってもいいかもしれません．それはもうちょっと試してみないとわからないです．</p>
 <p>環境は移行したものの、Miniconda よりも良くなったというところはとくにないので、Miniconda(Anaconda)を使ってもいいと思います．py+winget の部分が Miniconda になるだけです．とりあえず、どちらでも好きな方で問題ないという認識です．</p>
 <p>以上です．</p>]]></content:encoded>
+            <category>windows</category>
             <category>python</category>
         </item>
         <item>
