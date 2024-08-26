@@ -1,3 +1,7 @@
+- name: 2024-08-27-python-on-windows
+  date: 2024-08-27
+  title:
+    ja: WindowsでのPython環境について
 - name: 2024-04-03-prune-zoxide-database
   date: 2024-04-03
   title:
@@ -14,7 +18,3 @@
   date: 2023-12-16
   title:
     ja: Three.jsのカラー管理
-- name: 2023-12-15-bump-threejs-from-r116-to-r159
-  date: 2023-12-15
-  title:
-    ja: Three.js を r116 から r159 にアップデートしたこと
