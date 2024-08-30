@@ -110,6 +110,11 @@ div.mbx-snap img {
 .mbx-half { zoom:0.5; }
 .mbx-center { text-align: center; }
 
+.markdown > P,
+article > p {
+  line-height: 2rem;
+}
+
 .markdown > h1,
 article > h1 {
   color: var(--ifm-color-primary);
