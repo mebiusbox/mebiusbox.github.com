@@ -11,11 +11,11 @@ authors: [mebiusbox]
 まず、現在のキーバインドを確認するには `File > Settings` から `Keybindings` を選びます。
 `ctrl-alt-o` で検索をかけると、キーバインドの一覧が表示されます。
 
-![keybindings](/img/post/2016-06-17-atom-keybindings.png)
+![keybindings](/img/post/2016/2016-06-17-atom-keybindings.png)
 
 また、Keybinding Resolver を使うと詳しい情報がわかります。`ctrl-.` を押して Keybinding Resolver を有効にし `ctrl-alt-o` を押すと最終的にどのコマンドが実行されたかがわかります。
 
-![resolver](/img/post/2016-06-17-atom-keybindings-resolver.png)
+![resolver](/img/post/2016/2016-06-17-atom-keybindings-resolver.png)
 
 どうやら下から順番に上書きされているようです。この場合ですと `advanced-open-file:toggle` が実行されます。
 `ctrl-alt-o` では `git-control:toggle` を実行してほしいのでカスタマイズします。
@@ -32,7 +32,7 @@ Keybindings Resolver で実行されているコマンドを確認し、Keybindi
 そして、`advanced-open-file:toggle` を `git-control:toggle` に変更します。
 Keybindings Resolver で正しく設定されていることを確認してみます。
 
-![resolved](/img/post/2016-06-17-atom-keybindings-resolved.png)
+![resolved](/img/post/2016/2016-06-17-atom-keybindings-resolved.png)
 
 keymap.cson によって変更されていることがわかります。
 

@@ -477,7 +477,7 @@ yum install bzip2 -y
 npm install svgexport -g
 ```
 
-![fig-4](/img/post/2016-07-15-gitbook-automation-004.png)
+![fig-4](/img/post/2016/2016-07-15-gitbook-automation-004.png)
 
 
 正常に生成されました。

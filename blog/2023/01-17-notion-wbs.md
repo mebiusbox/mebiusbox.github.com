@@ -42,22 +42,22 @@ import Bookmark from '@site/src/components/Markdown/WebBookmark.tsx'
 
 この時点で次のようなプロパティ構成になっています．
 
-![](/img/post/2023-01-17-notion-wbs-230117230900.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117230900.png)
 
 
 ## サブアイテムの設定
 
 データベースの設定(`･･･`ボタン)からサブアイテム(`Sub-items`)の設定を選択します．
 
-![](/img/post/2023-01-17-notion-wbs-230117231000.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117231000.png)
 
 設定はデフォルトのままで問題ありません．
 
-![](/img/post/2023-01-17-notion-wbs-230117231026.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117231026.png)
 
 次のようなプロパティの構成になっているはずです．
 
-![](/img/post/2023-01-17-notion-wbs-230117231127.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117231127.png)
 
 
 ## 進捗率の計算
@@ -65,40 +65,40 @@ import Bookmark from '@site/src/components/Markdown/WebBookmark.tsx'
 子の進捗率を計算して親の進捗率として表示します．そのためにプロパティを2つ作成します．
 1つは`_進捗N`で関数(Formula)タイプです．先頭の`_`は計算用を表しています．もう1つは`_進捗R`とします．こちらはロールアップ(Rollup)で、リレーション(Relation)に`Sub-item`を設定します．
 
-![](/img/post/2023-01-17-notion-wbs-230117225647.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117225647.png)
 
 次にプロパティ(Property)に`_進捗N`を設定します．
 
-![](/img/post/2023-01-17-notion-wbs-230117225734.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117225734.png)
 
 計算(Calculate)は`オリジナルを表示(Show original)`に設定しておきます．
 
 この時点で、プロパティは次のようになっています．
 
-![](/img/post/2023-01-17-notion-wbs-230117231537.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117231537.png)
 
 適当にタスクを追加して、タスクの親子関係を設定します．ここで重要なのは、子を持つ親タスクの<HL>進捗(子)</HL>は`自動`に設定しておいてください．
 
-![](/img/post/2023-01-17-notion-wbs-230117231646.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117231646.png)
 
 
 ### 子タスクの進捗率
 
 `_進捗N`は子タスクの<HL>進捗(子)</HL>のセレクト値を数値に変換します．まず、`_進捗N`を数値として扱いたいので、関数(Formula)で`1`と設定します．
 
-![](/img/post/2023-01-17-notion-wbs-230117232045.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117232045.png)
 
 これで、このプロパティが数値として扱われます．数値として扱われると、関数プロパティのオプションに`数値の形式(Number format)`と`表示形式(Show as)`が追加されます．
 
-![](/img/post/2023-01-17-notion-wbs-230117232215.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117232215.png)
 
 数値の形式(Number format)を`数値(Number)`にし、表示形式(Show as)を`リング(Ring)`に設定します．
 
-![](/img/post/2023-01-17-notion-wbs-230117232322.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117232322.png)
 
 次に、`_進捗N`を数値に設定すると、そのプロパティをロールアップしている`_進捗R`の計算(Calculate)に項目が追加されますので、`合計(Sum)`を設定します．そうすると、`表示形式(Show as)`が選べるようになりますが`数値(Number)`のままにしておきます．
 
-![](/img/post/2023-01-17-notion-wbs-230117232735.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117232735.png)
 
 これで、`_進捗N`と`_進捗R`がともに数値となりました．次に`_進捗N`の関数を設定します．関数は次の通りです．
 
@@ -117,19 +117,19 @@ if(prop("進捗(子)") == "自動", floor(prop("_進捗R") / max(1, length(repla
 if(length(prop("Sub-item")) > 0, floor(prop("_進捗R") / max(1, length(replaceAll(prop("Sub-item") + ",", "[^,]", "")))), prop("_進捗N")) / 100
 ```
 
-![](/img/post/2023-01-17-notion-wbs-230117234022.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117234022.png)
 
 数値の形式は`パーセント(Percent)`、表示形式は`リング(Ring)`に設定します．
 
-![](/img/post/2023-01-17-notion-wbs-230117234120.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117234120.png)
 
 これで親タスクや子タスクを追加すると自動で計算されるようになります．
 
-![](/img/post/2023-01-17-notion-wbs-230117234223.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117234223.png)
 
 最後に不要なプロパティを非表示にすることで完成です．
 
-![](/img/post/2023-01-17-notion-wbs-230117234330.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117234330.png)
 
 
 ## ステータスプロパティを使った方法
@@ -145,23 +145,23 @@ if(length(prop("Sub-item")) > 0, floor(prop("_進捗R") / max(1, length(replaceA
 
 次に、サブアイテムの設定をします．設定はデフォルトのままで問題ありません．
 
-![](/img/post/2023-01-17-notion-wbs-230117235400.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117235400.png)
 
 適当にタスクを追加して、タスクの親子関係を設定します．
 
-![](/img/post/2023-01-17-notion-wbs-230117235544.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117235544.png)
 
 次に、<HL>進捗(親)</HL>のロールアップでリレーション(Relation)を `Sub-item` 、プロパティ(Property)を<HL>進捗(子)</HL>、計算(Calculate)を`グループごとの割合(Percent per group) → Complete`に設定します．
 
-![](/img/post/2023-01-17-notion-wbs-230117235803.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117235803.png)
 
 そうすると、表示形式(Show as)を設定できるようになりますので、`リング(Ring)`を設定します．
 
-![](/img/post/2023-01-17-notion-wbs-230117235912.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230117235912.png)
 
 これで完成です．
 
-![](/img/post/2023-01-17-notion-wbs-230118000036.png)
+![](/img/post/2023/2023-01-17-notion-wbs-230118000036.png)
 
 ただし、この方法では子タスクがすべて終わっても、その親タスクは自動で `Done` にならないので手動で行う必要があります．それを自動化することも可能かもしれませんが、ご自身で調べてみてください．
 
@@ -172,4 +172,3 @@ if(length(prop("Sub-item")) > 0, floor(prop("_進捗R") / max(1, length(replaceA
 今回作成したWBSのテンプレートを公開しています．詳しくはテンプレートにある「はじめにお読みください」を参照してください．
 
 <Bookmark name="WBS | mebiusbox.notion.site" url="https://mebiusbox.notion.site/WBS-c33e10534921465d93f6604948302c81" description="Notion用 WBS (Work Breakdown Structure)のテンプレートです" />
-

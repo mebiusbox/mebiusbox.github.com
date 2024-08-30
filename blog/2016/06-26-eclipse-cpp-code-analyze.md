@@ -15,11 +15,11 @@ Eclipse の C++ 開発環境に静的コード解析をいくつか追加しま�
 
 メニューバーから `Run > External Tools > External Tools Configurations...` を選択します。
 
-![001](/img/post/2016-06-26-eclipse-cpp-code-analyze-001.png)
+![001](/img/post/2016/2016-06-26-eclipse-cpp-code-analyze-001.png)
 
 ツールバーから選択してもいいです。
 
-![002](/img/post/2016-06-26-eclipse-cpp-code-analyze-002.png)
+![002](/img/post/2016/2016-06-26-eclipse-cpp-code-analyze-002.png)
 
 
 ## cpplint
@@ -36,19 +36,19 @@ cpplint を実行するには python が必要です。
 
 左下にある `Program` を選択するとその上にある `New` アイコンがクリック出来るようになるのでクリックします。
 
-![003](/img/post/2016-06-26-eclipse-cpp-code-analyze-003.png)
+![003](/img/post/2016/2016-06-26-eclipse-cpp-code-analyze-003.png)
 
 `Name` に `cpplint` と入力し、`Location` と `Arguments` に以下のように入力します。
 
-Location：`E:\python27\python.exe`  
+Location：`E:\python27\python.exe`
 Arguments：`E:\cpplint.py ${resource_loc}`
 
-![004](/img/post/2016-06-26-eclipse-cpp-code-analyze-004.png)
+![004](/img/post/2016/2016-06-26-eclipse-cpp-code-analyze-004.png)
 
 次に `Common` タブを選択して、Display in favorites menu の `Externals Tools` にチェックを入れます。
 また、Launch in background はチェックをはずします。設定が終わったら `Apply` を押します。
 
-![005](/img/post/2016-06-26-eclipse-cpp-code-analyze-005.png)
+![005](/img/post/2016/2016-06-26-eclipse-cpp-code-analyze-005.png)
 
 これで設定終了です。
 
@@ -64,7 +64,7 @@ cppcheck は以下の場所からダウンロードできます。
 
 cpplint と同じように New ボタンを押して新規に作成し、Name を `cppcheck`、Location, Arguments を以下のように設定します。
 
-Location：`C:\Program Files\Cppcheck\cppcheck.exe`  
+Location：`C:\Program Files\Cppcheck\cppcheck.exe`
 Arguments：`--enable=all --force ${resource_loc}`
 
 cppcheck はインクルードしたファイルが検索できないとエラーとなりますが、`--force` で強制的に解析します。
@@ -78,8 +78,8 @@ SourceMonitor はメトリクス解析をやってくれます。以下の場所
 
 ここではデフォルト設定のままインストールしました。こちらは次のように設定します。
 
-Name：`SourceMonitor`  
-Location：`C:\Program Files (x86)\SourceMonitor\SourceMonitor.exe`  
+Name：`SourceMonitor`
+Location：`C:\Program Files (x86)\SourceMonitor\SourceMonitor.exe`
 Arguments：`/DC++ ${resource_loc}`
 
 ## 実行してみる
@@ -105,7 +105,7 @@ linelength で行数を、filter でフィルターの細かい設定を行え�
 対象のソースファイルが UTF-8 の場合、SourceMonitor が起動しないことがあります。
 一度 SourceMonitor を直接起動し、`File > Options > Allow parsing of UTF-8 files` にチェックをつけて再度試してみてください。
 
-![006](/img/post/2016-06-26-eclipse-cpp-code-analyze-006.png)
+![006](/img/post/2016/2016-06-26-eclipse-cpp-code-analyze-006.png)
 
 ## メトリクス計測について
 
@@ -118,7 +118,7 @@ linelength で行数を、filter でフィルターの細かい設定を行え�
 Eclipse のプラグインに metriculator というメトリクス計測があります。
 Eclipse Marketplace からインストールするこｔが出来ます。
 
-![007](/img/post/2016-06-26-eclipse-cpp-code-analyze-007.png)
+![007](/img/post/2016/2016-06-26-eclipse-cpp-code-analyze-007.png)
 
 使い方は Project Explorer 上でフォルダまたはファイルを右クリックして `Run C/C++ Code Analysis` を選択します。
 しばらくすると結果が表示されます。

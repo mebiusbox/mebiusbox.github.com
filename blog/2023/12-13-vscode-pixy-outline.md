@@ -21,15 +21,15 @@ import Bookmark from '@site/src/components/Markdown/WebBookmark.tsx'
 
 VSCode の標準機能にあるアウトラインにはシンボル情報が表示されます．設定で一部を非表示に出来たり、`Ctrl+F`キーを押すと検索で絞り込むことができます．
 
-![VSCode Outline View](/img/post/2023-12-13-vscode-pixy-notion-231213153911.png)
+![VSCode Outline View](/img/post/2023/2023-12-13-vscode-pixy-notion-231213153911.png)
 
 また、シンボル検索(`Ctrl+Shift+O`)を使うこともできます．これはコマンドパレットで `@` と入力しても同じ結果になります．
 
-![Symbol Search](/img/post/2023-12-13-vscode-pixy-notion-231213165821.png)
+![Symbol Search](/img/post/2023/2023-12-13-vscode-pixy-notion-231213165821.png)
 
 ここで `@:` と入力すればカテゴリごとに分けて表示されます．
 
-![Symbol Search with Category](/img/post/2023-12-13-vscode-pixy-notion-231213165920.png)
+![Symbol Search with Category](/img/post/2023/2023-12-13-vscode-pixy-notion-231213165920.png)
 
 検索を使えば事足りそうな気がしますが、しばらく触っていなかったりするとそもそも関数名とか何があるのかを記憶していません．
 もう少し自分に優しいシンボル検索がとても欲しいと感じました．
@@ -45,14 +45,14 @@ VSCode の標準機能にあるアウトラインにはシンボル情報が表�
 
 次のようなアウトライン表示になります．
 
-![Pixy Outline View](/img/post/2023-12-13-vscode-pixy-notion-231213170838.png)
+![Pixy Outline View](/img/post/2023/2023-12-13-vscode-pixy-notion-231213170838.png)
 
 目印は `MARK: ***` と記述するようになっています．
 また、シンボル名にはそれぞれ `M: `、 `F: ` を付けています．これによってシンボル検索で、目印は `@M: `、関数は `@F: ` で絞り込むことができます．
 
-![Search Function Symbols](/img/post/2023-12-13-vscode-pixy-notion-231213172106.png)
+![Search Function Symbols](/img/post/2023/2023-12-13-vscode-pixy-notion-231213172106.png)
 
-![Search Mark Symbols](/img/post/2023-12-13-vscode-pixy-notion-231213172155.png)
+![Search Mark Symbols](/img/post/2023/2023-12-13-vscode-pixy-notion-231213172155.png)
 
 
 ## VSCode拡張機能の作成
@@ -215,7 +215,7 @@ npx vsce package
 
 次のように表示されます：
 
-![TODO Highlight](/img/post/2023-12-13-vscode-pixy-notion-231213180211.png)
+![TODO Highlight](/img/post/2023/2023-12-13-vscode-pixy-notion-231213180211.png)
 
 
 これで少しは快適になった感じがします．もしかすると便利な拡張機能や標準で出来るかもしれません．

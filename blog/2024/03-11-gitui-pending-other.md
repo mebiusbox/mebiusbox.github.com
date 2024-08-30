@@ -17,7 +17,7 @@ image: https://og-image-mebiusbox.vercel.app/api/og?title=gitui%20%E3%81%A7%20Pe
 
 具体的には次のような画面のように、「Pending Other」のウィンドウが表示され、内容は「Other」となっています．
 
-![gitui](/img/post/03-11-gitui-pending-other-240311-192012.png)
+![gitui](/img/post/2024/03-11-gitui-pending-other-240311-192012.png)
 
 これに関する情報がほとんど見つけられなかったので、とりあえずgituiのソースコードを確認してみることにしました．
 どうやらリポジトリのステートを表しているようです．

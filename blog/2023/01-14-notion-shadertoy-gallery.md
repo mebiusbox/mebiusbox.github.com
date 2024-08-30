@@ -13,7 +13,7 @@ image: https://og-image-mebiusbox.vercel.app/api/og?title=Notion%E3%81%A7Shadert
 
 Notionのギャラリービューを使うと、ページをサムネイル一覧で確認できます．
 
-![](/img/post/2023-01-14-notion-shadertoy-gallery-230114021100.png)
+![](/img/post/2023/2023-01-14-notion-shadertoy-gallery-230114021100.png)
 
 とはいえ、サムネイルを用意しなければなりません．
 ここではなるべく手間をかけずにサムネイルを作成する方法を紹介します．
@@ -23,7 +23,7 @@ Notionのギャラリービューを使うと、ページをサムネイル一�
 まずは、データベースを作成します．`Link(URL)`と`Description(Text)`プロパティを作成します．
 そして、ギャラリービューにして、プレビューをカバー、サイズを小にします
 
-![](/img/post/2023-01-14-notion-shadertoy-gallery-230114030500.png)
+![](/img/post/2023/2023-01-14-notion-shadertoy-gallery-230114030500.png)
 
 Shadertoyやツイートへのリンクをデータベースに保存します．[Save to Notion](https://chromewebstore.google.com/detail/save-to-notion/ldmmifpegigmeammaeckplhnjbbpccmm?hl=ja)やWebブックマークにしてからデータベースに移動すると Description をいい感じに埋めてくれます．
 
@@ -33,13 +33,13 @@ Shadertoyやツイートへのリンクをデータベースに保存します�
 
 Notionのページ上にツイートを埋め込みます．埋め込んだツイートの動画(画像)部分を右クリックして、「画像アドレスをコピー」します．次に、Notionのページ上部にある`Add Cover` を選択してカバー画像を追加し、コピーしたアドレスを `Link` にペーストして送信します．
 
-![](/img/post/2023-01-14-notion-shadertoy-gallery-230114032100.png)
+![](/img/post/2023/2023-01-14-notion-shadertoy-gallery-230114032100.png)
 
 ## Shadertoy
 
 Shadertoyの画面に行きます．左上のレンダリングしている場所を右クリックして「画像をコピー」します．Notionのページにそのまま貼り付けます．
 
-![](/img/post/2023-01-14-notion-shadertoy-gallery-230114032500.png)
+![](/img/post/2023/2023-01-14-notion-shadertoy-gallery-230114032500.png)
 
 ちなみに、Shadertoyの場合はWebブックマークを作成するといい感じのサムネイルができます．
 
@@ -74,7 +74,7 @@ canvas {
 
 `Name`, `Cover`, `Description` を次のように設定します．タグは任意に設定してください．
 
-![Save To Notion for Shadertoy](/img/post/2024-01-14-notion-shadertoy-gallery-240118-142658.png)
+![Save To Notion for Shadertoy](/img/post/2023/2023-01-14-notion-shadertoy-gallery-240118-142658.png)
 
 Save To Notion はコンテンツをCSSセレクタを使って指定することができます．
 Shadertoyでは名前や詳細をCSSセレクタを使って取得する必要があります．
@@ -85,7 +85,6 @@ Shadertoyでは名前や詳細をCSSセレクタを使って取得する必要�
 
 `Name`, `Content`, `Cover` を次のように設定します．タグは任意に設定してください．
 
-![Save To Notion for GLSLSandbox](/img/post/2024-01-14-notion-shadertoy-gallery-240118-142315.png)
-
+![Save To Notion for GLSLSandbox](/img/post/2023/2023-01-14-notion-shadertoy-gallery-240118-142315.png)
 
 以上です．

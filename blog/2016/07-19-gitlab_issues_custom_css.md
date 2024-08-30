@@ -22,21 +22,21 @@ GitLab の Issues は一覧画面、詳細画面ともにタイトルが少し�
 
 * 一覧画面
 
-![fig](/img/post/2016-07-19-gitlab-issues-custom-css-001.png)
+![fig](/img/post/2016/2016-07-19-gitlab-issues-custom-css-001.png)
 
 * 詳細画面
 
-![fig](/img/post/2016-07-19-gitlab-issues-custom-css-002.png)
+![fig](/img/post/2016/2016-07-19-gitlab-issues-custom-css-002.png)
 
 ### 変更後
 
 * 一覧画面
 
-![fig](/img/post/2016-07-19-gitlab-issues-custom-css-003.png)
+![fig](/img/post/2016/2016-07-19-gitlab-issues-custom-css-003.png)
 
 * 詳細画面
 
-![fig](/img/post/2016-07-19-gitlab-issues-custom-css-004.png)
+![fig](/img/post/2016/2016-07-19-gitlab-issues-custom-css-004.png)
 
 ### 「えー、イマイチじゃない？」
 そんなこと言わないで。
@@ -125,7 +125,7 @@ Errno::EACCES: Permission denied @ rb_sysopen - /opt/gitlab/embedded/service/git
 そこで、コンパイルするときだけパーミッションを変更し、コンパイルしたら元に戻します。
 そして、再作成したスタイルシートを反映させるため、GitLab をリスタートします。
 
-※この解決策は以下を参考にしました。  
+※この解決策は以下を参考にしました。
 [GitLab Omnibusロゴ差し替えスクリプト](http://qiita.com/hiconyan/items/7c5cdc6965c7eb44f1b5)
 
 ```

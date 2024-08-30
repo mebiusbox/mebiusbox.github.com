@@ -1,3 +1,11 @@
+- name: 2024-08-30-vscode-terminal
+  date: 2024-08-30
+  title:
+    ja: Visual Studio Codeでのターミナル操作
+- name: 2024-08-30-davinci-resolve-lua
+  date: 2024-08-30
+  title:
+    ja: DaVinci ResolveのLuaスクリプト入門
 - name: 2024-08-27-python-on-windows
   date: 2024-08-27
   title:
@@ -10,11 +18,3 @@
   date: 2024-03-11
   title:
     ja: gitui で Pending Other に Other が表示される
-- name: 2023-12-23-espanso-force-clipboard
-  date: 2023-12-23
-  title:
-    ja: Espanso の force_clipboard について
-- name: 2023-12-16-threejs-colorspace
-  date: 2023-12-16
-  title:
-    ja: Three.jsのカラー管理

@@ -659,7 +659,6 @@ end
 これらを組み込みましょう．
 
 ```lua
-```lua
 function main()
     local pm = resolve:GetProjectManager()
     local cm = pm:GetCurrentProject()
