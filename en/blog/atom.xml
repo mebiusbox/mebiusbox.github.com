@@ -2,11 +2,55 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://mebiusbox.github.io/en/blog</id>
     <title>Mebiusbox software Blog</title>
-    <updated>2024-08-30T00:00:00.000Z</updated>
+    <updated>2024-08-31T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://mebiusbox.github.io/en/blog"/>
     <subtitle>Mebiusbox software Blog</subtitle>
     <icon>https://mebiusbox.github.io/en/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Gistコマンドを自作してテンプレートファイルを管理する]]></title>
+        <id>https://mebiusbox.github.io/en/blog/2024/08/31/gist-tool</id>
+        <link href="https://mebiusbox.github.io/en/blog/2024/08/31/gist-tool"/>
+        <updated>2024-08-31T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[PowerShellを使って Gist を扱うコマンドを作成します]]></summary>
+        <content type="html"><![CDATA[<p>Gistを有効に活用できるようにgistコマンドを作ってみました．これはその備忘録です．</p>
+<p>詳しくは <a href="https://gist.github.com/mebiusbox/a90fda22776c9c9b376ffc165dd0988d" target="_blank" rel="noopener noreferrer">Gistコマンドを自作してテンプレートファイルを管理する</a> にあります．
+そこにも書いてある通り、Gistを扱うコマンドをPowerShellで実装して活用しています．
+とりあえず使ってみている状態で、まだ良し悪しはわかっていません．
+ここでは、いくつか思っていることを書いておきます．</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="スニペットで管理するのは">スニペットで管理するのは？<a class="hash-link" aria-label="Direct link to スニペットで管理するのは？" title="Direct link to スニペットで管理するのは？" href="https://mebiusbox.github.io/en/blog/2024/08/31/gist-tool#%E3%82%B9%E3%83%8B%E3%83%9A%E3%83%83%E3%83%88%E3%81%A7%E7%AE%A1%E7%90%86%E3%81%99%E3%82%8B%E3%81%AE%E3%81%AF">​</a></h2>
+<p>たとえば、Visual Studio Codeのスニペットや、独立したスニペット管理ツール、またはテキスト入力支援などを使うのはどうでしょうか．
+個人的にGistコマンドのメリットを挙げると次のとおりです：</p>
+<ul>
+<li>バージョン管理ができる（履歴がたどれる）</li>
+<li>共有できる</li>
+<li>diffがとれる（パッチも当てられる）</li>
+</ul>
+<p>逆にデメリットがあまりないかなと思っています．</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="gistをcloneするのは">Gistをcloneするのは？<a class="hash-link" aria-label="Direct link to Gistをcloneするのは？" title="Direct link to Gistをcloneするのは？" href="https://mebiusbox.github.io/en/blog/2024/08/31/gist-tool#gist%E3%82%92clone%E3%81%99%E3%82%8B%E3%81%AE%E3%81%AF">​</a></h2>
+<p>ローカルリポジトリを作ってしまうので、ちょっと面倒かなと思いました（たとえば、cloneしたあとに<code>.git</code>ディレクトリを削除）．
+あとは、プッシュができるので、そこは利点かなと思っています．
+ただし、今回の用途としては別のプロジェクトに手軽にファイルをコピーしてくることを想定しているので、ローカルリポジトリは邪魔になってしまい、それを削除すればプッシュも出来なくなります．</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="プロジェクトテンプレートとしてgithubなどにプロジェクトを作成しておくのは">プロジェクトテンプレートとして、GitHubなどにプロジェクトを作成しておくのは？<a class="hash-link" aria-label="Direct link to プロジェクトテンプレートとして、GitHubなどにプロジェクトを作成しておくのは？" title="Direct link to プロジェクトテンプレートとして、GitHubなどにプロジェクトを作成しておくのは？" href="https://mebiusbox.github.io/en/blog/2024/08/31/gist-tool#%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%81%A8%E3%81%97%E3%81%A6github%E3%81%AA%E3%81%A9%E3%81%AB%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%97%E3%81%A6%E3%81%8A%E3%81%8F%E3%81%AE%E3%81%AF">​</a></h2>
+<p>これも手間かなと思っています．そこまで几帳面に管理するつもりはないですし、したくもありません．</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="gistpad">GistPad<a class="hash-link" aria-label="Direct link to GistPad" title="Direct link to GistPad" href="https://mebiusbox.github.io/en/blog/2024/08/31/gist-tool#gistpad">​</a></h2>
+<p>エディタはVisual Studio Codeを使っていて、Gistの管理は拡張機能「<a href="https://marketplace.visualstudio.com/items?itemName=vsls-contrib.gistfs" target="_blank" rel="noopener noreferrer">GistPad</a>」を利用しています．
+Gistコマンドを使ってもいいですし、GistPadでコピペしても構いません．
+GistPadには現在開いているエディタ内にGistファイルをペーストする機能があります．</p>
+<p>今回作成したGistコマンドはプッシュする機能がないので、GistPadで更新しています．
+その際、ちょっと問題が発生したので、対処方法も書いておきます．
+それはフォーマッタの問題です．フォーマッタはprettierなどを使っているのですが、基本的に保存時にフォーマッタが実行されるようにしています．
+設定ファイルをプロジェクトごとに置いているんですが、それぞれの環境で保存したものと、GistPadで保存するときの挙動が異なります．
+コーディングスタイルに依存する部分なので、結局はどうしようもないのですが、GistPadで保存するときの挙動がVisual Studio Codeのデフォルトの設定になってしまうので設定を合わせていないと保存したときに、予期しないフォーマットがされてしまいました．ですので、少なくともGistPadで保存するときはフォーマッタを実行しないようにする必要があります．その場合、コマンドパレットから「File &gt; Save without Formatting」を使うと、フォーマッタを実行せずに保存できます．</p>
+<p>とりあえず、しばらく使って様子を見てみることにします．
+以上です．</p>]]></content>
+        <author>
+            <name>mebiusbox</name>
+            <uri>https://github.com/mebiusbox</uri>
+        </author>
+        <category label="gist" term="gist"/>
+        <category label="powershell" term="powershell"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[DaVinci ResolveのLuaスクリプト入門]]></title>
         <id>https://mebiusbox.github.io/en/blog/2024/08/30/davinci-resolve-lua</id>
@@ -624,7 +668,7 @@ GLSL3 のシェーダコードは先頭に <code>#version 300 es</code> を入�
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="役に立ったサイト">役に立ったサイト<a class="hash-link" aria-label="Direct link to 役に立ったサイト" title="Direct link to 役に立ったサイト" href="https://mebiusbox.github.io/en/blog/2023/12/13/vscode-pixy-outline#%E5%BD%B9%E3%81%AB%E7%AB%8B%E3%81%A3%E3%81%9F%E3%82%B5%E3%82%A4%E3%83%88">​</a></h3>
 <p>拡張機能のアクティベートの部分に関しては次のサイトを参考にしました．</p>
 <p><a href="https://clickan.click/activation-events/" target="_blank" rel="noopener noreferrer" class="card padding--md margin-bottom--sm cardContainer_yMBB"><span class="text--truncate cardTitle_SiGl" title="Visual Studio Code 拡張機能のアクティベート activationEvents"><i class="cardIcon_VTdI fas fa-external-link-alt"></i> <!-- -->Visual Studio Code 拡張機能のアクティベート activationEvents</span></a></p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="合わせて使いたい拡張機能">合わせて使いたい拡張機能<a class="hash-link" aria-label="Direct link to 合わせて使いたい拡張機能" title="Direct link to 合わせて��使いたい拡張機能" href="https://mebiusbox.github.io/en/blog/2023/12/13/vscode-pixy-outline#%E5%90%88%E3%82%8F%E3%81%9B%E3%81%A6%E4%BD%BF%E3%81%84%E3%81%9F%E3%81%84%E6%8B%A1%E5%BC%B5%E6%A9%9F%E8%83%BD">​</a></h2>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="合わせ��て使いたい拡張機能">合わせて使いたい拡張機能<a class="hash-link" aria-label="Direct link to 合わせて使いたい拡張機能" title="Direct link to 合わせて使いたい拡張機能" href="https://mebiusbox.github.io/en/blog/2023/12/13/vscode-pixy-outline#%E5%90%88%E3%82%8F%E3%81%9B%E3%81%A6%E4%BD%BF%E3%81%84%E3%81%9F%E3%81%84%E6%8B%A1%E5%BC%B5%E6%A9%9F%E8%83%BD">​</a></h2>
 <p>おまけで <code>TODO Highlight</code> という拡張機能を使うと、目印のコードをハイライトすることができます．</p>
 <p><a href="https://marketplace.visualstudio.com/items?itemName=wayou.vscode-todo-highlight" target="_blank" rel="noopener noreferrer" class="card padding--md margin-bottom--sm cardContainer_yMBB"><span class="text--truncate cardTitle_SiGl" title="TODO Highlight"><i class="cardIcon_VTdI fas fa-external-link-alt"></i> <!-- -->TODO Highlight</span><span class="text--truncate cardDescription_fnmI" title="highlight TODOs, FIXMEs, and any keywords, annotations...">highlight TODOs, FIXMEs, and any keywords, annotations...</span></a></p>
 <p>インストールしただけではダメで、カスタマイズする必要があります．</p>
@@ -870,7 +914,7 @@ DocusaurusのマークダウンからHTMLにレンダリングする部分は <a
 </ul>
 <p>Docusaurusでこれらを読み込むようにするには <code>docusaurus.config.js</code> の <code>scripts</code> および <code>stylesheets</code> で指定します．</p>
 <div class="language-javascript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#f8f8f2;--prism-background-color:#272822"><div class="codeBlockTitle_Ktv7">./docusaurus.config.js</div><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-javascript codeBlock_bY9V thin-scrollbar" style="color:#f8f8f2;background-color:#272822"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#f8f8f2"><span class="token keyword" style="color:#66d9ef">const</span><span class="token plain"> config </span><span class="token operator" style="color:#66d9ef">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#f8f8f2">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">  </span><span class="token literal-property property" style="color:#f92672">scripts</span><span class="token operator" style="color:#66d9ef">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#f8f8f2">[</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">    </span><span class="token punctuation" style="color:#f8f8f2">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">      </span><span class="token literal-property property" style="color:#f92672">src</span><span class="token operator" style="color:#66d9ef">:</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">"https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">      </span><span class="token literal-property property" style="color:#f92672">integrity</span><span class="token operator" style="color:#66d9ef">:</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">"sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4"</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">      </span><span class="token literal-property property" style="color:#f92672">crossorigin</span><span class="token operator" style="color:#66d9ef">:</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">"anonymous"</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">      </span><span class="token literal-property property" style="color:#f92672">defer</span><span class="token operator" style="color:#66d9ef">:</span><span class="token plain"> </span><span class="token boolean" style="color:#ae81ff">true</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">    </span><span class="token punctuation" style="color:#f8f8f2">}</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">    </span><span class="token punctuation" style="color:#f8f8f2">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">      </span><span class="token literal-property property" style="color:#f92672">src</span><span class="token operator" style="color:#66d9ef">:</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">"https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">      </span><span class="token literal-property property" style="color:#f92672">integrity</span><span class="token operator" style="color:#66d9ef">:</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">"sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">      </span><span class="token literal-property property" style="color:#f92672">crossorigin</span><span class="token operator" style="color:#66d9ef">:</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">"anonymous"</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">      </span><span class="token literal-property property" style="color:#f92672">defer</span><span class="token operator" style="color:#66d9ef">:</span><span class="token plain"> </span><span class="token boolean" style="color:#ae81ff">true</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">    </span><span class="token punctuation" style="color:#f8f8f2">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">  </span><span class="token punctuation" style="color:#f8f8f2">]</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">  </span><span class="token literal-property property" style="color:#f92672">stylesheets</span><span class="token operator" style="color:#66d9ef">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#f8f8f2">[</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">    </span><span class="token punctuation" style="color:#f8f8f2">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">      </span><span class="token literal-property property" style="color:#f92672">href</span><span class="token operator" style="color:#66d9ef">:</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">'https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css'</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">      </span><span class="token literal-property property" style="color:#f92672">type</span><span class="token operator" style="color:#66d9ef">:</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">'text/css'</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">      </span><span class="token literal-property property" style="color:#f92672">integrity</span><span class="token operator" style="color:#66d9ef">:</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">'sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0'</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">      </span><span class="token literal-property property" style="color:#f92672">crossorigin</span><span class="token operator" style="color:#66d9ef">:</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">'anonymous'</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">    </span><span class="token punctuation" style="color:#f8f8f2">}</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">  </span><span class="token punctuation" style="color:#f8f8f2">]</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain"></span><span class="token punctuation" style="color:#f8f8f2">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="数式をレンダリングする">数式をレンダリングする<a class="hash-link" aria-label="Direct link to 数式をレンダリングする" title="Direct link to 数式をレンダリングする" href="https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E6%95%B0%E5%BC%8F%E3%82%92%EF%BF%BD%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%81%99%E3%82%8B">​</a></h2>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="数式をレンダリングする">数式をレンダリングする<a class="hash-link" aria-label="Direct link to 数式をレンダリングする" title="Direct link to 数式をレンダリングする" href="https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E6%95%B0%E5%BC%8F%E3%82%92%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0%E3%81%99%E3%82%8B">​</a></h2>
 <p>クライアントサイドでレンダリングするには、ページがロードし終わったときに <code>renderMathInElement</code> を呼び出す必要があります．
 そのために、プラグインを作ります．ここでは <code>./plugins/docusaurus-plugin-katex-client</code> というプラグインを作ります（以降、<code>katex-client</code>プラグイン)．以下のようなフォルダ・ファイル構成にします．</p>
 <div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#f8f8f2;--prism-background-color:#272822"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#f8f8f2;background-color:#272822"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#f8f8f2"><span class="token plain">└─ plugins</span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">    └─ docusaurus-plugins-katex-client</span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">        ├─ index.js</span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">        └─ render.js</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
@@ -917,7 +961,7 @@ DocusaurusのマークダウンからHTMLにレンダリングする部分は <a
 <p>もちろん、クライアント側で数式処理をするのでページを開いたときに負荷がかかってしまいます．</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="マークダウンでエスケープが必要">マークダウンでエスケープが必要<a class="hash-link" aria-label="Direct link to マークダウンでエスケープが必要" title="Direct link to マークダウンでエスケープが必要" href="https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E3%83%9E%E3%83%BC%E3%82%AF%E3%83%80%E3%82%A6%E3%83%B3%E3%81%A7%E3%82%A8%E3%82%B9%E3%82%B1%E3%83%BC%E3%83%97%E3%81%8C%E5%BF%85%E8%A6%81">​</a></h3>
 <p>マークダウンの数式をそのまま remark や rehype に通すので、エスケープする必要があります．これは手間ではありますが、置換で対応できるので許容範囲としています．</p>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="remark-math--rehype-katexor-rehype-mathjax-��と併用できない">remark-math + rehype-katex(or rehype-mathjax) と併用できない<a class="hash-link" aria-label="Direct link to remark-math + rehype-katex(or rehype-mathjax) と併用できない" title="Direct link to remark-math + rehype-katex(or rehype-mathjax) と併用できない" href="https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering#remark-math--rehype-katexor-rehype-mathjax-%E3%81%A8%E4%BD%B5%E7%94%A8%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%84">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="remark-math--rehype-katexor-rehype-mathjax-と併用できない">remark-math + rehype-katex(or rehype-mathjax) と併用できない<a class="hash-link" aria-label="Direct link to remark-math + rehype-katex(or rehype-mathjax) と併用できない" title="Direct link to remark-math + rehype-katex(or rehype-mathjax) と併用できない" href="https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering#remark-math--rehype-katexor-rehype-mathjax-%E3%81%A8%E4%BD%B5%E7%94%A8%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%84">​</a></h3>
 <p>現状は併用できないです．<code>katex-client</code>プラグインを正常に動かすには <code>remark-math</code> を有効にできません．</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="ページをリロードすると一部の数式処理に失敗する">ページをリロードすると一部の数式処理に失敗する<a class="hash-link" aria-label="Direct link to ページをリロードすると一部の数式処理に失敗する" title="Direct link to ページをリロードすると一部の数式処理に失敗する" href="https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E3%83%9A%E3%83%BC%E3%82%B8%E3%82%92%E3%83%AA%E3%83%AD%E3%83%BC%E3%83%89%E3%81%99%E3%82%8B%E3%81%A8%E4%B8%80%E9%83%A8%E3%81%AE%E6%95%B0%E5%BC%8F%E5%87%A6%E7%90%86%E3%81%AB%E5%A4%B1%E6%95%97%E3%81%99%E3%82%8B">​</a></h3>
 <p>原因不明．</p>
@@ -988,7 +1032,7 @@ DocusaurusのマークダウンからHTMLにレンダリングする部分は <a
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="reactとmdx">ReactとMDX<a class="hash-link" aria-label="Direct link to ReactとMDX" title="Direct link to ReactとMDX" href="https://mebiusbox.github.io/en/blog/2023/01/11/docusaurus#react%E3%81%A8mdx">​</a></h2>
 <p>やはり目玉はこの2つ <span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">React</span> と <span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">MDX</span> です． <a href="https://reactjs.org/" target="_blank" rel="noopener noreferrer">React</a> はUIフレームワーク、 <a href="https://mdxjs.com/" target="_blank" rel="noopener noreferrer">MDX</a> はマークダウンの中に <span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">JSX</span> を使用することができる機能です． JSXはJavaScriptの拡張構文で、JavaScript内にタグ構文をそのまま使用できます．今、 <span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">React</span> や <span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">MDX</span> という表示がありますが、まさにこれがReactコンポーネントです．ちなみに、 codeタグで囲むと、 <code>React</code>, <code>MDX</code> というようになります．このブログのソースファイルはマークダウン形式であり、Reactコンポーネントを使用できます．しかも簡単に．ただ、通常のマークダウンは MDX と互換がありますが、MDXは通常のマークダウンとは互換がありません．</p>
 <p>Docusaurusで構築するときにReactコンポーネントを使って構築しなければならないかと言われればそうではないです．マークダウンファイルだけでも十分構築できます．今回のサイトではトップページのみ JSX で構築していますが、それ以外のものはすべてマークダウンを使っています．</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="静的サイトジェネレータとしての比較">静的サイトジェネレータとしての比較<a class="hash-link" aria-label="Direct link to 静的サイトジェネレータとしての比較" title="Direct link to 静的サイトジェネレータとしての比較" href="https://mebiusbox.github.io/en/blog/2023/01/11/docusaurus#%E9%9D%99%E7%9A%84%E3%82%B5%E3%82%A4%E3%83%88%E3%82%B8%E3%82%A7%E3%83%8D%E3%83%AC%E3%83%BC%E3%82%BF%E3%81%A8%E3%81%97%E3%81%A6%E3%81%AE%E6%AF%94%E8%BC%83">​</a></h2>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="静的サイトジェネレータとしての比較">静的サイトジェネレータとしての比較<a class="hash-link" aria-label="Direct link to 静的サイトジェネレータとしての比較" title="Direct link to 静的サイトジェネレータとしての��比較" href="https://mebiusbox.github.io/en/blog/2023/01/11/docusaurus#%E9%9D%99%E7%9A%84%E3%82%B5%E3%82%A4%E3%83%88%E3%82%B8%E3%82%A7%E3%83%8D%E3%83%AC%E3%83%BC%E3%82%BF%E3%81%A8%E3%81%97%E3%81%A6%E3%81%AE%E6%AF%94%E8%BC%83">​</a></h2>
 <p>個人的な所感に基づいて、以下のドキュメントサイトを生成するツールの使い分けみたいなのを書いておきます．</p>
 <ul>
 <li><a href="https://docusaurus.io/" target="_blank" rel="noopener noreferrer">Docusaurus</a></li>
@@ -1091,35 +1135,6 @@ Zennのブックなら、無料で公開していてもサポートでお金が�
 <li><a href="http://mebiusbox.sakura.ne.jp/forum/" target="_blank" rel="noopener noreferrer">ユーザーフォーラム</a></li>
 </ul>
 <p>何かあれば上記に書き込んでみてください．また，メールにより問い合わせも受け付けています．</p>]]></content>
-        <author>
-            <name>mebiusbox</name>
-            <uri>https://github.com/mebiusbox</uri>
-        </author>
-        <category label="diary" term="diary"/>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[開発終了・公開停止ソフト]]></title>
-        <id>https://mebiusbox.github.io/en/blog/2018/02/17/discontinued-projects</id>
-        <link href="https://mebiusbox.github.io/en/blog/2018/02/17/discontinued-projects"/>
-        <updated>2018-02-17T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[以下のソフトウェアは開発終了・公開停止とさせていただきます．]]></summary>
-        <content type="html"><![CDATA[<p>以下のソフトウェアは開発終了・公開停止とさせていただきます．</p>
-<ul>
-<li>Mebiusbox2</li>
-<li>FolderHammer</li>
-<li>CodeMage</li>
-<li>ExtendQuickBar</li>
-<li>Bugboard</li>
-<li>Mirage</li>
-<li>PortalFolder</li>
-<li>SmartQuickBar</li>
-<li>MebiusPress</li>
-<li>SmartTweetBar</li>
-<li>MebiusboxReader</li>
-<li>JsonBridge</li>
-<li>FileMater</li>
-</ul>
-<p>使用してくれていた方々，ありがとうございました．</p>]]></content>
         <author>
             <name>mebiusbox</name>
             <uri>https://github.com/mebiusbox</uri>
