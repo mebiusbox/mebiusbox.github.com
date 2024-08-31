@@ -7,6 +7,7 @@ keywords:
 category: note
 authors: [mebiusbox]
 tags: [DaVinci Resolve, Lua]
+images: https://og-image-mebiusbox.vercel.app/api/og?title=DaVinci+Resolve%e3%81%aeLua%e3%82%b9%e3%82%af%e3%83%aa%e3%83%97%e3%83%88%e5%85%a5%e9%96%80&subtitle=DaVinci+Resolve%e3%81%aeLua%e3%82%b9%e3%82%af%e3%83%aa%e3%83%97%e3%83%88%e3%82%92%e4%bd%9c%e3%81%a3%e3%81%a6%e3%81%bf%e3%82%88%e3%81%86&date=2024%2F08%2F30&tags=DaVinci+Resolve%2cLua
 ---
 
 [DaVinci Resolve](https://www.blackmagicdesign.com/jp/products/davinciresolve) は動画編集ソフトです．
