@@ -1,0 +1,33 @@
+# https://github.com/crate-ci/typos/blob/master/docs/reference.md
+[files]
+extend-exclude = [
+    "/*.*",
+    "/src/",
+    "/plugins/",
+    "/static/",
+    "/contents/",
+    "*.patch"       # Automatically generated files that should not be manually modified.
+]
+
+[default]
+extend-ignore-re = [
+  "(?Rm)^.*(#|//|/\\*)\\s*spellchecker:\\s*disable-line$",
+  "(?m)^\\s*(?:#|//|/\\*)\\s*spellchecker:\\s*disable-next-line.*$\\r?\\n.*$",
+  "(?s)(#|//|/\\*)\\s*spellchecker:\\s*disable.*?\\n\\s*(#|//|/\\*)\\s*spellchecker:\\s*enable"
+]
+
+extend-ignore-identifiers-re = [
+]
+
+# Corrections take the form of a key/value pair. The key is the incorrect word
+# and the value is the correct word. If the key and value are the same, the
+# word is treated as always correct. If the value is an empty string, the word
+# is treated as always incorrect.
+
+# Match Whole Word - Case Sensitive
+[default.extend-identifiers]
+# ba = "ba"
+
+# Match Inside a Word - Case Insensitive
+[default.extend-words]
+# ba = "ba"
