@@ -238,7 +238,7 @@ textureLoader.load( 'textures/diffuse.jpg', function ( map ) {
 MeshBasicMaterial や MeshStandardMaterial は自動で処理されますが、ShaderMaterial や RawShaderMaterial では自動で行ってくれません．
 この場合、適切に処理する必要があります．
 
-ShaderMaterial の場合は対応が簡単で、シェーダコードの中に `#include <colorspace_framgent>` を入れれば処理するようになります．
+ShaderMaterial の場合は対応が簡単で、シェーダコードの中に `#include <colorspace_fragment>` を入れれば処理するようになります．
 例えば次のようになります．
 
 ```c++
@@ -281,5 +281,3 @@ Three.js のカラー管理について調べたことをまとめました．
 ---
 
 [^1]: [Color Management](https://threejs.org/docs/index.html#manual/en/introduction/Color-management)
-
-

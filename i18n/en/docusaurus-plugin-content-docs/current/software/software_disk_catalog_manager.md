@@ -64,7 +64,7 @@ Windows XP(32bit), 7(32bit,64bit)
 
 ## Tips
 
-### 「Vitual CD-ROM Case」「メディアステンシル」からのインポート
+### 「Virtual CD-ROM Case」「メディアステンシル」からのインポート
 ヘルプの「インポート」を参照してください。
 
 ## 更新履歴

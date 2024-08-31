@@ -311,8 +311,8 @@ JSON形式で保存したり読み込んだりすることができます．そ�
   </div>
   <div className="row">
     <div className="col">
-      <img src="/img/lab/fxgen_seemlessnoise.gif" alt="SeemlessNoise" />
-      <div className="mbx-center margin-bottom--sm">SeemlessNoise</div>
+      <img src="/img/lab/fxgen_seamlessnoise.gif" alt="SeamlessNoise" />
+      <div className="mbx-center margin-bottom--sm">SeamlessNoise</div>
     </div>
     <div className="col">
       <img src="/img/lab/fxgen_booleannoise.gif" alt="BooleanNoise" />
@@ -516,7 +516,7 @@ Copyright (C) 2017-2024 mebiusbox software.
 
 ## Changes
 
-- 2024-03-26: 
+- 2024-03-26:
   - CoherentNoise を追加しました．
   - ノイズ球が正常に描画できない不具合を修正
   - パラメータのリセットボタンを追加

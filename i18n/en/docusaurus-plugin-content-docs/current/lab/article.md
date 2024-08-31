@@ -57,8 +57,8 @@ Each PDF files can be downloaded below:
 
 ## Zenn, Qiita
 
-- [Rust Fundamental](https://zenn.dev/mebiusbox/books/22d4c1ed9b0003) <Zenn /> 
-- [Mathematics for Computer Graphics](https://zenn.dev/mebiusbox/books/132b654aa02124) <Zenn /> 
+- [Rust Fundamental](https://zenn.dev/mebiusbox/books/22d4c1ed9b0003) <Zenn />
+- [Mathematics for Computer Graphics](https://zenn.dev/mebiusbox/books/132b654aa02124) <Zenn />
   - [A primer of Linear Algebra for Computer Graphics -Vector-](https://zenn.dev/mebiusbox/books/132b654aa02124/viewer/a51ef6)
   - [A primer of Linear Algebra for Computer Graphics -Matrix-](https://zenn.dev/mebiusbox/books/132b654aa02124/viewer/f0b8dc)
   - [A primer of Linear Algebra for Computer Graphics -Determinant-](https://zenn.dev/mebiusbox/books/132b654aa02124/viewer/7c6d1d)
@@ -80,7 +80,7 @@ Each PDF files can be downloaded below:
   - [Raytracing vol.1 "Ray and Reflection](https://zenn.dev/mebiusbox/books/8d9c42883df9f6/viewer/b85221)
   - [Raytracing vol.2 "Texture and Cornel Box"](https://zenn.dev/mebiusbox/books/8d9c42883df9f6/viewer/67a16c)
   - [Raytracing vol.3 "Monte Carlo Raytracing"](https://zenn.dev/mebiusbox/books/8d9c42883df9f6/viewer/66a2a2)
-- [Screen-Space Ambient Occulusion (SSAO)](https://zenn.dev/mebiusbox/articles/c7ea4871698ada) <Zenn />
+- [Screen-Space Ambient Occlusion (SSAO)](https://zenn.dev/mebiusbox/articles/c7ea4871698ada) <Zenn />
 - [Screen-Space Reflection (SSR)](https://zenn.dev/mebiusbox/articles/43ecf1bb12831c) <Zenn />
 - [Note for 3D coordinate transfomration](https://zenn.dev/mebiusbox/articles/8e765148576919) <Zenn />
 - [Snell's law](https://qiita.com/mebiusbox2/items/315e10031d15173f0aa5) <Qiita />
@@ -156,7 +156,7 @@ A simple raytracing renderer in c++.
 
 ### Texture
 
-- [Compressonator](https://github.com/GPUOpen-Tools/Compressonator) : Tool suite for Texture and 3D Model Compression, Optimization and Analysis using CPUs, GPUs and APUs 
+- [Compressonator](https://github.com/GPUOpen-Tools/Compressonator) : Tool suite for Texture and 3D Model Compression, Optimization and Analysis using CPUs, GPUs and APUs
 - [DirectXTex](https://github.com/Microsoft/DirectXTex) : DirectXTex texture processing library
 - [dds_thumbnail](https://github.com/oteguro/dds_thumbnail) : DirectX 11のテクスチャ圧縮フォーマットBC1～BC7をサムネイル表示
 - [DDS ファイルフォーマットの詳細解説](http://dench.flatlib.jp/ddsformat)

@@ -166,7 +166,7 @@ def get_monitor_areas():
     main_monitor_first = sorted(monitors, key=lambda x: x[2], reverse=True)
     non_taskbar_areas = list(map(lambda x: x[1], main_monitor_first))
     return non_taskbar_areas
-    
+
 def set_window_rect(rect):
     wnd = keymap.getTopLevelWindow()
     if list(wnd.getRect()) == rect:
@@ -257,7 +257,7 @@ def truncate_cjk(string, length, ellipsis="..."):
             break
         text += c
     return text
-    
+
 def switch_windows():
     dbg(">>>>> switch_windows <<<<<")
 
@@ -395,7 +395,7 @@ def next_chrome_window():
         dbg("[next] " + next_window[0].getText())
         chrome_history.append((next_window[0].getText(), now))
         next_window[0].setForeground()
-        
+
 keymap_global["U0-F7"] = next_chrome_window
 ```
 
@@ -451,7 +451,7 @@ def send_keys(*keys):
         keymap.setInput_FromString(str(key))
     keymap.endInput()
     keymap._fixFunnyModifierState()
-    
+
 def set_ime(mode):
     if keymap.getWindow().getImeStatus() != mode:
         send_keys("(243)")
@@ -486,7 +486,7 @@ def send_string(s):
     for c in s:
         keymap.input_seq.append(pyauto.Char(c))
     keymap.endInput()
-    
+
 def send_input(sequence, sleep=0.01):
     for elem in sequence:
         delay(sleep)
@@ -494,7 +494,7 @@ def send_input(sequence, sleep=0.01):
             send_keys(elem)
         except:
             send_string(elem)
-            
+
 def ime_input0(*sequence):
     def _ime_input0():
         set_ime(0)
@@ -623,7 +623,7 @@ def command_PopCommandList():
             ("  ^since:yesterday", itext("since:" + date_and_time("%Y-%m-%d", -1))),
         ]
 
-        listers = [("Commmand", cblister_FixedPhrase(commands))]
+        listers = [("Command", cblister_FixedPhrase(commands))]
 
         item, mod = keymap.popListWindow(listers)
 
@@ -688,7 +688,7 @@ phrase.append(("name", "snippet code here"))
 def paste_string(s):
     setClipboardText(s)
     send_keys("C-V")
-    
+
 def command_PopHistoryList():
     # If the list window is already opened, just close it
     if keymap.isListWindowOpened():
@@ -1295,7 +1295,7 @@ def configure(keymap):
                 ("  ^since:yesterday", itext("since:" + date_and_time("%Y-%m-%d", -1))),
             ]
 
-            listers = [("Commmand", cblister_FixedPhrase(commands))]
+            listers = [("Command", cblister_FixedPhrase(commands))]
 
             item, mod = keymap.popListWindow(listers)
 

@@ -21,7 +21,7 @@ GitBook は Markdown 形式のドキュメントから電子文書を作成す�
 
 ## CentOS7 の仮想マシンを作成
 
-VirtaulBox の仮想マシンを作成し、CentOS7 を Minimal 構成でインストールします。
+VirtualBox の仮想マシンを作成し、CentOS7 を Minimal 構成でインストールします。
 使ったのは `CentOS7-x86_64-Minimal-1511.iso` です。
 インストール後、`yum upgrade` を行います。
 Guest Additions は入れてません。

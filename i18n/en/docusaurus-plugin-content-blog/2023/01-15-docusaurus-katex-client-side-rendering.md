@@ -116,7 +116,7 @@ export default (function () {
 > 2. Docusaurus preloads the next route's assets, while keeping displaying the current page's content.
 > 3. The next route's assets have loaded.
 > 4. The new location's route component gets rendered to DOM.
-> 
+>
 > `onRouteUpdate` will be called at event (2), and `onRouteDidUpdate` will be called at (4). They both receive the current location and the previous location (which can be null, if this is the first screen).
 
 となっています．この関数の中で `renderMathInElement` を呼び出します． 次のようになります．
@@ -160,11 +160,11 @@ export default (function () {
   return {
     onRouteDidUpdate({ location }) {
 
-      const pathIsIncluded = 
+      const pathIsIncluded =
         location.pathname.startsWith("/docs/note") ||
         location.pathname.startsWith("/blog");
       if (pathIsIncluded == false) {
-        
+
         return null;
       }
 
@@ -272,13 +272,12 @@ Done in 42.66s.
 
 500KBを超えると最適化が無効になるとのことです．検索してみるとBabelの設定で、`compact`を`false`にすれば解決するとありましたが、どうも上手くいきませんでした．また、Docusaurusでプロジェクトを作成したときの `babel.config.js` は次のようになっています．
 
-```javascript title="./bable.config.js"
+```javascript title="./babel.config.js"
 module.exports = {
   presets: [require.resolve('@docusaurus/core/lib/babel/preset')],
 };
 ```
 
 そして、`@docusaurus/core/lib/bable/preset`の中身を見てみると`compact`は`true`と指定されています．今回の問題のために、`compact`を`false`にするのはどうかと思いますので、結局そのままにしました．
-
 
 以上です．

@@ -78,7 +78,7 @@ Enable toon shading. Three gradations: dark, light, and other.
 
 ### Tiling
 
-To seemless the effect. (Not good)
+To seamless the effect. (Not good)
 
 |  Parameter  |            Summary             |
 | ----------- | ------------------------------ |
@@ -311,8 +311,8 @@ You can save and load the data in JSON format. Press the `save` and `load` butto
   </div>
   <div className="row">
     <div className="col">
-      <img src="/img/lab/fxgen_seemlessnoise.gif" alt="SeemlessNoise" />
-      <div className="mbx-center margin-bottom--sm">SeemlessNoise</div>
+      <img src="/img/lab/fxgen_seamlessnoise.gif" alt="SeamlessNoise" />
+      <div className="mbx-center margin-bottom--sm">SeamlessNoise</div>
     </div>
     <div className="col">
       <img src="/img/lab/fxgen_booleannoise.gif" alt="BooleanNoise" />
@@ -497,7 +497,7 @@ This parameters can be used to create the following image.
 
 ## Contact
 
-Please do not hesitate to contact me. 
+Please do not hesitate to contact me.
 
 mebiusbox[at]gmail[dot].com
 
@@ -509,7 +509,7 @@ Copyright (C) 2017-2024 mebiusbox software.
 
 ## Changes
 
-- 2024-03-26: 
+- 2024-03-26:
   - [Add] CoherentNoise template type.
   - [Add] Add a button to reset effect parameters.
   - [Fix] Noise sphere cannot be rendered.
