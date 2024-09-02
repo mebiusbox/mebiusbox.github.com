@@ -291,6 +291,18 @@ table: 0x0254c17062c0
 	age = 20
 ```
 
+この`dump`関数はプロンプトの先頭に`==`と書いても同じです．
+
+```lua
+Lua> a = {}
+Lua> a['name'] = "John"
+Lua> a.age = 20
+Lua> ==a
+table: 0x0254c17062c0
+	name = John
+	age = 20
+```
+
 テーブルの初期化時に書くこともできます．その場合は `key = value`とします．
 
 ```lua
@@ -380,6 +392,19 @@ Lua> if a<b then print("a<b") else print("a>=b") end
 a>=b
 ```
 
+また、DaVinci ResolveのLuaには`iif`関数があります．
+これは、単純なif文を1行で短く書けます．
+
+```lua
+Lua> a = 2
+Lua> b = 5
+Lua> c = iif(a<3, a, b)
+Lua> print(c)
+2
+```
+
+これは `a` が3以下の場合に`a`の値、そうでないなら`b`の値が返ります．
+
 複数の条件を組み合わせるときは `and` または `or` を使います．
 
 ```lua
@@ -388,7 +413,7 @@ Lua> if a>5 and a%2==0 then print("OK") else print("NG") end
 OK
 ```
 
-比較演算子は等しくない場合、`~=`となります．
+比較演算子は、`==`, `<`, `<=`, `>`, `>=` と一般的なものが使えますが、等しくない場合、`~=`となりますので注意してください．
 
 次に関数定義です．`function` と `end` で囲みます．
 
@@ -398,8 +423,7 @@ Lua> print(add(10,20))
 30
 ```
 
-最後にオブジェクトの関数呼び出しについてです．
-一部のオブジェクトの関数は引数にオブジェクトそのものを渡します．この場合、オブジェクトの関数の呼び方は2種類あります．
+オブジェクトの関数を呼び出す場合、関数が引数にオブジェクトそのものを受け取るものがあります．この場合、オブジェクトの関数の呼び方は2種類あります．
 たとえば、型が`hoge`のオブジェクト`obj`の関数`foo`を呼びたい場合、次のようになります：
 
 ```lua
@@ -427,6 +451,14 @@ Lua> obj:foo()
 ---[[
   print("この行は有効になる")
 --]]
+```
+
+最後に、文字列の連結は `..` 演算子を使います．
+
+```lua
+Lua> m = "Hello" .. " World!"
+Lua> print(m)
+Hello World!
 ```
 
 Luaには他にも機能がありますが、とりあえずこれぐらいの知識があれば今回は大丈夫かと思います．
@@ -637,11 +669,11 @@ win:Hide()
 
 ```lua
 items = win:GetItems()
-    hdr = items.Tree:NewItem()
-    hdr.Text[0] = 'Clip Name'
-    hdr.Text[1] = 'Path'
-    items.Tree:SetHeaderItem(hdr)
-    items.Tree.ColumnWidth[0] = 200
+hdr = items.Tree:NewItem()
+hdr.Text[0] = 'Clip Name'
+hdr.Text[1] = 'Path'
+items.Tree:SetHeaderItem(hdr)
+items.Tree.ColumnWidth[0] = 200
 ```
 
 そして、クリップを追加します．タイムラインのみにしたいので、クリップの種類で判定します．
