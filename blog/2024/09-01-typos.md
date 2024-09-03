@@ -97,7 +97,7 @@ extend-ignore-re = [
 # spellchecker: disable-line, disable-next-line, disable, enable
   "(?Rm)^.*(#|//|/\\*)\\s*spellchecker:\\s*disable-line$",
   "(?m)^\\s*(?:#|//|/\\*)\\s*spellchecker:\\s*disable-next-line.*$\\r?\\n.*$",
-  "(?s)(#|//|/\\*)\\s*spellchecker:\\s*disable.*?\\n\\s*(#|//|/\\*)\\s*spellchecker:\\s*enable"
+  "(?s)(#|//|/\\*|<!--)\\s*spellchecker:\\s*disable.*?\\n\\s*(#|//|/\\*|<!--)\\s*spellchecker:\\s*enable"
 ]
 ```
 
