@@ -157,7 +157,7 @@ GistPadには現在開いているエディタ内にGistファイルをペース
 公式からインストーラをダウンロードしてインストールしてもいいですし、仮想環境を作成しても問題ありません．ただし、仮想環境の場合、環境変数を設定する必要があります．<a href="https://resolvedevdoc.readthedocs.io/en/latest/API_intro.html" target="_blank" rel="noopener noreferrer">ResolveDevDoc</a> や、README.txt (たとえば、<code>C:\ProgramData\Blackmagic Design\DaVinci Resolve\Support\Developer\Scripting\README.txt</code>)を参照してください．もちろん、ここでは Python について詳しく触れません．</p>
 <p>なお、環境は Windows で、UIは英語表記、バージョンは 19.0 です．DaVinci Resolveを個人で少し使っている程度です．</p>
 <p>今回作るツールは2つ．1つはタイムラインを開くツールです．シーンが多くなるとフォルダ構造も階層が深くなったり、なぜかシーンファイルを開くためにダブルクリックしようとするとクリックした直後にしばらく操作できずにいて、その後はシーンの名前変更になってしまったりと若干ストレスを感じていました．私はEdit画面を主に使っているので、Edit画面からタイムラインを切り替えたいです．
-もう1つはFusionのツールで、特定のノードのインスペクタに表示されるボタンを押すスクリプトです．これは、Trailノードを使っているときに、RestartやPrerollボタンを押すことがよくあるのですが、複数のTrailノードがあったりするととても面倒でした．</p>
+もう1つはFusionのツールで、特定のノードのインスペクタに表示されるボタンを押すスクリプトです．これは、Trailsノードを使っているときに、RestartやPrerollボタンを押すことがよくあるのですが、複数のTrailsノードがあったりするととても面倒でした．</p>
 <p>今回はこの2つを作成します．ここでは、最低限のプログラミングについて知っていることを前提とします（たとえば、変数や関数）．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="lua">Lua<a class="hash-link" aria-label="Direct link to Lua" title="Direct link to Lua" href="https://mebiusbox.github.io/en/blog/2024/08/30/davinci-resolve-lua#lua">​</a></h2>
 <p>Luaのマニュアルや日本語版へのリンクを貼っておきます：</p>
