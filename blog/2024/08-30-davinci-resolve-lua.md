@@ -545,17 +545,21 @@ bmd.openfileexternal("Open", fusion:MapPath("Scripts:"))
 
 とくに決まりはありませんが、ここでは`main`関数を作ります．
 
-```lua
+```lua title="OpenTimeline.lua" showLineNumbers
 function main()
+  print("Hello World!")
 end
 
 main()
 ```
 
-具体的な処理は `main`関数に書いていきます．
+この状態で、DaVinci Resolveのメニューから「Workspace > Scripts > Comp > OpenTimeline」の項目があるか確認し、実行してみましょう．
+コンソールに "Hello World!" と表示されれば問題ありません．もし、Fusionページを開いているなら「Workspace > Scripts > OpenTimeline」となります．
+
+具体的な処理は`main`関数に書いていきます．
 まずはお約束として、現在開いているプロジェクト情報にアクセスできるようにします．
 
-```lua
+```lua {2-4} showLineNumbers
 function main()
   local pm = resolve:GetProjectManager()
   local cm = pm:GetCurrentProject()
@@ -566,7 +570,7 @@ end
 タイムラインはメディアプールに含まれています．
 メディアプールのルートフォルダを取得して、タイムラインを検索します．
 
-```lua
+```lua {6-7} showLineNumbers
 function main()
   local pm = resolve:GetProjectManager()
   local cm = pm:GetCurrentProject()
@@ -580,7 +584,7 @@ end
 これから作成する`scandir`という関数はフォルダ内のクリップを取得します．
 フォルダの`GetSubFolderList`でサブフォルダを、`GetClipList`でクリップを取得します．
 
-```lua
+```lua {1-19} showLineNumbers
 function scandir(folder, parentName)
     local clips = {}
     print('scan... [' .. folder:GetName() .. ']')
@@ -600,13 +604,22 @@ function scandir(folder, parentName)
 
     return clips
 end
+
+function main()
+  local pm = resolve:GetProjectManager()
+  local cm = pm:GetCurrentProject()
+  local mp = cm:GetMediaPool()
+
+  local rootFolder = mp:GetRootFolder()
+  local clips = scandir(rootFolder, rootFolder:GetName())
+end
 ```
 
 クリップを見つけたら `GetClipProperty` でクリップ名とクリップの種類を取得して一時テーブルに格納して、そのテーブルを返します．
 クリップの列挙が終わったら、それを表示して選択できるようにしましょう．
 bmdライブラリの`UIDispatcher`を使います．
 
-```lua
+```lua {9-33} showLineNumbers
 function main()
     local pm = resolve:GetProjectManager()
     local cm = pm:GetCurrentProject()
@@ -648,7 +661,7 @@ end
 ![OpenTimeline - Window](/img/post/2024/08-30-davinci-resolve-lua-open-timeline-001.png)
 
 `dispatcher`の関数`AddWindow`でウィンドウを作成しています．
-`ID`は固有ID、タイトルはウィンドウのタイトル、`Geometry`はウィンドウの位置と大きさです．
+`ID`は固有ID、`WindowTitle`はウィンドウのタイトル、`Geometry`はウィンドウの位置と大きさです．
 UI要素として、Treeを配置しています．Treeでは `SortingEnabled` を有効にして自動ソートさせています．
 また、`ItemDoubleClicked`イベントを有効にすることでダブルクリックイベントを発生させるようにしています．
 
@@ -691,7 +704,7 @@ end
 
 これらを組み込みましょう．
 
-```lua
+```lua {27-41} showLineNumbers
 function main()
     local pm = resolve:GetProjectManager()
     local cm = pm:GetCurrentProject()
@@ -778,7 +791,7 @@ end
 
 ここまでのコードです．
 
-```lua
+```lua {43-57} showLineNumbers
 function main()
     local pm = resolve:GetProjectManager()
     local cm = pm:GetCurrentProject()
@@ -786,7 +799,6 @@ function main()
 
     local rootFolder = mp:GetRootFolder()
     local clips = scandir(rootFolder, rootFolder:GetName())
-    dump(clips)
 
     ui = fu.UIManager
     dispatcher = bmd.UIDispatcher(ui)
@@ -854,7 +866,7 @@ end
 
 最終的なコードは次のようになります．
 
-```lua
+```lua {37-63,94-113} title="OpenTimeline.lua" showLineNumbers
 function scandir(folder, parentName)
     local clips = {}
     print('scan... [' .. folder:GetName() .. ']')
@@ -990,8 +1002,11 @@ main()
 
 ![OpenTimeline - Final](/img/post/2024/08-30-davinci-resolve-lua-open-timeline-final.png)
 
+これで完成です．
+
 ## Fusionで特定のノードのボタンを押す
 
+2つ目のツールです．
 まず、現在開いているFusionのノードは `GetToolList`で列挙できます．`comp`は現在のコンポジションオブジェクトです．
 
 ```lua
@@ -1013,7 +1028,7 @@ tools = comp:GetToolList(false, "Trails")
 
 Fusion上で各ノードの種類を確認したい場合、`Ctrl+Shift+E`キーで確認できます．
 
-次の各ノードのパラメータを設定、取得する方法ですが、パラメータ名がキーとなっています．
+次に、各ノードのパラメータを設定・取得する方法ですが、パラメータ名がキーとなっています．
 たとえば、すべてのTrailsノードのRotateを変更したい場合、次のようになります．
 
 ```lua
@@ -1030,7 +1045,7 @@ end
 
 では、本題に入ります．ボタンはどうなのかというと、たとえば Trails の Restart にカーソルを合わせると `Trails1.Restart` のように表示されます．
 実は、この `Restart` に `1` を代入するとボタンを押したことになります．
-試してみましょう．わかりやすいように、`pEmitter`ノードを作成します．このノードには `Reseed` ボタンがあって、押すと `Random Seed`の値が変わります．
+試してみましょう．Trailsノードではわかりづらいので、ここでは `pEmitter`ノードを作成して使います．このノードには `Reseed` ボタンがあって、押すと `Random Seed`の値が変わります．
 次のスクリプトを実行してみます．
 
 ```lua
