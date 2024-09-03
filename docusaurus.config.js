@@ -174,7 +174,7 @@ const config = {
         // theme: prismThemes.github,
         theme: prismThemes.okaidia,
         darkTheme: prismThemes.okaidia,
-        additionalLanguages: ['powershell', 'lua', "json"],
+        additionalLanguages: ['powershell', 'lua', "json", "toml"],
       },
       zoom: {
         selector: '.markdown :not(em) > img',
