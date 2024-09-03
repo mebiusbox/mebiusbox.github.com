@@ -465,7 +465,7 @@ Luaには他にも機能がありますが、とりあえずこれぐらいの�
 
 ## bmdライブラリ
 
-Luaは必要最低限の機能しか提供しておらず、DaVinci Resolveがある程度機能を提供してくれないと使い物になりません．
+前述したようにLuaは必要最低限の機能しか提供しておらず、DaVinci Resolveがある程度機能を提供してくれないと使い物になりません．
 bmd(Black Magic Design?)ライブラリはDaVinci Resolveが提供しているライブラリです．このライブラリに含まれているものが大域環境に公開されていたりします．
 
 中身を見てみましょう：
@@ -473,58 +473,58 @@ bmd(Black Magic Design?)ライブラリはDaVinci Resolveが提供している�
 ```lua
 Lua> dump(bmd)
 table: 0x02549a312c18
-	fileexists = function: 0x02549a31c5a0
-	direxists = function: 0x02549a31c608
-	executebg = function: 0x02549a31c670
-	getcurrentdir = function: 0x02549a31c6d8
-	setcurrentdir = function: 0x02549a31c740
-	getpid = function: 0x02549a31c7a8
-	touserdata = function: 0x02549a31c808
-	wait = function: 0x02549a31c870
-	getuptime = function: 0x02549a31c8d0
-	gettime = function: 0x02549a31c938
-	stripname = function: 0x02549a31c998
-	isvalidname = function: 0x02549a31ca00
-	isquotable = function: 0x02549a31ca68
-	fullpath = function: 0x02549a31cad0
-	startserver = function: 0x02549a31cb38
-	getappname = function: 0x02549a31cba0
-	getappuuid = function: 0x02549a31cc08
-	createuuid = function: 0x02549a31cc70
-	getclipboard = function: 0x02549a31cd10
-	setclipboard = function: 0x02549a31cd78
-	tounc = function: 0x02549a31cde0
-	scriptapp = function: 0x02549a31ce40
-	asyncscriptapp = function: 0x02549a31cea8
-	sendnotify = function: 0x02549a31cf10
-	using = function: 0x02549a31cf78
-	getusing = function: 0x02549a31cfd8
-	obtaingloballock = function: 0x02549a31d040
-	exit = function: 0x02549a31ccd8
-	defragfile = function: 0x02549a31d120
-	defragsequence = function: 0x02549a31d188
-	readfile = function: 0x02549a31d1f0
-	writefile = function: 0x02549a31d258
-	readstring = function: 0x02549a31d2c0
-	writestring = function: 0x02549a31d328
-	openfileexternal = function: 0x02549a31d390
-	openurl = function: 0x02549a31d400
-	setapptitle = function: 0x02549a31d460
-	translate = function: 0x02549a31d4c8
-	UIDispatcher = function: 0x02549a32f8a8
-	settrcontext = function: 0x02549a322560
-	nextstate = function: 0x02549a311f90
-	getstateindex = function: 0x02549a311f60
-	_VERSION = "19.0"
-	releasegloballock = function: 0x02549a31d0b0
-	readdir = function: 0x02549a3163c8
-	createdir = function: 0x02549a316428
-	removedir = function: 0x02549a31c348
-	crash = function: 0x02549a31c3b0
-	allocconsole = function: 0x02549a31c410
-	suspend = function: 0x02549a31c478
-	noise = function: 0x02549a31c4d8
-	pinghosts = function: 0x02549a31c538
+fileexists = function: 0x02549a31c5a0
+direxists = function: 0x02549a31c608
+executebg = function: 0x02549a31c670
+getcurrentdir = function: 0x02549a31c6d8
+setcurrentdir = function: 0x02549a31c740
+getpid = function: 0x02549a31c7a8
+touserdata = function: 0x02549a31c808
+wait = function: 0x02549a31c870
+getuptime = function: 0x02549a31c8d0
+gettime = function: 0x02549a31c938
+stripname = function: 0x02549a31c998
+isvalidname = function: 0x02549a31ca00
+isquotable = function: 0x02549a31ca68
+fullpath = function: 0x02549a31cad0
+startserver = function: 0x02549a31cb38
+getappname = function: 0x02549a31cba0
+getappuuid = function: 0x02549a31cc08
+createuuid = function: 0x02549a31cc70
+getclipboard = function: 0x02549a31cd10
+setclipboard = function: 0x02549a31cd78
+tounc = function: 0x02549a31cde0
+scriptapp = function: 0x02549a31ce40
+asyncscriptapp = function: 0x02549a31cea8
+sendnotify = function: 0x02549a31cf10
+using = function: 0x02549a31cf78
+getusing = function: 0x02549a31cfd8
+obtaingloballock = function: 0x02549a31d040
+exit = function: 0x02549a31ccd8
+defragfile = function: 0x02549a31d120
+defragsequence = function: 0x02549a31d188
+readfile = function: 0x02549a31d1f0
+writefile = function: 0x02549a31d258
+readstring = function: 0x02549a31d2c0
+writestring = function: 0x02549a31d328
+openfileexternal = function: 0x02549a31d390
+openurl = function: 0x02549a31d400
+setapptitle = function: 0x02549a31d460
+translate = function: 0x02549a31d4c8
+UIDispatcher = function: 0x02549a32f8a8
+settrcontext = function: 0x02549a322560
+nextstate = function: 0x02549a311f90
+getstateindex = function: 0x02549a311f60
+_VERSION = "19.0"
+releasegloballock = function: 0x02549a31d0b0
+readdir = function: 0x02549a3163c8
+createdir = function: 0x02549a316428
+removedir = function: 0x02549a31c348
+crash = function: 0x02549a31c3b0
+allocconsole = function: 0x02549a31c410
+suspend = function: 0x02549a31c478
+noise = function: 0x02549a31c4d8
+pinghosts = function: 0x02549a31c538
 ```
 
 この中で重要なのはDaVinci ResolveでUIを管理する`UIDispatcher`です．これを使ってツールを作ります．
