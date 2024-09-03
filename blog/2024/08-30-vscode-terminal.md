@@ -73,7 +73,7 @@ WindowsのVisual Studio Codeでターミナルを快適に操作させるため�
       "workbench.action.toggleMaximizeEditorGroup"
     ]
   },
-  "when": "activeEditorGroupIndex==1"
+  "when": "activeEditorGroupIndex==1 && (editorFocus || terminalFocus)"
 },
 {
   "key": "f2",
@@ -85,7 +85,7 @@ WindowsのVisual Studio Codeでターミナルを快適に操作させるため�
       "workbench.action.toggleMaximizeEditorGroup"
     ]
   },
-  "when": "activeEditorGroupIndex==2"
+  "when": "activeEditorGroupIndex==2 && (editorFocus || terminalFocus)"
 },
 ```
 
