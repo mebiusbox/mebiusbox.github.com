@@ -49,7 +49,54 @@ WindowsのVisual Studio Codeでターミナルを快適に操作させるため�
 },
 ```
 
-エディター内のでターミナル操作とパネルでのターミナル（`Ctrl+@`）を使った方法は別々なので、2つのターミナルを使い分けることができます．
+エディター内でターミナル操作とパネルでのターミナル（`Ctrl+@`）を使った方法は別々なので、2つのターミナルを使い分けることができます．
+
+:::info
+この方法だと、ターミナルをフォーカスするときに、パネル内のターミナルが優先されることがあります．
+エディター内のターミナルに確実に切り替えたい場合、ターミナルをタブの一番左において、「Terminal: Focus Terminal」ではなく、「View: Open First Editor in Group」を使います．
+:::
+
+他には、エディターのセカンドグループにターミナルを置く方法もあります．
+一種の仮想画面のような機能で、この方法はターミナルに限った方法ではありません．
+エディターのグループは最大化できますので、これを使ってファーストグループとセカンドグループを互いに最大化で切り替えるやり方です．
+ちょっとトリッキーですが、これをするためにはショートカットキーの設定ファイルを直接編集する必要があります．
+`runCommands`を使うことで、複数のアクションを同時に行えます．たとえば、`F2`キーでこれを実行すると次のようになります．
+
+```json
+{
+  "key": "f2",
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "workbench.action.toggleMaximizeEditorGroup",
+      "workbench.action.focusSecondEditorGroup",
+      "workbench.action.toggleMaximizeEditorGroup"
+    ]
+  },
+  "when": "activeEditorGroupIndex==1"
+},
+{
+  "key": "f2",
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "workbench.action.toggleMaximizeEditorGroup",
+      "workbench.action.focusFirstEditorGroup",
+      "workbench.action.toggleMaximizeEditorGroup"
+    ]
+  },
+  "when": "activeEditorGroupIndex==2"
+},
+```
+
+やっていることは単純で次のことをやっています
+
+1. 現在のエディタグループの最大化を解除
+1. 別のエディタグループに切り替え
+1. 切り替えたエディタグループを最大化
+
+グループの状態が把握しづらいので、最大化を解除したり、両方のグループを表示できるようにすれば管理しやすいかもです．
+たとえば、`Ctrl+F2`に `workbench.action.evenEditorWidths` を設定したりとか．これはエディターグループを2画面表示します．
 
 ## Shortcut Menu Bar
 

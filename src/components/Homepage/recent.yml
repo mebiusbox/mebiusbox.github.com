@@ -1,3 +1,15 @@
+- name: 2024-09-02-gpg4win-gpgconf
+  date: 2024-09-02
+  title:
+    ja: Gpg4winのgpg-agent.confの場所
+- name: 2024-09-01-typos
+  date: 2024-09-01
+  title:
+    ja: Typosでスペルミスを減らす
+- name: 2024-08-31-gist-tool
+  date: 2024-08-31
+  title:
+    ja: Gistコマンドを自作してテンプレートファイルを管理する
 - name: 2024-08-30-vscode-terminal
   date: 2024-08-30
   title:
@@ -6,15 +18,3 @@
   date: 2024-08-30
   title:
     ja: DaVinci ResolveのLuaスクリプト入門
-- name: 2024-08-27-python-on-windows
-  date: 2024-08-27
-  title:
-    ja: WindowsでのPython環境について
-- name: 2024-04-03-prune-zoxide-database
-  date: 2024-04-03
-  title:
-    ja: zoxideのデータベースを整理する
-- name: 2024-03-11-gitui-pending-other
-  date: 2024-03-11
-  title:
-    ja: gitui で Pending Other に Other が表示される
