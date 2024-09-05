@@ -2,7 +2,7 @@
 title: Visual Studio Codeの新規ファイル作成を支援する拡張機能
 description: Visual Studio Codeの拡張機能「Simple New File」の紹介
 keywords:
-  - Visual Studio Codee
+  - Visual Studio Code
 category: note
 authors: [mebiusbox]
 tags: [vscode]
