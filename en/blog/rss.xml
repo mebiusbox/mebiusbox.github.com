@@ -4,10 +4,35 @@
         <title>Mebiusbox software Blog</title>
         <link>https://mebiusbox.github.io/en/blog</link>
         <description>Mebiusbox software Blog</description>
-        <lastBuildDate>Thu, 05 Sep 2024 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Sat, 07 Sep 2024 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[Visual Studio Codeで Ruff を使ったときの問題]]></title>
+            <link>https://mebiusbox.github.io/en/blog/2024/09/07/vscode-ruff</link>
+            <guid>https://mebiusbox.github.io/en/blog/2024/09/07/vscode-ruff</guid>
+            <pubDate>Sat, 07 Sep 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[Visual Studio Codeで Ruff を使ったときに問題が発生したのでその対処方法について]]></description>
+            <content:encoded><![CDATA[<p>Visual Studio CodeでRuffを使うときに1つ問題があったので対処方法を記録しておきます．</p>
+<p><a href="https://docs.astral.sh/ruff/" target="_blank" rel="noopener noreferrer">Ruff</a> はリンターおよびフォーマッタです．高速なのが特徴です．
+Visual Studio Codeで使う場合、<a href="https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff" target="_blank" rel="noopener noreferrer">拡張機能</a>をインストールします．</p>
+<p>使用していると、整形時に最終行が複製されてしまう問題が発生しました．
+どうやら、他の拡張機能と合わせて使っていると起きるようです．
+issue(<a href="https://github.com/astral-sh/ruff-vscode/issues/128" target="_blank" rel="noopener noreferrer">#128</a>)として報告はされているようです．
+対処方法は確認したところ、2つあるようです．</p>
+<ul>
+<li>他のリンターやフォーマッタなどの拡張機能を無効にする</li>
+<li><code>ruff.organizeImports</code> を無効にする</li>
+</ul>
+<p>前者の場合、<a href="https://marketplace.visualstudio.com/items?itemName=ms-python.isort" target="_blank" rel="noopener noreferrer">ms-python.isort</a> を無効にします．
+もしかするとそれ以外も無効にする必要があるかもしれません．</p>
+<p>厄介な問題なので、対応はしておきましょう．</p>
+<p>以上です．</p>]]></content:encoded>
+            <category>vscode</category>
+            <category>python</category>
+            <category>ruff</category>
+        </item>
         <item>
             <title><![CDATA[Visual Studio Codeの新規ファイル作成を支援する拡張機能]]></title>
             <link>https://mebiusbox.github.io/en/blog/2024/09/05/vscode-simple-new-file</link>
@@ -380,7 +405,7 @@ UI要素として、Treeを配置しています．Treeでは <code>SortingEnabl
 <p>「Ctrl+Shift+@」でターミナルを新規に作成できます．</p>
 <p>私の場合、ターミナルはエディター内でも作業したいことがあります．これは、パネルにあるターミナル画面とは別のものです．サーバー起動などの用途に少なくとも2つのターミナルが欲しいので、使い分けたいのです．新規に作成されるターミナルの場所は設定で変更できます．設定画面で「Terminal &gt; integrated: Default Location」を「Editor」に設定します．設定ファイルを直接編集する場合、<code>"terminal.integrated.defaultLocation": "editor"</code> とします．</p>
 <p>また、コマンドパレットから「Terminal: Create New Terminal in Editor Area」としてもエディター内に新規ターミナルを作れます．他にも「Terminal: Create New Terminal in Editor Area to the Side」であれば、隣のグループに新規ターミナルを作れます．</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="ターミナルとエディタを切�り替える">ターミナルとエディタを切り替える<a class="hash-link" aria-label="Direct link to ターミナルとエディタを切り替える" title="Direct link to ターミナルとエディタを切り替える" href="https://mebiusbox.github.io/en/blog/2024/08/30/vscode-terminal#%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB%E3%81%A8%E3%82%A8%E3%83%87%E3%82%A3%E3%82%BF%E3%82%92%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88%E3%82%8B">​</a></h2>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="ターミナルとエディタを切り替える">ターミナルとエディタを切り替える<a class="hash-link" aria-label="Direct link to ターミナルとエディタを切り替える" title="Direct link to ターミナルとエディタを切り替える" href="https://mebiusbox.github.io/en/blog/2024/08/30/vscode-terminal#%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB%E3%81%A8%E3%82%A8%E3%83%87%E3%82%A3%E3%82%BF%E3%82%92%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88%E3%82%8B">​</a></h2>
 <p>エディター内に作成したターミナルと現在開いているエディターを切り替える方法がいくつかあります．</p>
 <p>まずは「Ctrl+Tab」を使った方法です．このショートカットは「View: Quick Open Previous Recently Used Editor in Group」が割り当てられており、前回使っていたエディター画面を開きます．現在編集中のファイルと、ターミナルを切り替えていれば、この機能で手軽に切り替えられます．</p>
 <p>別の方法として、「Terminal: Focus Terminal」を使うやり方があります．これはどのエディター画面からも一発でターミナル画面に移動できるコマンドで、標準だとショートカットが割り当てられていないので、手動で割り当てる必要があります．これでターミナル画面に移動できるのですが、前のエディターに戻ることができません．そこで、ターミナル画面をタブの一番最初に置くことを前提とすれば「View: Open Next Editor in Group」を使って、相互に切り替えられます．
@@ -511,7 +536,7 @@ UI要素として、Treeを配置しています．Treeでは <code>SortingEnabl
             <content:encoded><![CDATA[<p><a href="https://espanso.org/" target="_blank" rel="noopener noreferrer">Espanso</a> というテキスト入力支援ソフトで置換文字が改行を含んでいる場合に起こる問題とその対応方法についてまとめました．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="espanso-とは">Espanso とは<a class="hash-link" aria-label="Direct link to Espanso とは" title="Direct link to Espanso とは" href="https://mebiusbox.github.io/en/blog/2023/12/23/espanso-force-clipboard#espanso-%E3%81%A8%E3%81%AF">​</a></h2>
 <p><a href="https://espanso.org/" target="_blank" rel="noopener noreferrer">Espanso</a> はテキスト入力支援ソフトです．WindowsやMacOSでも使えます．あらかじめトリガー文字と置換文字を指定しておくと、トリガー文字が入力されると同時に置換文字に置き換わります．Espanso では置換文字にクリップボードの内容やスクリプトの実行結果など様々な機能が利用できます．テキスト入力支援ソフトは他にも様々なものがあります．例えば、<a href="https://www.trankynam.com/atext/" target="_blank" rel="noopener noreferrer">aText</a> があります．また、<a href="https://sites.google.com/site/craftware/keyhac-ja" target="_blank" rel="noopener noreferrer">keyhac</a> を使って同様のことも出来るでしょう．</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="改行を含んでいる場合の問題となるケース">改行を含んでいる場合の問題となるケース<a class="hash-link" aria-label="Direct link to 改行を含んでいる場合の問題となるケース" title="Direct link to 改行を含んでいる場合の問題となるケース" href="https://mebiusbox.github.io/en/blog/2023/12/23/espanso-force-clipboard#%E6%94%B9%E8%A1%8C%E3%82%92%E5%90%AB%E3%82%93%E3%81%A7%E3%81%84%E3%82%8B%E5%A0%B4%E5%90%88%E3%81%AE%E5%95%8F%E9%A1%8C%E3%81%A8%E3%81%AA%E3%82%8B%E3%82%B1%E3%83%BC%E3%82%B9">​</a></h2>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="改行を含んでいる場合の問題となるケース">改行を含んでいる場合の問題となるケース<a class="hash-link" aria-label="Direct link to 改行を含んでいる場合の問題となるケース" title="Direct link to 改行を含んでいる場合の問題となる�ケース" href="https://mebiusbox.github.io/en/blog/2023/12/23/espanso-force-clipboard#%E6%94%B9%E8%A1%8C%E3%82%92%E5%90%AB%E3%82%93%E3%81%A7%E3%81%84%E3%82%8B%E5%A0%B4%E5%90%88%E3%81%AE%E5%95%8F%E9%A1%8C%E3%81%A8%E3%81%AA%E3%82%8B%E3%82%B1%E3%83%BC%E3%82%B9">​</a></h2>
 <p>Espanso には文字を置換するときに2つのバックエンドを使い分けて処理します．<code>Inject</code>と<code>Clipboard</code>です．</p>
 <p><code>Inject</code>はキー入力をシミュレートし、<code>Clipboard</code>はクリップボードを経由して置換します．このバックエンドは設定で切り替えることが出来ます．標準で <code>Auto</code> となっており、トリガー時に自動で切り替わります．</p>
 <p>問題となるのは <code>Enterキー</code> が改行ではなくショートカットなどに割り当てられている場合です．その場合 <code>Inject</code> だと適切に処理されません．
@@ -774,7 +799,7 @@ GLSL3 のシェーダコードは先頭に <code>#version 300 es</code> を入�
 この時 <code>README.md</code> を編集しないと怒られるので適当に編集します．以下のコマンドでパッケージが作成できます．</p>
 <div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#f8f8f2;--prism-background-color:#272822"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#f8f8f2;background-color:#272822"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#f8f8f2"><span class="token plain">npx vsce package</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
 <p>拡張子が <code>.vsix</code> のファイルが生成されます．VSCode上ならこのファイルを右クリックからインストールできます．</p>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="役に立ったサイト">役に立ったサイト<a class="hash-link" aria-label="Direct link to 役に立ったサイト" title="Direct link to 役に立ったサイト" href="https://mebiusbox.github.io/en/blog/2023/12/13/vscode-pixy-outline#%E5%BD%B9%E3%81%AB%E7%AB%8B%E3%81%A3%E3%81%9F%E3%82%B5%E3%82%A4%E3%83%88">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="役に立ったサイト">役に立ったサイト<a class="hash-link" aria-label="Direct link to 役に立ったサイト" title="Direct link to 役に立ったサイト" href="https://mebiusbox.github.io/en/blog/2023/12/13/vscode-pixy-outline#%EF%BF%BD%EF%BF%BD%E5%BD%B9%E3%81%AB%E7%AB%8B%E3%81%A3%E3%81%9F%E3%82%B5%E3%82%A4%E3%83%88">​</a></h3>
 <p>拡張機能のアクティベートの部分に関しては次のサイトを参考にしました．</p>
 <p><a href="https://clickan.click/activation-events/" target="_blank" rel="noopener noreferrer" class="card padding--md margin-bottom--sm cardContainer_yMBB"><span class="text--truncate cardTitle_SiGl" title="Visual Studio Code 拡張機能のアクティベート activationEvents"><i class="cardIcon_VTdI fas fa-external-link-alt"></i> <!-- -->Visual Studio Code 拡張機能のアクティベート activationEvents</span></a></p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="合わせて使いたい拡張機能">合わせて使いたい拡張機能<a class="hash-link" aria-label="Direct link to 合わせて使いたい拡張機能" title="Direct link to 合わせて使いたい拡張機能" href="https://mebiusbox.github.io/en/blog/2023/12/13/vscode-pixy-outline#%E5%90%88%E3%82%8F%E3%81%9B%E3%81%A6%E4%BD%BF%E3%81%84%E3%81%9F%E3%81%84%E6%8B%A1%E5%BC%B5%E6%A9%9F%E8%83%BD">​</a></h2>
@@ -941,7 +966,7 @@ mdbookの追加機能として<code>mdbook-admonition</code>を使っていま�
 <p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117231537-27450a558272a282cf7a9f4b56305354.png" width="1066" height="157" class="img_ev3q"></p>
 <p>適当にタスクを追加して、タスクの親子関係を設定します．ここで重要なのは、子を持つ親タスクの<span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">進捗(子)</span>は<code>自動</code>に設定しておいてください．</p>
 <p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117231646-03f7f04189aaae0fa11d77564340a94b.png" width="1074" height="604" class="img_ev3q"></p>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="子タスクの進捗率">子タスクの進捗率<a class="hash-link" aria-label="Direct link to 子タスクの進捗率" title="Direct link to 子タスク��の進捗率" href="https://mebiusbox.github.io/en/blog/2023/01/17/notion-wbs#%E5%AD%90%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E9%80%B2%E6%8D%97%E7%8E%87">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="子タスクの進捗率">子タスクの進捗率<a class="hash-link" aria-label="Direct link to 子タスクの進捗率" title="Direct link to 子タスクの進捗率" href="https://mebiusbox.github.io/en/blog/2023/01/17/notion-wbs#%E5%AD%90%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E9%80%B2%E6%8D%97%E7%8E%87">​</a></h3>
 <p><code>_進捗N</code>は子タスクの<span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">進捗(子)</span>のセレクト値を数値に変換します．まず、<code>_進捗N</code>を数値として扱いたいので、関数(Formula)で<code>1</code>と設定します．</p>
 <p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117232045-93ff2b9c60bf803288556eb233e824a7.png" width="995" height="327" class="img_ev3q"></p>
 <p>これで、このプロパティが数値として扱われます．数値として扱われると、関数プロパティのオプションに<code>数値の形式(Number format)</code>と<code>表示形式(Show as)</code>が追加されます．</p>
@@ -997,7 +1022,7 @@ mdbookの追加機能として<code>mdbook-admonition</code>を使っていま�
             <content:encoded><![CDATA[<p>Docusaurusは静的サイトジェネレータなので、すべてのページがビルド時にレンダリングされます．
 DocusaurusのマークダウンからHTMLにレンダリングする部分は <a href="https://remark.js.org/" target="_blank" rel="noopener noreferrer">remark</a> と <a href="https://github.com/rehypejs/rehype" target="_blank" rel="noopener noreferrer">rehype</a> が処理しています．数式を有効にするには、<a href="https://docusaurus.io/docs/markdown-features/math-equations" target="_blank" rel="noopener noreferrer">Docusaurusのドキュメント</a> によれば、<code>remark-math</code> と <code>rehype-katex</code> (または <code>rehype-mathjax</code>）を使います．
 しかし、2,3個の数式ならともかく、それなりの数があるとビルドに時間がかかるようになり、生成されるhtmlやjsファイルが肥大化します．もちろん、数式も含めて事前にレンダリングするので、閲覧する場合はブラウザで数式の処理が入らず高速に表示できますが、個人的にはデメリットの方が大きいので、数式処理はクライアントサイドでしたいところです．ここでは、その方法を記録しておきます．</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="必要なスクリプトやcssファイルを読み込む">必要なスクリプトやCSSファイルを読み込む<a class="hash-link" aria-label="Direct link to 必要なスクリプトやCSSファイルを読み込む" title="Direct link to 必要なスクリプトやCSSファイルを読み込む" href="https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E5%BF%85%E8%A6%81%E3%81%AA%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%82%84css%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%82%80">​</a></h2>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="必要なスクリプトやcssファイルを読み込む">必要なスクリプトやCSSファイルを読み込む<a class="hash-link" aria-label="Direct link to 必要なスクリプトやCSSファイルを読み込む" title="Direct link to 必要なスクリプトやCSSファイルを読み込む" href="https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E5%BF%85%EF%BF%BD%EF%BF%BD%E8%A6%81%E3%81%AA%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%82%84css%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%82%80">​</a></h2>
 <p>今回は <a href="https://katex.org/" target="_blank" rel="noopener noreferrer">katex</a> を使って数式処理をします．バージョンは <code>0.16.4</code> です．
 必要なファイルは以下の通りです．</p>
 <ul>
@@ -1052,7 +1077,7 @@ DocusaurusのマークダウンからHTMLにレンダリングする部分は <a
 <p><code>katex-client</code>プラグインにしたことによる注意点です．</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="クライアント側の負荷">クライアント側の負荷<a class="hash-link" aria-label="Direct link to クライアント側の負荷" title="Direct link to クライアント側の負荷" href="https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E3%82%AF%E3%83%A9%E3%82%A4%E3%82%A2%E3%83%B3%E3%83%88%E5%81%B4%E3%81%AE%E8%B2%A0%E8%8D%B7">​</a></h3>
 <p>もちろん、クライアント側で数式処理をするのでページを開いたときに負荷がかかってしまいます．</p>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="マークダウンでエスケー��プが必要">マークダウンでエスケープが必要<a class="hash-link" aria-label="Direct link to マークダウンでエスケープが必要" title="Direct link to マークダウンでエスケープが必要" href="https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E3%83%9E%E3%83%BC%E3%82%AF%E3%83%80%E3%82%A6%E3%83%B3%E3%81%A7%E3%82%A8%E3%82%B9%E3%82%B1%E3%83%BC%E3%83%97%E3%81%8C%E5%BF%85%E8%A6%81">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="マークダウンでエスケープが必要">マークダウンでエスケープが必要<a class="hash-link" aria-label="Direct link to マークダウンでエスケープが必要" title="Direct link to マークダウンでエスケープが必要" href="https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E3%83%9E%E3%83%BC%E3%82%AF%E3%83%80%E3%82%A6%E3%83%B3%E3%81%A7%E3%82%A8%E3%82%B9%E3%82%B1%E3%83%BC%E3%83%97%E3%81%8C%E5%BF%85%E8%A6%81">​</a></h3>
 <p>マークダウンの数式をそのまま remark や rehype に通すので、エスケープする必要があります．これは手間ではありますが、置換で対応できるので許容範囲としています．</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="remark-math--rehype-katexor-rehype-mathjax-と併用できない">remark-math + rehype-katex(or rehype-mathjax) と併用できない<a class="hash-link" aria-label="Direct link to remark-math + rehype-katex(or rehype-mathjax) と併用できない" title="Direct link to remark-math + rehype-katex(or rehype-mathjax) と併用できない" href="https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering#remark-math--rehype-katexor-rehype-mathjax-%E3%81%A8%E4%BD%B5%E7%94%A8%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%84">​</a></h3>
 <p>現状は併用できないです．<code>katex-client</code>プラグインを正常に動かすには <code>remark-math</code> を有効にできません．</p>
@@ -1128,7 +1153,7 @@ DocusaurusのマークダウンからHTMLにレンダリングする部分は <a
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="単にブログを書きたいなら">単にブログを書きたいなら<a class="hash-link" aria-label="Direct link to 単にブログを書きたいなら" title="Direct link to 単にブログを書きたいなら" href="https://mebiusbox.github.io/en/blog/2023/01/11/docusaurus#%E5%8D%98%E3%81%AB%E3%83%96%E3%83%AD%E3%82%B0%E3%82%92%E6%9B%B8%E3%81%8D%E3%81%9F%E3%81%84%E3%81%AA%E3%82%89">​</a></h3>
 <p>ブログサービスを使いましょう．静的サイトを使う理由がとくにないです．</p>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ブログをマークダウンで書きたいけどgithubで管理したい">ブログをマークダウンで書きたいけど、githubで管理したい<a class="hash-link" aria-label="Direct link to ブログをマークダウンで書きたいけど、githubで管��理したい" title="Direct link to ブログをマークダウンで書きたいけど、githubで管理したい" href="https://mebiusbox.github.io/en/blog/2023/01/11/docusaurus#%E3%83%96%E3%83%AD%E3%82%B0%E3%82%92%E3%83%9E%E3%83%BC%E3%82%AF%E3%83%80%E3%82%A6%E3%83%B3%E3%81%A7%E6%9B%B8%E3%81%8D%E3%81%9F%E3%81%84%E3%81%91%E3%81%A9github%E3%81%A7%E7%AE%A1%E7%90%86%E3%81%97%E3%81%9F%E3%81%84">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ブログをマークダウンで書きたいけどgithubで管理したい">ブログをマークダウンで書きたいけど、githubで管理したい<a class="hash-link" aria-label="Direct link to ブログをマークダウンで書きたいけど、githubで管理したい" title="Direct link to ブログをマークダウンで書きたいけど、githubで管理したい" href="https://mebiusbox.github.io/en/blog/2023/01/11/docusaurus#%E3%83%96%E3%83%AD%E3%82%B0%E3%82%92%E3%83%9E%E3%83%BC%E3%82%AF%E3%83%80%E3%82%A6%E3%83%B3%E3%81%A7%E6%9B%B8%E3%81%8D%E3%81%9F%E3%81%84%E3%81%91%E3%81%A9github%E3%81%A7%E7%AE%A1%E7%90%86%E3%81%97%E3%81%9F%E3%81%84">​</a></h3>
 <p><span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">Jekyll</span>を使いましょう．GitHubが標準でサポートしています．お手軽ですし、こだわりたいならテンプレートを使ってレイアウトを自分で構築してカスタマイズできます．</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="ドキュメントをマークダウンのみでweb上に公開するなら">ドキュメントをマークダウンのみでWeb上に公開するなら<a class="hash-link" aria-label="Direct link to ドキュメントをマークダウンのみでWeb上に公開するなら" title="Direct link to ドキュメントをマークダウンのみでWeb上に公開するなら" href="https://mebiusbox.github.io/en/blog/2023/01/11/docusaurus#%E3%83%89%E3%82%AD%E3%83%A5%E3%83%A1%E3%83%B3%E3%83%88%E3%82%92%E3%83%9E%E3%83%BC%E3%82%AF%E3%83%80%E3%82%A6%E3%83%B3%E3%81%AE%E3%81%BF%E3%81%A7web%E4%B8%8A%E3%81%AB%E5%85%AC%E9%96%8B%E3%81%99%E3%82%8B%E3%81%AA%E3%82%89">​</a></h3>
 <p><span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">MkDocs</span>を使いましょう．お手軽です． また、<span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">mdBook</span>でも構いません． Nodeの環境があるなら MkDocs、Rust (cargo) の環境があるなら mdBook という感じでもいいです．どちらの環境もあってどうしようという場合は <span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">mdBook</span> を使いましょう．</p>
@@ -1152,18 +1177,6 @@ Zennのブックなら、無料で公開していてもサポートでお金が�
             <category>mdBook</category>
             <category>Notion</category>
             <category>Jekyll</category>
-        </item>
-        <item>
-            <title><![CDATA[自前ライブラリの整備]]></title>
-            <link>https://mebiusbox.github.io/en/blog/2018/02/27/diary</link>
-            <guid>https://mebiusbox.github.io/en/blog/2018/02/27/diary</guid>
-            <pubDate>Tue, 27 Feb 2018 00:00:00 GMT</pubDate>
-            <description><![CDATA[うーん，毎日ブログ書けるかなと思っていたんだけど難しいね．あれこれやっていると，何かが疎かになる．]]></description>
-            <content:encoded><![CDATA[<p>うーん，毎日ブログ書けるかなと思っていたんだけど難しいね．あれこれやっていると，何かが疎かになる．</p>
-<p>Mebiusbox や FileHammer などは MFC で作成しているのですが，MFC 用または汎用ライブラリを１つ，.Net アプリ用にも自前ライブラリを１つ，他にもコンピュータグラフィック用のライブラリがあって，今はそれぞれメンテ中です．.Net アプリ用のライブラリは一部 GitHub で公開しています．</p>
-<p>正直，FileHammer や DiskCatalogManager もソースコード公開しようかなと思ったことはあるのですが，依存ライブラリがいくつかあって結構面倒だったというのがあります．とはいえ，今だと画像関係は OpenCV にまとめられそうですね．でも OpenCV の DLL はサイズが大きくてフリーソフトウェアで数十MBって結構大きいサイズになってしまいました．他にも便利なライブラリがあるので，そちらに移行するといいのですが，やっぱり面倒なのでやっていないです．とはいえ，FileHammer である程度整理しましたけどね．64bit になって Susie Plugin も対応しなくていいかな，なんて思ったりしていますが，対応は簡単なのでやってあります．</p>
-<p>自前ライブラリもずっと手付かずだったので，色々と整備していて機能を追加したり，リファクタリングしたり．Visual Studio 2012 が出たときも一度整理したんですが，Visual Studio もどんどんバージョンアップしていって，エラーが出るようになったりと結構厄介です．自分のライブラリはともかく他のライブラリの管理が大変．バージョンアップしていたりとか．まあ，色々やっています．</p>]]></content:encoded>
-            <category>diary</category>
         </item>
     </channel>
 </rss>
