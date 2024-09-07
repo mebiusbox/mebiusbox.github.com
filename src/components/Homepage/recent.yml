@@ -1,3 +1,11 @@
+- name: 2024-09-07-vscode-ruff
+  date: 2024-09-07
+  title:
+    ja: Visual Studio Codeで Ruff を使ったときの問題
+- name: 2024-09-05-vscode-simple-new-file
+  date: 2024-09-05
+  title:
+    ja: Visual Studio Codeの新規ファイル作成を支援する拡張機能
 - name: 2024-09-02-gpg4win-gpgconf
   date: 2024-09-02
   title:
@@ -10,11 +18,3 @@
   date: 2024-08-31
   title:
     ja: Gistコマンドを自作してテンプレートファイルを管理する
-- name: 2024-08-30-vscode-terminal
-  date: 2024-08-30
-  title:
-    ja: Visual Studio Codeでのターミナル操作
-- name: 2024-08-30-davinci-resolve-lua
-  date: 2024-08-30
-  title:
-    ja: DaVinci ResolveのLuaスクリプト入門
