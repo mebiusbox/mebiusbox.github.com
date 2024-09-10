@@ -1,4 +1,15 @@
 {
+  "search.exclude": {
+    "**/contents": true,
+    "**/static": true
+  },
+  "pixyPasteImage.confirmPattern": "Just Name",
+  "pixyPasteImage.ImageType": ".jpg",
+  "pixyPasteImage.path": "${projectRoot}/static/img",
+  "pixyPasteImage.basePath": "${projectRoot}/static/",
+  "pixyPasteImage.nameSuffix": "-${currentFileNameWithoutExt}",
+  "pixyPasteImage.defaultName": "Y/MM-DD-HH",
+  "pixyPasteImage.renderPattern": "![](/${imagePath})",
   "pasteImage.path": "${projectRoot}/static/img/post",
   "pasteImage.insertPattern": "${imageSyntaxPrefix}/img/post/${imageFileName}${imageSyntaxSuffix}"
 }
