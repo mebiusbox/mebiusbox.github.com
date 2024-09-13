@@ -1,0 +1,38 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "New Blog",
+      "type": "shell",
+      "command": [
+        "$year = Get-Date -Format 'yyyy';",
+        "$date = Get-Date -Format 'MM-dd';",
+        "New-Item -Path \"${workspaceFolder}\\blog\\${year}\\${date}-new-blog.md\";",
+        "code \"${workspaceFolder}\\blog\\${year}\\${date}-new-blog.md\""
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "close": true
+      }
+    },
+    {
+      "label": "New Note",
+      "type": "shell",
+      "command": [
+        "$date = Get-Date -Format 'yyyy-mm-dd';",
+        "New-Item -Path \"${workspaceFolder}\\docs\\note\\${date}-new-note.md\";",
+        "code \"${workspaceFolder}\\docs\\note\\${date}-new-note.md\""
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "close": true
+      }
+    }
+  ]
+}
