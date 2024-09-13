@@ -1,3 +1,7 @@
+- name: 2024-09-13-powershell-profile
+  date: 2024-09-13
+  title:
+    ja: PowerShellプロファイルの肥大化
 - name: 2024-09-13-ghq
   date: 2024-09-13
   title:
@@ -14,7 +18,3 @@
   date: 2024-09-02
   title:
     ja: Gpg4winのgpg-agent.confの場所
-- name: 2024-09-01-typos
-  date: 2024-09-01
-  title:
-    ja: Typosでスペルミスを減らす
