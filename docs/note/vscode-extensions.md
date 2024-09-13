@@ -8,7 +8,7 @@ pagination_next: null
 pagination_prev: null
 image: https://og-image-mebiusbox.vercel.app/api/og?title=Visual%20Studio%20Code%E3%81%AE%E6%8B%A1%E5%BC%B5%E6%A9%9F%E8%83%BD&subtitle=Visual%2520Studio%2520Code%25E3%2581%25AE%25E6%258B%25A1%25E5%25BC%25B5%25E6%25A9%259F%25E8%2583%25BD&date=2023%2F12%2F17&tags=VSCode
 last_update:
-  date: 2024-09-09
+  date: 2024-09-13
   author: mebiusbox
 ---
 
@@ -27,7 +27,7 @@ Markdownなどでちょっとした計算やプログラムを書いておいて
 ### [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker)
 
 スペルチェッカーです．ただし、現在は無効にしていて代わりに typos を使っています．
-ただ、typos よりノイズは多いかわりにスペルミスもtyposより検出してくれるので、通常は typos で、定期的に Code Spell Checker (cSpell) でチェックするのがいいかなと思います．
+ただ、typos よりノイズは多いかわりにスペルミスもtyposより検出してくれるので、通常は typos で、定期的に Code Spell Checker (cSpell) でチェックするのがいいかなと思います．（今は基本未使用）
 
 ### [Typos spell checker](https://marketplace.visualstudio.com/items?itemName=tekumara.typos-vscode)
 
@@ -64,7 +64,7 @@ Gitグラフツリーを確認できる拡張機能．
 
 ### [indent-rainbow](https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow)
 
-インデントのネストを色でわかりやすくする拡張機能．
+インデントのネストを色でわかりやすくする拡張機能．（標準でもある程度見やすくなったので今は未使用）
 
 ### [Jupyter](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter)
 
@@ -137,6 +137,10 @@ GistPadのスクラッチノートはシークレット扱いだけど、シー�
 ### [Whitespace++](https://marketplace.visualstudio.com/items?itemName=chihiro718.whitespacepp)
 
 全角の空白をわかりやすくするための拡張機能．
+
+### [Bracket Select](https://marketplace.visualstudio.com/items?itemName=chunsen.bracket-select)
+
+括弧やクォート間を選択したいときに便利な拡張機能．とくに文字列を選択したいときに使用．
 
 ### [Control Snippets](https://marketplace.visualstudio.com/items?itemName=svipas.control-snippets)
 
