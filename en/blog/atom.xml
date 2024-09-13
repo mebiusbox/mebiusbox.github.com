@@ -44,6 +44,31 @@
         <category label="powershell" term="powershell"/>
     </entry>
     <entry>
+        <title type="html"><![CDATA[PowerShellプロファイルの肥大化]]></title>
+        <id>https://mebiusbox.github.io/en/blog/2024/09/13/powershell-profile</id>
+        <link href="https://mebiusbox.github.io/en/blog/2024/09/13/powershell-profile"/>
+        <updated>2024-09-13T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[PowerShellプロファイルの肥大化に伴う問題]]></summary>
+        <content type="html"><![CDATA[<p>PowerShellが便利なので、さまざまな関数やコマンドレットをプロファイルに追加していったら、肥大化して少し問題になりました．
+ここでは、それに関する備忘録を残しておきます．</p>
+<p>PowerShellでも色んなことができるので、ちょっとしたことは可能ならPowerShellで処理するようにしています．
+そういったものはスクリプトとして作成せずに、関数やコマンドレットとして作成していました．
+ところが、PowerShellプロンプトを開くたびにコマンドが打てるまでの時間が長くなってしまいました．
+プロファイルの読み込み時間が表示されるので確認してみると10秒以上かかっています．
+さすがに長く感じてきたので、対処することにしました．</p>
+<p>具体的には、もともといくつかのモジュールに分けていて、プロファイルですべてをインポートしていたのですが、それをやめて必要最小限にとどめました．
+そして、必要であればモジュールをインポートする形に変更しました．結果、プロファイルの読み込みが2秒ぐらいになり、快適になりました．
+その反面、必要になるたびにモジュールを手動でインポートする手間が発生するようになりました．
+もちろん、インポートを手軽にできるように工夫してこの手間も最小限にしています．</p>
+<p>機能ごとにスクリプトを1つ作成して呼び出すのは、結局管理が大変になりそうなので、今はこのやり方で落ち着いています．</p>
+<p>以上です．</p>]]></content>
+        <author>
+            <name>mebiusbox</name>
+            <uri>https://github.com/mebiusbox</uri>
+        </author>
+        <category label="powershell" term="powershell"/>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[Visual Studio Codeで Ruff を使ったときの問題]]></title>
         <id>https://mebiusbox.github.io/en/blog/2024/09/07/vscode-ruff</id>
         <link href="https://mebiusbox.github.io/en/blog/2024/09/07/vscode-ruff"/>
@@ -354,7 +379,7 @@ GistPadには現在開いているエディタ内にGistファイルをペース
 <p>最後に、文字列の連結は <code>..</code> 演算子を使います．</p>
 <div class="language-lua codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#f8f8f2;--prism-background-color:#272822"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-lua codeBlock_bY9V thin-scrollbar" style="color:#f8f8f2;background-color:#272822"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#f8f8f2"><span class="token plain">Lua</span><span class="token operator" style="color:#66d9ef">&gt;</span><span class="token plain"> m </span><span class="token operator" style="color:#66d9ef">=</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">"Hello"</span><span class="token plain"> </span><span class="token operator" style="color:#66d9ef">..</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">" World!"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">Lua</span><span class="token operator" style="color:#66d9ef">&gt;</span><span class="token plain"> </span><span class="token function" style="color:#e6db74">print</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token plain">m</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">Hello World!</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
 <p>Luaには他にも機能がありますが、とりあえずこれぐらいの知識があれば今回は大丈夫かと思います．</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="bmdライブラリ">bmdライブラリ<a class="hash-link" aria-label="Direct link to bmd�ライブラリ" title="Direct link to bmdライブラリ" href="https://mebiusbox.github.io/en/blog/2024/08/30/davinci-resolve-lua#bmd%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA">​</a></h2>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="bmdライブラリ">bmdライブラリ<a class="hash-link" aria-label="Direct link to bmdライブラリ" title="Direct link to bmdライブラリ" href="https://mebiusbox.github.io/en/blog/2024/08/30/davinci-resolve-lua#bmd%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA">​</a></h2>
 <p>前述したようにLuaは必要最低限の機能しか提供しておらず、DaVinci Resolveがある程度機能を提供してくれないと使い物になりません．
 bmd(Black Magic Design?)ライブラリはDaVinci Resolveが提供しているライブラリです．このライブラリに含まれているものが大域環境に公開されていたりします．</p>
 <p>中身を見てみましょう：</p>
@@ -618,7 +643,7 @@ UI要素として、Treeを配置しています．Treeでは <code>SortingEnabl
 ではどうするかというとバックエンドに<code>Clipboard</code>を指定すればいいことになります．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="バックエンドに-clipboard-を使う方法">バックエンドに Clipboard を使う方法<a class="hash-link" aria-label="Direct link to バックエンドに Clipboard を使う方法" title="Direct link to バックエンドに Clipboard を使う方法" href="https://mebiusbox.github.io/en/blog/2023/12/23/espanso-force-clipboard#%E3%83%90%E3%83%83%E3%82%AF%E3%82%A8%E3%83%B3%E3%83%89%E3%81%AB-clipboard-%E3%82%92%E4%BD%BF%E3%81%86%E6%96%B9%E6%B3%95">​</a></h2>
 <p>3つの方法があります．</p>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="すべてに-clipboard-バックエンドを使う">すべてに Clipboard バックエンドを使う<a class="hash-link" aria-label="Direct link to すべてに Clipboard バックエンドを使う" title="Direct link to すべてに Clipboard バックエンドを使う" href="https://mebiusbox.github.io/en/blog/2023/12/23/espanso-force-clipboard#%E3%81%99%E3%81%B9%E3%81%A6%E3%81%AB-clipboard-%E3%83%90%E3%83%83%E3%82%AF%E3%82%A8%E3%83%B3%E3%83%89%E3%82%92%E4%BD%BF%E3%81%86">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="すべてに-clipboard-バックエンドを使う">すべてに Clipboard バックエンドを使う<a class="hash-link" aria-label="Direct link to すべてに Clipboard バックエンドを使う" title="Direct link to すべてに Clipboard バックエ��ンドを使う" href="https://mebiusbox.github.io/en/blog/2023/12/23/espanso-force-clipboard#%E3%81%99%E3%81%B9%E3%81%A6%E3%81%AB-clipboard-%E3%83%90%E3%83%83%E3%82%AF%E3%82%A8%E3%83%B3%E3%83%89%E3%82%92%E4%BD%BF%E3%81%86">​</a></h3>
 <p>設定ファイルで次のように設定します．</p>
 <div class="language-yml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#f8f8f2;--prism-background-color:#272822"><div class="codeBlockTitle_Ktv7">default.yml</div><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-yml codeBlock_bY9V thin-scrollbar" style="color:#f8f8f2;background-color:#272822"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#f8f8f2"><span class="token key atrule">backend</span><span class="token punctuation" style="color:#f8f8f2">:</span><span class="token plain"> clipboard</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="clipboard_threshold-を設定する">clipboard_threshold を設定する<a class="hash-link" aria-label="Direct link to clipboard_threshold を設定する" title="Direct link to clipboard_threshold を設定する" href="https://mebiusbox.github.io/en/blog/2023/12/23/espanso-force-clipboard#clipboard_threshold-%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B">​</a></h3>
@@ -981,7 +1006,7 @@ GLSL3 のシェーダコードは先頭に <code>#version 300 es</code> を入�
 <p>今回の執筆については、最初にも書いているある通り書籍を執筆することが夢の1つだったので、モチベが下がることはありませんでした．普段から文書を書くときにあまりモチベが下がることはありません．というのも、資料を集めて一気に書き上げるスタイルなので、書き始めてたらそのまま最後まで書き終えます．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="足りない部分">足りない部分<a class="hash-link" aria-label="Direct link to 足りない部分" title="Direct link to 足りない部分" href="https://mebiusbox.github.io/en/blog/2023/04/23/rust-book#%E8%B6%B3%E3%82%8A%E3%81%AA%E3%81%84%E9%83%A8%E5%88%86">​</a></h2>
 <p>基本的に本書を読むために必要なことは順番に書いてあるつもりですが、1つだけ、<code>pin</code>について書けませんでした．これは非同期処理のところでコードとしてさらっと出てきて一切説明していません．他にもいくつか説明が足らないところが多いです．ただ、あまりに細かく説明してしまうとページ数が多くなってしまうので、分かってはいても追加はしませんでした．そういった部分はZennのRust入門に追加しようと思っています．</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="本を書くために">本を書くために<a class="hash-link" aria-label="Direct link to 本を書くために" title="Direct link to 本を書くために" href="https://mebiusbox.github.io/en/blog/2023/04/23/rust-book#%E6%9C%AC%E3%82%92%E6%9B%B8%E3%81%8F%E3%81%9F%E3%82%81%E3%81%AB">​</a></h2>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="本を書くために">本を書くために<a class="hash-link" aria-label="Direct link to 本を書くために" title="Direct link to 本を書��くために" href="https://mebiusbox.github.io/en/blog/2023/04/23/rust-book#%E6%9C%AC%E3%82%92%E6%9B%B8%E3%81%8F%E3%81%9F%E3%82%81%E3%81%AB">​</a></h2>
 <p>私なりに思うことです．もともとPDFとして技術的な解説書を書いてきました．これは本を執筆したかったからであり、その練習でもあります．なので、原稿はTeXで書き、PDFとして出力していました．そのまま印刷できるように、かつ、そのまま本としても問題ないようにです．そのような文書を20近く書いてきました．その経験を十分に活かせたと思っています．今回の執筆では Zenn の「Rust入門」が始まりではありますが、その記事は「Rustではじめるレイトレーシング入門」の一部であり、さらに「レイトレーシング入門」という文書をRustに書き直したものです．これは2018年末に書いたものなので、4年ぐらい前になります．資料を集めて、原稿を実際に書いた期間は1カ月ほどですが、それまで積み上げてきたものがあってこそだと思います．</p>
 <p>また、初回の構成案や計画書などはかなり正確にできました．これは見積もりに関係してきます．これについては WBS（Work Breakdown Structure）の考え方が大きいです．これにより正確な見積もりが出来るようになりました．</p>
 <p>あと、情報の整理のやり方も大事です．Notion でも Markdown でも好きなものを使えばいいと思います．書くための情報をどのように書いておくか．基本的には箇条書きになります．十分に、そして漏らさずに．</p>
@@ -1184,7 +1209,7 @@ DocusaurusのマークダウンからHTMLにレンダリングする部分は <a
 <p>マークダウンの数式をそのまま remark や rehype に通すので、エスケープする必要があります．これは手間ではありますが、置換で対応できるので許容範囲としています．</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="remark-math--rehype-katexor-rehype-mathjax-と併用できない">remark-math + rehype-katex(or rehype-mathjax) と併用できない<a class="hash-link" aria-label="Direct link to remark-math + rehype-katex(or rehype-mathjax) と併用できない" title="Direct link to remark-math + rehype-katex(or rehype-mathjax) と併用できない" href="https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering#remark-math--rehype-katexor-rehype-mathjax-%E3%81%A8%E4%BD%B5%E7%94%A8%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%84">​</a></h3>
 <p>現状は併用できないです．<code>katex-client</code>プラグインを正常に動かすには <code>remark-math</code> を有効にできません．</p>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ページをリロードすると一部の数式処理に失敗する">ページをリロードすると一部の数式処理に失敗する<a class="hash-link" aria-label="Direct link to ページをリロードすると一部の数式処理に失敗する" title="Direct link to ページをリロードすると一部の数式処理に失敗する" href="https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E3%83%9A%E3%83%BC%E3%82%B8%E3%82%92%E3%83%AA%E3%83%AD%E3%83%BC%E3%83%89%E3%81%99%E3%82%8B%E3%81%A8%E4%B8%80%E9%83%A8%E3%81%AE%E6%95%B0%E5%BC%8F%E5%87%A6%E7%90%86%E3%81%AB%E5%A4%B1%E6%95%97%E3%81%99%E3%82%8B">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ページをリロードすると一部の数式処理に失敗する">ページをリロードすると一部の数式処理に失敗する<a class="hash-link" aria-label="Direct link to ページをリロードすると一部の数式処理に�失敗する" title="Direct link to ページをリロードすると一部の数式処理に失敗する" href="https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E3%83%9A%E3%83%BC%E3%82%B8%E3%82%92%E3%83%AA%E3%83%AD%E3%83%BC%E3%83%89%E3%81%99%E3%82%8B%E3%81%A8%E4%B8%80%E9%83%A8%E3%81%AE%E6%95%B0%E5%BC%8F%E5%87%A6%E7%90%86%E3%81%AB%E5%A4%B1%E6%95%97%E3%81%99%E3%82%8B">​</a></h3>
 <p>原因不明．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="余談">余談<a class="hash-link" aria-label="Direct link to 余談" title="Direct link to 余談" href="https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering#%E4%BD%99%E8%AB%87">​</a></h2>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="rehypeプラグイン">rehypeプラグイン<a class="hash-link" aria-label="Direct link to rehypeプラグイン" title="Direct link to rehypeプラグイン" href="https://mebiusbox.github.io/en/blog/2023/01/15/docusaurus-katex-client-side-rendering#rehype%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3">​</a></h3>
@@ -1202,39 +1227,5 @@ DocusaurusのマークダウンからHTMLにレンダリングする部分は <a
         </author>
         <category label="Docusaurus" term="Docusaurus"/>
         <category label="katex" term="katex"/>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Organize Shadertoy and tweets of Tsubuyaki into galleries on Notion]]></title>
-        <id>https://mebiusbox.github.io/en/blog/2023/01/14/notion-shadertoy-gallery</id>
-        <link href="https://mebiusbox.github.io/en/blog/2023/01/14/notion-shadertoy-gallery"/>
-        <updated>2023-01-14T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[なるべく手間をかけずにサムネイルを作成する方法を紹介します]]></summary>
-        <content type="html"><![CDATA[<p>Notionのギャラリービューを使うと、ページをサムネイル一覧で確認できます．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-14-notion-shadertoy-gallery-230114021100-11315a915d60c4fbb9303e66a04ed1e1.png" width="816" height="551" class="img_ev3q"></p>
-<p>とはいえ、サムネイルを用意しなければなりません．
-ここではなるべく手間をかけずにサムネイルを作成する方法を紹介します．</p>
-<p>まずは、データベースを作成します．<code>Link(URL)</code>と<code>Description(Text)</code>プロパティを作成．ギャラリービューにして、プレビューをカバー、サイズを小にします</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-14-notion-shadertoy-gallery-230114030500-5a779b3877252a00ff1f5473f3be0ca8.png" width="327" height="469" class="img_ev3q"></p>
-<p>Shadertoyやツイートへのリンクをデータベースに保存します．Save to NotionやWebブックマークにしてからデータベースに移動すると Description をいい感じに埋めてくれます．</p>
-<p>ここから、リンク元によって処理が変わります．</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="つぶやき系">つぶやき系<a class="hash-link" aria-label="Direct link to つぶやき系" title="Direct link to つぶやき系" href="https://mebiusbox.github.io/en/blog/2023/01/14/notion-shadertoy-gallery#%E3%81%A4%E3%81%B6%E3%82%84%E3%81%8D%E7%B3%BB">​</a></h2>
-<p>Notionのページ上にツイートを埋め込みます．埋め込んだツイートの動画(画像)部分を右クリックして、「画像アドレスをコピー」します．次に、Notionのページ上部にある<code>Add Cover</code> がカバー画像を追加して、コピーしたアドレスを <code>Link</code> にペーストして送信します．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-14-notion-shadertoy-gallery-230114032100-f51f56052209e2564282b11799caaec8.png" width="680" height="268" class="img_ev3q"></p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="shadertoy">Shadertoy<a class="hash-link" aria-label="Direct link to Shadertoy" title="Direct link to Shadertoy" href="https://mebiusbox.github.io/en/blog/2023/01/14/notion-shadertoy-gallery#shadertoy">​</a></h2>
-<p>Shadertoyの画面に行きます．左上のレンダリングしている場所を右クリックして「画像をコピー」します．Notionのページにそのまま貼り付けます．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-14-notion-shadertoy-gallery-230114032500-011cef84f3feb45a88a4885e847ccca8.png" width="686" height="437" class="img_ev3q"></p>
-<p>ちなみに、Shadertoyの場合はWebブックマークを作成するといい感じのサムネイルができます．</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="glslsandbox">GLSLSandbox<a class="hash-link" aria-label="Direct link to GLSLSandbox" title="Direct link to GLSLSandbox" href="https://mebiusbox.github.io/en/blog/2023/01/14/notion-shadertoy-gallery#glslsandbox">​</a></h2>
-<p>GLSLSandboxの場合は、StylusとDevToolsを使ってサムネイルを作成します．
-まず、Stylusを使ってサムネイル用の画像サイズに調整します．</p>
-<div class="language-css codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#f8f8f2;--prism-background-color:#272822"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-css codeBlock_bY9V thin-scrollbar" style="color:#f8f8f2;background-color:#272822"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#f8f8f2"><span class="token selector" style="color:#a6e22e;font-style:italic">canvas</span><span class="token plain"> </span><span class="token punctuation" style="color:#f8f8f2">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">    </span><span class="token property" style="color:#f92672">display</span><span class="token punctuation" style="color:#f8f8f2">:</span><span class="token plain"> block</span><span class="token punctuation" style="color:#f8f8f2">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">    </span><span class="token property" style="color:#f92672">position</span><span class="token punctuation" style="color:#f8f8f2">:</span><span class="token plain"> absolute</span><span class="token punctuation" style="color:#f8f8f2">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">    </span><span class="token property" style="color:#f92672">top</span><span class="token punctuation" style="color:#f8f8f2">:</span><span class="token plain"> </span><span class="token number" style="color:#ae81ff">0</span><span class="token punctuation" style="color:#f8f8f2">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">    </span><span class="token property" style="color:#f92672">left</span><span class="token punctuation" style="color:#f8f8f2">:</span><span class="token plain"> </span><span class="token number" style="color:#ae81ff">0</span><span class="token punctuation" style="color:#f8f8f2">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">    </span><span class="token property" style="color:#f92672">right</span><span class="token punctuation" style="color:#f8f8f2">:</span><span class="token plain"> </span><span class="token number" style="color:#ae81ff">0</span><span class="token punctuation" style="color:#f8f8f2">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">    </span><span class="token property" style="color:#f92672">bottom</span><span class="token punctuation" style="color:#f8f8f2">:</span><span class="token plain"> </span><span class="token number" style="color:#ae81ff">0</span><span class="token punctuation" style="color:#f8f8f2">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">    </span><span class="token property" style="color:#f92672">width</span><span class="token punctuation" style="color:#f8f8f2">:</span><span class="token plain"> </span><span class="token number" style="color:#ae81ff">300</span><span class="token unit">px</span><span class="token punctuation" style="color:#f8f8f2">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">    </span><span class="token property" style="color:#f92672">height</span><span class="token punctuation" style="color:#f8f8f2">:</span><span class="token plain"> </span><span class="token number" style="color:#ae81ff">200</span><span class="token unit">px</span><span class="token punctuation" style="color:#f8f8f2">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">    </span><span class="token property" style="color:#f92672">margin</span><span class="token punctuation" style="color:#f8f8f2">:</span><span class="token plain"> auto</span><span class="token punctuation" style="color:#f8f8f2">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain"></span><span class="token punctuation" style="color:#f8f8f2">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
-<p>そして、DevToolsでcanvasを選択した状態で、コマンドパレット(<code>Ctrl+Shift+P</code>)から<code>Run&gt; Capture node screenshot</code>を選択するとサムネイルが保存されるので、それをページに貼り付けます．</p>]]></content>
-        <author>
-            <name>mebiusbox</name>
-            <uri>https://github.com/mebiusbox</uri>
-        </author>
-        <category label="Notion" term="Notion"/>
-        <category label="Shadertoy" term="Shadertoy"/>
-        <category label="つぶやきGLSL" term="つぶやきGLSL"/>
     </entry>
 </feed>
