@@ -9,6 +9,7 @@ keywords:
   - poetry
   - rye
   - uv
+  - volta
 category: note
 authors: [mebiusbox]
 tags: [windows,python]
@@ -19,7 +20,7 @@ WindowsでのPython環境はこれまでMiniconda(Anaconda)を利用してきま
 
 <!-- truncate -->
 
-結論から言うと、やはりMinicondaが楽かなと思います．情報量も多いですし．ただ、最終的に py + winget + pip/uv + nvm という環境になりました．
+結論から言うと、やはりMinicondaが楽かなと思います．情報量も多いですし．ただ、最終的に py + winget + pip/uv + volta という環境になりました．
 まずは他に試したものからまとめていきます．
 
 ## pyenv + poetry
@@ -52,5 +53,18 @@ py はPythonランチャーのことで、公式インストーラを使うと�
 ということで、最終的に py + winget で python のバージョン管理を、pip/uv でパッケージ管理をするようになりました．とりあえず、ローカルにある環境はほとんど Miniconda から移行できました．ちなみに基本的に pyproject.toml に依存関係をまとめて uv を使ったり、pip を使う場合は uv で pyproject.toml から requirements.txt を生成して使うという形になります．あと、パッケージの依存関係を調べるのに `uv pip tree` コマンドが使えるので便利です．また、poetry も使ってもいいかもしれません．それはもうちょっと試してみないとわからないです．
 
 環境は移行したものの、Miniconda よりも良くなったというところはとくにないので、Miniconda(Anaconda)を使ってもいいと思います．py+winget の部分が Miniconda になるだけです．とりあえず、どちらでも好きな方で問題ないという認識です．
+
+:::info
+後述するVoltaを採用することで，より柔軟性が増しました．
+PythonとNodejsを別々に，そしてしっかりと管理できるようになったので，Miniconda(Anaconda) よりかは若干やりやすくなった感じがします．
+:::
+
+## Volta (2024-09-04追記)
+
+node.jsの管理に [NVM for Windows](https://github.com/coreybutler/nvm-windows) を使っていましたが，最近 [Volta](https://volta.sh/) に切り替えてみました．
+プロジェクトごとにバージョンを自動で切り替えられるメリットがあります．
+NVMはインストーラをダウンロードして実行しなければいけませんが，VoltaはWinGetでインストールできます．
+
+---
 
 以上です．
