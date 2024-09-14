@@ -65,5 +65,9 @@
     "node": ">=18.0"
   },
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "volta": {
+    "node": "18.20.4",
+    "yarn": "1.22.22"
+  }
 }
