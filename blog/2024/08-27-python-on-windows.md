@@ -61,9 +61,9 @@ PythonとNodejsを別々に，そしてしっかりと管理できるように�
 
 ## Volta (2024-09-04追記)
 
-node.jsの管理に [NVM for Windows](https://github.com/coreybutler/nvm-windows) を使っていましたが，最近 [Volta](https://volta.sh/) に切り替えてみました．
-プロジェクトごとにバージョンを自動で切り替えられるメリットがあります．
-NVMはインストーラをダウンロードして実行しなければいけませんが，VoltaはWinGetでインストールできます．
+node.jsの管理に [NVM for Windows](https://github.com/coreybutler/nvm-windows) を使っていましたが，最近 [Volta](https://volta.sh/) に変えました．
+Voltaはプロジェクトごとに使用するNodeのバージョンを自動で切り替えてくれます．NVMではグローバルで使用するNodeのバージョンを手動で切り替えなければなりません．
+また、NVMはインストーラをダウンロードして実行しなければいけませんが，VoltaはWinGetでインストールできます．現時点では良いところしかありません．
 
 ---
 
