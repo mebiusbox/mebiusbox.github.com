@@ -103,7 +103,7 @@ Windows環境なのでなるべくPowerShellで実行させたいですが、標
 しかし、一時ファイルが生成されたり新しくプロセスが生成されるのでプロファイルの読み込みに時間がかかったりします．
 `-nop`オプションを指定して、標準のプロファイル読み込みをさせないこともできますが、せっかく自作した便利な関数やコマンドレットを利用できないのはもったいないです．
 そこで、設定ファイル（標準で`makefile.toml`）を読み込んで、開いているPowerShellプロンプトで実行する機能も追加しました．
-ただし、機能は限定的でコマンドのみ、変数展開も`${@}`のみ対応しています．
+ただし、機能は限定的でコマンドのみ、変数展開も`${@}`のみ対応しています（コマンド以外の場合、cargo-makeを実行するようにしています）．
 
 これを実装するために、TOML形式からJSON形式に変換するのですが、これは[dasel](https://github.com/TomWright/dasel)を使用しました．
 私は json や yaml などの解析は [yq](https://github.com/mikefarah/yq) を使っています．
@@ -206,8 +206,12 @@ function psmake() {
           $_
         }
       }
-      Write-Host "Command: $($task.Command) ${newArguments}"
-      & "$($task.Command)" $newArguments
+      if ($task.Command -and $task.Command -ne "") {
+        Write-Host "Command: $($task.Command) ${newArguments}"
+        & "$($task.Command)" $newArguments
+      } else {
+        cargo make --makefile $file $Name
+      }
     } else {
       Write-Error "Not found Task [${Name}]"
     }
