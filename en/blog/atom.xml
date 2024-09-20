@@ -2,11 +2,77 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://mebiusbox.github.io/en/blog</id>
     <title>Mebiusbox software Blog</title>
-    <updated>2024-09-15T00:00:00.000Z</updated>
+    <updated>2024-09-20T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://mebiusbox.github.io/en/blog"/>
     <subtitle>Mebiusbox software Blog</subtitle>
     <icon>https://mebiusbox.github.io/en/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[WindowsでTensorflow(GPU)を使う]]></title>
+        <id>https://mebiusbox.github.io/en/blog/2024/09/20/tensorflow-gpu-for-windows</id>
+        <link href="https://mebiusbox.github.io/en/blog/2024/09/20/tensorflow-gpu-for-windows"/>
+        <updated>2024-09-20T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[WindowsでWSLとDocker Desktopを使ってTensorflowがGPUを使うようにする方法]]></summary>
+        <content type="html"><![CDATA[<p>WindowsでTensorflowがGPUを使えるようにするための方法をここに記録しておきます．
+また、それに関係するWSLやDocker Desktopについてもまとめておきます．</p>
+<p>Windowsでpythonの仮想環境を構築して、Visual Studio CodeのJupyter拡張機能を使っています．</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="tensorflow-intel">tensorflow-intel<a class="hash-link" aria-label="Direct link to tensorflow-intel" title="Direct link to tensorflow-intel" href="https://mebiusbox.github.io/en/blog/2024/09/20/tensorflow-gpu-for-windows#tensorflow-intel">​</a></h2>
+<p>Tensorflowを使う機会があったので、普通に Tensorflow を <code>uv add tensorflow</code> でインストールしてみました．
+とりあえず、インストールはできたみたいなのですが、Jupyter Notebook からインポートしてもモジュールが見つかりませんとエラーになります．
+まずは<code>uv pip list</code>を実行してインストールされていることを確認しました．
+あとはネットで検索したりして同様な症状が発生しているときの対処方法を試してみても変わらず．
+そこで、<code>uv pip show tensorflow</code> としたところ次のように表示されました．</p>
+<div class="language-powershell codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#f8f8f2;--prism-background-color:#272822"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-powershell codeBlock_bY9V thin-scrollbar" style="color:#f8f8f2;background-color:#272822"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#f8f8f2"><span class="token plain">Name: tensorflow</span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">Version: 2</span><span class="token punctuation" style="color:#f8f8f2">.</span><span class="token plain">17</span><span class="token punctuation" style="color:#f8f8f2">.</span><span class="token plain">0</span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">Location: F:\src\jupyter\</span><span class="token punctuation" style="color:#f8f8f2">.</span><span class="token plain">venv\Lib\site-packages</span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">Requires: tensorflow-intel</span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">Required-by:</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>どうやら<code>tensorflow-intel</code>が必要みたいです．確認してみるとインストールされていませんでした．
+uvでは依存解決できなかったらしく、直接指定してインストールすることで Jupyter Notebookからでもモジュールが見つかるようになりました．</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="tensorflow-gpu対応">tensorflow (GPU対応)<a class="hash-link" aria-label="Direct link to tensorflow (GPU対応)" title="Direct link to tensorflow (GPU対応)" href="https://mebiusbox.github.io/en/blog/2024/09/20/tensorflow-gpu-for-windows#tensorflow-gpu%E5%AF%BE%E5%BF%9C">​</a></h2>
+<p><code>tensorflow-intel</code>が必要だったので、GPUの対応はどうなっているのか気になりました．
+そこで調べてみると、最近のWindows用 tensorflow はGPUに対応していないみたいです．
+どうやらWSL2を使えばいいらしいので、試してみることにしました．また、Dockerイメージも用意されているみたいなので、それも使うことにします．</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="wsl2--docker-desktop">WSL2 + Docker Desktop<a class="hash-link" aria-label="Direct link to WSL2 + Docker Desktop" title="Direct link to WSL2 + Docker Desktop" href="https://mebiusbox.github.io/en/blog/2024/09/20/tensorflow-gpu-for-windows#wsl2--docker-desktop">​</a></h2>
+<p>WSLは環境構築済みで、Ubuntu (<code>22.04.5 LTS</code>) を使っています．
+Docker Desktopは最新のものをインストールしています．</p>
+<p>あまり両者とも使っていなかったので、整理することにしました．
+Ubuntuは再インストールして最低限の設定をしておきました．
+問題は Docker Desktop です．イメージが肥大化していくので大容量HDDに移動しておこうと思います．</p>
+<p>色々調べてみると情報が結構古かったので調べたり試したりして得られたことをここに書いておきます．
+もしかすると設定が必要なのかもしれませんが、そこはご了承ください．</p>
+<p>まず、Docker Desktop は WSL2 をバックエンドとして実行されます．
+Docker DesktopをWSL2にインテグレーションすると <code>docker-desktop</code> というディストリビューションが作られます．
+これは <code>docker-desktop</code> と <code>docker-desktop-data</code> の2つが作成されるとネットでよく見たのですが、最新は1つだけのようです．
+また、データの格納先も変わっていました．</p>
+<p>旧バージョン</p>
+<table><thead><tr><th style="text-align:left">ディストリビューション</th><th style="text-align:left">場所</th></tr></thead><tbody><tr><td style="text-align:left">docker-desktop</td><td style="text-align:left"><code>%LocalAppData%\Docker\wsl\distro\ext4.vhdx</code></td></tr><tr><td style="text-align:left">docker-desktop-data</td><td style="text-align:left"><code>%LocalAppData%\Docker\wsl\data\ext4.vhdx</code></td></tr></tbody></table>
+<p>最新</p>
+<table><thead><tr><th style="text-align:left">ディストリビューション</th><th style="text-align:left">場所</th></tr></thead><tbody><tr><td style="text-align:left">docker-desktop</td><td style="text-align:left"><code>%LocalAppData%\Docker\wsl\disk\docker_data.vhdx</code></td></tr></tbody></table>
+<p>このファイルがどんどん肥大化していくので、別のドライブにしたいのです．
+まず、Docker Desktop自体に設定で場所を変更できる機能がありますが、試してたところ失敗することが多く、まったく安定しません．
+次に、エクスポート・インポートする方法がありますが、ちょっと面倒ですし、人によっては上手くいかないこともあるようです．
+なので、シンボリックリンクを作成して<code>%LocalAppData%\Docker</code>ディレクトリを別のドライブにリンクするようにしました．</p>
+<p>あと、WSL2にインテグレーションすると、WSL側のディストリビューションで docker コマンドが Docker Desktop を経由するようになります．
+この場合、別途 Docker をインストールする必要がありません．</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="tensorflow-gpu">tensorflow-gpu<a class="hash-link" aria-label="Direct link to tensorflow-gpu" title="Direct link to tensorflow-gpu" href="https://mebiusbox.github.io/en/blog/2024/09/20/tensorflow-gpu-for-windows#tensorflow-gpu">​</a></h2>
+<p>これで WSL2(Ubuntu) で Docker を使う環境が整ったので、あとはイメージをpullして実行するだけです．</p>
+<div class="language-powershell codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#f8f8f2;--prism-background-color:#272822"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-powershell codeBlock_bY9V thin-scrollbar" style="color:#f8f8f2;background-color:#272822"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#f8f8f2"><span class="token plain">docker pull tensorflow/tensorflow:latest-gpu</span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">docker run </span><span class="token operator" style="color:#66d9ef">--</span><span class="token plain">gpus all </span><span class="token operator" style="color:#66d9ef">--</span><span class="token plain">it </span><span class="token operator" style="color:#66d9ef">--</span><span class="token plain">name tfgpu tensorflow/tensorflow:latest-gpu</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>必要に応じてマウントを追加してください．
+あとは、Visual Studio Codeの Dev Containerを使ってアタッチします．
+実行するカーネルを選択したり、Jupyter notebookを使うために拡張機能や ipykernel のインストールなどが求められますのでインストールします．
+諸々設定が終わったらGPUを認識しているか確認します．</p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#f8f8f2;--prism-background-color:#272822"><div class="codeBlockTitle_Ktv7">IN</div><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#f8f8f2;background-color:#272822"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#f8f8f2"><span class="token keyword" style="color:#66d9ef">import</span><span class="token plain"> tensorflow </span><span class="token keyword" style="color:#66d9ef">as</span><span class="token plain"> tf</span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">tf</span><span class="token punctuation" style="color:#f8f8f2">.</span><span class="token plain">config</span><span class="token punctuation" style="color:#f8f8f2">.</span><span class="token plain">list_physical_devices</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token string" style="color:#a6e22e">"GPU"</span><span class="token punctuation" style="color:#f8f8f2">)</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<div class="language-powershell codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#f8f8f2;--prism-background-color:#272822"><div class="codeBlockTitle_Ktv7">OUT</div><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-powershell codeBlock_bY9V thin-scrollbar" style="color:#f8f8f2;background-color:#272822"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#f8f8f2"><span class="token punctuation" style="color:#f8f8f2">[</span><span class="token plain">PhysicalDevice</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token plain">name=</span><span class="token string" style="color:#a6e22e">'/physical_device:GPU:0'</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"> device_type=</span><span class="token string" style="color:#a6e22e">'GPU'</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token punctuation" style="color:#f8f8f2">]</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>ちゃんと認識しているみたいです．</p>
+<p>ちなみに、Jupyter notebookのサーバーを立ち上げたい場合は <code>tensorflow/tensorflow:latest-gpu-jupyter</code> を使います．</p>]]></content>
+        <author>
+            <name>mebiusbox</name>
+            <uri>https://github.com/mebiusbox</uri>
+        </author>
+        <category label="wsl" term="wsl"/>
+        <category label="ubuntu" term="ubuntu"/>
+        <category label="docker" term="docker"/>
+        <category label="tensorflow" term="tensorflow"/>
+        <category label="python" term="python"/>
+        <category label="jupyter" term="jupyter"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[cargo-makeを少し使いやすくする]]></title>
         <id>https://mebiusbox.github.io/en/blog/2024/09/15/improve-cargo-make</id>
@@ -1075,7 +1141,7 @@ GLSL3 のシェーダコードは先頭に <code>#version 300 es</code> を入�
 <p>本書はすでに述べているとおり Zenn で公開している「<a href="https://zenn.dev/mebiusbox/books/22d4c1ed9b0003" target="_blank" rel="noopener noreferrer">Rust入門</a>（無料）」を加筆したものになっています．本書に興味を持たれた方は、先に Zenn の「Rust入門」を読んでから購入を検討することも可能です．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="レイトレーシング">レイトレーシング<a class="hash-link" aria-label="Direct link to レイトレーシング" title="Direct link to レイトレーシング" href="https://mebiusbox.github.io/en/blog/2023/04/23/rust-book#%E3%83%AC%E3%82%A4%E3%83%88%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%B3%E3%82%B0">​</a></h2>
 <p>はい、「アプリケーションの開発」にレイトレーシングのサンプルがあります．まさかのRust入門にいきなり数式が沢山でてきます．ですが、そんなことは気にしない．興味があればやってみてください．</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="印税について">印税について<a class="hash-link" aria-label="Direct link to 印税について" title="Direct link to 印税について" href="https://mebiusbox.github.io/en/blog/2023/04/23/rust-book#%E5%8D%B0%E7%A8%8E%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">​</a></h2>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="印税について">印税について<a class="hash-link" aria-label="Direct link to 印��税について" title="Direct link to 印税について" href="https://mebiusbox.github.io/en/blog/2023/04/23/rust-book#%E5%8D%B0%E7%A8%8E%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">​</a></h2>
 <p>詳しい事はお話できませんが、技術書が高い理由がわかった気がします．また、発売までの作業を考えると厳しいと思いました．ただ、原稿の執筆期間だけを考えれば悪くもないと思います．初回は原稿以外の部分でも大変と感じてしまいますが、そこを乗り切ればあとは原稿の執筆期間だけと考えると、なるほどという感じ．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="モチベーション">モチベーション<a class="hash-link" aria-label="Direct link to モチベーション" title="Direct link to モチベーション" href="https://mebiusbox.github.io/en/blog/2023/04/23/rust-book#%E3%83%A2%E3%83%81%E3%83%99%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3">​</a></h2>
 <p>今回の執筆については、最初にも書いているある通り書籍を執筆することが夢の1つだったので、モチベが下がることはありませんでした．普段から文書を書くときにあまりモチベが下がることはありません．というのも、資料を集めて一気に書き上げるスタイルなので、書き始めてたらそのまま最後まで書き終えます．</p>
@@ -1120,100 +1186,5 @@ mdbookの追加機能として<code>mdbook-admonition</code>を使っていま�
             <uri>https://github.com/mebiusbox</uri>
         </author>
         <category label="Rust" term="Rust"/>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[WBS with Notion]]></title>
-        <id>https://mebiusbox.github.io/en/blog/2023/01/17/notion-wbs</id>
-        <link href="https://mebiusbox.github.io/en/blog/2023/01/17/notion-wbs"/>
-        <updated>2023-01-17T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[Notionのサブアイテムを使ってWBSを構築するやり方を解説します]]></summary>
-        <content type="html"><![CDATA[<p>Notionのサブアイテム機能を使うことで単一のデータベースのみでWBS(Work Breakdown Structure)を構築できます．
-ここでは、次のようなWBSの構築方法を解説します．</p>
-<!-- -->
-<div class="videoWrapper_xpwa"><div style="width:100%;height:100%" class="videoPlayer_IRVz"></div></div>
-<div class="theme-admonition theme-admonition-caution admonition_xJq3 alert alert--warning"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path></svg></span>caution</div><div class="admonitionContent_BuS1"><p>ここでは、英語版Notionで解説しています．また、CSSで見た目をカスタマイズしているものをスクショしています．ご了承ください．</p></div></div>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="データベースの作成">データベースの作成<a class="hash-link" aria-label="Direct link to データベースの作成" title="Direct link to データベースの作成" href="https://mebiusbox.github.io/en/blog/2023/01/17/notion-wbs#%E3%83%87%E3%83%BC%E3%82%BF%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE%E4%BD%9C%E6%88%90">​</a></h2>
-<p>まず、データベースを作成します．プロパティは次のようにします：</p>
-<ul>
-<li>Task: タイトル(Title)</li>
-<li>進捗(子): セレクト(Select)</li>
-<li>進捗(親): 関数(Formula)</li>
-</ul>
-<p><span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">進捗(子)</span>のセレクト項目は次のようにしました． </p>
-<ul>
-<li><code>0%</code> .. <code>100%</code> (10%刻み)</li>
-<li><code>自動</code></li>
-</ul>
-<p><span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">進捗(親)</span>の関数は後で解説します．</p>
-<p>この時点で次のようなプロパティ構成になっています．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117230900-50038e269079a867b3b8ec884a07b901.png" width="671" height="369" class="img_ev3q"></p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="サブアイテムの設定">サブアイテムの設定<a class="hash-link" aria-label="Direct link to サブアイテムの設定" title="Direct link to サブアイテムの設定" href="https://mebiusbox.github.io/en/blog/2023/01/17/notion-wbs#%E3%82%B5%E3%83%96%E3%82%A2%E3%82%A4%E3%83%86%E3%83%A0%E3%81%AE%E8%A8%AD%E5%AE%9A">​</a></h2>
-<p>データベースの設定(<code>･･･</code>ボタン)からサブアイテム(<code>Sub-items</code>)の設定を選択します．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117231000-3a800a73205cb75e67e6415ef66c598b.png" width="774" height="439" class="img_ev3q"></p>
-<p>設定はデフォルトのままで問題ありません．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117231026-6a9d857cd3931b510b60e543e81d25ec.png" width="788" height="476" class="img_ev3q"></p>
-<p>次のようなプロパティの構成になっているはずです．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117231127-a259e6d9782c6e58f2bc3f3ae518c3a6.png" width="923" height="380" class="img_ev3q"></p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="進捗率の計算">進捗率の計算<a class="hash-link" aria-label="Direct link to 進捗率の計算" title="Direct link to 進捗率の計算" href="https://mebiusbox.github.io/en/blog/2023/01/17/notion-wbs#%E9%80%B2%E6%8D%97%E7%8E%87%E3%81%AE%E8%A8%88%E7%AE%97">​</a></h2>
-<p>子の進捗率を計算して親の進捗率として表示します．そのためにプロパティを2つ作成します．
-1つは<code>_進捗N</code>で関数(Formula)タイプです．先頭の<code>_</code>は計算用を表しています．もう1つは<code>_進捗R</code>とします．こちらはロールアップ(Rollup)で、リレーション(Relation)に<code>Sub-item</code>を設定します．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117225647-270169060dd6eb6c7e012b63e38a66d5.png" width="841" height="474" class="img_ev3q"></p>
-<p>次にプロパティ(Property)に<code>_進捗N</code>を設定します．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117225734-381c7e7b558ea108c93b9db7969d9cf2.png" width="828" height="594" class="img_ev3q"></p>
-<p>計算(Calculate)は<code>オリジナルを表示(Show original)</code>に設定しておきます．</p>
-<p>この時点で、プロパティは次のようになっています．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117231537-27450a558272a282cf7a9f4b56305354.png" width="1066" height="157" class="img_ev3q"></p>
-<p>適当にタスクを追加して、タスクの親子関係を設定します．ここで重要なのは、子を持つ親タスクの<span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">進捗(子)</span>は<code>自動</code>に設定しておいてください．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117231646-03f7f04189aaae0fa11d77564340a94b.png" width="1074" height="604" class="img_ev3q"></p>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="子タスクの進捗率">子タスクの進捗率<a class="hash-link" aria-label="Direct link to 子タスクの進捗率" title="Direct link to 子タスクの進捗率" href="https://mebiusbox.github.io/en/blog/2023/01/17/notion-wbs#%E5%AD%90%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E9%80%B2%E6%8D%97%E7%8E%87">​</a></h3>
-<p><code>_進捗N</code>は子タスクの<span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">進捗(子)</span>のセレクト値を数値に変換します．まず、<code>_進捗N</code>を数値として扱いたいので、関数(Formula)で<code>1</code>と設定します．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117232045-93ff2b9c60bf803288556eb233e824a7.png" width="995" height="327" class="img_ev3q"></p>
-<p>これで、このプロパティが数値として扱われます．数値として扱われると、関数プロパティのオプションに<code>数値の形式(Number format)</code>と<code>表示形式(Show as)</code>が追加されます．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117232215-c3908f3292c1dd427aa2da81d323c0af.png" width="351" height="343" class="img_ev3q"></p>
-<p>数値の形式(Number format)を<code>数値(Number)</code>にし、表示形式(Show as)を<code>リング(Ring)</code>に設定します．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117232322-2307f9d485d6504ed2ffb39b3034e492.png" width="343" height="441" class="img_ev3q"></p>
-<p>次に、<code>_進捗N</code>を数値に設定すると、そのプロパティをロールアップしている<code>_進捗R</code>の計算(Calculate)に項目が追加されますので、<code>合計(Sum)</code>を設定します．そうすると、<code>表示形式(Show as)</code>が選べるようになりますが<code>数値(Number)</code>のままにしておきます．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117232735-1e21ef497581026a3382438c88cdfd84.png" width="493" height="629" class="img_ev3q"></p>
-<p>これで、<code>_進捗N</code>と<code>_進捗R</code>がともに数値となりました．次に<code>_進捗N</code>の関数を設定します．関数は次の通りです．</p>
-<div class="language-js codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#f8f8f2;--prism-background-color:#272822"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-js codeBlock_bY9V thin-scrollbar" style="color:#f8f8f2;background-color:#272822"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#f8f8f2"><span class="token keyword control-flow" style="color:#66d9ef">if</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token function" style="color:#e6db74">prop</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token string" style="color:#a6e22e">"進捗(子)"</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token plain"> </span><span class="token operator" style="color:#66d9ef">==</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">"自動"</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"> </span><span class="token function" style="color:#e6db74">floor</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token function" style="color:#e6db74">prop</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token string" style="color:#a6e22e">"_進捗R"</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token plain"> </span><span class="token operator" style="color:#66d9ef">/</span><span class="token plain"> </span><span class="token function" style="color:#e6db74">max</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token number" style="color:#ae81ff">1</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"> </span><span class="token function" style="color:#e6db74">length</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token function" style="color:#e6db74">replaceAll</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token function" style="color:#e6db74">prop</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token string" style="color:#a6e22e">"Sub-item"</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token plain"> </span><span class="token operator" style="color:#66d9ef">+</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">","</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">"[^,]"</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">""</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"> </span><span class="token function" style="color:#e6db74">toNumber</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token function" style="color:#e6db74">slice</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token function" style="color:#e6db74">prop</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token string" style="color:#a6e22e">"進捗(子)"</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"> </span><span class="token number" style="color:#ae81ff">0</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"> </span><span class="token operator" style="color:#66d9ef">-</span><span class="token number" style="color:#ae81ff">1</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token punctuation" style="color:#f8f8f2">)</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
-<p>何をやっているかを説明すると、そのタスクが親タスク(<span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">進捗(子)</span>で<code>自動</code>を設定しているタスク)であれば、<code>_進捗R</code>（そのタスクの子タスクすべての進捗率の合計）から子タスクの数で割って進捗率を計算しています．また、子タスクであれば、<span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">進捗(子)</span>のセレクト値を数値に変換しています．</p>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="親タスクの進捗率">親タスクの進捗率<a class="hash-link" aria-label="Direct link to 親タスクの進捗率" title="Direct link to 親タスクの進捗率" href="https://mebiusbox.github.io/en/blog/2023/01/17/notion-wbs#%E8%A6%AA%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E9%80%B2%E6%8D%97%E7%8E%87">​</a></h3>
-<p>あとは、<span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">進捗(親)</span>の計算で進捗率を計算します．<span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">進捗(親)</span>の関数に以下を設定します．</p>
-<div class="language-js codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#f8f8f2;--prism-background-color:#272822"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-js codeBlock_bY9V thin-scrollbar" style="color:#f8f8f2;background-color:#272822"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#f8f8f2"><span class="token keyword control-flow" style="color:#66d9ef">if</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token function" style="color:#e6db74">length</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token function" style="color:#e6db74">prop</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token string" style="color:#a6e22e">"Sub-item"</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token plain"> </span><span class="token operator" style="color:#66d9ef">&gt;</span><span class="token plain"> </span><span class="token number" style="color:#ae81ff">0</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"> </span><span class="token function" style="color:#e6db74">floor</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token function" style="color:#e6db74">prop</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token string" style="color:#a6e22e">"_進捗R"</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token plain"> </span><span class="token operator" style="color:#66d9ef">/</span><span class="token plain"> </span><span class="token function" style="color:#e6db74">max</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token number" style="color:#ae81ff">1</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"> </span><span class="token function" style="color:#e6db74">length</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token function" style="color:#e6db74">replaceAll</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token function" style="color:#e6db74">prop</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token string" style="color:#a6e22e">"Sub-item"</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token plain"> </span><span class="token operator" style="color:#66d9ef">+</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">","</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">"[^,]"</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"> </span><span class="token string" style="color:#a6e22e">""</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"> </span><span class="token function" style="color:#e6db74">prop</span><span class="token punctuation" style="color:#f8f8f2">(</span><span class="token string" style="color:#a6e22e">"_進捗N"</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token punctuation" style="color:#f8f8f2">)</span><span class="token plain"> </span><span class="token operator" style="color:#66d9ef">/</span><span class="token plain"> </span><span class="token number" style="color:#ae81ff">100</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117234022-9971f6985ffcb1ad38441e886245b294.png" width="1006" height="397" class="img_ev3q"></p>
-<p>数値の形式は<code>パーセント(Percent)</code>、表示形式は<code>リング(Ring)</code>に設定します．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117234120-63b956cbfbe5a71f3aa51491ad2c453d.png" width="340" height="453" class="img_ev3q"></p>
-<p>これで親タスクや子タスクを追加すると自動で計算されるようになります．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117234223-451e7ece67201e5269256e0821be4bf6.png" width="1084" height="641" class="img_ev3q"></p>
-<p>最後に不要なプロパティを非表示にすることで完成です．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117234330-7641ba78950805dbb44d47f31fe8f64b.png" width="562" height="622" class="img_ev3q"></p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="ステータスプロパティを使った方法">ステータスプロパティを使った方法<a class="hash-link" aria-label="Direct link to ステータスプロパティを使った方法" title="Direct link to ステータスプロパティを使った方法" href="https://mebiusbox.github.io/en/blog/2023/01/17/notion-wbs#%E3%82%B9%E3%83%86%E3%83%BC%E3%82%BF%E3%82%B9%E3%83%97%E3%83%AD%E3%83%91%E3%83%86%E3%82%A3%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9F%E6%96%B9%E6%B3%95">​</a></h2>
-<p>これまでの方法では子タスクの進捗率を計算して親タスクの進捗率を算出しました．
-もし、そこまで正確な値を求める必要はなく、全体のタスクの進捗が終わったかどうかだけ調べて進捗率に反映させたい場合、ステータスプロパティを使って数式を使わずとも計算できます．</p>
-<p>まず、データベースを作成します．</p>
-<ul>
-<li>Task: タイトル(Title)</li>
-<li>進捗(子): ステータス(Status)</li>
-<li>進捗(親): ロールアップ(Rollup)</li>
-</ul>
-<p>次に、サブアイテムの設定をします．設定はデフォルトのままで問題ありません．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117235400-4e4e044067545360ba69e647d433ef2a.png" width="993" height="373" class="img_ev3q"></p>
-<p>適当にタスクを追加して、タスクの親子関係を設定します．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117235544-3976c6206d6e0c9b3c25cfd7f456dc52.png" width="1101" height="656" class="img_ev3q"></p>
-<p>次に、<span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">進捗(親)</span>のロールアップでリレーション(Relation)を <code>Sub-item</code> 、プロパティ(Property)を<span style="background-color:var(--ifm-color-primary-dark);border-radius:2px;color:var(--ifm-color-emphasis-0);padding:0.2rem 0.4rem;margin:0 0.4rem;font-family:var(--ifm-font-family-monospace)">進捗(子)</span>、計算(Calculate)を<code>グループごとの割合(Percent per group) → Complete</code>に設定します．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117235803-1a6207acf13744d2de6405cdb54c77ad.png" width="563" height="469" class="img_ev3q"></p>
-<p>そうすると、表示形式(Show as)を設定できるようになりますので、<code>リング(Ring)</code>を設定します．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230117235912-e5520374dbf9d2f9414b0235017f347e.png" width="341" height="433" class="img_ev3q"></p>
-<p>これで完成です．</p>
-<p><img decoding="async" loading="lazy" src="https://mebiusbox.github.io/en/assets/images/2023-01-17-notion-wbs-230118000036-25e08b1dcffd154da3f5948eda49c299.png" width="1183" height="662" class="img_ev3q"></p>
-<p>ただし、この方法では子タスクがすべて終わっても、その親タスクは自動で <code>Done</code> にならないので手動で行う必要があります．それを自動化することも可能かもしれませんが、ご自身で調べてみてください．</p>
-<div class="theme-admonition theme-admonition-caution admonition_xJq3 alert alert--warning"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path></svg></span>caution</div><div class="admonitionContent_BuS1"><p>今回のようにロールアップを使って親、または子のプロパティを参照する場合、それがさらにその親、または子のプロパティを参照するといった循環参照をしてしまうとパフォーマンスに大きな影響があるため、制限されているとサポートから聞きました．階層が深くなってしまうとロールアップした値が異常な値になるため、階層レベルは3～4以下にしておくのが無難です．</p></div></div>
-<p>今回作成したWBSのテンプレートを公開しています．詳しくはテンプレートにある「はじめにお読みください」を参照してください．</p>
-<p><a href="https://mebiusbox.notion.site/WBS-c33e10534921465d93f6604948302c81" target="_blank" rel="noopener noreferrer" class="card padding--md margin-bottom--sm cardContainer_yMBB"><span class="text--truncate cardTitle_SiGl" title="WBS | mebiusbox.notion.site"><i class="cardIcon_VTdI fas fa-external-link-alt"></i> <!-- -->WBS | mebiusbox.notion.site</span><span class="text--truncate cardDescription_fnmI" title="Notion用 WBS (Work Breakdown Structure)のテンプレートです">Notion用 WBS (Work Breakdown Structure)のテンプレートです</span></a></p>]]></content>
-        <author>
-            <name>mebiusbox</name>
-            <uri>https://github.com/mebiusbox</uri>
-        </author>
-        <category label="Notion" term="Notion"/>
     </entry>
 </feed>
