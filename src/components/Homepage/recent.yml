@@ -1,3 +1,7 @@
+- name: 2024-09-20-tensorflow-gpu-for-windows
+  date: 2024-09-20
+  title:
+    ja: WindowsでTensorflow(GPU)を使う
 - name: 2024-09-15-improve-cargo-make
   date: 2024-09-15
   title:
@@ -14,7 +18,3 @@
   date: 2024-09-07
   title:
     ja: Visual Studio Codeで Ruff を使ったときの問題
-- name: 2024-09-05-vscode-simple-new-file
-  date: 2024-09-05
-  title:
-    ja: Visual Studio Codeの新規ファイル作成を支援する拡張機能
