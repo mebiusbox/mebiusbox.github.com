@@ -21,7 +21,7 @@ WindowsでTensorflowがGPUを使えるようにするための方法をここに
 
 <!-- truncate -->
 
-Windowsでpythonの仮想環境を構築して、Visual Studio CodeのJupyter拡張機能を使っています．
+試した環境はWindowsでpythonの仮想環境を構築して、Visual Studio CodeのJupyter拡張機能を使っています．
 
 ## tensorflow-intel
 
@@ -79,9 +79,9 @@ Docker DesktopをWSL2にインテグレーションすると `docker-desktop` �
 | docker-desktop         | `%LocalAppData%\Docker\wsl\disk\docker_data.vhdx` |
 
 このファイルがどんどん肥大化していくので、別のドライブにしたいのです．
-まず、Docker Desktop自体に設定で場所を変更できる機能がありますが、試してたところ失敗することが多く、まったく安定しません．
+まず、Docker Desktop自体に設定で場所を変更できる機能がありますが、試したところ失敗することが多く、まったく安定しません．
 次に、エクスポート・インポートする方法がありますが、ちょっと面倒ですし、人によっては上手くいかないこともあるようです．
-なので、シンボリックリンクを作成して`%LocalAppData%\Docker`ディレクトリを別のドライブにリンクするようにしました．
+なので、シンボリックリンクを作成して`%LocalAppData%\Docker\wsl`ディレクトリを別のドライブにリンクするようにしました．
 
 あと、WSL2にインテグレーションすると、WSL側のディストリビューションで docker コマンドが Docker Desktop を経由するようになります．
 この場合、別途 Docker をインストールする必要がありません．
@@ -112,3 +112,5 @@ tf.config.list_physical_devices("GPU")
 ちゃんと認識しているみたいです．
 
 ちなみに、Jupyter notebookのサーバーを立ち上げたい場合は `tensorflow/tensorflow:latest-gpu-jupyter` を使います．
+
+以上です．
