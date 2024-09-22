@@ -8,7 +8,7 @@ pagination_next: null
 pagination_prev: null
 image: https://og-image-mebiusbox.vercel.app/api/og?title=PowerShell%2Bfzf%E3%81%A7%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E5%85%A5%E5%8A%9B%E6%94%AF%E6%8F%B4&subtitle=PowerShell%E3%81%A8fzf%E3%82%92%E7%B5%84%E3%81%BF%E5%90%88%E3%82%8F%E3%81%9B%E3%81%A6%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E5%85%A5%E5%8A%9B%E6%94%AF%E6%8F%B4%E7%92%B0%E5%A2%83%E3%82%92%E6%A7%8B%E7%AF%89%E3%81%97%E3%81%BE%E3%81%99&date=2023%2F01%2F23&tags=powershell%2Cfzf
 last_update:
-  date: 2023-09-13
+  date: 2023-09-22
   author: mebiusbox
 ---
 
@@ -515,6 +515,74 @@ function lnav() {
     navi -Run -File (Get-ChildItem "*navi*.yaml" | ForEach-Object { $_.Name } | fzf)
 }
 ```
+
+## 高速化
+
+チートシートデータが大きくなっていくと、起動に若干時間がかかるようになってきました．
+おそらくyamlの読み込みに時間がかかっていると予想できるので `Measure-Command`で計測してみました．
+比較対象として、yamlファイルを[yq](https://github.com/mikefarah/yq)や[dasel](https://github.com/TomWright/dasel)でjson形式に変換して`ConvertFrom-Json`で読み込む方法も試しました．
+
+```powershell
+function test-navi() {
+  # use powershell-yaml
+  Measure-Command { $data = ConvertFrom-Yaml (Get-Content -raw $env:USERPROFILE\navi.yaml) }
+  Write-Host $data
+  # use yq
+  Measure-Command { $data = Get-Content -raw $env:USERPROFILE\navi.yaml | yq -oj | ConvertFrom-Json }
+  Write-Host $data
+  # use dasel
+  Measure-Command { $data = dasel -f $env:USERPROFILE\navi.yaml -r yaml -w json | ConvertFrom-Json }
+  Write-Host $data
+}
+```
+
+結果は次のようになりました：
+
+```powershell
+Days              : 0
+Hours             : 0
+Minutes           : 0
+Seconds           : 0
+Milliseconds      : 286
+Ticks             : 2869281
+TotalDays         : 3.32092708333333E-06
+TotalHours        : 7.970225E-05
+TotalMinutes      : 0.004782135
+TotalSeconds      : 0.2869281
+TotalMilliseconds : 286.9281
+
+[items, System.Collections.Generic.List`1[System.Object]]
+Days              : 0
+Hours             : 0
+Minutes           : 0
+Seconds           : 0
+Milliseconds      : 61
+Ticks             : 610668
+TotalDays         : 7.06791666666667E-07
+TotalHours        : 1.6963E-05
+TotalMinutes      : 0.00101778
+TotalSeconds      : 0.0610668
+TotalMilliseconds : 61.0668
+
+@{items=System.Object[]}
+Days              : 0
+Hours             : 0
+Minutes           : 0
+Seconds           : 0
+Milliseconds      : 41
+Ticks             : 415678
+TotalDays         : 4.81108796296296E-07
+TotalHours        : 1.15466111111111E-05
+TotalMinutes      : 0.000692796666666667
+TotalSeconds      : 0.0415678
+TotalMilliseconds : 41.5678
+
+@{items=System.Object[]}
+```
+
+`powershell-yaml`を使うよりも、yaml形式をjson形式に変換してから`ConvertFrom-Json`で読み込んだほうが4~7倍早くなりました．
+`ConvertFrom-Json`で読み込んだデータは`ConvertFrom-yaml`と型が違っていますが、プログラムからは以前と変わらずに扱えます．
+書きやすさはyaml形式の方がいいので、実行する度に変換するか、最速にしたい場合はあらかじめjson形式に変換しておいて直接読み込むのがいいと思います．
 
 ## おわり
 
