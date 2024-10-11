@@ -112,5 +112,5 @@ Write-Host "CHECKPOINT"
 CHECKPOINT
 ```
 
-`ForEach-Object`に対して使いたくなるし、`foreach`というエイリアスもあって間違えやすいですよね．
+`continue`や`break`は`ForEach-Object`に対して使いたくなるし、`foreach`というエイリアスもあって間違えやすいですよね．
 以上です．
