@@ -1,3 +1,7 @@
+- name: 2024-10-11-foreach-object-continue-break
+  date: 2024-10-11
+  title:
+    ja: ForEach-Objectにおけるcontinueとbreakについて
 - name: 2024-09-20-tensorflow-gpu-for-windows
   date: 2024-09-20
   title:
@@ -14,7 +18,3 @@
   date: 2024-09-13
   title:
     ja: ghqでプロジェクト管理（整理）する
-- name: 2024-09-07-vscode-ruff
-  date: 2024-09-07
-  title:
-    ja: Visual Studio Codeで Ruff を使ったときの問題
