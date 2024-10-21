@@ -1,3 +1,7 @@
+- name: 2024-10-21-modify-styles-of-markdown-on-vs-code
+  date: 2024-10-21
+  title:
+    ja: Visual Studio CodeでJupyter NotebookのMarkdownセルのスタイルを変更する
 - name: 2024-10-12-mdbook-frontmatter
   date: 2024-10-12
   title:
@@ -14,7 +18,3 @@
   date: 2024-09-20
   title:
     ja: WindowsでTensorflow(GPU)を使う
-- name: 2024-09-15-improve-cargo-make
-  date: 2024-09-15
-  title:
-    ja: cargo-makeを少し使いやすくする
