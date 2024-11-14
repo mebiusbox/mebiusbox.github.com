@@ -5,10 +5,10 @@
   },
   "pixyPasteImage.confirmPattern": "Just Name",
   "pixyPasteImage.ImageType": ".jpg",
-  "pixyPasteImage.path": "${projectRoot}/static/img",
+  "pixyPasteImage.path": "${projectRoot}/static/img/post",
   "pixyPasteImage.basePath": "${projectRoot}/static/",
-  "pixyPasteImage.nameSuffix": "-${currentFileNameWithoutExt}",
-  "pixyPasteImage.defaultName": "Y/MM-DD-HH",
+  "pixyPasteImage.nameSuffix": "${currentFileNameWithoutExt}",
+  "pixyPasteImage.defaultName": "Y/",
   "pixyPasteImage.renderPattern": "![](/${imagePath})",
   "pasteImage.path": "${projectRoot}/static/img/post",
   "pasteImage.insertPattern": "${imageSyntaxPrefix}/img/post/${imageFileName}${imageSyntaxSuffix}"
