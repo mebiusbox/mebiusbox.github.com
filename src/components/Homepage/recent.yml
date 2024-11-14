@@ -1,3 +1,7 @@
+- name: 2024-11-14-normal-cdf-in-powershell
+  date: 2024-11-14
+  title:
+    ja: PowerShellで標準正規分布の累積密度関数の値を計算する
 - name: 2024-10-21-modify-styles-of-markdown-on-vs-code
   date: 2024-10-21
   title:
@@ -14,7 +18,3 @@
   date: 2024-10-11
   title:
     ja: ForEach-Objectにおけるcontinueとbreakについて
-- name: 2024-09-20-tensorflow-gpu-for-windows
-  date: 2024-09-20
-  title:
-    ja: WindowsでTensorflow(GPU)を使う
