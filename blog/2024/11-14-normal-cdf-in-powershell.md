@@ -1,22 +1,22 @@
 ---
-title: PowerShellで標準正規分布の累積密度関数の値を計算する
-description: PowerShellで標準正規分布の累積密度関数(CDF)の値を計算する方法
+title: PowerShellで標準正規分布の累積分布関数の値を計算する
+description: PowerShellで標準正規分布の累積分布関数(CDF)の値を計算する方法
 keywords:
   - PowerShell
   - Statistics
 category: note
 authors: [mebiusbox]
 tags: [powershell]
-image: https://og-image-mebiusbox.vercel.app/api/og?title=PowerShell%e3%81%a7%e6%a8%99%e6%ba%96%e6%ad%a3%e8%a6%8f%e5%88%86%e5%b8%83%e3%81%ae%e7%b4%af%e7%a9%8d%e5%af%86%e5%ba%a6%e9%96%a2%e6%95%b0%e3%81%ae%e5%80%a4%e3%82%92%e8%a8%88%e7%ae%97%e3%81%99%e3%82%8b&subtitle=PowerShell%e3%81%a7%e6%a8%99%e6%ba%96%e6%ad%a3%e8%a6%8f%e5%88%86%e5%b8%83%e3%81%ae%e7%b4%af%e7%a9%8d%e5%af%86%e5%ba%a6%e9%96%a2%e6%95%b0(CDF)%e3%81%ae%e5%80%a4%e3%82%92%e8%a8%88%e7%ae%97%e3%81%99%e3%82%8b%e6%96%b9%e6%b3%95&date=2024%2F11%2F14&tags=powershell
+image: https://og-image-mebiusbox.vercel.app/api/og?title=PowerShell%e3%81%a7%e6%a8%99%e6%ba%96%e6%ad%a3%e8%a6%8f%e5%88%86%e5%b8%83%e3%81%ae%e7%b4%af%e7%a9%8d%e5%88%86%e5%b8%83%e9%96%a2%e6%95%b0%e3%81%ae%e5%80%a4%e3%82%92%e8%a8%88%e7%ae%97%e3%81%99%e3%82%8b&subtitle=PowerShell%e3%81%a7%e6%a8%99%e6%ba%96%e6%ad%a3%e8%a6%8f%e5%88%86%e5%b8%83%e3%81%ae%e7%b4%af%e7%a9%8d%e5%88%86%e5%b8%83%e9%96%a2%e6%95%b0(CDF)%e3%81%ae%e5%80%a4%e3%82%92%e8%a8%88%e7%ae%97%e3%81%99%e3%82%8b%e6%96%b9%e6%b3%95&date=2024%2F11%2F14&tags=powershell
 ---
 
-PowerShellで標準正規分布の累積密度関数を求める方法（近似）を紹介します．
+PowerShellで標準正規分布の累積分布関数を求める方法（近似）を紹介します．
 
 <!-- truncate -->
 
 検索してみると、「[Math.Net Numerics](https://numerics.mathdotnet.com/)」を使う方法が見つかりますが、今回は、外部モジュールに依存しないかたちで実装します．
 
-ここでは、標準正規分布の累積密度関数を求めるために、誤差関数を使います．そして、誤差関数は近似式を使って実装します．
+ここでは、標準正規分布の累積分布関数を求めるために、誤差関数を使います．そして、誤差関数は近似式を使って実装します．
 
 ```powershell
 function Get-ErrorFunction() {
@@ -48,7 +48,7 @@ function Get-ErrorFunction() {
 
 この近似式については「[Wikipedia](https://en.wikipedia.org/wiki/Error_function)」を参照してください．
 また、この近似式による計算誤差は最大で $1.5\times 10^\{-7\}$ ということです．
-あとは、この誤差関数を使って累積密度関数の値を計算します．
+あとは、この誤差関数を使って累積分布関数の値を計算します．
 
 ```powershell
 function Get-NormalCDF() {
