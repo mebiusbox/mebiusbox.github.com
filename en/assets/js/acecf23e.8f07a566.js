@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmebiusbox_docusaurus=self.webpackChunkmebiusbox_docusaurus||[]).push([[7393],{81838:s=>{s.exports=JSON.parse('{"blogBasePath":"/en/blog","blogTitle":"Blog"}')}}]);
