@@ -4,7 +4,7 @@ import WebGL from 'three/addons/capabilities/WebGL.js';
 import Stats from 'three/addons/libs/stats.module.js';
 // import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-if ( WebGL.isWebGLAvailable() === false ) {
+if ( WebGL.isWebGL2Available() === false ) {
 	document.body.appendChild( WebGL.getWebGLErrorMessage() );
 }
 

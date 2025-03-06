@@ -6,7 +6,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
 
 
-if ( WebGL.isWebGLAvailable() === false ) {
+if ( WebGL.isWebGL2Available() === false ) {
 	document.body.appendChild( WebGL.getWebGLErrorMessage() );
 }
 
