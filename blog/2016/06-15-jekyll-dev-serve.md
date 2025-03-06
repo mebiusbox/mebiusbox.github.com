@@ -10,4 +10,6 @@ authors: [mebiusbox]
 `_config.yml` を複製し `_config-dev.yml` という名前にします。この名前は適当で構いません。
 下記のコマンドを実行することで `_config-dev.yml` を参照するようになります。
 
+<!-- truncate -->
+
 	jekyll serve -w --config _config-dev.yml

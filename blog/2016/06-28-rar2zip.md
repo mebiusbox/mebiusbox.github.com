@@ -7,6 +7,9 @@ authors: [mebiusbox]
 ---
 
 rar形式のファイルをzip形式に一括変換するバッチファイルです。
+
+<!-- truncate -->
+
 実行するには WinRAR が必要です。
 
 [WinRAR](http://www.winrarjapan.com/)

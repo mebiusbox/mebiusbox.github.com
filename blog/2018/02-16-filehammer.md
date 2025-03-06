@@ -8,6 +8,8 @@ authors: [mebiusbox]
 
 これまで32bit 版から以下の対応をしました．
 
+<!-- truncate -->
+
 - 64bit 版
 - susie プラグインは 64bit 版（sph）ファイルに対応しました．
 - 動画ルールを追加しました

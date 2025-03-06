@@ -10,6 +10,8 @@ authors: [mebiusbox]
 ですが、GitHub Pages では動作しません。
 ここでは GitHub Pages で使える機能でアーカイブページを作成します。
 
+<!-- truncate -->
+
 ## 年月日
 
 全記事から年月日を参照して、列挙します。

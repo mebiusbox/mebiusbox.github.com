@@ -10,6 +10,8 @@ Eclipse で新規にファイルを作成すると Workspace に設定された�
 文字エンコーディングを UTF-8 に設定した場合、新規にファイルを作成しても BOM は付きません。
 そこで、BOM を付加するスクリプトを書きました。Ruby 版と Python 版があります。
 
+<!-- truncate -->
+
 ## AddBom.rb
 
 ```ruby

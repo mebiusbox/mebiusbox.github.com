@@ -7,6 +7,9 @@ authors: [mebiusbox]
 ---
 
 Blender のカメラ操作を Maya と同じに変更する方法を解説します。
+
+<!-- truncate -->
+
 Blender には操作方法を Maya に一括変更する設定がありますが、今回はカメラのみ Maya に合わせます。
 `User Preference > Input` を開いて、`3D View(Global)` から `Rotate View`, `Move View`, `Zoom View` のキーを変更します。
 

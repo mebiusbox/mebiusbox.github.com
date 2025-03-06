@@ -8,6 +8,8 @@ authors: [mebiusbox]
 
 実は以前からダウンロードファイルが 0.6.5 になっていたんですが、正式にアナウンスしていませんでした。
 
+<!-- truncate -->
+
 ダウンロードはこちらから。
 
 * [ComicPicker](http://mebiusbox.github.io/software_comic_picker.html)

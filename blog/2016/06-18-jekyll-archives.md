@@ -8,6 +8,8 @@ authors: [mebiusbox]
 
 `jekyll-archives` を使うと、日付・カテゴリ・タグごとにアーカイブページを生成してくれます。
 
+<!-- truncate -->
+
 [jekyll-archives](https://github.com/jekyll/jekyll-archives)
 
 まずはインストールします。

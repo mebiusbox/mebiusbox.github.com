@@ -8,6 +8,8 @@ authors: [mebiusbox]
 
 以下のソフトウェアは開発終了・公開停止とさせていただきます．
 
+<!-- truncate -->
+
 - Mebiusbox2
 - FolderHammer
 - CodeMage
@@ -23,4 +25,3 @@ authors: [mebiusbox]
 - FileMater
 
 使用してくれていた方々，ありがとうございました．
-

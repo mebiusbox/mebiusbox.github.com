@@ -8,6 +8,8 @@ authors: [mebiusbox]
 
 次のソフトウェアは開発終了とします。
 
+<!-- truncate -->
+
 * FolderHammer
 * MebiusScope
 * CodeMage

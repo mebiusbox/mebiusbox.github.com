@@ -11,6 +11,8 @@ authors: [mebiusbox]
 GitBook は Markdown 形式のドキュメントから電子文書を作成するツールです。
 次のような文書作成環境を構築します。
 
+<!-- truncate -->
+
 * GitBook に使うドキュメントを GitLab でバージョン管理します
 * GitLab の push イベントを Hubot でフックします
 * GitBook を使って電子文書を作成します

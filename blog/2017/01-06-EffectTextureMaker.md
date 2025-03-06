@@ -8,6 +8,8 @@ authors: [mebiusbox]
 
 EffectTextureMaker はエフェクト用のテクスチャをブラウザ上で作成するツールです。
 
+<!-- truncate -->
+
 [EffectTextureMaker](http://mebiusbox.github.io/contents/EffectTextureMaker/)
 
 ## きっかけ

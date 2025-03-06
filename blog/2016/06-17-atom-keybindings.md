@@ -8,6 +8,8 @@ authors: [mebiusbox]
 
 `git-control`, `advanced-open-file`, `symbols-tree-view` パッケージを入れたところ `ctrl-alt-o` のキーバインドが重複してしまったので、これを何とかしたい。
 
+<!-- truncate -->
+
 まず、現在のキーバインドを確認するには `File > Settings` から `Keybindings` を選びます。
 `ctrl-alt-o` で検索をかけると、キーバインドの一覧が表示されます。
 

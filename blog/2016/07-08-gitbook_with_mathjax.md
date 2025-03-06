@@ -9,6 +9,8 @@ authors: [mebiusbox]
 Gitbook は Markdown 形式で書かれた文書から HTML や PDF, EPUB, MOBI 形式の作成が行えるツールです。
 ここでは　Windows で環境を構築する方法を解説します。
 
+<!-- truncate -->
+
 ## Node.js のインストール
 まず、Node.js が必要です。以下のサイトから LTS 版をダウンロードします。
 
