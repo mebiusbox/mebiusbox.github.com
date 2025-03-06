@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {type ReactNode} from 'react';
 import Translate, {translate} from '@docusaurus/Translate';
 import Link from '@docusaurus/Link';
+import type {Props} from '@theme/BlogPostItem/Footer/ReadMoreLink';
 import clsx from 'clsx';
 import styles from './styles.module.css';
 function ReadMoreLabel() {
@@ -9,12 +10,15 @@ function ReadMoreLabel() {
       <Translate
         id="theme.blog.post.readMore"
         description="The label used in blog post item excerpts to link to full blog posts">
-        Read More
+        Read more
       </Translate>
     </b>
   );
 }
-export default function BlogPostItemFooterReadMoreLink(props) {
+
+export default function BlogPostItemFooterReadMoreLink(
+  props: Props,
+): ReactNode {
   const {blogPostTitle, ...linkProps} = props;
   return (
     <Link
