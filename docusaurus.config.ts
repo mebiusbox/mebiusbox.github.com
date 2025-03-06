@@ -2,12 +2,14 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 
 import {themes as prismThemes} from 'prism-react-renderer';
+import type {Config} from '@docusaurus/types';
+import type * as Preset from '@docusaurus/preset-classic'
+import type {PluginOptions} from '@docusaurus/plugin-ideal-image'
 
 // const math = require('remark-math');
 // const katex = require('rehype-katex');
 
-/** @type {import('@docusaurus/types').Config} */
-const config = {
+const config: Config = {
   title: 'Mebiusbox software',
   tagline: "mebiusbox's software, blogs and articles",
   url: 'https://mebiusbox.github.io',
@@ -29,15 +31,14 @@ const config = {
     require.resolve('docusaurus-plugin-image-zoom'),
     [
       'ideal-image',
-      /** @type {import('@docusaurus/plugin-ideal-image').PluginOptions} */
-      ({
+      {
         quality: 70,
         max: 1030,
         min: 640,
         steps: 2,
         // Use false to debug, but it incurs huge perf costs
         disableInDev: true,
-      }),
+      } satisfies PluginOptions,
     ],
   ],
 
@@ -52,10 +53,9 @@ const config = {
   presets: [
     [
       'classic',
-      /** @type {import('@docusaurus/preset-classic').Options} */
-      ({
+      {
         docs: {
-          sidebarPath: require.resolve('./sidebars.js'),
+          sidebarPath: require.resolve('./sidebars.ts'),
           sidebarCollapsible: false,
           sidebarCollapsed: false,
           // remarkPlugins: [math],
@@ -73,7 +73,7 @@ const config = {
         googleTagManager: {
           containerId: 'GTM-5WZWRT7N',
         },
-      }),
+      } satisfies Preset.Options
     ],
   ],
   scripts: [
@@ -100,8 +100,7 @@ const config = {
   ],
 
   themeConfig:
-    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
-    ({
+    {
       navbar: {
         title: 'Mebiusbox software',
         // logo: {
@@ -210,7 +209,7 @@ const config = {
         // container: '',
         debug: false // Set debug to true if you want to inspect the modal
       },
-    }),
+    } satisfies Preset.ThemeConfig
 };
 
 export default config;
