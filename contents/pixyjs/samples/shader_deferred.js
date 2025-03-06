@@ -5,7 +5,7 @@ import Stats from 'three/addons/libs/stats.module.js';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-if ( WebGL.isWebGLAvailable() === false ) {
+if ( WebGL.isWebGL2Available() === false ) {
 	document.body.appendChild( WebGL.getWebGLErrorMessage() );
 }
 
@@ -180,25 +180,23 @@ const app = {
 	initDeferred() {
 		this.deferred.depthTexture = new THREE.DepthTexture();
 
-		const pars = {
-			minFilter: THREE.NearestFilter,
-			magFilter: THREE.NearestFilter,
-			format: THREE.RGBAFormat,
-			generateMipmaps: false,
-			stencilBuffer: false,
-			depthTexture: this.deferred.depthTexture,
-		};
-
 		// gbuf
-		this.deferred.gbuf = new THREE.WebGLMultipleRenderTargets(
+		this.deferred.gbuf = new THREE.WebGLRenderTarget(
 			window.innerWidth * window.devicePixelRatio,
 			window.innerHeight * window.devicePixelRatio,
-			2,
-			pars
+			{
+				count: 2,
+				minFilter: THREE.NearestFilter,
+				magFilter: THREE.NearestFilter,
+				// internalFormat: THREE.RGBAFormat,
+				generateMipmaps: false,
+				stencilBuffer: false,
+				depthTexture: this.deferred.depthTexture,
+			}
 		);
 
-		this.deferred.gbuf.texture[ 0 ].name = 'normal';
-		this.deferred.gbuf.texture[ 1 ].name = 'albedo+roughness';
+		this.deferred.gbuf.textures[ 0 ].name = 'normal';
+		this.deferred.gbuf.textures[ 1 ].name = 'albedo+roughness';
 
 		this.deferred.geometryShader = new PIXY.Shader();
 		this.deferred.geometryShader.enable( 'DEFERRED_GEOMETRY' );
@@ -212,8 +210,8 @@ const app = {
 		this.deferred.lightShader.enable( 'DEFERRED_LIGHT' );
 		this.deferred.lightShader.enable( 'GLSL3' );
 		this.deferred.lightShader.build( { defines: { NUM_POINT_LIGHT: this.numMaxLights } } );
-		this.deferred.lightShader.uniforms.gbuf0.value = this.deferred.gbuf.texture[ 0 ];
-		this.deferred.lightShader.uniforms.gbuf1.value = this.deferred.gbuf.texture[ 1 ];
+		this.deferred.lightShader.uniforms.gbuf0.value = this.deferred.gbuf.textures[ 0 ];
+		this.deferred.lightShader.uniforms.gbuf1.value = this.deferred.gbuf.textures[ 1 ];
 		this.deferred.lightShader.uniforms.tDepth.value = this.deferred.depthTexture;
 		// console.log(deferred.lightShader.uniforms);
 		// console.log(deferred.lightShader._generateVertexShader());
@@ -248,15 +246,15 @@ const app = {
 			return { sprite: sprite, texture: texture, type: type };
 		};
 
-		// this.deferred.views.push(createView(10, 10, this.deferred.gbuf.texture[2], 6));
+		// this.deferred.views.push(createView(10, 10, this.deferred.gbuf.textures[2], 6));
 		this.deferred.views.push( createView( 10, 10, this.deferred.depthTexture, PIXY.ViewDepth ) );
-		// this.deferred.views.push(createView(10, 10, this.deferred.gbuf.texture[0], 1));
-		this.deferred.views.push( createView( 10, 120, this.deferred.gbuf.texture[ 0 ], PIXY.ViewRGB ) );
-		this.deferred.views.push( createView( 10, 230, this.deferred.gbuf.texture[ 1 ], PIXY.ViewAlpha ) );
-		this.deferred.views.push( createView( 10, 340, this.deferred.gbuf.texture[ 1 ], PIXY.ViewRGB ) );
-		// this.deferred.views.push(createView(10, 450, this.deferred.gbuf.texture[2], 0));
-		// this.deferred.views.push(createView(120, 10, this.deferred.lbuf.texture[0], 0));
-		// this.deferred.views.push(createView(120, 120, this.deferred.lbuf.texture[1], 0));
+		// this.deferred.views.push(createView(10, 10, this.deferred.gbuf.textures[0], 1));
+		this.deferred.views.push( createView( 10, 120, this.deferred.gbuf.textures[ 0 ], PIXY.ViewRGB ) );
+		this.deferred.views.push( createView( 10, 230, this.deferred.gbuf.textures[ 1 ], PIXY.ViewAlpha ) );
+		this.deferred.views.push( createView( 10, 340, this.deferred.gbuf.textures[ 1 ], PIXY.ViewRGB ) );
+		// this.deferred.views.push(createView(10, 450, this.deferred.gbuf.textures[2], 0));
+		// this.deferred.views.push(createView(120, 10, this.deferred.lbuf.textures[0], 0));
+		// this.deferred.views.push(createView(120, 120, this.deferred.lbuf.textures[1], 0));
 	},
 
 	initGui() {

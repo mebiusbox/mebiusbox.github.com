@@ -5,7 +5,7 @@ import Stats from 'three/addons/libs/stats.module.js';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 
-if ( WebGL.isWebGLAvailable() === false ) {
+if ( WebGL.isWebGL2Available() === false ) {
 	document.body.appendChild( WebGL.getWebGLErrorMessage() );
 }
 
