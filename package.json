@@ -67,7 +67,7 @@
   "main": "index.js",
   "license": "MIT",
   "volta": {
-    "node": "18.20.4",
+    "node": "22.14.0",
     "yarn": "1.22.22"
   }
 }
