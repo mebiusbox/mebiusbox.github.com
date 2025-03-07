@@ -92,7 +92,12 @@ Visual Studio Codeから手軽にHTTPリクエストをテストできる拡張�
 
 ### [TODO Highlight](https://marketplace.visualstudio.com/items?itemName=wayou.vscode-todo-highlight)
 
-TODO や FIXME などをハイライト表示してくれる拡張機能．カスタマイズもできる．
+TODO や FIXME などをハイライト表示してくれる拡張機能．カスタマイズもできる．（今は未使用）
+
+### [ToDo Tree](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree)
+
+TODO Highlight をやめて、現在はこちらを導入．
+ツリービューで確認できるので便利．
 
 ## 全般
 
@@ -164,6 +169,10 @@ GistPadのスクラッチノートはシークレット扱いだけど、シー�
 
 日本語の文章をチェックする拡張機能．
 
+### [Pinit](https://marketplace.visualstudio.com/items?itemName=Decahedra.pinit)
+
+特定のフォルダやファイルをピンする機能．お気に入りのようなものです．
+
 ## Markdown
 
 ### [Markdown Preview Enhanced](https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced)
@@ -178,6 +187,12 @@ Markdownプレビュー．数式やMermaidなどサポートしている．ま�
 ### [Markdown Table](https://marketplace.visualstudio.com/items?itemName=TakumiI.markdowntable)
 
 Markdownでの表を書くときに便利な拡張機能．項目を作成してからの表生成や、各セルの移動などがサポートされている．
+
+:::info
+
+この拡張機能とスニペット機能との相性がとても悪いです．両方とも有効にしていると、表内で次のセルに移動するときにTabキーを押すと、場合によってはスニペットが展開されてしまいます．VS CodeのスニペットはFuzzy検索なので、とても厄介な問題です．とりあえず、Markdownファイルではスニペットを無効にしています．スニペットを使う場合は明示的にスニペット挿入機能を使っています．ショートカットキーに割り当てていればあまり気になりません．ちなみに、私は「`Ctrl+J`, `Ctrl+J`」に割り当てています．
+
+:::
 
 ### [Markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint)
 
