@@ -9,7 +9,8 @@
       "command": [
         "$year = Get-Date -Format 'yyyy';",
         "$date = Get-Date -Format 'MM-dd';",
-        "New-Item -Path \"${workspaceFolder}\\blog\\${year}\\${date}-new-blog.md\";",
+        "if (-not(Test-Path -LiteralPath \"${workspaceFolder}\\blog\\${year}\")) { New-Item -Path \"${workspaceFolder}\\blog\\${year}\" -ItemType \"directory\" | Out-Null };",
+        "New-Item -Path \"${workspaceFolder}\\blog\\${year}\\${date}-new-blog.md\" | Out-Null;",
         "code \"${workspaceFolder}\\blog\\${year}\\${date}-new-blog.md\""
       ],
       "problemMatcher": [],
