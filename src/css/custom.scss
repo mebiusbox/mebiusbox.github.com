@@ -205,6 +205,7 @@ article p strong {
   // border-style: dashed;
   // border-color: rgb(0, 105, 146);
   border: 2px dashed rgb(0, 105, 146);
+  text-wrap: wrap;
 }
 
 [data-theme='dark'] .DocSearch {
