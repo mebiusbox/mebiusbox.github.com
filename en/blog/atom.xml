@@ -2,11 +2,48 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://mebiusbox.github.io/en/blog</id>
     <title>Mebiusbox software Blog</title>
-    <updated>2025-03-07T00:00:00.000Z</updated>
+    <updated>2025-03-09T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://mebiusbox.github.io/en/blog"/>
     <subtitle>Mebiusbox software Blog</subtitle>
     <icon>https://mebiusbox.github.io/en/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[OpenCV 4.12 をビルドする]]></title>
+        <id>https://mebiusbox.github.io/en/blog/2025/03/09/build-opencv-412</id>
+        <link href="https://mebiusbox.github.io/en/blog/2025/03/09/build-opencv-412"/>
+        <updated>2025-03-09T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[WindowsでOpenCV 4.12をビルドする方法]]></summary>
+        <content type="html"><![CDATA[<p>WindowsでOpenCVをビルドする方法です．OpenCVをビルドする方法の解説はそこらじゅうにありますが、必要最低限のビルド構成について解説します．</p>
+<p>OpenCVにはさまざまなモジュールがあります．今回は最低限の画像処理だけできればいいように <code>core</code>, <code>imgproc</code>, <code>imgcodecs</code>, <code>videoio</code>のみをビルドする構成にします．また、64bit版のみとします．</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="準備">準備<a href="https://mebiusbox.github.io/en/blog/2025/03/09/build-opencv-412#%E6%BA%96%E5%82%99" class="hash-link" aria-label="Direct link to 準備" title="Direct link to 準備">​</a></h2>
+<p>ソースコードは OpenCV の<a href="https://github.com/opencv/opencv" target="_blank" rel="noopener noreferrer">リポジトリ</a>から取得します．今回は Contrib を使いません．また、OpenCV は<code>4.x</code>の最新版を取得しました．ビルドするには <a href="https://cmake.org/" target="_blank" rel="noopener noreferrer">CMake</a> が必要です．必要であればWinGetでインストールします．WinGetでインストールする場合はパスが追加されてませんので、必要に応じて追加します．</p>
+<div class="language-shell codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#f8f8f2;--prism-background-color:#272822"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-shell codeBlock_bY9V thin-scrollbar" style="color:#f8f8f2;background-color:#272822"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#f8f8f2"><span class="token plain">winget install Kitware.Cmake</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>ビルドには Visual Studio 2022 を使います．</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="プロジェクトの生成">プロジェクトの生成<a href="https://mebiusbox.github.io/en/blog/2025/03/09/build-opencv-412#%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AE%E7%94%9F%E6%88%90" class="hash-link" aria-label="Direct link to プロジェクトの生成" title="Direct link to プロジェクトの生成">​</a></h2>
+<p>CMakeを使ってプロジェクトを作成します．不要なモジュールとテストコードを除外します．</p>
+<p>クローンしたディレクトリに <code>build.x64</code> ディレクトリを作成し、そこに移動します．そして、次のコマンドを実行します．
+必要なモジュールがあれば、削除して有効にしてください．</p>
+<div class="language-shell codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#f8f8f2;--prism-background-color:#272822"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-shell codeBlock_bY9V thin-scrollbar" style="color:#f8f8f2;background-color:#272822"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#f8f8f2"><span class="token plain">cmake -G "Visual Studio 17 2022" -A x64 -DBUILD_TESTS=OFF -DBUILD_PERF_TEST=OFF -DBUILD_opencv_apps=OFF -DBUILD_opencv_calib3d=OFF -DBUILD_opencv_dnn=OFF -DBUILD_opencv_features2d=OFF -DBUILD_opencv_flann=OFF -DBUILD_opencv_gapi=OFF -DBUILD_opencv_highgui=OFF -DBUILD_opencv_java_bindings_generator=OFF -DBUILD_opencv_js_bindings_generator=OFF -DBUILD_opencv_ml=OFF -DBUILD_opencv_objc_bindings_generator=OFF -DBUILD_opencv_objdetect=OFF -DBUILD_opencv_photo=OFF -DBUILD_opencv_python3=OFF -DBUILD_opencv_python_bindings_generator=OFF -DBUILD_opencv_python_tests=OFF -DBUILD_opencv_stitching=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_video=OFF ..</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<div class="theme-admonition theme-admonition-warning admonition_xJq3 alert alert--warning"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path></svg></span>warning</div><div class="admonitionContent_BuS1"><p>Pythonモジュールを有効にするとDebugビルド時にPythonライブラリのDebug版が求められますので注意．</p></div></div>
+<p>正常終了すればプロジェクトファイルが作成されます．</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="ビルド">ビルド<a href="https://mebiusbox.github.io/en/blog/2025/03/09/build-opencv-412#%E3%83%93%E3%83%AB%E3%83%89" class="hash-link" aria-label="Direct link to ビルド" title="Direct link to ビルド">​</a></h2>
+<p><code>ALL_BUILD.vcxproj</code> を開いて <code>ALL_BUILD</code> 構成でビルドします．その後、<code>INSTALL</code> 構成でビルドすれば <code>build.x64\install</code> にインストールされます．
+ターミナルでも CMake を使ってビルドやインストールができます．その場合は次のコマンドを実行します．</p>
+<div class="language-shell codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#f8f8f2;--prism-background-color:#272822"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-shell codeBlock_bY9V thin-scrollbar" style="color:#f8f8f2;background-color:#272822"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#f8f8f2"><span class="token plain">cmake --build .\ --config Debug</span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">cmake --build .\ --config Release</span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">cmake --install .\ --config Debug</span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">cmake --install .\ --config Release</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>どちらでも構いません．個人的に何かエラーが発生した場合は、Visual Studioで確認したほうがいいので、面倒でもVisual Studioを開いてビルドすることをオススメします．</p>
+<p>以上です．</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="おまけ">おまけ<a href="https://mebiusbox.github.io/en/blog/2025/03/09/build-opencv-412#%E3%81%8A%E3%81%BE%E3%81%91" class="hash-link" aria-label="Direct link to おまけ" title="Direct link to おまけ">​</a></h2>
+<p>CMake で次のようなエラーが出る場合：</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#f8f8f2;--prism-background-color:#272822"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#f8f8f2;background-color:#272822"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#f8f8f2"><span class="token plain">CMake Error: The following variables are used in this project, but they are set to NOTFOUND. Please set them or make sure they are set and tested correctly in the CMake files: CUDA_nppial_LIBRARY (ADVANCED) linked by target ...</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>OpenCV 3.x 系をビルドしようとしたらこのようなエラーが出ました．一応、対応できるらしいですが、問題なければ 4.x 系を使いましょう．
+（3.3.0 で確認しました．どうやら 3.4.0 から修正されているようですが、確認はしていません）</p>]]></content>
+        <author>
+            <name>mebiusbox</name>
+            <uri>https://github.com/mebiusbox</uri>
+        </author>
+        <category label="OpenCV" term="OpenCV"/>
+        <category label="CMake" term="CMake"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[最近導入したWindows用のツール]]></title>
         <id>https://mebiusbox.github.io/en/blog/2025/03/07/windows-tools</id>
@@ -956,29 +993,5 @@ Voltaはプロジェクトごとに使用するNodeのバージョンを自動�
         </author>
         <category label="zoxide" term="zoxide"/>
         <category label="powershell" term="powershell"/>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[gitui で Pending Other に Other が表示される]]></title>
-        <id>https://mebiusbox.github.io/en/blog/2024/03/11/gitui-pending-other</id>
-        <link href="https://mebiusbox.github.io/en/blog/2024/03/11/gitui-pending-other"/>
-        <updated>2024-03-11T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[gitui で Pending Other に Other が表示されたので対応したこと]]></summary>
-        <content type="html"><![CDATA[<p>ターミナルでのgit管理に<a href="https://github.com/extrawurst/gitui" target="_blank" rel="noopener noreferrer">gitui</a>を使っています．
-細かい操作をUIで操作するときに便利です．
-ところで、ローカルで作業中のリポジトリでgituiを実行すると画面に「Pending Other」が表示されていることに気づきました．何かが終わっていない、途中の状態というのは何となくわかるのですが、これだけでは詳しいことがわかりません．ここでは備忘録として対応したことを書いておきます．</p>
-<p>具体的には次のような画面のように、「Pending Other」のウィンドウが表示され、内容は「Other」となっています．</p>
-<p><img decoding="async" loading="lazy" alt="gitui" src="https://mebiusbox.github.io/en/assets/images/03-11-gitui-pending-other-240311-192012-b73f26e2f5ecffdc61c2402371f541ce.png" width="939" height="444" class="img_ev3q"></p>
-<p>これに関する情報がほとんど見つけられなかったので、とりあえずgituiのソースコードを確認してみることにしました．
-どうやらリポジトリのステートを表しているようです．</p>
-<div class="language-rust codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#f8f8f2;--prism-background-color:#272822"><div class="codeBlockTitle_Ktv7">src/sync/state.rs</div><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-rust codeBlock_bY9V thin-scrollbar" style="color:#f8f8f2;background-color:#272822"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#f8f8f2"><span class="token keyword" style="color:#66d9ef">pub</span><span class="token plain"> </span><span class="token keyword" style="color:#66d9ef">enum</span><span class="token plain"> </span><span class="token type-definition class-name" style="color:#e6db74">RepoState</span><span class="token plain"> </span><span class="token punctuation" style="color:#f8f8f2">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">	</span><span class="token comment" style="color:#8292a2;font-style:italic">///</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">	</span><span class="token class-name" style="color:#e6db74">Clean</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">	</span><span class="token comment" style="color:#8292a2;font-style:italic">///</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">	</span><span class="token class-name" style="color:#e6db74">Merge</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">	</span><span class="token comment" style="color:#8292a2;font-style:italic">///</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">	</span><span class="token class-name" style="color:#e6db74">Rebase</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">	</span><span class="token comment" style="color:#8292a2;font-style:italic">///</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">	</span><span class="token class-name" style="color:#e6db74">Revert</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">	</span><span class="token comment" style="color:#8292a2;font-style:italic">///</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain">	</span><span class="token class-name" style="color:#e6db74">Other</span><span class="token punctuation" style="color:#f8f8f2">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#f8f8f2"><span class="token plain"></span><span class="token punctuation" style="color:#f8f8f2">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
-<p><code>Clean</code>以外のステートのときに画面に表示されるようになっていました．
-結局、まだ詳しいことはわからないので、<code>.git</code>ディレクトリの中を他のリポジトリのものと比較してみることにしました．
-そうすると、「Pending Other」が表示されるリポジトリの<code>.git</code>ディレクトリの中に<code>rebase-apply</code>というディレクトリが存在していました．中身は空です．どうやら、Rebaseが中途半端な状態だったようです．といってもRebaseをした覚えがないので、何か間違った操作をしてRebaseしようとしたのかもしれません．ということで、この<code>rebace-apply</code>ディレクトリを削除することで「Pending Other」は表示されなくなりました．</p>
-<p>以上です．</p>]]></content>
-        <author>
-            <name>mebiusbox</name>
-            <uri>https://github.com/mebiusbox</uri>
-        </author>
-        <category label="gitui" term="gitui"/>
     </entry>
 </feed>
