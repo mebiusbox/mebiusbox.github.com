@@ -19,7 +19,7 @@ import VideoPlayer from '@site/src/components/Markdown/VideoPlayer.tsx'
 import HL from '@site/src/components/Markdown/Highlight.tsx'
 import Bookmark from '@site/src/components/Markdown/WebBookmark.tsx'
 
-<VideoPlayer url='/img/post/2023-01-17-Notion-WBS.mp4' />
+<VideoPlayer url='/img/post/2023/2023-01-17-Notion-WBS.mp4' />
 
 :::caution
 ここでは、英語版Notionで解説しています．また、CSSで見た目をカスタマイズしているものをスクショしています．ご了承ください．
