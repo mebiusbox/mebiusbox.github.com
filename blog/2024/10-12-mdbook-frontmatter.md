@@ -65,7 +65,7 @@ import re
 import sys
 
 def process(content):
-    pattern = re.compile(r"^---(?P<frontmatters>.*?)---\n*", re.DOTALL)
+    pattern = re.compile(r"^---(?P<frontmatters>.*?)---\r?\n*", re.DOTALL)
     result = pattern.search(content)
     if result:
         frontmatters = result.group("frontmatters")
@@ -76,6 +76,11 @@ def process(content):
         content = title + pattern.sub("", content)
     return content
 
+def process_section(section):
+    if "Chapter" in section:
+        section["Chapter"]["content"] = process(section["Chapter"]["content"])
+        for item in section["Chapter"]["sub_items"]:
+            process_section(item)
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:  # we check if we received any argument
@@ -86,8 +91,7 @@ if __name__ == "__main__":
     # load both the context and the book representations from stdin
     context, book = json.load(sys.stdin)
     for section in book["sections"]:
-        if "Chapter" in section:
-            section["Chapter"]["content"] = process(section["Chapter"]["content"])
+        process_section(section)
     print(json.dumps(book))
 ```
 
