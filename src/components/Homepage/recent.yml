@@ -1,3 +1,7 @@
+- name: 2025-03-23-vscode-mdbook-obsidian
+  date: 2025-03-23
+  title:
+    ja: VS CodeとmdBookとObsidianを使った環境
 - name: 2025-03-20-vscode-toggle-markers
   date: 2025-03-20
   title:
@@ -14,7 +18,3 @@
   date: 2024-11-14
   title:
     ja: PowerShellで標準正規分布の累積分布関数の値を計算する
-- name: 2024-10-21-modify-styles-of-markdown-on-vs-code
-  date: 2024-10-21
-  title:
-    ja: Visual Studio CodeでJupyter NotebookのMarkdownセルのスタイルを変更する
