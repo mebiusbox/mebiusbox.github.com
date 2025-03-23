@@ -6,34 +6,48 @@
     {
       "label": "New Blog",
       "type": "shell",
+      "options": {
+        "shell": {
+          "executable": "pwsh"
+        }
+      },
       "command": [
-        "$year = Get-Date -Format 'yyyy';",
-        "$date = Get-Date -Format 'MM-dd';",
-        "if (-not(Test-Path -LiteralPath \"${workspaceFolder}\\blog\\${year}\")) { New-Item -Path \"${workspaceFolder}\\blog\\${year}\" -ItemType \"directory\" | Out-Null };",
-        "New-Item -Path \"${workspaceFolder}\\blog\\${year}\\${date}-new-blog.md\" | Out-Null;",
-        "code \"${workspaceFolder}\\blog\\${year}\\${date}-new-blog.md\""
+        "-nop -C ",
+        "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process;",
+        ". .vscode/tasks.ps1;",
+        "CreateNewBlogPost ${workspaceFolder} ${input:NewName}"
       ],
       "problemMatcher": [],
       "presentation": {
-        "reveal": "always",
-        "panel": "new",
-        "close": true
+        "reveal": "never"
       }
     },
     {
       "label": "New Note",
       "type": "shell",
+      "options": {
+        "shell": {
+          "executable": "pwsh"
+        }
+      },
       "command": [
-        "$date = Get-Date -Format 'yyyy-mm-dd';",
-        "New-Item -Path \"${workspaceFolder}\\docs\\note\\${date}-new-note.md\";",
-        "code \"${workspaceFolder}\\docs\\note\\${date}-new-note.md\""
+        "-nop -C ",
+        "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process;",
+        ". .vscode/tasks.ps1;",
+        "CreateNewNote ${workspaceFolder} ${input:NewName}"
       ],
       "problemMatcher": [],
       "presentation": {
-        "reveal": "always",
-        "panel": "new",
-        "close": true
+        "reveal": "never"
       }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "NewName",
+      "type": "promptString",
+      "default": "NewFile",
+      "description": "New Name"
     }
   ]
 }
