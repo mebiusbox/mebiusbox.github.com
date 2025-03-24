@@ -9,6 +9,8 @@ category: note
 authors: [mebiusbox]
 tags: [mdBook,python]
 image: https://og-image-mebiusbox.vercel.app/api/og?title=mdBook%e3%81%a7Front+Matter%e3%82%92%e5%87%a6%e7%90%86%e3%81%99%e3%82%8b&subtitle=mdBook%e3%81%a7Front+Matter%e3%82%92%e5%87%a6%e7%90%86%e3%81%99%e3%82%8b%e3%83%97%e3%83%ad%e3%82%b0%e3%83%a9%e3%83%a0%e3%81%ae%e4%bd%9c%e6%88%90&date=2024%2F10%2F12&tags=mdBook,python
+last_update:
+  date: 2025-03-23
 ---
 
 mdBookでMarkdownファイルに含まれているFront Matterを処理するスクリプトの作成について解説します．
