@@ -10,6 +10,8 @@ category: note
 authors: [mebiusbox]
 tags: [VS Code,mdBook,Obsidian,Notion]
 image: https://og-image-mebiusbox.vercel.app/api/og?title=VS+Code%e3%81%a8mdBook%e3%81%a8Obsidian%e3%82%92%e4%bd%bf%e3%81%a3%e3%81%9f%e7%92%b0%e5%a2%83&subtitle=VS+Code%e3%81%a8mdBook%e3%80%81Obsidian%e3%82%92%e4%bd%bf%e3%81%a3%e3%81%9f%e3%83%89%e3%82%ad%e3%83%a5%e3%83%a1%e3%83%b3%e3%83%88%e7%ae%a1%e7%90%86%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6&date=2025%2F03%2F23&tags=VSCode,mdBook,Obsidian,Notion
+last_update:
+  date: 2025-03-24
 ---
 
 ドキュメント管理の方法として VS Code、mdBook そして Obsidian を組み合わせて使う方法について解説します．
@@ -69,8 +71,8 @@ image: https://og-image-mebiusbox.vercel.app/api/og?title=VS+Code%e3%81%a8mdBook
 | Plugin              | Enable/Disable |
 | ------------------- | -------------- |
 | Audio recorder      | Disable        |
-| Backlinks           | ✅Enable       |
-| Bookmarks           | ✅Enable       |
+| Backlinks           | Disable        |
+| Bookmarks           | Disable        |
 | Canvas              | Disable        |
 | Command palette     | ✅Enable       |
 | Daily notes         | ✅Enable       |
@@ -79,7 +81,7 @@ image: https://og-image-mebiusbox.vercel.app/api/og?title=VS+Code%e3%81%a8mdBook
 | Format converter    | Disable        |
 | Graph view          | Disable        |
 | Note composer       | Disable        |
-| Outgoing links      | ✅Enable       |
+| Outgoing links      | Disable        |
 | Outline             | ✅Enable       |
 | Page preview        | Disable        |
 | Properties view     | Disable        |
@@ -90,7 +92,7 @@ image: https://og-image-mebiusbox.vercel.app/api/og?title=VS+Code%e3%81%a8mdBook
 | Slash commands      | Disable        |
 | Slides              | Disable        |
 | Sync                | Disable        |
-| Tags view           | ✅Enable       |
+| Tags view           | Disable        |
 | Templates           | ✅Enable       |
 | Unique note creator | Disable        |
 | Web viewer          | Disable        |
@@ -108,6 +110,7 @@ image: https://og-image-mebiusbox.vercel.app/api/og?title=VS+Code%e3%81%a8mdBook
 | Templater      | テンプレート               |
 | Thino          | デイリーログ               |
 | Tray           | システムトレイ、ホットキー |
+| Metadata Hider | プロパティが空なら非表示   |
 
 以下は、試したけど不採用だったもの．
 
