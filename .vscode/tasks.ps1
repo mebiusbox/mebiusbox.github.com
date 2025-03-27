@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Stop"
 
-function CreateNewBlogPost() {
+function New-BlogPost() {
     param(
         [string]$WorkspaceFolder,
         [string]$NewName
@@ -10,16 +10,16 @@ function CreateNewBlogPost() {
     if (-not(Test-Path -LiteralPath "${WorkspaceFolder}\blog\${year}")) {
          New-Item -Path "${WorkspaceFolder}\blog\${year}" -ItemType "directory" | Out-Null 
     }
-    New-Item -Path "${WorkspaceFolder}\blog\${year}\${date}-${NewName}.md" | Out-Null
+    Copy-Item -LiteralPath "${WorkspaceFolder}\.vscode\templates\blog.md" -Destination "${WorkspaceFolder}\blog\${year}\${date}-${NewName}.md" | Out-Null
     code "${WorkspaceFolder}\blog\${year}\${date}-${NewName}.md"
 }
 
-function CreateNewNote() {
+function New-Note() {
     param(
         [string]$WorkspaceFolder,
         [string]$NewName
     )
     $date = Get-Date -Format 'yyyy-MM-dd'
-    New-Item -Path "${WorkspaceFolder}\docs\note\${date}-${NewName}.md" | Out-Null
+    Copy-Item -LiteralPath "${WorkspaceFolder}\.vscode\templates\note.md" -Destination "${WorkspaceFolder}\docs\note\${date}-${NewName}.md" | Out-Null
     code "${WorkspaceFolder}\docs\note\${date}-${NewName}.md"
 }

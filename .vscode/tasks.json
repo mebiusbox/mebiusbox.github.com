@@ -15,7 +15,7 @@
         "-nop -C ",
         "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process;",
         ". .vscode/tasks.ps1;",
-        "CreateNewBlogPost ${workspaceFolder} ${input:NewName}"
+        "New-BlogPost ${workspaceFolder} ${input:NewName}"
       ],
       "problemMatcher": [],
       "presentation": {
@@ -34,7 +34,7 @@
         "-nop -C ",
         "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process;",
         ". .vscode/tasks.ps1;",
-        "CreateNewNote ${workspaceFolder} ${input:NewName}"
+        "New-Note ${workspaceFolder} ${input:NewName}"
       ],
       "problemMatcher": [],
       "presentation": {
