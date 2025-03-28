@@ -537,6 +537,12 @@ yqは一応TOML形式も対応しているらしいのですが、基本的に�
 その反面、必要になるたびにモジュールを手動でインポートする手間が発生するようになりました．
 もちろん、インポートを手軽にできるように工夫してこの手間も最小限にしています．</p>
 <p>機能ごとにスクリプトを1つ作成して呼び出すのは、結局管理が大変になりそうなので、今はこのやり方で落ち着いています．</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="2025-03-28-追記">2025-03-28 追記<a href="https://mebiusbox.github.io/en/blog/2024/09/13/powershell-profile#2025-03-28-%E8%BF%BD%E8%A8%98" class="hash-link" aria-label="Direct link to 2025-03-28 追記" title="Direct link to 2025-03-28 追記">​</a></h2>
+<p>いくつかのモジュールを分けることで大分速くなったのですが、それでも遅い部分がありました．以下、2つの点で改善できたので書いておきます．</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="oh-my-posh-が遅い">Oh My Posh が遅い<a href="https://mebiusbox.github.io/en/blog/2024/09/13/powershell-profile#oh-my-posh-%E3%81%8C%E9%81%85%E3%81%84" class="hash-link" aria-label="Direct link to Oh My Posh が遅い" title="Direct link to Oh My Posh が遅い">​</a></h3>
+<p>初期化に1秒以上かかっていました．ターミナル上でいろいろ確認できるので便利なのですが、どのターミナルでも必要というわけではなかったので、標準で実行しないようにしました．かわりに、<code>init</code>コマンドレットを作って、その中で実行するようにしました．</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="スクリプトモジュール化">スクリプトモジュール化<a href="https://mebiusbox.github.io/en/blog/2024/09/13/powershell-profile#%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%83%A2%E3%82%B8%E3%83%A5%E3%83%BC%E3%83%AB%E5%8C%96" class="hash-link" aria-label="Direct link to スクリプトモジュール化" title="Direct link to スクリプトモジュール化">​</a></h3>
+<p>モジュールを分けていたのですが、<code>Import-Module</code> で指定する形になっていました．これらのモジュールをスクリプトモジュール準拠にして、<code>$PSModulePath</code> の場所に登録することで、そもそも <code>Import-Module</code> を呼ぶ必要がなくなりました．PowerShellは <code>$PSModulePath</code> パスから自動でコマンドレットを検索してくれます．私の場合、<code>$PSModulePath</code> にパスを追加して管理しています．</p>
 <p>以上です．</p>]]></content>
         <author>
             <name>mebiusbox</name>
