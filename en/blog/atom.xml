@@ -994,6 +994,8 @@ UI要素として、Treeを配置しています．Treeでは <code>SortingEnabl
 </ol>
 <p>グループの状態が把握しづらいので、最大化を解除したり、両方のグループを表示できるようにすれば管理しやすいかもです．
 たとえば、<code>Ctrl+F2</code>に <code>workbench.action.evenEditorWidths</code> を設定したりとか．これはエディターグループを2画面表示します．</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="パネルで2画面以上扱う場合">パネルで2画面以上扱う場合<a href="https://mebiusbox.github.io/en/blog/2024/08/30/vscode-terminal#%E3%83%91%E3%83%8D%E3%83%AB%E3%81%A72%E7%94%BB%E9%9D%A2%E4%BB%A5%E4%B8%8A%E6%89%B1%E3%81%86%E5%A0%B4%E5%90%88" class="hash-link" aria-label="Direct link to パネルで2画面以上扱う場合" title="Direct link to パネルで2画面以上扱う場合">​</a></h2>
+<p>エディターではなく、パネルの中でターミナルを管理するほうがやりやすいかもしれません．標準のままなら、新規ターミナルを作成すればターミナルパネルにスタックされていきます．その状態で「Ctrl+PgUp」や「Ctrl+PgDown」で切り替えることができます．エディター内で開くと画面を広く使えるのですが、ターミナルパネルの場合でも <code>workbench.action.toggleMaximizedPanel</code> でパネルの最大化を切り替えることができます．ショートカットに割り当てれば便利です．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="shortcut-menu-bar">Shortcut Menu Bar<a href="https://mebiusbox.github.io/en/blog/2024/08/30/vscode-terminal#shortcut-menu-bar" class="hash-link" aria-label="Direct link to Shortcut Menu Bar" title="Direct link to Shortcut Menu Bar">​</a></h2>
 <p>最後に拡張機能「<a href="https://marketplace.visualstudio.com/items?itemName=jerrygoyal.shortcut-menu-bar" target="_blank" rel="noopener noreferrer">Shortcut Menu Bar</a>」を紹介します．
 これはVisual Studio Codeのメニューバー（エディターの右上）にボタンを追加する拡張機能です．
