@@ -58,11 +58,13 @@ const config: Config = {
           sidebarPath: require.resolve('./sidebars.ts'),
           sidebarCollapsible: false,
           sidebarCollapsed: false,
+          showLastUpdateTime: true,
           // remarkPlugins: [math],
           // rehypePlugins: [[katex, {strict: false}]],
         },
         blog: {
           showReadingTime: true,
+          showLastUpdateTime: true,
           postsPerPage: 5,
           blogSidebarTitle: 'All posts',
           blogSidebarCount: 'ALL',
