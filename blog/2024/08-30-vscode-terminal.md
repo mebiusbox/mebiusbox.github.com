@@ -8,6 +8,8 @@ category: note
 authors: [mebiusbox]
 tags: [vscode]
 image: https://og-image-mebiusbox.vercel.app/api/og?title=Visual+Studio+Code%e3%81%a7%e3%81%ae%e3%82%bf%e3%83%bc%e3%83%9f%e3%83%8a%e3%83%ab%e6%93%8d%e4%bd%9c&subtitle=Visual+Studio+Code%e3%81%a7%e3%82%bf%e3%83%bc%e3%83%9f%e3%83%8a%e3%83%ab%e3%82%92%e6%93%8d%e4%bd%9c%e3%81%99%e3%82%8b%e4%be%bf%e5%88%a9%e3%81%aa%e8%a8%ad%e5%ae%9a&date=2024%2F08%2F30&tags=vscode
+last_update:
+  date: 2025-03-28
 ---
 
 WindowsのVisual Studio Codeでターミナルを快適に操作させるためのいくつかの設定を紹介します．
@@ -102,6 +104,10 @@ WindowsのVisual Studio Codeでターミナルを快適に操作させるため�
 
 グループの状態が把握しづらいので、最大化を解除したり、両方のグループを表示できるようにすれば管理しやすいかもです．
 たとえば、`Ctrl+F2`に `workbench.action.evenEditorWidths` を設定したりとか．これはエディターグループを2画面表示します．
+
+## パネルで2画面以上扱う場合
+
+エディターではなく、パネルの中でターミナルを管理するほうがやりやすいかもしれません．標準のままなら、新規ターミナルを作成すればターミナルパネルにスタックされていきます．その状態で「Ctrl+PgUp」や「Ctrl+PgDown」で切り替えることができます．エディター内で開くと画面を広く使えるのですが、ターミナルパネルの場合でも `workbench.action.toggleMaximizedPanel` でパネルの最大化を切り替えることができます．ショートカットに割り当てれば便利です．
 
 ## Shortcut Menu Bar
 
