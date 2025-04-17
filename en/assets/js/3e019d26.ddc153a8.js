@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmebiusbox_docusaurus=self.webpackChunkmebiusbox_docusaurus||[]).push([[8817],{88012:e=>{e.exports=JSON.parse('{"metadata":{"permalink":"/en/blog/page/12","page":12,"postsPerPage":5,"totalPages":13,"totalCount":64,"previousPage":"/en/blog/page/11","nextPage":"/en/blog/page/13","blogDescription":"Blog","blogTitle":"Blog"}}')}}]);
