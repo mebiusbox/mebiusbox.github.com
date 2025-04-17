@@ -1,3 +1,7 @@
+- name: 2025-04-17-csharp-formatter-for-vscode
+  date: 2025-04-17
+  title:
+    ja: Visual Studio CodeのC#フォーマッタ設定
 - name: 2025-03-29-obsidian-single-vault
   date: 2025-03-29
   title:
@@ -14,7 +18,3 @@
   date: 2025-03-09
   title:
     ja: OpenCV 4.12 をビルドする
-- name: 2025-03-07-windows-tools
-  date: 2025-03-07
-  title:
-    ja: 最近導入したWindows用のツール
