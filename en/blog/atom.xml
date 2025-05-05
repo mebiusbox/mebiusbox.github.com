@@ -15,7 +15,7 @@
         <summary type="html"><![CDATA[公開したくない内容をビルド時に除外するプリプロセッサについて]]></summary>
         <content type="html"><![CDATA[<p>mdBookで生成したWebコンテンツを公開する必要があったのですが、一部の内容は公開したくないものがありました．
 本記事ではプリプロセッサを作成して実現する方法について解説します．</p>
-<p>mdBookではマークダウン方式で記述した内容を静的Webコンテンツにビルドします．通常は <code>src</code> ディレクトリに含まれている <code>SUMMARY.md</code> をルートとして木構造で構築してきます．今回は、除外対象としてファイル単位、またはファイル内の一部を公開用ビルドしたときに除外します．また、非公開でビルドするときは除外しないようにします．</p>
+<p>mdBookではマークダウン方式で記述した内容を静的Webコンテンツにビルドします．通常は <code>src</code> ディレクトリに含まれている <code>SUMMARY.md</code> をルートとして木構造で構築します．今回は、除外対象としてファイル単位、またはファイル内の一部を公開用ビルドしたときに除外します．また、非公開でビルドするときは除外しないようにします．</p>
 <p>除外するためにプリプロセッサを使います．プリプロセッサは標準入力と標準出力さえ出来れば可能なので、Pythonを使います．</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="mdbook-private">mdbook-private<a href="https://mebiusbox.github.io/en/blog/2025/05/03/mdbook-private#mdbook-private" class="hash-link" aria-label="Direct link to mdbook-private" title="Direct link to mdbook-private">​</a></h2>
 <p>除外するプリプロセッサを <code>mdbook-private</code> という名前で作成します．ちなみに同名のプリプロセッサがすでに存在しますが、想定した使い方と異なるので自作します．
