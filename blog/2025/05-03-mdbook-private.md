@@ -30,7 +30,7 @@ mdBookではマークダウン方式で記述した内容を静的Webコンテ�
 ### プリプロセッサの利用
 
 mdBookのプロジェクトディレクトリ（`book.toml`がある）に `preprocessor` ディレクトリを作り、そこに `mdbook-private.py` ファイルを作成します．
-このプリプロセッサを使うには `book.toml` に以下のセクションを追加します．これは Windows用です．
+このプリプロセッサを使うには `book.toml` に以下のセクションを追加します．Windows用なので `py` を使っています．
 
 ```toml
 [preprocessor.private]
@@ -197,7 +197,7 @@ if __name__ == "__main__":
 プリプロセッサに対してオプション機能を実装します．たとえば、それぞれの機能の有効・無効の切替を制御できると便利です．
 プリプロセッサのオプションは `book.toml` ファイルの各プリプロセッサセクションで設定できます．このオプションは `context` に含まれています．
 `mdbook-private.py` プリプロセッサのオプションは `context["config"]["preprocessor"]["private"]` に入っています．
-プリプロセッサの有効・無効を切り替える `enabled` と、コンテンツ内の一部を非公開にする機能を切り替える `hidden-block` オプションに対応します．
+ここでは、プリプロセッサの有効・無効を切り替える `enabled` と、コンテンツ内の一部を非公開にする機能を切り替える `hidden-block` オプションに対応します．
 
 このオプションに対応したコードは次のようになります：
 
@@ -279,7 +279,7 @@ hidden-block = true
 
 ### プリプロセッサの実行順番
 
-このプリプロセッサはFront Matterを使っていますが、mdBookでは標準だと普通にレンダリングされてしまいます．たとえば、[mdBookでFront Matterを処理する](/blog/2024/10/12/mdbook-frontmatter) のようにプリプロセッサで取り除くことができます．そこでは `mdbook-frontmatter.py` というプリプロセッサで処理しています．それと組合せて使うと次のようになります．
+このプリプロセッサはFront Matterを使っていますが、mdBookでは標準だと普通にレンダリングされてしまいます．たとえば、以前に書いた記事 [mdBookでFront Matterを処理する](/blog/2024/10/12/mdbook-frontmatter) で作成したプリプロセッサ（`mdbook-frontmatter.py`）などで取り除くことができます．それと組合せて使うと次のようになります．
 
 ```toml
 [preprocessor.frontmatter]
@@ -303,6 +303,8 @@ command = "py preprocessor/mdbook_private.py"
 hidden-block = true
 enabled = true
 ```
+
+これで、privateプリプロセッサがfrontmatterプリプロセッサの前に処理されます．
 
 ### 実行時にプリプロセッサのオプションを変更する
 
