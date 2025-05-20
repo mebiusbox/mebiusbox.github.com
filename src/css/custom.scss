@@ -47,7 +47,7 @@
   --ifm-font-family-base-orig: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   --ifm-font-family-monospace-orig: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   --ifm-font-family-base: 'Segoe UI', Roboto, "UD デジタル 教科書体 NK-R", "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo, var(--ifm-font-family-base-orig);
-  --ifm-font-family-monospace: "Iosevka Fixed", "Inconsolata", "Fira Mono", "UD デジタル 教科書体 NK-R", "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo, var(--ifm-font-family-monospace-orig);
+  --ifm-font-family-monospace: "Iosevka Fixed", "Inconsolata", var(--ifm-font-family-monospace-orig), "UD デジタル 教科書体 NK-R", "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo;
 
   --ifm-card-border-radius: 5px;
   --ifm-table-cell-padding: 5px;
