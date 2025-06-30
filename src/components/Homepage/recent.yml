@@ -1,3 +1,7 @@
+- name: 2025-06-30-mise
+  date: 2025-06-30
+  title:
+    ja: miseに切り替えました
 - name: 2025-05-03-mdbook-private
   date: 2025-05-03
   title:
@@ -14,7 +18,3 @@
   date: 2025-03-23
   title:
     ja: VS CodeとmdBookとObsidianを使った環境
-- name: 2025-03-20-vscode-toggle-markers
-  date: 2025-03-20
-  title:
-    ja: ちょっとしたMarkdown編集用の拡張機能を作りました
