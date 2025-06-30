@@ -64,7 +64,7 @@ const config: Config = {
         },
         blog: {
           showReadingTime: true,
-          showLastUpdateTime: true,
+          showLastUpdateTime: false,
           postsPerPage: 5,
           blogSidebarTitle: 'All posts',
           blogSidebarCount: 'ALL',
