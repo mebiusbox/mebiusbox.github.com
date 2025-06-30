@@ -8,7 +8,7 @@ Mebiusbox Software website (https://mebiusbox.github.io/) is built using [Docusa
 | ------------------- | ------ |
 | BlogPostItem/Footer | Unsafe |
 | DocCard             | Unsafe |
-| DocItem/Footer     | Unsafe |
+| DocItem/Footer      | Unsafe |
 | NotFound            | Safe   |
 
 ```shell
