@@ -1,3 +1,7 @@
+- name: 2025-08-09-go-environment-with-mise
+  date: 2025-08-09
+  title:
+    ja: Windows で mise を使用した Go 環境のパス設定
 - name: 2025-06-30-mise
   date: 2025-06-30
   title:
@@ -14,7 +18,3 @@
   date: 2025-03-29
   title:
     ja: Obsidianで複数のディレクトリを1つのVaultで管理する方法
-- name: 2025-03-23-vscode-mdbook-obsidian
-  date: 2025-03-23
-  title:
-    ja: VS CodeとmdBookとObsidianを使った環境
