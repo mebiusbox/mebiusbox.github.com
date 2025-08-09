@@ -8,7 +8,7 @@ function New-BlogPost() {
     $year = Get-Date -Format 'yyyy'
     $date = Get-Date -Format 'MM-dd'
     if (-not(Test-Path -LiteralPath "${WorkspaceFolder}\blog\${year}")) {
-         New-Item -Path "${WorkspaceFolder}\blog\${year}" -ItemType "directory" | Out-Null 
+         New-Item -Path "${WorkspaceFolder}\blog\${year}" -ItemType directory | Out-Null 
     }
     Copy-Item -LiteralPath "${WorkspaceFolder}\.vscode\templates\blog.md" -Destination "${WorkspaceFolder}\blog\${year}\${date}-${NewName}.md" | Out-Null
     code "${WorkspaceFolder}\blog\${year}\${date}-${NewName}.md"

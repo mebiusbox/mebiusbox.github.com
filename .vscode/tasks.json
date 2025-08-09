@@ -6,13 +6,7 @@
     {
       "label": "New Blog",
       "type": "shell",
-      "options": {
-        "shell": {
-          "executable": "pwsh"
-        }
-      },
       "command": [
-        "-nop -C ",
         "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process;",
         ". .vscode/tasks.ps1;",
         "New-BlogPost ${workspaceFolder} ${input:NewName}"
@@ -25,17 +19,20 @@
     {
       "label": "New Note",
       "type": "shell",
-      "options": {
-        "shell": {
-          "executable": "pwsh"
-        }
-      },
       "command": [
-        "-nop -C ",
         "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process;",
         ". .vscode/tasks.ps1;",
         "New-Note ${workspaceFolder} ${input:NewName}"
       ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never"
+      }
+    },
+    {
+      "label": "Test",
+      "type": "shell",
+      "command": "$PSVersionTable",
       "problemMatcher": [],
       "presentation": {
         "reveal": "never"
