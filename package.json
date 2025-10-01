@@ -16,9 +16,9 @@
     "contents:preview": "npx servez ./contents/"
   },
   "dependencies": {
-    "@docusaurus/core": "^3.8.1",
-    "@docusaurus/plugin-ideal-image": "^3.8.1",
-    "@docusaurus/preset-classic": "^3.8.1",
+    "@docusaurus/core": "^3.9.1",
+    "@docusaurus/plugin-ideal-image": "^3.9.1",
+    "@docusaurus/preset-classic": "^3.9.1",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
@@ -42,9 +42,9 @@
     "sass": "^1.57.1"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.8.1",
-    "@docusaurus/tsconfig": "^3.8.1",
-    "@docusaurus/types": "^3.8.1",
+    "@docusaurus/module-type-aliases": "^3.9.1",
+    "@docusaurus/tsconfig": "^3.9.1",
+    "@docusaurus/types": "^3.9.1",
     "@types/js-yaml": "^4.0.5",
     "@types/react": "^18.2.45",
     "front-matter": "^4.0.2",
