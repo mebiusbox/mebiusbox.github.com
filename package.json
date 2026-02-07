@@ -50,7 +50,7 @@
     "front-matter": "^4.0.2",
     "sass-loader": "^13.2.0",
     "typescript": "^5.0.0",
-    "webpack": "^5.76.0"
+    "webpack": "^5.104.1"
   },
   "browserslist": {
     "production": [
